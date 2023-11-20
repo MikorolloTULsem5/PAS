@@ -5,7 +5,8 @@ import com.mongodb.client.model.Filters;
 import nbd.gV.exceptions.CourtException;
 import nbd.gV.exceptions.MainException;
 import nbd.gV.exceptions.MyMongoException;
-import nbd.gV.mappers.CourtMapper;
+import nbd.gV.data.dto.CourtDTO;
+import nbd.gV.data.mappers.CourtMapper;
 import nbd.gV.repositories.CourtMongoRepository;
 
 import java.util.ArrayList;
@@ -55,7 +56,7 @@ public class CourtManager {
 
     public Court getCourt(UUID courtID) {
         try {
-            CourtMapper courtMapper = courtRepository.readByUUID(courtID);
+            CourtDTO courtMapper = courtRepository.readByUUID(courtID);
             return courtMapper != null ? CourtMapper.fromMongoCourt(courtMapper) : null;
         } catch (Exception exception) {
             throw new CourtException("Blad transakcji.");

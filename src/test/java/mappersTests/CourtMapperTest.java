@@ -1,7 +1,8 @@
 package mappersTests;
 
 import nbd.gV.courts.Court;
-import nbd.gV.mappers.CourtMapper;
+import nbd.gV.data.dto.CourtDTO;
+import nbd.gV.data.mappers.CourtMapper;
 import org.junit.jupiter.api.Test;
 
 import java.util.UUID;
@@ -15,7 +16,7 @@ public class CourtMapperTest {
     UUID uuid = UUID.randomUUID();
     @Test
     void testCreatingMapper() {
-        CourtMapper courtMapper = new CourtMapper(uuid.toString(), 300, 200, 1,
+        CourtDTO courtMapper = new CourtDTO(uuid.toString(), 300, 200, 1,
                 false, 1);
         assertNotNull(courtMapper);
 
@@ -32,7 +33,7 @@ public class CourtMapperTest {
         Court court = new Court(300, 100, 1);
         assertNotNull(court);
 
-        CourtMapper courtMapper = CourtMapper.toMongoCourt(court);
+        CourtDTO courtMapper = CourtMapper.toMongoCourt(court);
         assertNotNull(courtMapper);
 
         assertEquals(court.getCourtId(), UUID.fromString(courtMapper.getCourtId()));
@@ -45,7 +46,7 @@ public class CourtMapperTest {
 
     @Test
     void testFromMongoClientMethod() {
-        CourtMapper courtMapper = new CourtMapper(uuid.toString(), 300, 200, 1,
+        CourtDTO courtMapper = new CourtDTO(uuid.toString(), 300, 200, 1,
                 true, 0);
         assertNotNull(courtMapper);
 

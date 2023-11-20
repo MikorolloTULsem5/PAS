@@ -7,7 +7,8 @@ import nbd.gV.clients.Client;
 import nbd.gV.courts.Court;
 import nbd.gV.exceptions.MyMongoException;
 import nbd.gV.exceptions.ReservationException;
-import nbd.gV.mappers.ReservationMapper;
+import nbd.gV.data.dto.ReservationDTO;
+import nbd.gV.data.mappers.ReservationMapper;
 import nbd.gV.repositories.ClientMongoRepository;
 import nbd.gV.repositories.CourtMongoRepository;
 import nbd.gV.repositories.ReservationMongoRepository;
@@ -123,7 +124,7 @@ public class ReservationManager {
     public Reservation getReservationByID(UUID uuid) {
         var clientsRepo = new ClientMongoRepository();
         var courtsRepo = new CourtMongoRepository();
-        ReservationMapper reservationMapper = reservationRepository.readByUUID(uuid);
+        ReservationDTO reservationMapper = reservationRepository.readByUUID(uuid);
         return ReservationMapper.fromMongoReservation(reservationMapper,
                 clientsRepo.readByUUID(UUID.fromString(reservationMapper.getClientId())),
                 courtsRepo.readByUUID(UUID.fromString(reservationMapper.getCourtId())));

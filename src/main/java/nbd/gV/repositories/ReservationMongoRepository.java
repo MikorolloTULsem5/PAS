@@ -15,9 +15,12 @@ import nbd.gV.exceptions.ClientException;
 import nbd.gV.exceptions.CourtException;
 import nbd.gV.exceptions.MyMongoException;
 import nbd.gV.exceptions.ReservationException;
-import nbd.gV.mappers.ClientMapper;
-import nbd.gV.mappers.CourtMapper;
-import nbd.gV.mappers.ReservationMapper;
+import nbd.gV.data.dto.ClientDTO;
+import nbd.gV.data.mappers.ClientMapper;
+import nbd.gV.data.dto.CourtDTO;
+import nbd.gV.data.dto.ReservationDTO;
+import nbd.gV.data.mappers.CourtMapper;
+import nbd.gV.data.mappers.ReservationMapper;
 import nbd.gV.reservations.Reservation;
 import org.bson.Document;
 
@@ -25,7 +28,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.UUID;
 
-public class ReservationMongoRepository extends AbstractMongoRepository<ReservationMapper> {
+public class ReservationMongoRepository extends AbstractMongoRepository<ReservationDTO> {
 
     public ReservationMongoRepository() {
         boolean collectionExists = getDatabase().listCollectionNames().into(new ArrayList<>()).contains("reservations");
@@ -51,10 +54,10 @@ public class ReservationMongoRepository extends AbstractMongoRepository<Reservat
 
     //Checking database consistency
     @Override
-    public boolean create(ReservationMapper reservationMapper) {
+    public boolean create(ReservationDTO reservationMapper) {
         try {
             //Check client
-            var list1 = getDatabase().getCollection("clients", ClientMapper.class)
+            var list1 = getDatabase().getCollection("clients", ClientDTO.class)
                     .find(Filters.eq("_id", reservationMapper.getClientId())).into(new ArrayList<>());
             if (list1.isEmpty()) {
                 throw new ReservationException("Brak podanego klienta w bazie!");
@@ -62,7 +65,7 @@ public class ReservationMongoRepository extends AbstractMongoRepository<Reservat
             Client clientFound = ClientMapper.fromMongoClient(list1.get(0));
 
             //Check court
-            var list2 = getDatabase().getCollection("courts", CourtMapper.class)
+            var list2 = getDatabase().getCollection("courts", CourtDTO.class)
                     .find(Filters.eq("_id", reservationMapper.getCourtId())).into(new ArrayList<>());
             if (list2.isEmpty()) {
                 throw new ReservationException("Brak podanego boiska w bazie!");
@@ -78,7 +81,7 @@ public class ReservationMongoRepository extends AbstractMongoRepository<Reservat
                             new Reservation(UUID.fromString(reservationMapper.getId()),
                                     clientFound, courtFound, reservationMapper.getBeginTime())));
                     if (result.wasAcknowledged()) {
-                        getDatabase().getCollection("courts", CourtMapper.class).updateOne(
+                        getDatabase().getCollection("courts", CourtDTO.class).updateOne(
                                 clientSession,
                                 Filters.eq("_id", courtFound.getCourtId().toString()),
                                 Updates.inc("rented", 1));
@@ -106,7 +109,7 @@ public class ReservationMongoRepository extends AbstractMongoRepository<Reservat
 
     public void update(Court court, LocalDateTime endTime) {
         //Find court
-        var listCourt = getDatabase().getCollection("courts", CourtMapper.class)
+        var listCourt = getDatabase().getCollection("courts", CourtDTO.class)
                 .find(Filters.eq("_id", court.getCourtId().toString())).into(new ArrayList<>());
         if (listCourt.isEmpty()) {
             throw new ReservationException("Brak podanego boiska w bazie!");
@@ -117,14 +120,14 @@ public class ReservationMongoRepository extends AbstractMongoRepository<Reservat
 
         //Find reservation
         var listReservation = getDatabase().getCollection("reservations",
-                ReservationMapper.class).find(Filters.eq("courtid", court.getCourtId().toString()))
+                ReservationDTO.class).find(Filters.eq("courtid", court.getCourtId().toString()))
                 .into(new ArrayList<>());
         if (listReservation.isEmpty()) {
             throw new ReservationException("Brak rezerwacji, dla podanego boiska, w bazie!");
         }
 
         //Find client
-        var listClient = getDatabase().getCollection("clients", ClientMapper.class)
+        var listClient = getDatabase().getCollection("clients", ClientDTO.class)
                 .find(Filters.eq("_id", listReservation.get(0).getClientId().toString()))
                 .into(new ArrayList<>());
         if (listClient.isEmpty()) {
@@ -145,7 +148,7 @@ public class ReservationMongoRepository extends AbstractMongoRepository<Reservat
             update(reservationFound.getId(), "reservationcost", reservationFound.getReservationCost());
 
             //Update court's "rented" field
-            getDatabase().getCollection("courts", CourtMapper.class).updateOne(
+            getDatabase().getCollection("courts", CourtDTO.class).updateOne(
                     clientSession,
                     Filters.eq("_id", listCourt.get(0).getCourtId().toString()),
                     Updates.inc("rented", -1));
@@ -162,8 +165,8 @@ public class ReservationMongoRepository extends AbstractMongoRepository<Reservat
     }
 
     @Override
-    protected MongoCollection<ReservationMapper> getCollection() {
-        return getDatabase().getCollection(getCollectionName(), ReservationMapper.class);
+    protected MongoCollection<ReservationDTO> getCollection() {
+        return getDatabase().getCollection(getCollectionName(), ReservationDTO.class);
     }
 
     @Override

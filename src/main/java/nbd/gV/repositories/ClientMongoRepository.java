@@ -3,12 +3,12 @@ package nbd.gV.repositories;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.model.CreateCollectionOptions;
 import com.mongodb.client.model.ValidationOptions;
-import nbd.gV.mappers.ClientMapper;
+import nbd.gV.data.dto.ClientDTO;
 import org.bson.Document;
 
 import java.util.ArrayList;
 
-public class ClientMongoRepository extends AbstractMongoRepository<ClientMapper> {
+public class ClientMongoRepository extends AbstractMongoRepository<ClientDTO> {
 
     public ClientMongoRepository() {
         boolean collectionExists = getDatabase().listCollectionNames().into(new ArrayList<>()).contains("clients");
@@ -43,8 +43,8 @@ public class ClientMongoRepository extends AbstractMongoRepository<ClientMapper>
     }
 
     @Override
-    protected MongoCollection<ClientMapper> getCollection() {
-        return getDatabase().getCollection(getCollectionName(), ClientMapper.class);
+    protected MongoCollection<ClientDTO> getCollection() {
+        return getDatabase().getCollection(getCollectionName(), ClientDTO.class);
     }
 
     @Override

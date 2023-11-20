@@ -3,7 +3,8 @@ import com.mongodb.client.MongoCollection;
 import com.mongodb.client.model.Filters;
 import nbd.gV.courts.Court;
 import nbd.gV.exceptions.MyMongoException;
-import nbd.gV.mappers.CourtMapper;
+import nbd.gV.data.dto.CourtDTO;
+import nbd.gV.data.mappers.CourtMapper;
 import nbd.gV.repositories.CourtMongoRepository;
 import org.bson.Document;
 import org.junit.jupiter.api.AfterAll;
@@ -23,23 +24,23 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 public class CourtMongoRepositoryTest {
     static final CourtMongoRepository courtRepository = new CourtMongoRepository();
 
-    CourtMapper courtMapper1;
-    CourtMapper courtMapper2;
-    CourtMapper courtMapper3;
+    CourtDTO courtMapper1;
+    CourtDTO courtMapper2;
+    CourtDTO courtMapper3;
     Court court1;
     Court court2;
     Court court3;
 
-    private MongoCollection<CourtMapper> getTestCollection() {
+    private MongoCollection<CourtDTO> getTestCollection() {
         return courtRepository.getDatabase()
-                .getCollection(courtRepository.getCollectionName(), CourtMapper.class);
+                .getCollection(courtRepository.getCollectionName(), CourtDTO.class);
     }
 
     @BeforeAll
     @AfterAll
     static void cleanFirstAndLastTimeDB() {
         courtRepository.getDatabase()
-                .getCollection(courtRepository.getCollectionName(), CourtMapper.class).deleteMany(Filters.empty());
+                .getCollection(courtRepository.getCollectionName(), CourtDTO.class).deleteMany(Filters.empty());
     }
 
     @BeforeEach
@@ -131,11 +132,11 @@ public class CourtMongoRepositoryTest {
         assertTrue(courtRepository.create(courtMapper3));
         assertEquals(3, getTestCollection().find().into(new ArrayList<>()).size());
 
-        CourtMapper couMapper1 = courtRepository.readByUUID(UUID.fromString(courtMapper1.getCourtId()));
+        CourtDTO couMapper1 = courtRepository.readByUUID(UUID.fromString(courtMapper1.getCourtId()));
         assertNotNull(couMapper1);
         assertEquals(courtMapper1, couMapper1);
 
-        CourtMapper couMapper3 = courtRepository.readByUUID(UUID.fromString(courtMapper3.getCourtId()));
+        CourtDTO couMapper3 = courtRepository.readByUUID(UUID.fromString(courtMapper3.getCourtId()));
         assertNotNull(couMapper3);
         assertEquals(courtMapper3, couMapper3);
     }

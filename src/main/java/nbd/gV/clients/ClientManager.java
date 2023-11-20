@@ -5,7 +5,8 @@ import nbd.gV.clients.clienttype.ClientType;
 import nbd.gV.exceptions.ClientException;
 import nbd.gV.exceptions.MainException;
 import nbd.gV.exceptions.MyMongoException;
-import nbd.gV.mappers.ClientMapper;
+import nbd.gV.data.dto.ClientDTO;
+import nbd.gV.data.mappers.ClientMapper;
 import nbd.gV.repositories.ClientMongoRepository;
 
 import java.util.ArrayList;
@@ -55,7 +56,7 @@ public class ClientManager {
 
     public Client getClient(UUID clientID) {
         try {
-            ClientMapper clientMapper = clientRepository.readByUUID(clientID);
+            ClientDTO clientMapper = clientRepository.readByUUID(clientID);
             return clientMapper != null ? ClientMapper.fromMongoClient(clientMapper) : null;
         } catch (Exception exception) {
             throw new ClientException("Blad transakcji.");

@@ -9,9 +9,9 @@ import nbd.gV.exceptions.ClientException;
 import nbd.gV.exceptions.CourtException;
 import nbd.gV.exceptions.MainException;
 import nbd.gV.exceptions.ReservationException;
-import nbd.gV.mappers.ClientMapper;
-import nbd.gV.mappers.CourtMapper;
-import nbd.gV.mappers.ReservationMapper;
+import nbd.gV.data.mappers.ClientMapper;
+import nbd.gV.data.dto.ReservationDTO;
+import nbd.gV.data.mappers.CourtMapper;
 import nbd.gV.repositories.ClientMongoRepository;
 import nbd.gV.repositories.CourtMongoRepository;
 import nbd.gV.repositories.ReservationMongoRepository;
@@ -53,7 +53,7 @@ public class ReservationManagerTest {
     @AfterAll
     static void cleanDB() {
         reservationRepository.getDatabase().getCollection(reservationRepository.getCollectionName(),
-                ReservationMapper.class).deleteMany(Filters.empty());
+                ReservationDTO.class).deleteMany(Filters.empty());
         clientRepository.readAll().forEach((mapper) -> clientRepository.delete(UUID.fromString(mapper.getClientID())));
         courtRepository.readAll().forEach((mapper) -> courtRepository.delete(UUID.fromString(mapper.getCourtId())));
     }

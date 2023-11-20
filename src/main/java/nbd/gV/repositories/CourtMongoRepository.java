@@ -3,12 +3,12 @@ package nbd.gV.repositories;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.model.CreateCollectionOptions;
 import com.mongodb.client.model.ValidationOptions;
-import nbd.gV.mappers.CourtMapper;
+import nbd.gV.data.dto.CourtDTO;
 import org.bson.Document;
 
 import java.util.ArrayList;
 
-public class CourtMongoRepository extends AbstractMongoRepository<CourtMapper> {
+public class CourtMongoRepository extends AbstractMongoRepository<CourtDTO> {
 
     public CourtMongoRepository() {
         boolean collectionExists = getDatabase().listCollectionNames().into(new ArrayList<>()).contains("courts");
@@ -42,8 +42,8 @@ public class CourtMongoRepository extends AbstractMongoRepository<CourtMapper> {
     }
 
     @Override
-    protected MongoCollection<CourtMapper> getCollection() {
-        return getDatabase().getCollection(getCollectionName(), CourtMapper.class);
+    protected MongoCollection<CourtDTO> getCollection() {
+        return getDatabase().getCollection(getCollectionName(), CourtDTO.class);
     }
 
     @Override

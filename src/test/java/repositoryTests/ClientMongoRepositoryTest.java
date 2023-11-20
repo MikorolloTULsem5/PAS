@@ -2,7 +2,8 @@ package repositoryTests;
 
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.model.Filters;
-import nbd.gV.mappers.ClientMapper;
+import nbd.gV.data.dto.ClientDTO;
+import nbd.gV.data.mappers.ClientMapper;
 import nbd.gV.repositories.ClientMongoRepository;
 import nbd.gV.clients.Client;
 import nbd.gV.clients.clienttype.ClientType;
@@ -25,24 +26,24 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class ClientMongoRepositoryTest {
     static final ClientMongoRepository clientRepository = new ClientMongoRepository();
-    ClientMapper clientMapper1;
-    ClientMapper clientMapper2;
-    ClientMapper clientMapper3;
+    ClientDTO clientMapper1;
+    ClientDTO clientMapper2;
+    ClientDTO clientMapper3;
     Client client1;
     Client client2;
     Client client3;
     final ClientType testClientType = new Normal();
 
-    private MongoCollection<ClientMapper> getTestCollection() {
+    private MongoCollection<ClientDTO> getTestCollection() {
         return clientRepository.getDatabase()
-                .getCollection(clientRepository.getCollectionName(), ClientMapper.class);
+                .getCollection(clientRepository.getCollectionName(), ClientDTO.class);
     }
 
     @BeforeAll
     @AfterAll
     static void cleanFirstAndLastTimeDB() {
         clientRepository.getDatabase()
-                .getCollection(clientRepository.getCollectionName(), ClientMapper.class).deleteMany(Filters.empty());
+                .getCollection(clientRepository.getCollectionName(), ClientDTO.class).deleteMany(Filters.empty());
     }
 
     @BeforeEach
@@ -133,11 +134,11 @@ public class ClientMongoRepositoryTest {
         assertTrue(clientRepository.create(clientMapper3));
         assertEquals(3, getTestCollection().find().into(new ArrayList<>()).size());
 
-        ClientMapper clMapper1 = clientRepository.readByUUID(UUID.fromString(clientMapper1.getClientID()));
+        ClientDTO clMapper1 = clientRepository.readByUUID(UUID.fromString(clientMapper1.getClientID()));
         assertNotNull(clMapper1);
         assertEquals(clientMapper1, clMapper1);
 
-        ClientMapper clMapper3 = clientRepository.readByUUID(UUID.fromString(clientMapper3.getClientID()));
+        ClientDTO clMapper3 = clientRepository.readByUUID(UUID.fromString(clientMapper3.getClientID()));
         assertNotNull(clMapper3);
         assertEquals(clientMapper3, clMapper3);
     }
