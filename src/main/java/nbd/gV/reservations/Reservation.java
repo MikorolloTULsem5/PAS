@@ -96,11 +96,13 @@ public class Reservation {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Reservation that = (Reservation) o;
-        return Double.compare(reservationCost, that.reservationCost) == 0 &&
-                Objects.equals(id, that.id) &&
-                Objects.equals(client.getId().toString(), that.client.getId().toString()) &&
-                Objects.equals(court.getCourtId().toString(), that.court.getCourtId().toString()) &&
-                Duration.between(beginTime, that.beginTime).getSeconds() < 5 &&
-                Objects.equals(endTime, that.endTime);
+        ///TODO czy to spelnienie 1 wymagania z zadania (o byciu podstawa rownosci obiektow)???
+        return Objects.equals(id, that.id);
+//        return Double.compare(reservationCost, that.reservationCost) == 0 &&
+//                Objects.equals(id, that.id) &&
+//                Objects.equals(client.getId().toString(), that.client.getId().toString()) &&
+//                Objects.equals(court.getCourtId().toString(), that.court.getCourtId().toString()) &&
+//                Duration.between(beginTime, that.beginTime).getSeconds() < 5 &&
+//                Objects.equals(endTime, that.endTime);
     }
 }

@@ -50,11 +50,13 @@ public class Court {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Court court = (Court) o;
-        return Double.compare(area, court.area) == 0 &&
-                baseCost == court.baseCost &&
-                courtNumber == court.courtNumber &&
-                archive == court.archive &&
-                rented == court.rented &&
-                Objects.equals(courtId, court.courtId);
+        ///TODO czy to spelnienie 1 wymagania z zadania (o byciu podstawa rownosci obiektow)???
+        return Objects.equals(courtId, court.courtId);
+//        return Double.compare(area, court.area) == 0 &&
+//                baseCost == court.baseCost &&
+//                courtNumber == court.courtNumber &&
+//                archive == court.archive &&
+//                rented == court.rented &&
+//
     }
 }

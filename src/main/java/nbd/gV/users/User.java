@@ -12,6 +12,7 @@ public abstract class User {
 
     @Setter(AccessLevel.NONE)
     private final UUID id;
+    ///TODO wywalic pesel, zostawic login???
     private String login;
     private boolean archive = false;
 
@@ -19,4 +20,6 @@ public abstract class User {
         this.id = id;
         this.login = login;
     }
+
+    ///TODO dodac DTO dla Usera (zapewnienie dziedziczenia) oraz obslugi w Manadzerze i Repozytorium
 }

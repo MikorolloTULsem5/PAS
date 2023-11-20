@@ -17,7 +17,6 @@ public class Client extends User {
     private String personalId;
     private ClientType clientType;
 
-
     public Client(UUID id, String login, String firstName, String lastName, String personalId, ClientType clientType) {
         super(id, login);
         this.firstName = firstName;
