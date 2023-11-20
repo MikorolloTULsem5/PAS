@@ -1,10 +1,10 @@
 package basicClassesTests;
 
-import nbd.gV.clients.Client;
-import nbd.gV.clients.clienttype.Athlete;
-import nbd.gV.clients.clienttype.ClientType;
-import nbd.gV.clients.clienttype.Coach;
-import nbd.gV.clients.clienttype.Normal;
+import nbd.gV.users.Client;
+import nbd.gV.users.clienttype.Athlete;
+import nbd.gV.users.clienttype.ClientType;
+import nbd.gV.users.clienttype.Coach;
+import nbd.gV.users.clienttype.Normal;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;

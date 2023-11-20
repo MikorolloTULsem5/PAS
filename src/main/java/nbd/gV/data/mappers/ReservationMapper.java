@@ -9,7 +9,7 @@ import java.util.UUID;
 
 public class ReservationMapper {
     public static ReservationDTO toMongoReservation(Reservation reservation) {
-        return new ReservationDTO(reservation.getId().toString(), reservation.getClient().getClientId().toString(),
+        return new ReservationDTO(reservation.getId().toString(), reservation.getClient().getId().toString(),
                 reservation.getCourt().getCourtId().toString(), reservation.getBeginTime(), reservation.getEndTime(),
                 reservation.getReservationCost());
     }

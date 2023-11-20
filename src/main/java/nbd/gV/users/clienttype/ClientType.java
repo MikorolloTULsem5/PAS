@@ -1,4 +1,4 @@
-package nbd.gV.clients.clienttype;
+package nbd.gV.users.clienttype;
 
 public abstract class ClientType {
 

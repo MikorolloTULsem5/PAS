@@ -1,6 +1,6 @@
 package managersTests;
 import nbd.gV.courts.Court;
-import nbd.gV.courts.CourtManager;
+import nbd.gV.managers.CourtManager;
 import nbd.gV.exceptions.CourtException;
 import nbd.gV.exceptions.MainException;
 import nbd.gV.repositories.CourtMongoRepository;

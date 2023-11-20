@@ -1,10 +1,10 @@
 package basicClassesTests;
 
-import nbd.gV.clients.Client;
+import nbd.gV.users.Client;
 import nbd.gV.courts.Court;
 import nbd.gV.reservations.Reservation;
-import nbd.gV.clients.clienttype.ClientType;
-import nbd.gV.clients.clienttype.Normal;
+import nbd.gV.users.clienttype.ClientType;
+import nbd.gV.users.clienttype.Normal;
 import nbd.gV.exceptions.MainException;
 import nbd.gV.exceptions.ReservationException;
 import org.junit.jupiter.api.BeforeEach;

@@ -1,7 +1,7 @@
 package nbd.gV.reservations;
 
 import lombok.Getter;
-import nbd.gV.clients.Client;
+import nbd.gV.users.Client;
 import nbd.gV.courts.Court;
 import nbd.gV.exceptions.MainException;
 import nbd.gV.exceptions.ReservationException;
@@ -98,7 +98,7 @@ public class Reservation {
         Reservation that = (Reservation) o;
         return Double.compare(reservationCost, that.reservationCost) == 0 &&
                 Objects.equals(id, that.id) &&
-                Objects.equals(client.getClientId().toString(), that.client.getClientId().toString()) &&
+                Objects.equals(client.getId().toString(), that.client.getId().toString()) &&
                 Objects.equals(court.getCourtId().toString(), that.court.getCourtId().toString()) &&
                 Duration.between(beginTime, that.beginTime).getSeconds() < 5 &&
                 Objects.equals(endTime, that.endTime);

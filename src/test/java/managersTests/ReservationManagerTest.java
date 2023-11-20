@@ -1,9 +1,9 @@
 package managersTests;
 
 import com.mongodb.client.model.Filters;
-import nbd.gV.clients.*;
-import nbd.gV.clients.clienttype.ClientType;
-import nbd.gV.clients.clienttype.Normal;
+import nbd.gV.users.*;
+import nbd.gV.users.clienttype.ClientType;
+import nbd.gV.users.clienttype.Normal;
 import nbd.gV.courts.Court;
 import nbd.gV.exceptions.ClientException;
 import nbd.gV.exceptions.CourtException;
@@ -16,7 +16,7 @@ import nbd.gV.repositories.ClientMongoRepository;
 import nbd.gV.repositories.CourtMongoRepository;
 import nbd.gV.repositories.ReservationMongoRepository;
 import nbd.gV.reservations.Reservation;
-import nbd.gV.reservations.ReservationManager;
+import nbd.gV.managers.ReservationManager;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -115,7 +115,7 @@ public class ReservationManagerTest {
         assertEquals(rm.getAllCurrentReservations().size(), 2);
         assertTrue(testCourt1.isRented());
 
-        clientRepository.update(testClient2.getClientId(), "archive", true);
+        clientRepository.update(testClient2.getId(), "archive", true);
         assertFalse(testCourt3.isRented());
         assertThrows(ClientException.class, () -> rm.makeReservation(testClient2, testCourt3, testTimeStart));
         assertEquals(rm.getAllCurrentReservations().size(), 2);

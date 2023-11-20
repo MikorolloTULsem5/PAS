@@ -1,7 +1,8 @@
-package nbd.gV.courts;
+package nbd.gV.managers;
 
 import com.mongodb.client.model.Filters;
 
+import nbd.gV.courts.Court;
 import nbd.gV.exceptions.CourtException;
 import nbd.gV.exceptions.MainException;
 import nbd.gV.exceptions.MyMongoException;

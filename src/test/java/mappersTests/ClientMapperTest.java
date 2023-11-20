@@ -1,11 +1,11 @@
 package mappersTests;
 
 import nbd.gV.data.dto.ClientDTO;
-import nbd.gV.clients.clienttype.Athlete;
-import nbd.gV.clients.Client;
-import nbd.gV.clients.clienttype.ClientType;
-import nbd.gV.clients.clienttype.Coach;
-import nbd.gV.clients.clienttype.Normal;
+import nbd.gV.users.clienttype.Athlete;
+import nbd.gV.users.Client;
+import nbd.gV.users.clienttype.ClientType;
+import nbd.gV.users.clienttype.Coach;
+import nbd.gV.users.clienttype.Normal;
 import nbd.gV.data.mappers.ClientMapper;
 import org.junit.jupiter.api.Test;
 
@@ -59,7 +59,7 @@ public class ClientMapperTest {
         ClientDTO clientDTO = ClientMapper.toMongoClient(client);
         assertNotNull(clientDTO);
 
-        assertEquals(client.getClientId(), UUID.fromString(clientDTO.getClientID()));
+        assertEquals(client.getId(), UUID.fromString(clientDTO.getClientID()));
         assertEquals(client.getFirstName(), clientDTO.getFirstName());
         assertEquals(client.getLastName(), clientDTO.getLastName());
         assertEquals(client.getPersonalId(), clientDTO.getPersonalId());
@@ -76,7 +76,7 @@ public class ClientMapperTest {
         Client client1 = ClientMapper.fromMongoClient(clientDTO1);
         assertNotNull(client1);
 
-        assertEquals(UUID.fromString(clientDTO1.getClientID()), client1.getClientId());
+        assertEquals(UUID.fromString(clientDTO1.getClientID()), client1.getId());
         assertEquals(clientDTO1.getFirstName(), client1.getFirstName());
         assertEquals(clientDTO1.getLastName(), client1.getLastName());
         assertEquals(clientDTO1.getPersonalId(), client1.getPersonalId());

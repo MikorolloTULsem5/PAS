@@ -1,9 +1,10 @@
-package nbd.gV.reservations;
+package nbd.gV.managers;
 
 import com.mongodb.client.model.Filters;
 
 import nbd.gV.exceptions.MainException;
-import nbd.gV.clients.Client;
+import nbd.gV.reservations.Reservation;
+import nbd.gV.users.Client;
 import nbd.gV.courts.Court;
 import nbd.gV.exceptions.MyMongoException;
 import nbd.gV.exceptions.ReservationException;
@@ -80,7 +81,7 @@ public class ReservationManager {
         if (client == null) {
             throw new MainException("Nie istniejacy klient nie moze posiadac rezerwacji!");
         }
-        return getReservationsWithBsonFilter(Filters.eq("clientid", client.getClientId().toString()));
+        return getReservationsWithBsonFilter(Filters.eq("clientid", client.getId().toString()));
     }
 
     public List<Reservation> getClientEndedReservations(Client client) {
@@ -88,7 +89,7 @@ public class ReservationManager {
             throw new MainException("Nie istniejacy klient nie moze posiadac rezerwacji!");
         }
         return getReservationsWithBsonFilter(Filters.and(
-                Filters.eq("clientid", client.getClientId().toString()),
+                Filters.eq("clientid", client.getId().toString()),
                 Filters.not(Filters.eq("endtime", null))));
     }
 

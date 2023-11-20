@@ -9,7 +9,7 @@ import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Updates;
 import com.mongodb.client.model.ValidationOptions;
 import com.mongodb.client.result.InsertOneResult;
-import nbd.gV.clients.Client;
+import nbd.gV.users.Client;
 import nbd.gV.courts.Court;
 import nbd.gV.exceptions.ClientException;
 import nbd.gV.exceptions.CourtException;

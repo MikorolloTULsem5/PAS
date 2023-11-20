@@ -1,10 +1,10 @@
 package nbd.gV.data.mappers;
 
-import nbd.gV.clients.Client;
-import nbd.gV.clients.clienttype.Athlete;
-import nbd.gV.clients.clienttype.ClientType;
-import nbd.gV.clients.clienttype.Coach;
-import nbd.gV.clients.clienttype.Normal;
+import nbd.gV.users.Client;
+import nbd.gV.users.clienttype.Athlete;
+import nbd.gV.users.clienttype.ClientType;
+import nbd.gV.users.clienttype.Coach;
+import nbd.gV.users.clienttype.Normal;
 import nbd.gV.data.dto.ClientDTO;
 
 import java.util.UUID;
@@ -12,7 +12,7 @@ import java.util.UUID;
 public class ClientMapper {
 
     public static ClientDTO toMongoClient(Client client) {
-        return new ClientDTO(client.getClientId().toString(), client.getFirstName(),
+        return new ClientDTO(client.getId().toString(), client.getFirstName(),
                 client.getLastName(), client.getPersonalId(), client.isArchive(),
                 client.getClientType().getClientTypeName());
     }
