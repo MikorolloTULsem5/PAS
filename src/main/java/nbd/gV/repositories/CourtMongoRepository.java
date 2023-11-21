@@ -10,8 +10,10 @@ import java.util.ArrayList;
 
 public class CourtMongoRepository extends AbstractMongoRepository<CourtDTO> {
 
+    static final String COLLECTION_NAME = "courts";
+
     public CourtMongoRepository() {
-        boolean collectionExists = getDatabase().listCollectionNames().into(new ArrayList<>()).contains("courts");
+        boolean collectionExists = getDatabase().listCollectionNames().into(new ArrayList<>()).contains(COLLECTION_NAME);
         if (!collectionExists) {
             ValidationOptions validationOptions = new ValidationOptions().validator(
                     Document.parse("""
@@ -37,7 +39,7 @@ public class CourtMongoRepository extends AbstractMongoRepository<CourtDTO> {
                             """));
             CreateCollectionOptions createCollectionOptions = new CreateCollectionOptions()
                     .validationOptions(validationOptions);
-            getDatabase().createCollection("courts", createCollectionOptions);
+            getDatabase().createCollection(COLLECTION_NAME, createCollectionOptions);
         }
     }
 
@@ -48,6 +50,6 @@ public class CourtMongoRepository extends AbstractMongoRepository<CourtDTO> {
 
     @Override
     public String getCollectionName() {
-        return "courts";
+        return COLLECTION_NAME;
     }
 }

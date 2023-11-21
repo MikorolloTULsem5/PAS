@@ -4,7 +4,7 @@ import com.mongodb.client.MongoCollection;
 import com.mongodb.client.model.Filters;
 import nbd.gV.data.dto.ClientDTO;
 import nbd.gV.data.mappers.ClientMapper;
-import nbd.gV.repositories.ClientMongoRepository;
+import nbd.gV.repositories.UserMongoRepository;
 import nbd.gV.users.Client;
 import nbd.gV.users.clienttype.ClientType;
 import nbd.gV.users.clienttype.Normal;
@@ -25,7 +25,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class ClientMongoRepositoryTest {
-    static final ClientMongoRepository clientRepository = new ClientMongoRepository();
+    static final UserMongoRepository clientRepository = new UserMongoRepository();
     ClientDTO clientMapper1;
     ClientDTO clientMapper2;
     ClientDTO clientMapper3;
@@ -61,7 +61,7 @@ public class ClientMongoRepositoryTest {
 
     @Test
     void testCreatingRepository() {
-        ClientMongoRepository clientRepository = new ClientMongoRepository();
+        UserMongoRepository clientRepository = new UserMongoRepository();
         assertNotNull(clientRepository);
     }
 

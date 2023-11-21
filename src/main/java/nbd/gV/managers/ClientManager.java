@@ -8,7 +8,7 @@ import nbd.gV.exceptions.MainException;
 import nbd.gV.exceptions.MyMongoException;
 import nbd.gV.data.dto.ClientDTO;
 import nbd.gV.data.mappers.ClientMapper;
-import nbd.gV.repositories.ClientMongoRepository;
+import nbd.gV.repositories.UserMongoRepository;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,10 +16,10 @@ import java.util.UUID;
 
 public class ClientManager {
 
-    private final ClientMongoRepository clientRepository;
+    private final UserMongoRepository clientRepository;
 
     public ClientManager() {
-        this.clientRepository = new ClientMongoRepository();
+        this.clientRepository = new UserMongoRepository();
     }
 
     public Client registerClient(String firstName, String lastName, String login, ClientType clientType) {

@@ -6,7 +6,7 @@ import nbd.gV.users.clienttype.ClientType;
 import nbd.gV.users.clienttype.Normal;
 import nbd.gV.exceptions.ClientException;
 import nbd.gV.exceptions.MainException;
-import nbd.gV.repositories.ClientMongoRepository;
+import nbd.gV.repositories.UserMongoRepository;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -23,7 +23,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class ClientManagerTest {
 
-    static final ClientMongoRepository clientRepository = new ClientMongoRepository();
+    static final UserMongoRepository clientRepository = new UserMongoRepository();
     final ClientType testClientType = new Normal();
 
     @BeforeAll

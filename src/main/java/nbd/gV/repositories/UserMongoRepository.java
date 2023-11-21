@@ -8,10 +8,12 @@ import org.bson.Document;
 
 import java.util.ArrayList;
 
-public class ClientMongoRepository extends AbstractMongoRepository<ClientDTO> {
+public class UserMongoRepository extends AbstractMongoRepository<ClientDTO> {
 
-    public ClientMongoRepository() {
-        boolean collectionExists = getDatabase().listCollectionNames().into(new ArrayList<>()).contains("clients");
+    static final String COLLECTION_NAME = "users";
+
+    public UserMongoRepository() {
+        boolean collectionExists = getDatabase().listCollectionNames().into(new ArrayList<>()).contains(COLLECTION_NAME);
         if (!collectionExists) {
             ValidationOptions validationOptions = new ValidationOptions().validator(
                     Document.parse("""
@@ -30,7 +32,7 @@ public class ClientMongoRepository extends AbstractMongoRepository<ClientDTO> {
                             """));
             CreateCollectionOptions createCollectionOptions = new CreateCollectionOptions()
                     .validationOptions(validationOptions);
-            getDatabase().createCollection("clients", createCollectionOptions);
+            getDatabase().createCollection(COLLECTION_NAME, createCollectionOptions);
         }
     }
 
@@ -41,6 +43,6 @@ public class ClientMongoRepository extends AbstractMongoRepository<ClientDTO> {
 
     @Override
     public String getCollectionName() {
-        return "clients";
+        return COLLECTION_NAME;
     }
 }

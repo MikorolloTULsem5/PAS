@@ -10,7 +10,7 @@ import nbd.gV.exceptions.MyMongoException;
 import nbd.gV.exceptions.ReservationException;
 import nbd.gV.data.dto.ReservationDTO;
 import nbd.gV.data.mappers.ReservationMapper;
-import nbd.gV.repositories.ClientMongoRepository;
+import nbd.gV.repositories.UserMongoRepository;
 import nbd.gV.repositories.CourtMongoRepository;
 import nbd.gV.repositories.ReservationMongoRepository;
 import org.bson.conversions.Bson;
@@ -67,7 +67,7 @@ public class ReservationManager {
 
     private List<Reservation> getReservationsWithBsonFilter(Bson filter) {
         List<Reservation> reservations = new ArrayList<>();
-        var clientsRepo = new ClientMongoRepository();
+        var clientsRepo = new UserMongoRepository();
         var courtsRepo = new CourtMongoRepository();
         for (var r : reservationRepository.read(filter)) {
             reservations.add(ReservationMapper.fromMongoReservation(r,
@@ -123,7 +123,7 @@ public class ReservationManager {
     }
 
     public Reservation getReservationByID(UUID uuid) {
-        var clientsRepo = new ClientMongoRepository();
+        var clientsRepo = new UserMongoRepository();
         var courtsRepo = new CourtMongoRepository();
         ReservationDTO reservationMapper = reservationRepository.readByUUID(uuid);
         return ReservationMapper.fromMongoReservation(reservationMapper,

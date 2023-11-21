@@ -12,7 +12,7 @@ import nbd.gV.exceptions.ReservationException;
 import nbd.gV.data.mappers.ClientMapper;
 import nbd.gV.data.dto.ReservationDTO;
 import nbd.gV.data.mappers.CourtMapper;
-import nbd.gV.repositories.ClientMongoRepository;
+import nbd.gV.repositories.UserMongoRepository;
 import nbd.gV.repositories.CourtMongoRepository;
 import nbd.gV.repositories.ReservationMongoRepository;
 import nbd.gV.reservations.Reservation;
@@ -35,7 +35,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 public class ReservationManagerTest {
 
     static final ReservationMongoRepository reservationRepository = new ReservationMongoRepository();
-    static final ClientMongoRepository clientRepository = new ClientMongoRepository();
+    static final UserMongoRepository clientRepository = new UserMongoRepository();
     static final CourtMongoRepository courtRepository = new CourtMongoRepository();
     ClientType testClientType;
 
