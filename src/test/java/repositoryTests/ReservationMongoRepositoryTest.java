@@ -57,7 +57,7 @@ public class ReservationMongoRepositoryTest {
     static void cleanDB() {
         reservationRepository.getDatabase().getCollection(reservationRepository.getCollectionName(),
                 ReservationDTO.class).deleteMany(Filters.empty());
-        clientRepository.readAll().forEach((mapper) -> clientRepository.delete(UUID.fromString(mapper.getClientID())));
+        clientRepository.readAll().forEach((mapper) -> clientRepository.delete(UUID.fromString(mapper.getId())));
         courtRepository.readAll().forEach((mapper) -> courtRepository.delete(UUID.fromString(mapper.getCourtId())));
     }
 

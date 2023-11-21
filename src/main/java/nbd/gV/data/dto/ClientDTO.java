@@ -13,7 +13,6 @@ import java.util.Objects;
 @BsonDiscriminator(key = "_clazz", value = "client")
 public class ClientDTO extends UserDTO{
 //    @BsonProperty("_id")
-//    private String clientID;
     @BsonProperty("firstname")
     private String firstName;
     @BsonProperty("lastname")

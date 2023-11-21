@@ -32,7 +32,7 @@ public class ClientMapperTest {
                 false, testTypeNormal.getClientTypeName());
         assertNotNull(clientDTO1);
 
-        assertEquals(uuid, UUID.fromString(clientDTO1.getClientID()));
+        assertEquals(uuid, UUID.fromString(clientDTO1.getId()));
         assertEquals(testFirstName, clientDTO1.getFirstName());
         assertEquals(testLastName, clientDTO1.getLastName());
         assertEquals(testLogin, clientDTO1.getLogin());
@@ -59,7 +59,7 @@ public class ClientMapperTest {
         ClientDTO clientDTO = ClientMapper.toMongoClient(client);
         assertNotNull(clientDTO);
 
-        assertEquals(client.getId(), UUID.fromString(clientDTO.getClientID()));
+        assertEquals(client.getId(), UUID.fromString(clientDTO.getId()));
         assertEquals(client.getFirstName(), clientDTO.getFirstName());
         assertEquals(client.getLastName(), clientDTO.getLastName());
         assertEquals(client.getLogin(), clientDTO.getLogin());
@@ -76,7 +76,7 @@ public class ClientMapperTest {
         Client client1 = ClientMapper.fromMongoClient(clientDTO1);
         assertNotNull(client1);
 
-        assertEquals(UUID.fromString(clientDTO1.getClientID()), client1.getId());
+        assertEquals(UUID.fromString(clientDTO1.getId()), client1.getId());
         assertEquals(clientDTO1.getFirstName(), client1.getFirstName());
         assertEquals(clientDTO1.getLastName(), client1.getLastName());
         assertEquals(clientDTO1.getLogin(), client1.getLogin());
