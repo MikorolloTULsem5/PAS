@@ -64,7 +64,7 @@ public class ReservationMongoRepository extends AbstractMongoRepository<Reservat
             if (list1.isEmpty()) {
                 throw new ReservationException("Brak podanego klienta w bazie!");
             }
-            Client clientFound = ClientMapper.fromMongoClient(list1.get(0));
+            Client clientFound = ClientMapper.fromMongoUser(list1.get(0));
 
             //Check court
             var list2 = getDatabase().getCollection(CourtMongoRepository.COLLECTION_NAME, CourtDTO.class)

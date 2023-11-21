@@ -34,7 +34,7 @@ public class ReservationMapperTest {
     @BeforeEach
     void setUp() {
         testClient = new Client("John", "Smith", "12345678901", new Normal());
-        testClientMapper = ClientMapper.toMongoClient(testClient);
+        testClientMapper = ClientMapper.toMongoUser(testClient);
 
         testCourt = new Court(1000, 100, 1);
         testCourtMapper = CourtMapper.toMongoCourt(testCourt);
@@ -96,7 +96,7 @@ public class ReservationMapperTest {
         assertNotNull(reservationMapper);
 
         Reservation reservation = ReservationMapper.fromMongoReservation(reservationMapper,
-                ClientMapper.toMongoClient(testClient), CourtMapper.toMongoCourt(testCourt));
+                ClientMapper.toMongoUser(testClient), CourtMapper.toMongoCourt(testCourt));
         assertNotNull(reservation);
 
         assertEquals(uuid, reservation.getId());
@@ -113,7 +113,7 @@ public class ReservationMapperTest {
         assertNotNull(reservationMapperEnded);
 
         Reservation reservationEnded = ReservationMapper.fromMongoReservation(reservationMapperEnded,
-                ClientMapper.toMongoClient(testClient), CourtMapper.toMongoCourt(testCourt));
+                ClientMapper.toMongoUser(testClient), CourtMapper.toMongoCourt(testCourt));
         assertNotNull(reservationEnded);
 
         assertEquals(UUID.fromString(reservationMapperEnded.getId()), reservationEnded.getId());

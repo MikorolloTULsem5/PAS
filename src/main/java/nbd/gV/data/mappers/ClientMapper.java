@@ -11,13 +11,13 @@ import java.util.UUID;
 
 public class ClientMapper {
 
-    public static ClientDTO toMongoClient(Client client) {
+    public static ClientDTO toMongoUser(Client client) {
         return new ClientDTO(client.getId().toString(), client.getFirstName(),
                 client.getLastName(), client.getLogin(), client.isArchive(),
                 client.getClientType().getClientTypeName());
     }
 
-    public static Client fromMongoClient(ClientDTO clientDTO) {
+    public static Client fromMongoUser(ClientDTO clientDTO) {
         ClientType type = switch (clientDTO.getClientType()) {
             case "Normal" -> new Normal();
             case "Athlete" -> new Athlete();

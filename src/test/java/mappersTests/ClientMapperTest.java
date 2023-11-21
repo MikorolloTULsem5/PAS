@@ -56,7 +56,7 @@ public class ClientMapperTest {
         Client client = new Client(testFirstName, testLastName, testLogin, testTypeNormal);
         assertNotNull(client);
 
-        ClientDTO clientDTO = ClientMapper.toMongoClient(client);
+        ClientDTO clientDTO = ClientMapper.toMongoUser(client);
         assertNotNull(clientDTO);
 
         assertEquals(client.getId(), UUID.fromString(clientDTO.getId()));
@@ -73,7 +73,7 @@ public class ClientMapperTest {
                 true, testTypeNormal.getClientTypeName());
         assertNotNull(clientDTO1);
 
-        Client client1 = ClientMapper.fromMongoClient(clientDTO1);
+        Client client1 = ClientMapper.fromMongoUser(clientDTO1);
         assertNotNull(client1);
 
         assertEquals(UUID.fromString(clientDTO1.getId()), client1.getId());
@@ -89,7 +89,7 @@ public class ClientMapperTest {
                 testFirstName, testLastName, testLogin, false, testTypeAthlete.getClientTypeName());
         assertNotNull(clientDTO2);
 
-        Client client2 = ClientMapper.fromMongoClient(clientDTO2);
+        Client client2 = ClientMapper.fromMongoUser(clientDTO2);
         assertNotNull(client2);
         assertEquals(clientDTO2.getClientType(), client2.getClientType().getClientTypeName());
         assertTrue(client2.getClientType() instanceof Athlete);
@@ -98,7 +98,7 @@ public class ClientMapperTest {
                 testLogin, false, testTypeCoach.getClientTypeName());
         assertNotNull(clientDTO3);
 
-        Client client3 = ClientMapper.fromMongoClient(clientDTO3);
+        Client client3 = ClientMapper.fromMongoUser(clientDTO3);
         assertNotNull(client3);
         assertEquals(clientDTO3.getClientType(), client3.getClientType().getClientTypeName());
         assertTrue(client3.getClientType() instanceof Coach);

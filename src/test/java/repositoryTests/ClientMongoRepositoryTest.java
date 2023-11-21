@@ -50,13 +50,13 @@ public class ClientMongoRepositoryTest {
     void initData() {
         cleanFirstAndLastTimeDB();
         client1 = new Client("Adam", "Smith", "12345678901", testClientType);
-        clientMapper1 = ClientMapper.toMongoClient(client1);
+        clientMapper1 = ClientMapper.toMongoUser(client1);
 
         client2 = new Client("Eva", "Smith", "12345678902", testClientType);
-        clientMapper2 = ClientMapper.toMongoClient(client2);
+        clientMapper2 = ClientMapper.toMongoUser(client2);
 
         client3 = new Client("John", "Lenon", "12345678903", testClientType);
-        clientMapper3 = ClientMapper.toMongoClient(client3);
+        clientMapper3 = ClientMapper.toMongoUser(client3);
     }
 
     @Test

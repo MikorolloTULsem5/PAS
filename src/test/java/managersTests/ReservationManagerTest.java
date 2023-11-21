@@ -66,9 +66,9 @@ public class ReservationManagerTest {
         testClient1 = new Client("John", "Smith", "12345678901", testClientType);
         testClient2 = new Client("Eva", "Brown", "12345678902", testClientType);
         testClient3 = new Client("Adam", "Long", "12345678903", testClientType);
-        clientRepository.create(ClientMapper.toMongoClient(testClient1));
-        clientRepository.create(ClientMapper.toMongoClient(testClient2));
-        clientRepository.create(ClientMapper.toMongoClient(testClient3));
+        clientRepository.create(ClientMapper.toMongoUser(testClient1));
+        clientRepository.create(ClientMapper.toMongoUser(testClient2));
+        clientRepository.create(ClientMapper.toMongoUser(testClient3));
 
         testCourt1 = new Court(1000, 100, 1);
         testCourt2 = new Court(1000, 100, 2);

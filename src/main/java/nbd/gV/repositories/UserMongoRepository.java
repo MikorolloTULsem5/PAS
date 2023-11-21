@@ -3,12 +3,12 @@ package nbd.gV.repositories;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.model.CreateCollectionOptions;
 import com.mongodb.client.model.ValidationOptions;
-import nbd.gV.data.dto.ClientDTO;
+import nbd.gV.data.dto.UserDTO;
 import org.bson.Document;
 
 import java.util.ArrayList;
 
-public class UserMongoRepository extends AbstractMongoRepository<ClientDTO> {
+public class UserMongoRepository extends AbstractMongoRepository<UserDTO> {
 
     static final String COLLECTION_NAME = "users";
 
@@ -33,8 +33,8 @@ public class UserMongoRepository extends AbstractMongoRepository<ClientDTO> {
     }
 
     @Override
-    protected MongoCollection<ClientDTO> getCollection() {
-        return getDatabase().getCollection(getCollectionName(), ClientDTO.class);
+    protected MongoCollection<UserDTO> getCollection() {
+        return getDatabase().getCollection(getCollectionName(), UserDTO.class);
     }
 
     @Override

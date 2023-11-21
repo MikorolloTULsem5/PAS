@@ -30,7 +30,7 @@ public class ClientManager {
                         "znajduje sie juz w bazie");
             }
 
-            if (!clientRepository.create(ClientMapper.toMongoClient(newClient))) {
+            if (!clientRepository.create(ClientMapper.toMongoUser(newClient))) {
                 throw new ClientException("Nie udalo sie zarejestrowac klienta w bazie! - brak odpowiedzi");
             }
         } catch (MyMongoException exception) {
@@ -58,7 +58,7 @@ public class ClientManager {
     public Client getClient(UUID clientID) {
         try {
             ClientDTO clientMapper = clientRepository.readByUUID(clientID);
-            return clientMapper != null ? ClientMapper.fromMongoClient(clientMapper) : null;
+            return clientMapper != null ? ClientMapper.fromMongoUser(clientMapper) : null;
         } catch (Exception exception) {
             throw new ClientException("Blad transakcji.");
         }
@@ -68,7 +68,7 @@ public class ClientManager {
         try {
             List<Client> clientsList = new ArrayList<>();
             for (var el : clientRepository.readAll()) {
-                clientsList.add(ClientMapper.fromMongoClient(el));
+                clientsList.add(ClientMapper.fromMongoUser(el));
             }
             return clientsList;
         } catch (Exception exception) {
@@ -78,6 +78,6 @@ public class ClientManager {
 
     public Client findClientByLogin(String login) {
         var list = clientRepository.read(Filters.eq("login", login));
-        return !list.isEmpty() ? ClientMapper.fromMongoClient(list.get(0)) : null;
+        return !list.isEmpty() ? ClientMapper.fromMongoUser(list.get(0)) : null;
     }
 }

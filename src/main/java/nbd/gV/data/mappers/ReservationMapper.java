@@ -17,7 +17,7 @@ public class ReservationMapper {
     public static Reservation fromMongoReservation(ReservationDTO reservationMapper, ClientDTO clientMapper,
                                                    CourtDTO courtMapper) {
         Reservation reservation = new Reservation(UUID.fromString(reservationMapper.getId()),
-                ClientMapper.fromMongoClient(clientMapper), CourtMapper.fromMongoCourt(courtMapper),
+                ClientMapper.fromMongoUser(clientMapper), CourtMapper.fromMongoCourt(courtMapper),
                 reservationMapper.getBeginTime());
         if (reservationMapper.getEndTime() != null) {
             reservation.endReservation(reservationMapper.getEndTime());

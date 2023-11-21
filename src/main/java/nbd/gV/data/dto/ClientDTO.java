@@ -12,13 +12,10 @@ import java.util.Objects;
 @FieldDefaults(makeFinal = true)
 @BsonDiscriminator(key = "_clazz", value = "client")
 public class ClientDTO extends UserDTO{
-//    @BsonProperty("_id")
     @BsonProperty("firstname")
     private String firstName;
     @BsonProperty("lastname")
     private String lastName;
-//    @BsonProperty("login")
-//    private String login;
     @BsonProperty("archive")
     private boolean archive;
     @BsonProperty("clienttype")
