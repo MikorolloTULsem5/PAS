@@ -21,11 +21,7 @@ public class UserMongoRepository extends AbstractMongoRepository<ClientDTO> {
                                 "$jsonSchema": {
                                     "bsonType": "object",
                                     "required": [
-                                        "firstname",
-                                        "lastname",
-                                        "login",
-                                        "archive",
-                                        "clienttype"
+                                        "login"
                                     ],
                                 }
                             }

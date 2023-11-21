@@ -25,7 +25,7 @@ public class ClientMapper {
             default -> null;
         };
 
-        Client clientModel = new Client(UUID.fromString(clientDTO.getClientID()), clientDTO.getFirstName(),
+        Client clientModel = new Client(UUID.fromString(clientDTO.getId()), clientDTO.getFirstName(),
                 clientDTO.getLastName(), clientDTO.getLogin(), type);
         clientModel.setArchive(clientDTO.isArchive());
         return clientModel;
