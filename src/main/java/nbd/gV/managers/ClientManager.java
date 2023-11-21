@@ -22,10 +22,10 @@ public class ClientManager {
         this.clientRepository = new ClientMongoRepository();
     }
 
-    public Client registerClient(String firstName, String lastName, String personalID, ClientType clientType) {
-        Client newClient = new Client(firstName, lastName, personalID, clientType);
+    public Client registerClient(String firstName, String lastName, String login, ClientType clientType) {
+        Client newClient = new Client(firstName, lastName, login, clientType);
         try {
-            if (!clientRepository.read(Filters.eq("personalid", personalID)).isEmpty()) {
+            if (!clientRepository.read(Filters.eq("login", login)).isEmpty()) {
                 throw new ClientException("Nie udalo sie zarejestrowac klienta w bazie! - klient o tym numerze PESEL" +
                         "znajduje sie juz w bazie");
             }
@@ -76,8 +76,8 @@ public class ClientManager {
         }
     }
 
-    public Client findClientByPersonalId(String personalId) {
-        var list = clientRepository.read(Filters.eq("personalid", personalId));
+    public Client findClientByLogin(String login) {
+        var list = clientRepository.read(Filters.eq("login", login));
         return !list.isEmpty() ? ClientMapper.fromMongoClient(list.get(0)) : null;
     }
 }

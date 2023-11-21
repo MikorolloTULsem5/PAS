@@ -14,37 +14,29 @@ public class Client extends User {
 
     private String firstName;
     private String lastName;
-    private String personalId;
     private ClientType clientType;
 
-    public Client(UUID id, String login, String firstName, String lastName, String personalId, ClientType clientType) {
+    public Client(UUID id, String firstName, String lastName, String login, ClientType clientType) {
         super(id, login);
         this.firstName = firstName;
         this.lastName = lastName;
-        this.personalId = personalId;
         this.clientType = clientType;
     }
 
     ///TODO do refactoru 1 (zostawione dla kompatybilnosci wstecznej)
-    public Client(String firstName, String lastName, String personalId, ClientType clientType) {
-        super(UUID.randomUUID(), "exampleLogin");
-        if (firstName.isEmpty() || lastName.isEmpty() || personalId.isEmpty() || clientType == null) {
+    public Client(String firstName, String lastName, String login, ClientType clientType) {
+        super(UUID.randomUUID(), login);
+        if (firstName.isEmpty() || lastName.isEmpty() || login.isEmpty() || clientType == null) {
             throw new MainException("Brakujacy parametr przy tworzeniu obiektu klienta!");
         }
 
         this.firstName = firstName;
         this.lastName = lastName;
-        this.personalId = personalId;
         this.clientType = clientType;
     }
 
-    ///TODO do refactoru 2 (zostawione dla kompatybilnosci wstecznej)
-    public Client(UUID uuid, String firstName, String lastName, String personalId, ClientType clientType) {
-        this(uuid, "exampleLogin", firstName, lastName, personalId, clientType);
-    }
-
     public String getClientInfo() {
-        return "Klient - %s %s o numerze PESEL %s\n".formatted(firstName, lastName, personalId);
+        return "Klient - %s %s o numerze PESEL %s\n".formatted(firstName, lastName, getLogin());
     }
 
     public double applyDiscount(double price) {
@@ -62,11 +54,11 @@ public class Client extends User {
         Client client = (Client) o;
         return Objects.equals(getId(), client.getId());
         ///TODO czy to spelnienie 1 wymagania z zadania (o byciu podstawa rownosci obiektow)???
-//        return archive == client.archive &&
-//                Objects.equals(id, client.id) &&
+//        return isArchive() == client.isArchive() &&
+//                Objects.equals(getId(), client.getId()) &&
 //                Objects.equals(firstName, client.firstName) &&
 //                Objects.equals(lastName, client.lastName) &&
-//                Objects.equals(personalId, client.personalId) &&
+//                Objects.equals(getLogin(), client.getLogin()) &&
 //                Objects.equals(clientType.getClientTypeName(), client.clientType.getClientTypeName());
     }
 }

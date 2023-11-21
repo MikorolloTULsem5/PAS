@@ -7,13 +7,12 @@ import lombok.Setter;
 import java.util.UUID;
 
 @Getter
-@Setter
 public abstract class User {
 
-    @Setter(AccessLevel.NONE)
     private final UUID id;
     ///TODO wywalic pesel, zostawic login???
-    private String login;
+    private final String login;
+    @Setter
     private boolean archive = false;
 
     public User(UUID id, String login) {

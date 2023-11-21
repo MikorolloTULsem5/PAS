@@ -21,18 +21,10 @@ public class ClientMongoRepository extends AbstractMongoRepository<ClientDTO> {
                                     "required": [
                                         "firstname",
                                         "lastname",
-                                        "personalid",
+                                        "login",
                                         "archive",
                                         "clienttype"
                                     ],
-                                    "properties": {
-                                        "personalid": {
-                                            "bsonType": "string",
-                                            "minimum": 11,
-                                            "maximum": 11,
-                                            "description": "Must contain exactly 11 digits"
-                                        }
-                                    }
                                 }
                             }
                             """));

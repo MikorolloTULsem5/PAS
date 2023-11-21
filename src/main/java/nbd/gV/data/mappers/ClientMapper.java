@@ -13,7 +13,7 @@ public class ClientMapper {
 
     public static ClientDTO toMongoClient(Client client) {
         return new ClientDTO(client.getId().toString(), client.getFirstName(),
-                client.getLastName(), client.getPersonalId(), client.isArchive(),
+                client.getLastName(), client.getLogin(), client.isArchive(),
                 client.getClientType().getClientTypeName());
     }
 
@@ -26,7 +26,7 @@ public class ClientMapper {
         };
 
         Client clientModel = new Client(UUID.fromString(clientDTO.getClientID()), clientDTO.getFirstName(),
-                clientDTO.getLastName(), clientDTO.getPersonalId(), type);
+                clientDTO.getLastName(), clientDTO.getLogin(), type);
         clientModel.setArchive(clientDTO.isArchive());
         return clientModel;
     }
