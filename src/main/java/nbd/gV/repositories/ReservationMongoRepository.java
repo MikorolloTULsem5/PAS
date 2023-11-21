@@ -129,7 +129,7 @@ public class ReservationMongoRepository extends AbstractMongoRepository<Reservat
         }
 
         //Find client
-        var listClient = getDatabase().getCollection("clients", ClientDTO.class)
+        var listClient = getDatabase().getCollection(UserMongoRepository.COLLECTION_NAME, ClientDTO.class)
                 .find(Filters.eq("_id", listReservation.get(0).getClientId().toString()))
                 .into(new ArrayList<>());
         if (listClient.isEmpty()) {
