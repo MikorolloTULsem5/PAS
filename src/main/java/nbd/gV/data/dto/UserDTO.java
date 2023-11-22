@@ -9,7 +9,7 @@ import java.util.Objects;
 
 @Getter
 @FieldDefaults(makeFinal = true)
-public abstract class UserDTO {
+public class UserDTO {
     @BsonProperty("_id")
     private String id;
     @BsonProperty

@@ -127,100 +127,100 @@ public class ClientMongoRepositoryTest {
         assertEquals(clientMapper3, clientsList.get(2));
     }
 
-//    @Test
-//    void testFindingByUUID() {
-//        assertEquals(0, getTestCollection().find().into(new ArrayList<>()).size());
-//        assertTrue(clientRepository.create(clientMapper1));
-//        assertTrue(clientRepository.create(clientMapper2));
-//        assertTrue(clientRepository.create(clientMapper3));
-//        assertEquals(3, getTestCollection().find().into(new ArrayList<>()).size());
-//
-//        UserDTO clMapper1 = clientRepository.readByUUID(UUID.fromString(clientMapper1.getId()), ClientDTO.class);
-//        assertNotNull(clMapper1);
-//        assertEquals(clientMapper1, clMapper1);
-//
-//        UserDTO clMapper3 = clientRepository.readByUUID(UUID.fromString(clientMapper3.getId()), ClientDTO.class);
-//        assertNotNull(clMapper3);
-//        assertEquals(clientMapper3, clMapper3);
-//    }
-//
-//    @Test
-//    void testDeletingDocumentsInDBPositive() {
-//        assertEquals(0, getTestCollection().find().into(new ArrayList<>()).size());
-//        assertTrue(clientRepository.create(clientMapper1));
-//        assertTrue(clientRepository.create(clientMapper2));
-//        assertTrue(clientRepository.create(clientMapper3));
-//        assertEquals(3, getTestCollection().find().into(new ArrayList<>()).size());
-//
-//        assertTrue(clientRepository.delete(UUID.fromString(clientMapper2.getId())));
-//        assertEquals(2, getTestCollection().find().into(new ArrayList<>()).size());
-//
-//        //Check the rest
-//        var clientMappersList = clientRepository.readAll();
-//        assertEquals(2, clientMappersList.size());
-//        assertEquals(clientMapper1, clientMappersList.get(0));
-//        assertEquals(clientMapper3, clientMappersList.get(1));
-//    }
-//
-//    @Test
-//    void testDeletingDocumentsInDBNegative() {
-//        assertEquals(0, getTestCollection().find().into(new ArrayList<>()).size());
-//        assertTrue(clientRepository.create(clientMapper1));
-//        assertTrue(clientRepository.create(clientMapper2));
-//        assertTrue(clientRepository.create(clientMapper3));
-//        assertEquals(3, getTestCollection().find().into(new ArrayList<>()).size());
-//
-//        assertTrue(clientRepository.delete(UUID.fromString(clientMapper3.getId())));
-//        assertEquals(2, getTestCollection().find().into(new ArrayList<>()).size());
-//
-//        assertFalse(clientRepository.delete(UUID.fromString(clientMapper3.getId())));
-//        assertEquals(2, getTestCollection().find().into(new ArrayList<>()).size());
-//    }
-//
-//    @Test
-//    void testUpdatingDocumentsInDBPositive() {
-//        assertEquals(0, getTestCollection().find().into(new ArrayList<>()).size());
-//        assertTrue(clientRepository.create(clientMapper1));
-//        assertTrue(clientRepository.create(clientMapper2));
-//        assertTrue(clientRepository.create(clientMapper3));
-//        assertEquals(3, getTestCollection().find().into(new ArrayList<>()).size());
-//
-//        assertEquals("Adam",
-//                clientRepository.readByUUID(UUID.fromString(clientMapper1.getId())).getFirstName());
-//        assertTrue(clientRepository.update(UUID.fromString(clientMapper1.getId()),
-//                "firstname", "Chris"));
-//        assertEquals("Chris",
-//                clientRepository.readByUUID(UUID.fromString(clientMapper1.getId())).getFirstName());
-//
-//        //Test adding new value to document
-//        assertFalse(clientRepository.getDatabase().getCollection(clientRepository.getCollectionName(), Document.class)
-//                .find(Filters.eq("_id", clientMapper2.getId().toString()))
-//                .into(new ArrayList<>()).get(0).containsKey("field"));
-//
-//        assertTrue(clientRepository.update(UUID.fromString(clientMapper2.getId()),
-//                "field", "newValue"));
-//
-//        assertTrue(clientRepository.getDatabase().getCollection(clientRepository.getCollectionName(), Document.class)
-//                .find(Filters.eq("_id", clientMapper2.getId().toString()))
-//                .into(new ArrayList<>()).get(0).containsKey("field"));
-//
-//        assertEquals("newValue",
-//                clientRepository.getDatabase().getCollection(clientRepository.getCollectionName(), Document.class)
-//                .find(Filters.eq("_id", clientMapper2.getId().toString()))
-//                .into(new ArrayList<>()).get(0).getString("field"));
-//    }
-//    @Test
-//    void testUpdatingDocumentsInDBNegative() {
-//        assertEquals(0, getTestCollection().find().into(new ArrayList<>()).size());
-//        assertTrue(clientRepository.create(clientMapper1));
-//        assertTrue(clientRepository.create(clientMapper2));
-//        assertTrue(clientRepository.create(clientMapper3));
-//        assertEquals(3, getTestCollection().find().into(new ArrayList<>()).size());
-//
-//        assertThrows(MyMongoException.class,
-//                () -> clientRepository.update(UUID.fromString(clientMapper3.getId()),
-//                        "_id", UUID.randomUUID().toString()));
-//
-//        assertFalse(clientRepository.update(UUID.randomUUID(), "firstname", "Harry"));
-//    }
+    @Test
+    void testFindingByUUID() {
+        assertEquals(0, getTestCollection().find().into(new ArrayList<>()).size());
+        assertTrue(clientRepository.create(clientMapper1));
+        assertTrue(clientRepository.create(clientMapper2));
+        assertTrue(clientRepository.create(clientMapper3));
+        assertEquals(3, getTestCollection().find().into(new ArrayList<>()).size());
+
+        UserDTO clMapper1 = clientRepository.readByUUID(UUID.fromString(clientMapper1.getId()), ClientDTO.class);
+        assertNotNull(clMapper1);
+        assertEquals(clientMapper1, clMapper1);
+
+        UserDTO clMapper3 = clientRepository.readByUUID(UUID.fromString(clientMapper3.getId()), ClientDTO.class);
+        assertNotNull(clMapper3);
+        assertEquals(clientMapper3, clMapper3);
+    }
+
+    @Test
+    void testDeletingDocumentsInDBPositive() {
+        assertEquals(0, getTestCollection().find().into(new ArrayList<>()).size());
+        assertTrue(clientRepository.create(clientMapper1));
+        assertTrue(clientRepository.create(clientMapper2));
+        assertTrue(clientRepository.create(clientMapper3));
+        assertEquals(3, getTestCollection().find().into(new ArrayList<>()).size());
+
+        assertTrue(clientRepository.delete(UUID.fromString(clientMapper2.getId())));
+        assertEquals(2, getTestCollection().find().into(new ArrayList<>()).size());
+
+        //Check the rest
+        var clientMappersList = clientRepository.readAll(ClientDTO.class);
+        assertEquals(2, clientMappersList.size());
+        assertEquals(clientMapper1, clientMappersList.get(0));
+        assertEquals(clientMapper3, clientMappersList.get(1));
+    }
+
+    @Test
+    void testDeletingDocumentsInDBNegative() {
+        assertEquals(0, getTestCollection().find().into(new ArrayList<>()).size());
+        assertTrue(clientRepository.create(clientMapper1));
+        assertTrue(clientRepository.create(clientMapper2));
+        assertTrue(clientRepository.create(clientMapper3));
+        assertEquals(3, getTestCollection().find().into(new ArrayList<>()).size());
+
+        assertTrue(clientRepository.delete(UUID.fromString(clientMapper3.getId())));
+        assertEquals(2, getTestCollection().find().into(new ArrayList<>()).size());
+
+        assertFalse(clientRepository.delete(UUID.fromString(clientMapper3.getId())));
+        assertEquals(2, getTestCollection().find().into(new ArrayList<>()).size());
+    }
+
+    @Test
+    void testUpdatingDocumentsInDBPositive() {
+        assertEquals(0, getTestCollection().find().into(new ArrayList<>()).size());
+        assertTrue(clientRepository.create(clientMapper1));
+        assertTrue(clientRepository.create(clientMapper2));
+        assertTrue(clientRepository.create(clientMapper3));
+        assertEquals(3, getTestCollection().find().into(new ArrayList<>()).size());
+
+        assertEquals("Adam",
+                ((ClientDTO) clientRepository.readByUUID(UUID.fromString(clientMapper1.getId()), ClientDTO.class)).getFirstName());
+        assertTrue(clientRepository.update(UUID.fromString(clientMapper1.getId()),
+                "firstname", "Chris"));
+        assertEquals("Chris",
+                ((ClientDTO) clientRepository.readByUUID(UUID.fromString(clientMapper1.getId()), ClientDTO.class)).getFirstName());
+
+        //Test adding new value to document
+        assertFalse(clientRepository.getDatabase().getCollection(clientRepository.getCollectionName(), Document.class)
+                .find(Filters.eq("_id", clientMapper2.getId().toString()))
+                .into(new ArrayList<>()).get(0).containsKey("field"));
+
+        assertTrue(clientRepository.update(UUID.fromString(clientMapper2.getId()),
+                "field", "newValue"));
+
+        assertTrue(clientRepository.getDatabase().getCollection(clientRepository.getCollectionName(), Document.class)
+                .find(Filters.eq("_id", clientMapper2.getId().toString()))
+                .into(new ArrayList<>()).get(0).containsKey("field"));
+
+        assertEquals("newValue",
+                clientRepository.getDatabase().getCollection(clientRepository.getCollectionName(), Document.class)
+                .find(Filters.eq("_id", clientMapper2.getId().toString()))
+                .into(new ArrayList<>()).get(0).getString("field"));
+    }
+    @Test
+    void testUpdatingDocumentsInDBNegative() {
+        assertEquals(0, getTestCollection().find().into(new ArrayList<>()).size());
+        assertTrue(clientRepository.create(clientMapper1));
+        assertTrue(clientRepository.create(clientMapper2));
+        assertTrue(clientRepository.create(clientMapper3));
+        assertEquals(3, getTestCollection().find().into(new ArrayList<>()).size());
+
+        assertThrows(MyMongoException.class,
+                () -> clientRepository.update(UUID.fromString(clientMapper3.getId()),
+                        "_id", UUID.randomUUID().toString()));
+
+        assertFalse(clientRepository.update(UUID.randomUUID(), "firstname", "Harry"));
+    }
 }
