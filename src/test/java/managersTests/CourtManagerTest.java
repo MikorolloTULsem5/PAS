@@ -1,14 +1,26 @@
 package managersTests;
 import nbd.gV.courts.Court;
+import nbd.gV.data.dto.CourtDTO;
+import nbd.gV.data.mappers.ClientMapper;
+import nbd.gV.data.mappers.CourtMapper;
+import nbd.gV.data.mappers.ReservationMapper;
 import nbd.gV.managers.CourtManager;
 import nbd.gV.exceptions.CourtException;
 import nbd.gV.exceptions.MainException;
 import nbd.gV.repositories.CourtMongoRepository;
+import nbd.gV.repositories.ReservationMongoRepository;
+import nbd.gV.repositories.UserMongoRepository;
+import nbd.gV.reservations.Reservation;
+import nbd.gV.users.Client;
+import nbd.gV.users.clienttype.Normal;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.time.LocalDateTime;
+import java.time.Month;
+import java.util.ArrayList;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -111,6 +123,49 @@ public class CourtManagerTest {
         // Testujemy wyrejestrowanie null'a
         assertThrows(MainException.class, () -> cm.unregisterCourt(null));
         assertEquals(2, cm.getAllCourts().size());
+    }
+
+    @Test
+    void testDeletingCourtSuccess() {
+        CourtManager courtManager = new CourtManager();
+        var collection = courtRepository.getDatabase().getCollection(courtRepository.getCollectionName(), CourtDTO.class);
+        assertEquals(0, collection.find().into(new ArrayList<>()).size());
+        Court testCourt1 = new Court(1000, 100, 1);
+
+        assertTrue(courtRepository.create(CourtMapper.toMongoCourt(testCourt1)));
+        assertEquals(1, collection.find().into(new ArrayList<>()).size());
+
+        courtManager.deleteCourt(testCourt1);
+        assertEquals(0, collection.find().into(new ArrayList<>()).size());
+    }
+
+    @Test
+    void testDeletingCourtFailure() {
+        CourtManager courtManager = new CourtManager();
+        var collection = courtRepository.getDatabase().getCollection(courtRepository.getCollectionName(), CourtDTO.class);
+        assertEquals(0, collection.find().into(new ArrayList<>()).size());
+        Client testClient1 = new Client("John", "Smith", "12345678901", new Normal());
+        Court testCourt1 = new Court(1000, 100, 1);
+        LocalDateTime testTimeStart = LocalDateTime.of(2023, Month.JUNE, 4, 12, 0);
+        Reservation testReservation1 = new Reservation(testClient1, testCourt1, testTimeStart);
+
+        assertTrue(courtRepository.create(CourtMapper.toMongoCourt(testCourt1)));
+
+        assertEquals(1, collection.find().into(new ArrayList<>()).size());
+
+        try (ReservationMongoRepository reservationMongoRepository = new ReservationMongoRepository();
+             UserMongoRepository userMongoRepository = new UserMongoRepository()){
+            userMongoRepository.create(ClientMapper.toMongoUser(testClient1));
+            reservationMongoRepository.create(ReservationMapper.toMongoReservation(testReservation1));
+            assertThrows(CourtException.class, () -> courtManager.deleteCourt(testCourt1));
+            assertEquals(1, collection.find().into(new ArrayList<>()).size());
+
+            reservationMongoRepository.delete(testReservation1.getId());
+            userMongoRepository.delete(testCourt1.getCourtId());
+        }
+
+        assertTrue(courtRepository.delete(testCourt1.getCourtId()));
+        assertEquals(0, collection.find().into(new ArrayList<>()).size());
     }
 
     @Test

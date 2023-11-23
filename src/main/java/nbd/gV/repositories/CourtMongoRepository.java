@@ -1,12 +1,20 @@
 package nbd.gV.repositories;
 
+import com.mongodb.client.ClientSession;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.model.CreateCollectionOptions;
+import com.mongodb.client.model.Filters;
+import com.mongodb.client.model.Updates;
 import com.mongodb.client.model.ValidationOptions;
+import com.mongodb.client.result.UpdateResult;
 import nbd.gV.data.dto.CourtDTO;
+import nbd.gV.data.dto.ReservationDTO;
+import nbd.gV.exceptions.MyMongoException;
 import org.bson.Document;
+import org.bson.conversions.Bson;
 
 import java.util.ArrayList;
+import java.util.UUID;
 
 public class CourtMongoRepository extends AbstractMongoRepository<CourtDTO> {
 
@@ -51,5 +59,37 @@ public class CourtMongoRepository extends AbstractMongoRepository<CourtDTO> {
     @Override
     public String getCollectionName() {
         return COLLECTION_NAME;
+    }
+
+    @Override
+    public boolean delete(UUID uuid) {
+        Bson filter = Filters.eq("courtid", uuid.toString());
+        ClientSession clientSession = getMongoClient().startSession();
+        try {
+            clientSession.startTransaction();
+            var reservation = this.getDatabase().getCollection(ReservationMongoRepository.COLLECTION_NAME, ReservationDTO.class).find(filter).first();
+            if (reservation != null) {
+                return false;
+            }
+            boolean result = super.delete(uuid);
+            if (result) {
+                clientSession.commitTransaction();
+            } else {
+                clientSession.abortTransaction();
+            }
+            return result;
+        } catch (Exception exception) {
+            clientSession.abortTransaction();
+            clientSession.close();
+            throw new MyMongoException(exception.getMessage());
+        } finally {
+            clientSession.close();
+        }
+    }
+
+    public boolean update(CourtDTO court){
+        Bson filter = Filters.eq("_id", court.getCourtId());
+        UpdateResult result = getCollection().replaceOne(filter,court);
+        return result.getModifiedCount() != 0;
     }
 }
