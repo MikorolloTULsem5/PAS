@@ -60,7 +60,8 @@ public class ClientManager extends UserManager {
 
     public List<Client> findClientByLoginFitting(String login) {
         List<Client> clientsList = new ArrayList<>();
-        for (var el : userRepository.read(Filters.regex("login", ".*%s.*".formatted(login)), ClientDTO.class)) {
+        for (var el : userRepository.read(Filters.and(Filters.regex("login", ".*%s.*".formatted(login)),
+                Filters.eq("_clazz", "client")), ClientDTO.class)) {
             clientsList.add(ClientMapper.fromMongoUser((ClientDTO) el));
         }
         return clientsList;

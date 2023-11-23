@@ -168,7 +168,7 @@ public class ClientManagerTest {
         var list = cm.findClientByLoginFitting("adxam");
         assertEquals(2, list.size());
         assertEquals(testClient1.getId(), list.get(0).getId());
-        assertEquals(testClient2.getId(), list.get(1).getId());
+        assertEquals(testClient3.getId(), list.get(1).getId());
     }
 
     @Test

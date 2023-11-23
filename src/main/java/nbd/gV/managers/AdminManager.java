@@ -24,7 +24,8 @@ public class AdminManager extends UserManager {
         this.userRepository = new UserMongoRepository();
     }
 
-    public Admin registerClient(String login) {
+
+    public Admin registerAdmin(String login) {
         Admin newAdmin = new Admin(login);
         try {
             if (!userRepository.read(Filters.eq("login", login), AdminDTO.class).isEmpty()) {
