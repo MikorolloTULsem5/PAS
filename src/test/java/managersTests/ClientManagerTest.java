@@ -105,7 +105,7 @@ public class ClientManagerTest {
         assertEquals(testClient1, cm.getClient(testClient1.getId()));
         assertFalse(testClient1.isArchive());
 
-        cm.unregisterClient(testClient1);
+        cm.archiveClient(testClient1);
 
         assertEquals(2, cm.getAllClients().size());
         Client dbClient = cm.getClient(testClient1.getId());
@@ -117,12 +117,12 @@ public class ClientManagerTest {
         assertNotNull(testClient3);
         assertFalse(testClient3.isArchive());
 
-        assertThrows(ClientException.class, () -> cm.unregisterClient(testClient3));
+        assertThrows(ClientException.class, () -> cm.archiveClient(testClient3));
         assertFalse(testClient3.isArchive());
         assertEquals(2, cm.getAllClients().size());
 
         // Testujemy wyrejestrowanie null'a
-        assertThrows(MainException.class, () -> cm.unregisterClient(null));
+        assertThrows(MainException.class, () -> cm.archiveClient(null));
         assertEquals(2, cm.getAllClients().size());
     }
 
