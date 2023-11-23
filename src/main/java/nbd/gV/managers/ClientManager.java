@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-public class ClientManager {
+public class ClientManager extends UserManager {
 
     private final UserMongoRepository clientRepository;
 
@@ -57,28 +57,33 @@ public class ClientManager {
     }
 
     public Client getClient(UUID clientID) {
-        try {
-            UserDTO clientMapper = clientRepository.readByUUID(clientID, ClientDTO.class);
-            return clientMapper != null ? ClientMapper.fromMongoUser((ClientDTO) clientMapper) : null;
-        } catch (Exception exception) {
-            throw new ClientException("Blad transakcji.");
-        }
+        UserDTO clientMapper = clientRepository.readByUUID(clientID, ClientDTO.class);
+        return clientMapper != null ? ClientMapper.fromMongoUser((ClientDTO) clientMapper) : null;
     }
 
     public List<Client> getAllClients() {
-        try {
-            List<Client> clientsList = new ArrayList<>();
-            for (var el : clientRepository.readAll(ClientDTO.class)) {
-                clientsList.add(ClientMapper.fromMongoUser((ClientDTO) el));
-            }
-            return clientsList;
-        } catch (Exception exception) {
-            throw new ClientException("Nie udalo sie uzyskac clientow.");
+        List<Client> clientsList = new ArrayList<>();
+        for (var el : clientRepository.readAll(ClientDTO.class)) {
+            clientsList.add(ClientMapper.fromMongoUser((ClientDTO) el));
         }
+        return clientsList;
     }
 
     public Client findClientByLogin(String login) {
         var list = clientRepository.read(Filters.eq("login", login), ClientDTO.class);
         return !list.isEmpty() ? ClientMapper.fromMongoUser((ClientDTO) list.get(0)) : null;
+    }
+
+    public List<Client> findClientByLoginFitting(String login) {
+        List<Client> clientsList = new ArrayList<>();
+        for (var el : clientRepository.read(Filters.regex("login", ".*%s.*".formatted(login)), ClientDTO.class)) {
+            clientsList.add(ClientMapper.fromMongoUser((ClientDTO) el));
+        }
+        return clientsList;
+    }
+
+    @Override
+    public int usersSize() {
+        return clientRepository.readAll(UserDTO.class).size();
     }
 }
