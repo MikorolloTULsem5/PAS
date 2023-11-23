@@ -101,11 +101,21 @@ public class ReservationManager {
         return reservations;
     }
 
+    ///TODO wymienic referencje do obiektu na ich UUID
     public List<Reservation> getAllClientReservations(Client client) {
         if (client == null) {
             throw new MainException("Nie istniejacy klient nie moze posiadac rezerwacji!");
         }
         return getReservationsWithBsonFilter(Filters.eq("clientid", client.getId().toString()));
+    }
+
+    public List<Reservation> getClientCurrentReservations(Client client) {
+        if (client == null) {
+            throw new MainException("Nie istniejacy klient nie moze posiadac rezerwacji!");
+        }
+        return getReservationsWithBsonFilter(Filters.and(
+                Filters.eq("clientid", client.getId().toString()),
+                Filters.eq("endtime", null)));
     }
 
     public List<Reservation> getClientEndedReservations(Client client) {
@@ -117,13 +127,25 @@ public class ReservationManager {
                 Filters.not(Filters.eq("endtime", null))));
     }
 
-    public Reservation getCourtReservation(Court court) {
+    public Reservation getCourtCurrentReservation(Court court) {
         if (court == null) {
             throw new MainException("Nie istniejace boisko nie moze posiadac rezerwacji!");
         }
         var list = getReservationsWithBsonFilter(
                 Filters.eq("courtid", court.getCourtId().toString()));
         return !list.isEmpty() ? list.get(0) : null;
+    }
+
+    ///TODO obtestowac
+
+
+    public List<Reservation> getCourtEndedReservation(Court court) {
+        if (court == null) {
+            throw new MainException("Nie istniejace boisko nie moze posiadac rezerwacji!");
+        }
+        return getReservationsWithBsonFilter(Filters.and(
+                Filters.eq("courtid", court.getCourtId().toString()),
+                Filters.not(Filters.eq("endtime", null))));
     }
 
     public double checkClientReservationBalance(Client client) {
