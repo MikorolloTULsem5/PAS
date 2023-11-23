@@ -2,16 +2,25 @@ package repositoryTests;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.model.Filters;
 import nbd.gV.courts.Court;
+import nbd.gV.data.mappers.ClientMapper;
+import nbd.gV.data.mappers.ReservationMapper;
 import nbd.gV.exceptions.MyMongoException;
 import nbd.gV.data.dto.CourtDTO;
 import nbd.gV.data.mappers.CourtMapper;
 import nbd.gV.repositories.CourtMongoRepository;
+import nbd.gV.repositories.ReservationMongoRepository;
+import nbd.gV.repositories.UserMongoRepository;
+import nbd.gV.reservations.Reservation;
+import nbd.gV.users.Client;
+import nbd.gV.users.clienttype.Normal;
 import org.bson.Document;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.time.LocalDateTime;
+import java.time.Month;
 import java.util.ArrayList;
 import java.util.UUID;
 
@@ -175,6 +184,34 @@ public class CourtMongoRepositoryTest {
     }
 
     @Test
+    void testDeletingDocumentsInDBExistingAllocation() {
+        assertEquals(0, getTestCollection().find().into(new ArrayList<>()).size());
+        Client testClient1 = new Client("John", "Smith", "12345678901", new Normal());
+        Court testCourt1 = new Court(1000, 100, 1);
+        LocalDateTime testTimeStart = LocalDateTime.of(2023, Month.JUNE, 4, 12, 0);
+        Reservation testReservation1 = new Reservation(testClient1, testCourt1, testTimeStart);
+
+        assertTrue(courtRepository.create(CourtMapper.toMongoCourt(testCourt1)));
+        assertTrue(courtRepository.create(courtMapper2));
+        assertTrue(courtRepository.create(courtMapper3));
+        assertEquals(3, getTestCollection().find().into(new ArrayList<>()).size());
+
+        try (ReservationMongoRepository reservationMongoRepository = new ReservationMongoRepository();
+             UserMongoRepository userMongoRepository = new UserMongoRepository()){
+            userMongoRepository.create(ClientMapper.toMongoUser(testClient1));
+            reservationMongoRepository.create(ReservationMapper.toMongoReservation(testReservation1));
+            assertFalse(courtRepository.delete(testCourt1.getCourtId()));
+            assertEquals(3, getTestCollection().find().into(new ArrayList<>()).size());
+
+            reservationMongoRepository.delete(testReservation1.getId());
+            userMongoRepository.delete(testCourt1.getCourtId());
+        }
+
+        assertTrue(courtRepository.delete(testCourt1.getCourtId()));
+        assertEquals(2, getTestCollection().find().into(new ArrayList<>()).size());
+    }
+
+    @Test
     void testUpdatingRecordsInDBPositive() {
         assertEquals(0, getTestCollection().find().into(new ArrayList<>()).size());
         assertTrue(courtRepository.create(courtMapper1));
@@ -219,5 +256,31 @@ public class CourtMongoRepositoryTest {
                         "_id", UUID.randomUUID().toString()));
 
         assertFalse(courtRepository.update(UUID.randomUUID(), "area", 435.0));
+    }
+    @Test
+    void testUpdatingWholeRecordsInDBPositive() {
+        assertEquals(0, getTestCollection().find().into(new ArrayList<>()).size());
+        assertTrue(courtRepository.create(courtMapper1));
+        assertTrue(courtRepository.create(courtMapper2));
+        assertTrue(courtRepository.create(courtMapper3));
+        assertEquals(3, getTestCollection().find().into(new ArrayList<>()).size());
+
+        court1.setArea(111);
+        court1.setBaseCost(123);
+        assertTrue(courtRepository.update(CourtMapper.toMongoCourt(court1)));
+        Court court1Copy = CourtMapper.fromMongoCourt(courtRepository.readByUUID(court1.getCourtId()));
+        assertEquals(court1Copy, court1);
+    }
+
+    @Test
+    void testUpdatingWholeRecordsInDBNegative() {
+        assertEquals(0, getTestCollection().find().into(new ArrayList<>()).size());
+        assertTrue(courtRepository.create(courtMapper2));
+        assertTrue(courtRepository.create(courtMapper3));
+        assertEquals(2, getTestCollection().find().into(new ArrayList<>()).size());
+
+        court1.setArea(111);
+        court1.setBaseCost(123);
+        assertFalse(courtRepository.update(CourtMapper.toMongoCourt(court1)));
     }
 }

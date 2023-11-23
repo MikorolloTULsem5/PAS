@@ -48,7 +48,21 @@ public class CourtManager {
             court.setArchive(true);
             if (!courtRepository.update(court.getCourtId(), "archive", true)) {
                 court.setArchive(false);
-                throw new CourtException("Nie udalo sie wyrejestrowac podanego klienta.");
+                throw new CourtException("Nie udalo sie wyrejestrowac podanego boiska.");
+            }
+        } catch (Exception exception) {
+            court.setArchive(false);
+            throw new CourtException("Nie udalo sie wyrejestrowac podanego boiska.");
+        }
+    }
+
+    public void deleteCourt(Court court) {
+        if (court == null) {
+            throw new MainException("Nie mozna usunac nieistniejacego boiska!");
+        }
+        try {
+            if (!courtRepository.delete(court.getCourtId())) {
+                throw new CourtException("Nie mozna usunac boiska - istnieja powiazanie z nim rezerwacje");
             }
         } catch (Exception exception) {
             court.setArchive(false);
@@ -64,7 +78,6 @@ public class CourtManager {
             throw new CourtException("Blad transakcji.");
         }
     }
-
 
     public List<Court> getAllCourts() {
         try {
