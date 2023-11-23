@@ -36,7 +36,7 @@ public class Client extends User {
     }
 
     public String getClientInfo() {
-        return "Klient - %s %s o numerze PESEL %s\n".formatted(firstName, lastName, getLogin());
+        return "Klient - %s %s o loginie %s\n".formatted(firstName, lastName, getLogin());
     }
 
     public double applyDiscount(double price) {

@@ -8,7 +8,7 @@ import nbd.gV.users.Client;
 import nbd.gV.users.clienttype.ClientType;
 import nbd.gV.users.clienttype.Normal;
 import nbd.gV.courts.Court;
-import nbd.gV.exceptions.ClientException;
+import nbd.gV.exceptions.UserException;
 import nbd.gV.exceptions.CourtException;
 import nbd.gV.exceptions.MyMongoException;
 import nbd.gV.exceptions.ReservationException;
@@ -134,7 +134,7 @@ public class ReservationMongoRepositoryTest {
 
         //Archive client
         clientRepository.update(testClient3.getId(), "archive", true);
-        assertThrows(ClientException.class, () -> reservationRepository.create(
+        assertThrows(UserException.class, () -> reservationRepository.create(
                 ReservationMapper.toMongoReservation(new Reservation(testClient3, testCourt3, testTimeStart))));
 
         //Archive court

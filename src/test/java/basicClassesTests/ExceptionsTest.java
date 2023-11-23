@@ -1,6 +1,6 @@
 package basicClassesTests;
 
-import nbd.gV.exceptions.ClientException;
+import nbd.gV.exceptions.UserException;
 import nbd.gV.exceptions.CourtException;
 import nbd.gV.exceptions.JakartaException;
 import nbd.gV.exceptions.MainException;
@@ -23,8 +23,8 @@ public class ExceptionsTest {
 
     @Test
     void testClientException() {
-        RuntimeException clientException = new ClientException("TEST");
-        assertThrows(ClientException.class, () -> {throw clientException;});
+        RuntimeException clientException = new UserException("TEST");
+        assertThrows(UserException.class, () -> {throw clientException;});
         assertEquals("TEST", clientException.getMessage());
     }
 

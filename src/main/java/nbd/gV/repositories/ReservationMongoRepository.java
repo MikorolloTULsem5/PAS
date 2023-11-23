@@ -11,7 +11,7 @@ import com.mongodb.client.model.ValidationOptions;
 import com.mongodb.client.result.InsertOneResult;
 import nbd.gV.users.Client;
 import nbd.gV.courts.Court;
-import nbd.gV.exceptions.ClientException;
+import nbd.gV.exceptions.UserException;
 import nbd.gV.exceptions.CourtException;
 import nbd.gV.exceptions.MyMongoException;
 import nbd.gV.exceptions.ReservationException;
@@ -98,7 +98,7 @@ public class ReservationMongoRepository extends AbstractMongoRepository<Reservat
                 }
                 return result.wasAcknowledged();
             } else if (clientFound.isArchive()) {
-                throw new ClientException("Nie udalo sie utworzyc rezerwacji - klient jest archiwalny!");
+                throw new UserException("Nie udalo sie utworzyc rezerwacji - klient jest archiwalny!");
             } else if (courtFound.isArchive()) {
                 throw new CourtException("Nie udalo sie utworzyc rezerwacji - boisko jest archiwalne!");
             } else {

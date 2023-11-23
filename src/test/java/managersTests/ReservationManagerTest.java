@@ -6,7 +6,7 @@ import nbd.gV.users.*;
 import nbd.gV.users.clienttype.ClientType;
 import nbd.gV.users.clienttype.Normal;
 import nbd.gV.courts.Court;
-import nbd.gV.exceptions.ClientException;
+import nbd.gV.exceptions.UserException;
 import nbd.gV.exceptions.CourtException;
 import nbd.gV.exceptions.MainException;
 import nbd.gV.exceptions.ReservationException;
@@ -118,7 +118,7 @@ public class ReservationManagerTest {
 
         clientRepository.update(testClient2.getId(), "archive", true);
         assertFalse(testCourt3.isRented());
-        assertThrows(ClientException.class, () -> rm.makeReservation(testClient2, testCourt3, testTimeStart));
+        assertThrows(UserException.class, () -> rm.makeReservation(testClient2, testCourt3, testTimeStart));
         assertEquals(rm.getAllCurrentReservations().size(), 2);
         assertFalse(testCourt3.isRented());
 

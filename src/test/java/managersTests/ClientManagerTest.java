@@ -5,7 +5,7 @@ import nbd.gV.users.Client;
 import nbd.gV.managers.ClientManager;
 import nbd.gV.users.clienttype.ClientType;
 import nbd.gV.users.clienttype.Normal;
-import nbd.gV.exceptions.ClientException;
+import nbd.gV.exceptions.UserException;
 import nbd.gV.exceptions.MainException;
 import nbd.gV.repositories.UserMongoRepository;
 import org.junit.jupiter.api.AfterAll;
@@ -62,7 +62,7 @@ public class ClientManagerTest {
         cm.registerClient("Adam", "Brown", "12345678904", testClientType);
         assertEquals(4, cm.getAllClients().size());
 
-        assertThrows(ClientException.class,
+        assertThrows(UserException.class,
                 () -> cm.registerClient("Eva", "Brown", "12345678901", testClientType));
         assertEquals(4, cm.getAllClients().size());
     }
@@ -117,7 +117,7 @@ public class ClientManagerTest {
         assertNotNull(testClient3);
         assertFalse(testClient3.isArchive());
 
-        assertThrows(ClientException.class, () -> cm.archiveClient(testClient3));
+        assertThrows(UserException.class, () -> cm.archiveClient(testClient3));
         assertFalse(testClient3.isArchive());
         assertEquals(2, cm.getAllClients().size());
 
@@ -127,7 +127,7 @@ public class ClientManagerTest {
     }
 
     @Test
-    public void testFindCourtByLogin() {
+    public void testFindClientByLogin() {
         ClientManager cm = new ClientManager();
         assertNotNull(cm);
 
@@ -145,5 +145,57 @@ public class ClientManagerTest {
         assertEquals(testClient1, newClient);
         Client newClient2 = cm.findClientByLogin("12345678999");
         assertNull(newClient2);
+    }
+
+    @Test
+    public void testFindClientByLoginFitting() {
+        ClientManager cm = new ClientManager();
+        assertNotNull(cm);
+
+        Client testClient1 =
+                cm.registerClient("Adam", "Smith", "adxam@smith", testClientType);
+        assertNotNull(testClient1);
+        assertEquals(1, cm.getAllClients().size());
+        Client testClient2 =
+                cm.registerClient("Eva", "Brown", "eva123bro", testClientType);
+        assertNotNull(testClient2);
+        assertEquals(2, cm.getAllClients().size());
+        Client testClient3 =
+                cm.registerClient("Adam", "Tell", "telladxam13", testClientType);
+        assertNotNull(testClient3);
+        assertEquals(3, cm.getAllClients().size());
+
+        var list = cm.findClientByLoginFitting("adxam");
+        assertEquals(2, list.size());
+        assertEquals(testClient1.getId(), list.get(0).getId());
+        assertEquals(testClient2.getId(), list.get(1).getId());
+    }
+
+    @Test
+    public void testModifyClient() {
+        ClientManager cm = new ClientManager();
+        assertNotNull(cm);
+
+        Client testClient1 =
+                cm.registerClient("Adam", "Smith", "adxam@smith", testClientType);
+        assertNotNull(testClient1);
+        assertEquals(1, cm.getAllClients().size());
+        Client testClient2 =
+                cm.registerClient("Eva", "Brown", "eva123bro", testClientType);
+        assertNotNull(testClient2);
+        assertEquals(2, cm.getAllClients().size());
+
+        assertEquals("Eva", cm.getAllClients().get(1).getFirstName());
+        assertEquals("Brown", cm.getAllClients().get(1).getLastName());
+        assertEquals("eva123bro", cm.getAllClients().get(1).getLogin());
+
+        testClient2.setFirstName("Vanessa");
+        testClient2.setLastName("Lock");
+
+        cm.modifyClient(testClient2);
+
+        assertEquals("Vanessa", cm.getAllClients().get(1).getFirstName());
+        assertEquals("Lock", cm.getAllClients().get(1).getLastName());
+        assertEquals("eva123bro", cm.getAllClients().get(1).getLogin());
     }
 }
