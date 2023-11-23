@@ -1,4 +1,4 @@
-package nbd.gV.managers;
+package nbd.gV.managers.usermanager;
 
 
 public abstract class UserManager {

@@ -2,7 +2,7 @@ package managersTests;
 
 import nbd.gV.data.dto.ClientDTO;
 import nbd.gV.users.Client;
-import nbd.gV.managers.ClientManager;
+import nbd.gV.managers.usermanager.ClientManager;
 import nbd.gV.users.clienttype.ClientType;
 import nbd.gV.users.clienttype.Normal;
 import nbd.gV.exceptions.UserException;

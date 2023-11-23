@@ -87,6 +87,7 @@ public class CourtMongoRepository extends AbstractMongoRepository<CourtDTO> {
         }
     }
 
+    ///TODO przepiac metode
     public boolean update(CourtDTO court){
         Bson filter = Filters.eq("_id", court.getCourtId());
         UpdateResult result = getCollection().replaceOne(filter,court);

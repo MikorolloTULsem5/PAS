@@ -3,6 +3,8 @@ package nbd.gV.managers;
 import com.mongodb.client.model.Filters;
 
 import nbd.gV.data.dto.ClientDTO;
+import nbd.gV.data.mappers.ClientMapper;
+import nbd.gV.data.mappers.CourtMapper;
 import nbd.gV.exceptions.MainException;
 import nbd.gV.reservations.Reservation;
 import nbd.gV.users.Client;
@@ -28,6 +30,26 @@ public class ReservationManager {
         reservationRepository = new ReservationMongoRepository();
     }
 
+    ///TODO ewidentnie do zmiany
+    public Reservation makeReservation(UUID clientId, UUID courtId, LocalDateTime beginTime) {
+        try {
+            Client client = ClientMapper.fromMongoUser((ClientDTO) new UserMongoRepository().readByUUID(clientId, ClientDTO.class));
+            Court court = CourtMapper.fromMongoCourt(new CourtMongoRepository().readByUUID(courtId));
+
+            Reservation newReservation = new Reservation(client, court, beginTime);
+            boolean result = reservationRepository.create(ReservationMapper.toMongoReservation(newReservation));
+            if (!result) {
+                throw new ReservationException("Nie udalo sie utworzyc transkacji!");
+            }
+            court.setRented(true);
+            return newReservation;
+        } catch (MyMongoException exception) {
+            throw new ReservationException("Blad transakcji.");
+        }
+    }
+
+    ///TODO do wywalenia
+    /*-------------------------------------------------------------------------------------------------------------*/
     //Rezerwacji mozna dokonac tylko obiektami ktore juz znajduja sie w bazie danych
     public Reservation makeReservation(Client client, Court court, LocalDateTime beginTime) {
         if (client == null || court == null) {
@@ -49,6 +71,7 @@ public class ReservationManager {
     public Reservation makeReservation(Client client, Court court) {
         return makeReservation(client, court, LocalDateTime.now());
     }
+    /*-------------------------------------------------------------------------------------------------------------*/
 
     public void returnCourt(Court court, LocalDateTime endTime) {
         if (court == null) {

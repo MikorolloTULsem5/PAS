@@ -1,7 +1,7 @@
 package nbd.gV;
 
-import nbd.gV.managers.AdminManager;
-import nbd.gV.managers.ClientManager;
+import nbd.gV.managers.usermanager.AdminManager;
+import nbd.gV.managers.usermanager.ClientManager;
 import nbd.gV.users.Client;
 import nbd.gV.users.clienttype.Normal;
 

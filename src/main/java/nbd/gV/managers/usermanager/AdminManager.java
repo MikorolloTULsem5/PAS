@@ -1,16 +1,14 @@
-package nbd.gV.managers;
+package nbd.gV.managers.usermanager;
 
 import com.mongodb.client.model.Filters;
 import nbd.gV.data.dto.AdminDTO;
 import nbd.gV.data.dto.UserDTO;
 import nbd.gV.data.mappers.AdminMapper;
-import nbd.gV.data.mappers.ClientMapper;
 import nbd.gV.exceptions.UserException;
 import nbd.gV.exceptions.MainException;
 import nbd.gV.exceptions.MyMongoException;
 import nbd.gV.repositories.UserMongoRepository;
 import nbd.gV.users.Admin;
-import nbd.gV.users.Client;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -68,12 +66,12 @@ public class AdminManager extends UserManager {
         return adminsList;
     }
 
-    public void modifyAdmin(Client modifiedAdmin) {
+    public void modifyAdmin(Admin modifiedAdmin) {
         if (modifiedAdmin == null) {
             throw new MainException("Nie mozna modyfikowac nieistniejacego administratora!");
         }
         try {
-            if (!userRepository.updateByReplace(modifiedAdmin.getId(), ClientMapper.toMongoUser(modifiedAdmin))) {
+            if (!userRepository.updateByReplace(modifiedAdmin.getId(), AdminMapper.toMongoUser(modifiedAdmin))) {
                 throw new UserException("Nie udalo sie wyrejestrowac podanego administratora.");
             }
         } catch (Exception exception) {

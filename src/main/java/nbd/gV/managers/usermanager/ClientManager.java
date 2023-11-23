@@ -1,4 +1,4 @@
-package nbd.gV.managers;
+package nbd.gV.managers.usermanager;
 
 import com.mongodb.client.model.Filters;
 import nbd.gV.data.dto.UserDTO;
