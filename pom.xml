@@ -7,6 +7,7 @@
     <groupId>nbd.gV</groupId>
     <artifactId>CourtRent</artifactId>
     <version>1.0-SNAPSHOT</version>
+    <packaging>war</packaging>
 
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
@@ -14,6 +15,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <slf4j.version>2.0.9</slf4j.version>
         <logback.version>1.4.11</logback.version>
+        <junit.version>5.9.2</junit.version>
     </properties>
 
     <build>
@@ -79,6 +81,11 @@
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>3.0.0-M5</version>
             </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-war-plugin</artifactId>
+                <version>3.3.2</version>
+            </plugin>
         </plugins>
     </build>
 
@@ -114,42 +121,72 @@
     </reporting>
 
     <dependencies>
+
+        <!--Jakarta basic dependencies-->
+        <dependency>
+            <groupId>jakarta.enterprise</groupId>
+            <artifactId>jakarta.enterprise.cdi-api</artifactId>
+            <version>3.0.0</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>jakarta.ws.rs</groupId>
+            <artifactId>jakarta.ws.rs-api</artifactId>
+            <version>3.0.0</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>jakarta.servlet</groupId>
+            <artifactId>jakarta.servlet-api</artifactId>
+            <version>5.0.0</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <!--Testing dependencies-->
         <dependency>
             <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter-engine</artifactId>
-            <version>5.9.2</version>
+            <artifactId>junit-jupiter-api</artifactId>
+            <version>${junit.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>jakarta.persistence</groupId>
-            <artifactId>jakarta.persistence-api</artifactId>
-            <version>3.1.0</version>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-engine</artifactId>
+            <version>${junit.version}</version>
+            <scope>test</scope>
         </dependency>
-        <dependency>
-            <groupId>org.hibernate</groupId>
-            <artifactId>hibernate-core-jakarta</artifactId>
-            <version>5.6.11.Final</version>
-        </dependency>
-        <dependency>
-            <groupId>org.hibernate</groupId>
-            <artifactId>hibernate-jpamodelgen-jakarta</artifactId>
-            <version>5.6.11.Final</version>
-        </dependency>
-        <dependency>
-            <groupId>org.glassfish.jaxb</groupId>
-            <artifactId>jaxb-runtime</artifactId>
-            <version>3.0.0</version>
-        </dependency>
-        <dependency>
-            <groupId>org.hibernate.validator</groupId>
-            <artifactId>hibernate-validator</artifactId>
-            <version>8.0.0.Final</version>
-        </dependency>
-        <dependency>
-            <groupId>org.glassfish</groupId>
-            <artifactId>jakarta.el</artifactId>
-            <version>4.0.2</version>
-        </dependency>
+
+                <!--        <dependency>-->
+                <!--            <groupId>jakarta.persistence</groupId>-->
+                <!--            <artifactId>jakarta.persistence-api</artifactId>-->
+                <!--            <version>3.1.0</version>-->
+                <!--        </dependency>-->
+                <!--        <dependency>-->
+                <!--            <groupId>org.hibernate</groupId>-->
+                <!--            <artifactId>hibernate-core-jakarta</artifactId>-->
+                <!--            <version>5.6.11.Final</version>-->
+                <!--        </dependency>-->
+                <!--        <dependency>-->
+                <!--            <groupId>org.hibernate</groupId>-->
+                <!--            <artifactId>hibernate-jpamodelgen-jakarta</artifactId>-->
+                <!--            <version>5.6.11.Final</version>-->
+                <!--        </dependency>-->
+                <!--        <dependency>-->
+                <!--            <groupId>org.glassfish.jaxb</groupId>-->
+                <!--            <artifactId>jaxb-runtime</artifactId>-->
+                <!--            <version>3.0.0</version>-->
+                <!--        </dependency>-->
+                <!--        <dependency>-->
+                <!--            <groupId>org.hibernate.validator</groupId>-->
+                <!--            <artifactId>hibernate-validator</artifactId>-->
+                <!--            <version>8.0.0.Final</version>-->
+                <!--        </dependency>-->
+                <!--        <dependency>-->
+                <!--            <groupId>org.glassfish</groupId>-->
+                <!--            <artifactId>jakarta.el</artifactId>-->
+                <!--            <version>4.0.2</version>-->
+                <!--        </dependency>-->
+
         <!--MongoDB-->
         <dependency>
             <groupId>org.mongodb</groupId>
@@ -161,6 +198,7 @@
             <artifactId>mongodb-crypt</artifactId>
             <version>1.8.0</version>
         </dependency>
+
         <!-- LOGGING -->
         <dependency>
             <groupId>ch.qos.logback</groupId>
@@ -177,6 +215,7 @@
             <artifactId>slf4j-api</artifactId>
             <version>${slf4j.version}</version>
         </dependency>
+
         <!--Lombok-->
         <dependency>
             <groupId>org.projectlombok</groupId>

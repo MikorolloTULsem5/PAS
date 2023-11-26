@@ -1,21 +1,9 @@
 package nbd.gV;
 
-import nbd.gV.restapi.managers.usermanager.AdminManager;
-import nbd.gV.restapi.managers.usermanager.ClientManager;
-import nbd.gV.model.users.Client;
-import nbd.gV.model.users.clienttype.Normal;
+import jakarta.ws.rs.ApplicationPath;
+import jakarta.ws.rs.core.Application;
 
-public class App {
-    public static void main(String[] args) {
-        ClientManager clientManager = new ClientManager();
+@ApplicationPath("/api")
+public class App extends Application {
 
-        clientManager.registerClient("Adam", "Smith", "adamSmith123", new Normal());
-        clientManager.registerClient("Eva", "Braun", "11Breva", new Normal());
-        clientManager.registerClient("Michal", "Braun", "michal12Br", new Normal());
-        new AdminManager().registerAdmin("adm1234");
-        new AdminManager().registerAdmin("sebus876");
-
-        System.out.println(clientManager.usersSize());
-        clientManager.findClientByLoginFitting("12").forEach(Client::getClientInfo);
-    }
 }
