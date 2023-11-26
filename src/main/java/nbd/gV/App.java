@@ -1,9 +1,9 @@
 package nbd.gV;
 
-import nbd.gV.managers.usermanager.AdminManager;
-import nbd.gV.managers.usermanager.ClientManager;
-import nbd.gV.users.Client;
-import nbd.gV.users.clienttype.Normal;
+import nbd.gV.restapi.managers.usermanager.AdminManager;
+import nbd.gV.restapi.managers.usermanager.ClientManager;
+import nbd.gV.model.users.Client;
+import nbd.gV.model.users.clienttype.Normal;
 
 public class App {
     public static void main(String[] args) {
