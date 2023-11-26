@@ -1,15 +1,18 @@
 package nbd.gV.model.users;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.UUID;
 
 @Getter
+@NoArgsConstructor
 public abstract class User {
 
-    private final UUID id;
-    private final String login;
+    private UUID id;
+    @Setter
+    private String login;
     @Setter
     private boolean archive = false;
 

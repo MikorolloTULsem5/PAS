@@ -1,6 +1,7 @@
 package nbd.gV.model.users;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import nbd.gV.model.users.clienttype.ClientType;
 import nbd.gV.exceptions.MainException;
@@ -10,6 +11,7 @@ import java.util.UUID;
 
 @Getter
 @Setter
+@NoArgsConstructor
 public class Client extends User {
 
     private String firstName;
@@ -20,9 +22,9 @@ public class Client extends User {
         super(id, login);
 
         ///TODO do wywalenia przy zmianie walidacji
-        if (firstName.isEmpty() || lastName.isEmpty() || login.isEmpty() || clientType == null) {
-            throw new MainException("Brakujacy parametr przy tworzeniu obiektu klienta!");
-        }
+//        if (firstName.isEmpty() || lastName.isEmpty() || login.isEmpty() || clientType == null) {
+//            throw new MainException("Brakujacy parametr przy tworzeniu obiektu klienta!");
+//        }
 
         this.firstName = firstName;
         this.lastName = lastName;
