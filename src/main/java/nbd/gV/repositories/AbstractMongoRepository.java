@@ -27,7 +27,9 @@ import java.util.UUID;
 public abstract class AbstractMongoRepository<T> implements AutoCloseable {
 
     private final ConnectionString connectionString = new ConnectionString(
+            // Local with docker
 //            "mongodb://localhost:27017,localhost:27018,localhost:27019/?replicaSet=replica_set_single"
+            // MongoDB Atlas (cloud)
             "mongodb+srv://Michal:ZvDI3RNUGeTKjHTU@atlascluster.pweqkng.mongodb.net/"
     );
     private final MongoCredential credential = MongoCredential.createCredential("admin", "admin",
