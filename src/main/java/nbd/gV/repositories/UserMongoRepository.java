@@ -76,4 +76,9 @@ public class UserMongoRepository extends AbstractMongoRepository<UserDTO> {
     public UserDTO readByUUID(UUID uuid) {
         throw new UnsupportedOperationException();
     }
+
+//    @Override
+//    public boolean delete(UUID uuid) {
+//        throw new UnsupportedOperationException();
+//    }
 }

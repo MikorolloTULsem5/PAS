@@ -113,7 +113,7 @@ public class ClientManagerTest {
         assertTrue(dbClient.isArchive());
 
         // Testujemy wyrejestrowanie boiska ktore nie nalezy do repozytorium
-        Client testClient3 = new Client("John", "Lenon", "12345678903", testClientType);
+        Client testClient3 = new Client(UUID.randomUUID(), "John", "Lenon", "12345678903", testClientType);
         assertNotNull(testClient3);
         assertFalse(testClient3.isArchive());
 

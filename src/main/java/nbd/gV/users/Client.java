@@ -18,14 +18,8 @@ public class Client extends User {
 
     public Client(UUID id, String firstName, String lastName, String login, ClientType clientType) {
         super(id, login);
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.clientType = clientType;
-    }
 
-    ///TODO do refactoru 1 (zostawione dla kompatybilnosci wstecznej)
-    public Client(String firstName, String lastName, String login, ClientType clientType) {
-        super(UUID.randomUUID(), login);
+        ///TODO do wywalenia przy zmianie walidacji
         if (firstName.isEmpty() || lastName.isEmpty() || login.isEmpty() || clientType == null) {
             throw new MainException("Brakujacy parametr przy tworzeniu obiektu klienta!");
         }

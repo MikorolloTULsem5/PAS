@@ -15,6 +15,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import nbd.gV.exceptions.MainException;
 import org.junit.jupiter.api.Test;
 
+import java.util.UUID;
+
 public class ClientTest {
     String testFirstName = "John";
     String testLastName = "Smith";
@@ -22,9 +24,10 @@ public class ClientTest {
     ClientType testTypeAthlete = new Athlete();
     ClientType testTypeCoach = new Coach();
     ClientType testTypeNormal = new Normal();
+
     @Test
     void testCreatingClient() {
-        Client client = new Client(testFirstName, testLastName, testLogin, testTypeNormal);
+        Client client = new Client(UUID.randomUUID(), testFirstName, testLastName, testLogin, testTypeNormal);
         assertNotNull(client);
 
         assertEquals(testFirstName, client.getFirstName());
@@ -34,18 +37,18 @@ public class ClientTest {
         assertFalse(client.isArchive());
 
         assertThrows(MainException.class, ()
-                -> new Client("", testLastName, testLogin, testTypeNormal));
+                -> new Client(UUID.randomUUID(), "", testLastName, testLogin, testTypeNormal));
         assertThrows(MainException.class, ()
-                -> new Client(testFirstName, "", testLogin, testTypeNormal));
+                -> new Client(UUID.randomUUID(), testFirstName, "", testLogin, testTypeNormal));
         assertThrows(MainException.class, ()
-                -> new Client(testFirstName, testLastName, "", testTypeNormal));
+                -> new Client(UUID.randomUUID(), testFirstName, testLastName, "", testTypeNormal));
         assertThrows(MainException.class, ()
-                -> new Client(testFirstName, testLastName, testLogin, null));
+                -> new Client(UUID.randomUUID(), testFirstName, testLastName, testLogin, null));
     }
 
     @Test
     void testSetters() {
-        Client client = new Client(testFirstName, testLastName, testLogin, testTypeNormal);
+        Client client = new Client(UUID.randomUUID(), testFirstName, testLastName, testLogin, testTypeNormal);
         assertNotNull(client);
 
         assertEquals(testFirstName, client.getFirstName());
@@ -71,7 +74,7 @@ public class ClientTest {
 
     @Test
     void testGettingClientInfo() {
-        Client client = new Client(testFirstName, testLastName, testLogin, testTypeNormal);
+        Client client = new Client(UUID.randomUUID(), testFirstName, testLastName, testLogin, testTypeNormal);
         assertNotNull(client);
 
         assertEquals("Klient - John Smith o numerze PESEL 12345678\n", client.getClientInfo());
@@ -79,11 +82,11 @@ public class ClientTest {
 
     @Test
     void testGettingClientMaxHoursAndApplyingDiscount() {
-        Client client = new Client(testFirstName, testLastName, testLogin, testTypeNormal);
+        Client client = new Client(UUID.randomUUID(), testFirstName, testLastName, testLogin, testTypeNormal);
         assertNotNull(client);
-        Client client1 = new Client(testFirstName, testLastName, testLogin, testTypeAthlete);
+        Client client1 = new Client(UUID.randomUUID(), testFirstName, testLastName, testLogin, testTypeAthlete);
         assertNotNull(client1);
-        Client client2 = new Client(testFirstName, testLastName, testLogin, testTypeCoach);
+        Client client2 = new Client(UUID.randomUUID(), testFirstName, testLastName, testLogin, testTypeCoach);
         assertNotNull(client2);
 
         assertEquals(0, client.applyDiscount(100));

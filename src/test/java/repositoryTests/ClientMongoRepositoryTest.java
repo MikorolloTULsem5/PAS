@@ -50,13 +50,13 @@ public class ClientMongoRepositoryTest {
     @BeforeEach
     void initData() {
         cleanFirstAndLastTimeDB();
-        client1 = new Client("Adam", "Smith", "12345678901", testClientType);
+        client1 = new Client(UUID.randomUUID(), "Adam", "Smith", "12345678901", testClientType);
         clientMapper1 = ClientMapper.toMongoUser(client1);
 
-        client2 = new Client("Eva", "Smith", "12345678902", testClientType);
+        client2 = new Client(UUID.randomUUID(), "Eva", "Smith", "12345678902", testClientType);
         clientMapper2 = ClientMapper.toMongoUser(client2);
 
-        client3 = new Client("John", "Lenon", "12345678903", testClientType);
+        client3 = new Client(UUID.randomUUID(), "John", "Lenon", "12345678903", testClientType);
         clientMapper3 = ClientMapper.toMongoUser(client3);
     }
 
@@ -206,9 +206,10 @@ public class ClientMongoRepositoryTest {
 
         assertEquals("newValue",
                 clientRepository.getDatabase().getCollection(clientRepository.getCollectionName(), Document.class)
-                .find(Filters.eq("_id", clientMapper2.getId().toString()))
-                .into(new ArrayList<>()).get(0).getString("field"));
+                        .find(Filters.eq("_id", clientMapper2.getId().toString()))
+                        .into(new ArrayList<>()).get(0).getString("field"));
     }
+
     @Test
     void testUpdatingDocumentsInDBNegative() {
         assertEquals(0, getTestCollection().find().into(new ArrayList<>()).size());

@@ -24,7 +24,7 @@ public class ClientManager extends UserManager {
     }
 
     public Client registerClient(String firstName, String lastName, String login, ClientType clientType) {
-        Client newClient = new Client(firstName, lastName, login, clientType);
+        Client newClient = new Client(UUID.randomUUID(), firstName, lastName, login, clientType);
         try {
             if (!userRepository.read(Filters.eq("login", login), ClientDTO.class).isEmpty()) {
                 throw new UserException("Nie udalo sie zarejestrowac klienta w bazie! - klient o tym loginie" +

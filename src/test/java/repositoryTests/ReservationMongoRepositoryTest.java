@@ -67,9 +67,9 @@ public class ReservationMongoRepositoryTest {
         cleanDB();
         testClientType = new Normal();
 
-        testClient1 = new Client("John", "Smith", "12345678901", testClientType);
-        testClient2 = new Client("Eva", "Brown", "12345678902", testClientType);
-        testClient3 = new Client("Adam", "Long", "12345678903", testClientType);
+        testClient1 = new Client(UUID.randomUUID(), "John", "Smith", "12345678901", testClientType);
+        testClient2 = new Client(UUID.randomUUID(), "Eva", "Brown", "12345678902", testClientType);
+        testClient3 = new Client(UUID.randomUUID(), "Adam", "Long", "12345678903", testClientType);
         clientRepository.create(ClientMapper.toMongoUser(testClient1));
         clientRepository.create(ClientMapper.toMongoUser(testClient2));
         clientRepository.create(ClientMapper.toMongoUser(testClient3));
@@ -124,7 +124,7 @@ public class ReservationMongoRepositoryTest {
 
         //No client in the database
         assertThrows(ReservationException.class, () -> reservationRepository.create(
-                ReservationMapper.toMongoReservation(new Reservation(new Client("John", "Blade",
+                ReservationMapper.toMongoReservation(new Reservation(new Client(UUID.randomUUID(), "John", "Blade",
                         "12345678911", new Normal()), testCourt3, testTimeStart))));
 
         //No court in the database

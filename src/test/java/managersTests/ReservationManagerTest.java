@@ -64,9 +64,9 @@ public class ReservationManagerTest {
         cleanDB();
         testClientType = new Normal();
 
-        testClient1 = new Client("John", "Smith", "12345678901", testClientType);
-        testClient2 = new Client("Eva", "Brown", "12345678902", testClientType);
-        testClient3 = new Client("Adam", "Long", "12345678903", testClientType);
+        testClient1 = new Client(UUID.randomUUID(), "John", "Smith", "12345678901", testClientType);
+        testClient2 = new Client(UUID.randomUUID(), "Eva", "Brown", "12345678902", testClientType);
+        testClient3 = new Client(UUID.randomUUID(), "Adam", "Long", "12345678903", testClientType);
         clientRepository.create(ClientMapper.toMongoUser(testClient1));
         clientRepository.create(ClientMapper.toMongoUser(testClient2));
         clientRepository.create(ClientMapper.toMongoUser(testClient3));
@@ -98,41 +98,30 @@ public class ReservationManagerTest {
         assertEquals(rm.getAllCurrentReservations().size(), 0);
         assertFalse(testCourt1.isRented());
 
-        Reservation newReservation = rm.makeReservation(testClient1, testCourt1, testTimeStart);
+        Reservation newReservation = rm.makeReservation(testClient1.getId(), testCourt1.getCourtId(), testTimeStart);
 
         assertEquals(rm.getAllCurrentReservations().size(), 1);
         assertEquals(newReservation, rm.getReservationByID(newReservation.getId()));
-        assertTrue(testCourt1.isRented());
+        assertTrue(newReservation.getCourt().isRented());
 
 
         assertFalse(testCourt2.isRented());
-        Reservation newReservation2 = rm.makeReservation(testClient1, testCourt2);
+        Reservation newReservation2 = rm.makeReservation(testClient1.getId(), testCourt2.getCourtId());
 
         assertEquals(rm.getAllCurrentReservations().size(), 2);
         assertEquals(newReservation2, rm.getReservationByID(newReservation2.getId()));
-        assertTrue(testCourt2.isRented());
+        assertTrue(newReservation2.getCourt().isRented());
 
-        assertThrows(ReservationException.class, () -> rm.makeReservation(testClient1, testCourt1, testTimeStart));
+        assertThrows(ReservationException.class, () -> rm.makeReservation(testClient1.getId(), testCourt1.getCourtId(), testTimeStart));
         assertEquals(rm.getAllCurrentReservations().size(), 2);
-        assertTrue(testCourt1.isRented());
 
         clientRepository.update(testClient2.getId(), "archive", true);
         assertFalse(testCourt3.isRented());
-        assertThrows(UserException.class, () -> rm.makeReservation(testClient2, testCourt3, testTimeStart));
+        assertThrows(UserException.class, () -> rm.makeReservation(testClient2.getId(), testCourt3.getCourtId(), testTimeStart));
         assertEquals(rm.getAllCurrentReservations().size(), 2);
-        assertFalse(testCourt3.isRented());
 
         courtRepository.update(testCourt4.getCourtId(), "archive", true);
-        assertFalse(testCourt4.isRented());
-        assertThrows(CourtException.class, () -> rm.makeReservation(testClient1, testCourt4, testTimeStart));
-        assertEquals(rm.getAllCurrentReservations().size(), 2);
-        assertFalse(testCourt4.isRented());
-
-        assertThrows(MainException.class, () -> rm.makeReservation(null, testCourt4, testTimeStart));
-        assertFalse(testCourt4.isRented());
-        assertEquals(rm.getAllCurrentReservations().size(), 2);
-
-        assertThrows(MainException.class, () -> rm.makeReservation(testClient1, null, testTimeStart));
+        assertThrows(CourtException.class, () -> rm.makeReservation(testClient1.getId(), testCourt4.getCourtId(), testTimeStart));
         assertEquals(rm.getAllCurrentReservations().size(), 2);
     }
 
@@ -142,7 +131,7 @@ public class ReservationManagerTest {
         assertNotNull(rm);
 
         assertEquals(0, rm.getAllCurrentReservations().size());
-        Reservation newReservation = rm.makeReservation(testClient1, testCourt1);
+        Reservation newReservation = rm.makeReservation(testClient1.getId(), testCourt1.getCourtId());
         var reservations = rm.getAllCurrentReservations();
         assertEquals(1, reservations.size());
         assertEquals(newReservation, reservations.get(0));
@@ -153,8 +142,8 @@ public class ReservationManagerTest {
         ReservationManager rm = new ReservationManager();
         assertNotNull(rm);
 
-        rm.makeReservation(testClient1,testCourt1,testTimeStart);
-        rm.makeReservation(testClient2,testCourt2,testTimeStart);
+        rm.makeReservation(testClient1.getId(), testCourt1.getCourtId(), testTimeStart);
+        rm.makeReservation(testClient2.getId(), testCourt2.getCourtId(), testTimeStart);
 
         assertEquals(0, rm.getAllArchiveReservations().size());
         assertEquals(2, rm.getAllCurrentReservations().size());
@@ -180,20 +169,18 @@ public class ReservationManagerTest {
         ReservationManager rm = new ReservationManager();
         assertNotNull(rm);
 
-        rm.makeReservation(testClient1,testCourt1,testTimeStart);
-        rm.makeReservation(testClient1, testCourt2, testTimeStart);
-        rm.makeReservation(testClient1, testCourt3, testTimeStart);
+        rm.makeReservation(testClient1.getId(), testCourt1.getCourtId(), testTimeStart);
+        rm.makeReservation(testClient1.getId(), testCourt2.getCourtId(), testTimeStart);
+        rm.makeReservation(testClient1.getId(), testCourt3.getCourtId(), testTimeStart);
 
-        assertEquals(0, rm.checkClientReservationBalance(testClient1));
+        assertEquals(0, rm.checkClientReservationBalance(testClient1.getId()));
         rm.returnCourt(testCourt1, testTimeEnd);
-        assertEquals(300, rm.checkClientReservationBalance(testClient1));
+        assertEquals(300, rm.checkClientReservationBalance(testClient1.getId()));
 
         rm.returnCourt(testCourt2, testSuperTimeEnd);
-        assertEquals(3750, rm.checkClientReservationBalance(testClient1));
+        assertEquals(3750, rm.checkClientReservationBalance(testClient1.getId()));
 
         rm.returnCourt(testCourt3, testSuperTimeEnd2);
-        assertEquals(10800, rm.checkClientReservationBalance(testClient1));
-
-        assertThrows(MainException.class, () -> rm.checkClientReservationBalance(null));
+        assertEquals(10800, rm.checkClientReservationBalance(testClient1.getId()));
     }
 }

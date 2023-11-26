@@ -10,7 +10,6 @@ import java.util.UUID;
 public abstract class User {
 
     private final UUID id;
-    ///TODO wywalic pesel, zostawic login???
     private final String login;
     @Setter
     private boolean archive = false;
@@ -19,6 +18,4 @@ public abstract class User {
         this.id = id;
         this.login = login;
     }
-
-    ///TODO dodac DTO dla Usera (zapewnienie dziedziczenia) oraz obslugi w Manadzerze i Repozytorium
 }

@@ -1,4 +1,5 @@
 package repositoryTests;
+
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.model.Filters;
 import nbd.gV.courts.Court;
@@ -186,7 +187,7 @@ public class CourtMongoRepositoryTest {
     @Test
     void testDeletingDocumentsInDBExistingAllocation() {
         assertEquals(0, getTestCollection().find().into(new ArrayList<>()).size());
-        Client testClient1 = new Client("John", "Smith", "12345678901", new Normal());
+        Client testClient1 = new Client(UUID.randomUUID(), "John", "Smith", "12345678901", new Normal());
         Court testCourt1 = new Court(1000, 100, 1);
         LocalDateTime testTimeStart = LocalDateTime.of(2023, Month.JUNE, 4, 12, 0);
         Reservation testReservation1 = new Reservation(testClient1, testCourt1, testTimeStart);
@@ -197,7 +198,7 @@ public class CourtMongoRepositoryTest {
         assertEquals(3, getTestCollection().find().into(new ArrayList<>()).size());
 
         try (ReservationMongoRepository reservationMongoRepository = new ReservationMongoRepository();
-             UserMongoRepository userMongoRepository = new UserMongoRepository()){
+             UserMongoRepository userMongoRepository = new UserMongoRepository()) {
             userMongoRepository.create(ClientMapper.toMongoUser(testClient1));
             reservationMongoRepository.create(ReservationMapper.toMongoReservation(testReservation1));
             assertFalse(courtRepository.delete(testCourt1.getCourtId()));
@@ -243,6 +244,7 @@ public class CourtMongoRepositoryTest {
                         .find(Filters.eq("_id", courtMapper2.getCourtId().toString()))
                         .into(new ArrayList<>()).get(0).getString("field"));
     }
+
     @Test
     void testUpdatingRecordsInDBNegative() {
         assertEquals(0, getTestCollection().find().into(new ArrayList<>()).size());
@@ -257,6 +259,7 @@ public class CourtMongoRepositoryTest {
 
         assertFalse(courtRepository.update(UUID.randomUUID(), "area", 435.0));
     }
+
     @Test
     void testUpdatingWholeRecordsInDBPositive() {
         assertEquals(0, getTestCollection().find().into(new ArrayList<>()).size());

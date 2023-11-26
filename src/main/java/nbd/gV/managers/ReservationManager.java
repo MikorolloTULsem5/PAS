@@ -25,16 +25,21 @@ import java.util.UUID;
 
 public class ReservationManager {
     private final ReservationMongoRepository reservationRepository;
+    private final UserMongoRepository clientsRepository;
+    private final CourtMongoRepository courtMongoRepository;
 
     public ReservationManager() {
         reservationRepository = new ReservationMongoRepository();
+
+        ///TODO do wywalenia
+        clientsRepository = new UserMongoRepository();
+        courtMongoRepository = new CourtMongoRepository();
     }
 
-    ///TODO ewidentnie do zmiany
     public Reservation makeReservation(UUID clientId, UUID courtId, LocalDateTime beginTime) {
         try {
-            Client client = ClientMapper.fromMongoUser((ClientDTO) new UserMongoRepository().readByUUID(clientId, ClientDTO.class));
-            Court court = CourtMapper.fromMongoCourt(new CourtMongoRepository().readByUUID(courtId));
+            Client client = ClientMapper.fromMongoUser((ClientDTO) clientsRepository.readByUUID(clientId, ClientDTO.class));
+            Court court = CourtMapper.fromMongoCourt(courtMongoRepository.readByUUID(courtId));
 
             Reservation newReservation = new Reservation(client, court, beginTime);
             boolean result = reservationRepository.create(ReservationMapper.toMongoReservation(newReservation));
@@ -48,30 +53,9 @@ public class ReservationManager {
         }
     }
 
-    ///TODO do wywalenia
-    /*-------------------------------------------------------------------------------------------------------------*/
-    //Rezerwacji mozna dokonac tylko obiektami ktore juz znajduja sie w bazie danych
-    public Reservation makeReservation(Client client, Court court, LocalDateTime beginTime) {
-        if (client == null || court == null) {
-            throw new MainException("Jeden z podanych parametrow [client/court] prowadzi do nieistniejacego obiektu!");
-        }
-        try {
-            Reservation newReservation = new Reservation(client, court, beginTime);
-            boolean result = reservationRepository.create(ReservationMapper.toMongoReservation(newReservation));
-            if (!result) {
-                throw new ReservationException("Nie udalo sie utworzyc transkacji!");
-            }
-            court.setRented(true);
-            return newReservation;
-        } catch (MyMongoException exception) {
-            throw new ReservationException("Blad transakcji.");
-        }
+    public Reservation makeReservation(UUID clientId, UUID courtId) {
+        return makeReservation(clientId, courtId, LocalDateTime.now());
     }
-
-    public Reservation makeReservation(Client client, Court court) {
-        return makeReservation(client, court, LocalDateTime.now());
-    }
-    /*-------------------------------------------------------------------------------------------------------------*/
 
     public void returnCourt(Court court, LocalDateTime endTime) {
         if (court == null) {
@@ -101,59 +85,40 @@ public class ReservationManager {
         return reservations;
     }
 
-    ///TODO wymienic referencje do obiektu na ich UUID
-    public List<Reservation> getAllClientReservations(Client client) {
-        if (client == null) {
-            throw new MainException("Nie istniejacy klient nie moze posiadac rezerwacji!");
-        }
-        return getReservationsWithBsonFilter(Filters.eq("clientid", client.getId().toString()));
+    ///TODO przetestowac co gdy UUID jest zly
+    public List<Reservation> getAllClientReservations(UUID clientId) {
+        return getReservationsWithBsonFilter(Filters.eq("clientid", clientId.toString()));
     }
 
-    public List<Reservation> getClientCurrentReservations(Client client) {
-        if (client == null) {
-            throw new MainException("Nie istniejacy klient nie moze posiadac rezerwacji!");
-        }
+    public List<Reservation> getClientCurrentReservations(UUID clientId) {
         return getReservationsWithBsonFilter(Filters.and(
-                Filters.eq("clientid", client.getId().toString()),
+                Filters.eq("clientid", clientId.toString()),
                 Filters.eq("endtime", null)));
     }
 
-    public List<Reservation> getClientEndedReservations(Client client) {
-        if (client == null) {
-            throw new MainException("Nie istniejacy klient nie moze posiadac rezerwacji!");
-        }
+    public List<Reservation> getClientEndedReservations(UUID clientId) {
         return getReservationsWithBsonFilter(Filters.and(
-                Filters.eq("clientid", client.getId().toString()),
+                Filters.eq("clientid", clientId.toString()),
                 Filters.not(Filters.eq("endtime", null))));
     }
 
-    public Reservation getCourtCurrentReservation(Court court) {
-        if (court == null) {
-            throw new MainException("Nie istniejace boisko nie moze posiadac rezerwacji!");
-        }
+    public Reservation getCourtCurrentReservation(UUID courtId) {
         var list = getReservationsWithBsonFilter(
-                Filters.eq("courtid", court.getCourtId().toString()));
+                Filters.eq("courtid", courtId.toString()));
         return !list.isEmpty() ? list.get(0) : null;
     }
 
     ///TODO obtestowac
 
-
-    public List<Reservation> getCourtEndedReservation(Court court) {
-        if (court == null) {
-            throw new MainException("Nie istniejace boisko nie moze posiadac rezerwacji!");
-        }
+    public List<Reservation> getCourtEndedReservation(UUID courtId) {
         return getReservationsWithBsonFilter(Filters.and(
-                Filters.eq("courtid", court.getCourtId().toString()),
+                Filters.eq("courtid", courtId.toString()),
                 Filters.not(Filters.eq("endtime", null))));
     }
 
-    public double checkClientReservationBalance(Client client) {
-        if (client == null) {
-            throw new MainException("Nie mozna obliczyc salda dla nieistniejacego klienta!");
-        }
+    public double checkClientReservationBalance(UUID clientId) {
         double sum = 0;
-        List<Reservation> reservationList = getClientEndedReservations(client);
+        List<Reservation> reservationList = getClientEndedReservations(clientId);
         for (Reservation reservation : reservationList) {
             sum += reservation.getReservationCost();
         }
@@ -169,11 +134,9 @@ public class ReservationManager {
     }
 
     public Reservation getReservationByID(UUID uuid) {
-        var clientsRepo = new UserMongoRepository();
-        var courtsRepo = new CourtMongoRepository();
         ReservationDTO reservationMapper = reservationRepository.readByUUID(uuid);
         return ReservationMapper.fromMongoReservation(reservationMapper,
-                (ClientDTO) clientsRepo.readByUUID(UUID.fromString(reservationMapper.getClientId()), ClientDTO.class),
-                courtsRepo.readByUUID(UUID.fromString(reservationMapper.getCourtId())));
+                (ClientDTO) clientsRepository.readByUUID(UUID.fromString(reservationMapper.getClientId()), ClientDTO.class),
+                courtMongoRepository.readByUUID(UUID.fromString(reservationMapper.getCourtId())));
     }
 }

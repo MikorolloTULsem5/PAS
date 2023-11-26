@@ -30,7 +30,7 @@ public class ReservationTest {
     @BeforeEach
     void setUp() {
         testClientType = new Normal();
-        testClient = new Client("John", "Smith", "123456789", testClientType);
+        testClient = new Client(UUID.randomUUID(), "John", "Smith", "123456789", testClientType);
         testCourt = new Court(1, 100, 1);
         testUUID = UUID.randomUUID();
     }
@@ -175,7 +175,7 @@ public class ReservationTest {
         assertTrue(reservation.getReservationHours() > testClient.getClientMaxHours());
         assertEquals(600, reservation.getReservationCost());
     }
-    
+
     @Test
     void testGettingReservationInfo() {
         LocalDateTime now = LocalDateTime.of(2023, Month.JUNE, 3, 22, 15);
