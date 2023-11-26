@@ -1,6 +1,8 @@
-package nbd.gV.restapi.managers.usermanager;
+package nbd.gV.restapi.services.userservice;
 
 import com.mongodb.client.model.Filters;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
 import nbd.gV.data.datahandling.dto.UserDTO;
 import nbd.gV.model.users.Client;
 import nbd.gV.model.users.clienttype.ClientType;
@@ -15,11 +17,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-public class ClientManager extends UserManager {
+@ApplicationScoped
+public class ClientService extends UserService {
 
-    private final UserMongoRepository userRepository;
+    @Inject
+    private UserMongoRepository userRepository;
 
-    public ClientManager() {
+    public ClientService() {
         this.userRepository = new UserMongoRepository();
     }
 

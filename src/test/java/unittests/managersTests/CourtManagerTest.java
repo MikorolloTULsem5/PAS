@@ -5,7 +5,7 @@ import nbd.gV.data.datahandling.dto.CourtDTO;
 import nbd.gV.data.datahandling.mappers.ClientMapper;
 import nbd.gV.data.datahandling.mappers.CourtMapper;
 import nbd.gV.data.datahandling.mappers.ReservationMapper;
-import nbd.gV.restapi.managers.CourtManager;
+import nbd.gV.restapi.services.CourtService;
 import nbd.gV.exceptions.CourtException;
 import nbd.gV.exceptions.MainException;
 import nbd.gV.data.repositories.CourtMongoRepository;
@@ -48,14 +48,14 @@ public class CourtManagerTest {
 
     @Test
     void testCreatingCourtManager() {
-        CourtManager courtManager = new CourtManager();
+        CourtService courtManager = new CourtService();
         assertNotNull(courtManager);
         assertEquals(0, courtManager.getAllCourts().size());
     }
 
     @Test
     void testRegisteringNewCourt() {
-        CourtManager cm = new CourtManager();
+        CourtService cm = new CourtService();
         assertNotNull(cm);
         assertEquals(0, cm.getAllCourts().size());
 
@@ -74,7 +74,7 @@ public class CourtManagerTest {
 
     @Test
     void testGettingCourt() {
-        CourtManager cm = new CourtManager();
+        CourtService cm = new CourtService();
         assertNotNull(cm);
 
         Court testCourt1 = cm.registerCourt(10, 50, 1);
@@ -92,7 +92,7 @@ public class CourtManagerTest {
 
     @Test
     void testUnregisteringCourt() {
-        CourtManager cm = new CourtManager();
+        CourtService cm = new CourtService();
         assertNotNull(cm);
 
         Court testCourt1 = cm.registerCourt(10, 50, 1);
@@ -129,7 +129,7 @@ public class CourtManagerTest {
 
     @Test
     void testDeletingCourtSuccess() {
-        CourtManager courtManager = new CourtManager();
+        CourtService courtManager = new CourtService();
         var collection = courtRepository.getDatabase().getCollection(courtRepository.getCollectionName(), CourtDTO.class);
         assertEquals(0, collection.find().into(new ArrayList<>()).size());
         Court testCourt1 = new Court(1000, 100, 1);
@@ -143,7 +143,7 @@ public class CourtManagerTest {
 
     @Test
     void testDeletingCourtFailure() {
-        CourtManager courtManager = new CourtManager();
+        CourtService courtManager = new CourtService();
         var collection = courtRepository.getDatabase().getCollection(courtRepository.getCollectionName(), CourtDTO.class);
         assertEquals(0, collection.find().into(new ArrayList<>()).size());
         Client testClient1 = new Client(UUID.randomUUID(), "John", "Smith", "12345678901", new Normal());
@@ -172,7 +172,7 @@ public class CourtManagerTest {
 
     @Test
     public void testFindByCourtNumber() {
-        CourtManager cm = new CourtManager();
+        CourtService cm = new CourtService();
         assertNotNull(cm);
 
         Court testCourt1 = cm.registerCourt(10, 50, 1);

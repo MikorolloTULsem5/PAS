@@ -1,4 +1,4 @@
-package nbd.gV.restapi.managers;
+package nbd.gV.restapi.services;
 
 import com.mongodb.client.model.Filters;
 
@@ -23,12 +23,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-public class ReservationManager {
+public class ReservationService {
     private final ReservationMongoRepository reservationRepository;
     private final UserMongoRepository clientsRepository;
     private final CourtMongoRepository courtMongoRepository;
 
-    public ReservationManager() {
+    public ReservationService() {
         reservationRepository = new ReservationMongoRepository();
 
         ///TODO do wywalenia

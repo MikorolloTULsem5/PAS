@@ -1,4 +1,4 @@
-package nbd.gV.restapi.managers.usermanager;
+package nbd.gV.restapi.services.userservice;
 
 import com.mongodb.client.model.Filters;
 import nbd.gV.data.datahandling.dto.AdminDTO;
@@ -14,11 +14,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-public class AdminManager extends UserManager {
+public class AdminService extends UserService {
 
     private final UserMongoRepository userRepository;
 
-    public AdminManager() {
+    public AdminService() {
         this.userRepository = new UserMongoRepository();
     }
 

@@ -17,7 +17,7 @@ import nbd.gV.data.repositories.UserMongoRepository;
 import nbd.gV.data.repositories.CourtMongoRepository;
 import nbd.gV.data.repositories.ReservationMongoRepository;
 import nbd.gV.model.reservations.Reservation;
-import nbd.gV.restapi.managers.ReservationManager;
+import nbd.gV.restapi.services.ReservationService;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -87,13 +87,13 @@ public class ReservationManagerTest {
 
     @Test
     void testCreatingReservationManager() {
-        ReservationManager rm = new ReservationManager();
+        ReservationService rm = new ReservationService();
         assertNotNull(rm);
     }
 
     @Test
     void testMakingReservation() {
-        ReservationManager rm = new ReservationManager();
+        ReservationService rm = new ReservationService();
         assertNotNull(rm);
         assertEquals(rm.getAllCurrentReservations().size(), 0);
         assertFalse(testCourt1.isRented());
@@ -127,7 +127,7 @@ public class ReservationManagerTest {
 
     @Test
     void testCreatingReservationManagerWithNullDate() {
-        ReservationManager rm = new ReservationManager();
+        ReservationService rm = new ReservationService();
         assertNotNull(rm);
 
         assertEquals(0, rm.getAllCurrentReservations().size());
@@ -139,7 +139,7 @@ public class ReservationManagerTest {
 
     @Test
     void testEndReservation() {
-        ReservationManager rm = new ReservationManager();
+        ReservationService rm = new ReservationService();
         assertNotNull(rm);
 
         rm.makeReservation(testClient1.getId(), testCourt1.getCourtId(), testTimeStart);
@@ -166,7 +166,7 @@ public class ReservationManagerTest {
     void testCheckingClientBalance() {
         var testSuperTimeEnd = LocalDateTime.of(2023, Month.JUNE, 5, 12, 0);
         var testSuperTimeEnd2 = LocalDateTime.of(2023, Month.JUNE, 6, 12, 0);
-        ReservationManager rm = new ReservationManager();
+        ReservationService rm = new ReservationService();
         assertNotNull(rm);
 
         rm.makeReservation(testClient1.getId(), testCourt1.getCourtId(), testTimeStart);

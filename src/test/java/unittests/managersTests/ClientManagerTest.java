@@ -2,7 +2,7 @@ package unittests.managersTests;
 
 import nbd.gV.data.datahandling.dto.ClientDTO;
 import nbd.gV.model.users.Client;
-import nbd.gV.restapi.managers.usermanager.ClientManager;
+import nbd.gV.restapi.services.userservice.ClientService;
 import nbd.gV.model.users.clienttype.ClientType;
 import nbd.gV.model.users.clienttype.Normal;
 import nbd.gV.exceptions.UserException;
@@ -40,14 +40,14 @@ public class ClientManagerTest {
 
     @Test
     void testCreatingClientManager() {
-        ClientManager clientManager = new ClientManager();
+        ClientService clientManager = new ClientService();
         assertNotNull(clientManager);
         assertEquals(0, clientManager.getAllClients().size());
     }
 
     @Test
     void testRegisteringNewCourt() {
-        ClientManager cm = new ClientManager();
+        ClientService cm = new ClientService();
         assertNotNull(cm);
         assertEquals(0, cm.getAllClients().size());
 
@@ -69,7 +69,7 @@ public class ClientManagerTest {
 
     @Test
     void testGettingClient() {
-        ClientManager cm = new ClientManager();
+        ClientService cm = new ClientService();
         assertNotNull(cm);
 
         Client testClient1 =
@@ -89,7 +89,7 @@ public class ClientManagerTest {
 
     @Test
     void testUnregisteringClient() {
-        ClientManager cm = new ClientManager();
+        ClientService cm = new ClientService();
         assertNotNull(cm);
 
         Client testClient1 =
@@ -128,7 +128,7 @@ public class ClientManagerTest {
 
     @Test
     public void testFindClientByLogin() {
-        ClientManager cm = new ClientManager();
+        ClientService cm = new ClientService();
         assertNotNull(cm);
 
         Client testClient1 =
@@ -149,7 +149,7 @@ public class ClientManagerTest {
 
     @Test
     public void testFindClientByLoginFitting() {
-        ClientManager cm = new ClientManager();
+        ClientService cm = new ClientService();
         assertNotNull(cm);
 
         Client testClient1 =
@@ -173,7 +173,7 @@ public class ClientManagerTest {
 
     @Test
     public void testModifyClient() {
-        ClientManager cm = new ClientManager();
+        ClientService cm = new ClientService();
         assertNotNull(cm);
 
         Client testClient1 =

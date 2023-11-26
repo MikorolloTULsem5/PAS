@@ -1,4 +1,4 @@
-package nbd.gV.restapi.managers;
+package nbd.gV.restapi.services;
 
 import com.mongodb.client.model.Filters;
 
@@ -14,11 +14,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-public class CourtManager {
+public class CourtService {
 
     private final CourtMongoRepository courtRepository;
 
-    public CourtManager() {
+    public CourtService() {
         courtRepository = new CourtMongoRepository();
     }
 
