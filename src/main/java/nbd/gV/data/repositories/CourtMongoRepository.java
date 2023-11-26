@@ -6,6 +6,7 @@ import com.mongodb.client.model.CreateCollectionOptions;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.ValidationOptions;
 import com.mongodb.client.result.UpdateResult;
+import jakarta.enterprise.context.ApplicationScoped;
 import nbd.gV.data.datahandling.dto.CourtDTO;
 import nbd.gV.data.datahandling.dto.ReservationDTO;
 import nbd.gV.exceptions.MyMongoException;
@@ -15,6 +16,7 @@ import org.bson.conversions.Bson;
 import java.util.ArrayList;
 import java.util.UUID;
 
+@ApplicationScoped
 public class CourtMongoRepository extends AbstractMongoRepository<CourtDTO> {
 
     static final String COLLECTION_NAME = "courts";

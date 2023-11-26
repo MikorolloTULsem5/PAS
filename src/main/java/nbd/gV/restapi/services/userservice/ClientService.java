@@ -23,10 +23,6 @@ public class ClientService extends UserService {
     @Inject
     private UserMongoRepository userRepository;
 
-    public ClientService() {
-        this.userRepository = new UserMongoRepository();
-    }
-
     public Client registerClient(String firstName, String lastName, String login, ClientType clientType) {
         Client newClient = new Client(UUID.randomUUID(), firstName, lastName, login, clientType);
         try {

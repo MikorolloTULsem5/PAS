@@ -4,6 +4,7 @@ import com.mongodb.client.MongoCollection;
 import com.mongodb.client.model.CreateCollectionOptions;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.ValidationOptions;
+import jakarta.enterprise.context.ApplicationScoped;
 import nbd.gV.data.datahandling.dto.UserDTO;
 import org.bson.Document;
 import org.bson.conversions.Bson;
@@ -12,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+@ApplicationScoped
 public class UserMongoRepository extends AbstractMongoRepository<UserDTO> {
 
     static final String COLLECTION_NAME = "users";

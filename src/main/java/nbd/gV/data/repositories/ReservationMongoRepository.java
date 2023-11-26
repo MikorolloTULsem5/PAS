@@ -9,6 +9,7 @@ import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Updates;
 import com.mongodb.client.model.ValidationOptions;
 import com.mongodb.client.result.InsertOneResult;
+import jakarta.enterprise.context.ApplicationScoped;
 import nbd.gV.data.datahandling.mappers.CourtMapper;
 import nbd.gV.model.users.Client;
 import nbd.gV.model.courts.Court;
@@ -28,6 +29,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.UUID;
 
+@ApplicationScoped
 public class ReservationMongoRepository extends AbstractMongoRepository<ReservationDTO> {
 
     static final String COLLECTION_NAME = "reservations";
