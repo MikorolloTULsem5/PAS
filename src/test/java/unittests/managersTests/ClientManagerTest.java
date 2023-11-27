@@ -53,7 +53,7 @@ public class ClientManagerTest {
                 cm.registerClient("Adam", "Smith", "12345678901", testClientType);
         assertNotNull(newClient);
         assertEquals(1, cm.getAllClients().size());
-        assertEquals(newClient, cm.getClient(newClient.getId()));
+        assertEquals(newClient, cm.getClientById(newClient.getId()));
 
         cm.registerClient("Adam", "Long", "12345678902", testClientType);
         cm.registerClient("Eva", "Brown", "12345678903", testClientType);
@@ -77,9 +77,9 @@ public class ClientManagerTest {
         assertNotNull(testClient2);
         assertEquals(2, cm.getAllClients().size());
 
-        assertEquals(testClient1, cm.getClient(testClient1.getId()));
-        assertEquals(testClient2, cm.getClient(testClient2.getId()));
-        assertNull(cm.getClient(UUID.randomUUID()));
+        assertEquals(testClient1, cm.getClientById(testClient1.getId()));
+        assertEquals(testClient2, cm.getClientById(testClient2.getId()));
+        assertNull(cm.getClientById(UUID.randomUUID()));
     }
 
     @Test
@@ -94,13 +94,13 @@ public class ClientManagerTest {
         assertEquals(2, cm.getAllClients().size());
 
         assertEquals(2, cm.getAllClients().size());
-        assertEquals(testClient1, cm.getClient(testClient1.getId()));
+        assertEquals(testClient1, cm.getClientById(testClient1.getId()));
         assertFalse(testClient1.isArchive());
 
         cm.archiveClient(testClient1);
 
         assertEquals(2, cm.getAllClients().size());
-        Client dbClient = cm.getClient(testClient1.getId());
+        Client dbClient = cm.getClientById(testClient1.getId());
         assertNotNull(dbClient);
         assertTrue(dbClient.isArchive());
 
@@ -129,10 +129,10 @@ public class ClientManagerTest {
         assertNotNull(testClient2);
         assertEquals(2, cm.getAllClients().size());
 
-        Client newClient = cm.findClientByLogin("12345678901");
+        Client newClient = cm.getClientByLogin("12345678901");
         assertNotNull(newClient);
         assertEquals(testClient1, newClient);
-        Client newClient2 = cm.findClientByLogin("12345678999");
+        Client newClient2 = cm.getClientByLogin("12345678999");
         assertNull(newClient2);
     }
 
@@ -151,7 +151,7 @@ public class ClientManagerTest {
         assertNotNull(testClient3);
         assertEquals(3, cm.getAllClients().size());
 
-        var list = cm.findClientByLoginFitting("adxam");
+        var list = cm.getClientByLoginMatching("adxam");
         assertEquals(2, list.size());
         assertEquals(testClient1.getId(), list.get(0).getId());
         assertEquals(testClient3.getId(), list.get(1).getId());

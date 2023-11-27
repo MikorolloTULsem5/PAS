@@ -3,7 +3,6 @@ package nbd.gV.restapi.controllers;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
-import jakarta.ws.rs.core.MediaType;
 import nbd.gV.model.users.Client;
 import nbd.gV.model.users.clienttype.Athlete;
 import nbd.gV.model.users.clienttype.Coach;
@@ -11,6 +10,7 @@ import nbd.gV.model.users.clienttype.Normal;
 import nbd.gV.restapi.services.userservice.ClientService;
 
 import java.util.List;
+import java.util.UUID;
 
 @Path("/users")
 @ApplicationScoped
@@ -33,5 +33,23 @@ public class UserController {
     @GET
     public List<Client> getAllClients() {
         return clientService.getAllClients();
+    }
+
+    @GET
+    @Path("{id}")
+    public Client getClientById(@PathParam("id") String id) {
+        return clientService.getClientById(UUID.fromString(id));
+    }
+
+    @GET
+    @Path("{login}")
+    public Client getClientByLogin(@PathParam("login") String login) {
+        return clientService.getClientByLogin(login);
+    }
+
+    @GET
+    @Path("{matchingLogin}")
+    public List<Client> getClientByLoginMatching(@PathParam("matchingLogin") String matchingLogin) {
+        return clientService.getClientByLoginMatching(matchingLogin);
     }
 }

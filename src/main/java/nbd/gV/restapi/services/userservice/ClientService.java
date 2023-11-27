@@ -47,7 +47,7 @@ public class ClientService extends UserService {
         return newClient;
     }
 
-    public Client getClient(UUID clientID) {
+    public Client getClientById(UUID clientID) {
         UserDTO clientDTO = userRepository.readByUUID(clientID, ClientDTO.class);
         return clientDTO != null ? ClientMapper.fromMongoUser((ClientDTO) clientDTO) : null;
     }
@@ -60,12 +60,12 @@ public class ClientService extends UserService {
         return clientsList;
     }
 
-    public Client findClientByLogin(String login) {
+    public Client getClientByLogin(String login) {
         var list = userRepository.read(Filters.eq("login", login), ClientDTO.class);
         return !list.isEmpty() ? ClientMapper.fromMongoUser((ClientDTO) list.get(0)) : null;
     }
 
-    public List<Client> findClientByLoginFitting(String login) {
+    public List<Client> getClientByLoginMatching(String login) {
         List<Client> clientsList = new ArrayList<>();
         for (var el : userRepository.read(Filters.and(Filters.regex("login", ".*%s.*".formatted(login)),
                 Filters.eq("_clazz", "client")), ClientDTO.class)) {
