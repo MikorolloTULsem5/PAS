@@ -3,6 +3,7 @@ package nbd.gV.restapi.controllers;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
+import jakarta.ws.rs.core.MediaType;
 import nbd.gV.model.users.Client;
 import nbd.gV.model.users.clienttype.Athlete;
 import nbd.gV.model.users.clienttype.Coach;
@@ -19,6 +20,7 @@ public class UserController {
     private ClientService clientService;
 
     @POST
+    @Consumes(MediaType.APPLICATION_JSON)
     @Path("/addClient/{typeName}")
     public void addClient(@PathParam("typeName") String type, Client client) {
         Client newClient = clientService.registerClient(client.getFirstName(), client.getLastName(),
@@ -31,25 +33,33 @@ public class UserController {
     }
 
     @GET
+//    @Produces(MediaType.APPLICATION_JSON)
+//    @Path("/all")
     public List<Client> getAllClients() {
         return clientService.getAllClients();
     }
 
     @GET
-    @Path("{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.TEXT_PLAIN)
+    @Path("/{id}")
     public Client getClientById(@PathParam("id") String id) {
         return clientService.getClientById(UUID.fromString(id));
     }
 
     @GET
-    @Path("{login}")
-    public Client getClientByLogin(@PathParam("login") String login) {
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.TEXT_PLAIN)
+    @Path("/get")
+    public Client getClientByLogin(@QueryParam("login") String login) {
         return clientService.getClientByLogin(login);
     }
 
     @GET
-    @Path("{matchingLogin}")
-    public List<Client> getClientByLoginMatching(@PathParam("matchingLogin") String matchingLogin) {
-        return clientService.getClientByLoginMatching(matchingLogin);
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.TEXT_PLAIN)
+    @Path("/match")
+    public List<Client> getClientByLoginMatching(@QueryParam("login") String login) {
+        return clientService.getClientByLoginMatching(login);
     }
 }
