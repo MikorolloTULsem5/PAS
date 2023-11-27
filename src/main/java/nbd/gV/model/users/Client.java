@@ -4,7 +4,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import nbd.gV.model.users.clienttype.ClientType;
-import nbd.gV.exceptions.MainException;
 
 import java.util.Objects;
 import java.util.UUID;
@@ -31,15 +30,11 @@ public class Client extends User {
         this.clientType = clientType;
     }
 
-    public String getClientInfo() {
-        return "Klient - %s %s o numerze PESEL %s\n".formatted(firstName, lastName, getLogin());
-    }
-
     public double applyDiscount(double price) {
         return clientType.applyDiscount(price);
     }
 
-    public int getClientMaxHours() {
+    public int clientMaxHours() {
         return clientType.getMaxHours();
     }
 

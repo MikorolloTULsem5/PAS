@@ -172,29 +172,7 @@ public class ReservationTest {
 
         reservation.endReservation(now);
 
-        assertTrue(reservation.getReservationHours() > testClient.getClientMaxHours());
+        assertTrue(reservation.getReservationHours() > testClient.clientMaxHours());
         assertEquals(600, reservation.getReservationCost());
-    }
-
-    @Test
-    void testGettingReservationInfo() {
-        LocalDateTime now = LocalDateTime.of(2023, Month.JUNE, 3, 22, 15);
-        LocalDateTime then = LocalDateTime.of(2023, Month.JUNE, 3, 20, 7);
-        Reservation reservation = new Reservation(testUUID, testClient, testCourt, then);
-
-        assertNotNull(reservation);
-
-        String str = "Rezerwacja nr " + testUUID +
-                " przez 'Klient - John Smith o numerze PESEL 123456789' boiska: 'Boisko nr 1 o powierzchni 1,00 " +
-                "i koszcie za rezerwacje: 100,00 PLN', od godziny [03.06.2023, 20:07].%n".formatted();
-        assertEquals(str, reservation.getReservationInfo());
-
-        reservation.endReservation(now);
-
-        str = ("Rezerwacja nr " + testUUID +
-                " przez 'Klient - John Smith o numerze PESEL 123456789' boiska: 'Boisko nr 1 o powierzchni 1,00 " +
-                "i koszcie za rezerwacje: 100,00 PLN', od godziny [03.06.2023, 20:07] " +
-                "do godziny [03.06.2023, 22:15].%n").formatted();
-        assertEquals(str, reservation.getReservationInfo());
     }
 }

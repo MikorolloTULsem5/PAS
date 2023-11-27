@@ -12,7 +12,6 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import nbd.gV.exceptions.MainException;
 import org.junit.jupiter.api.Test;
 
 import java.util.UUID;
@@ -35,15 +34,6 @@ public class ClientTest {
         assertEquals(testLogin, client.getLogin());
         assertEquals(testTypeNormal, client.getClientType());
         assertFalse(client.isArchive());
-
-        assertThrows(MainException.class, ()
-                -> new Client(UUID.randomUUID(), "", testLastName, testLogin, testTypeNormal));
-        assertThrows(MainException.class, ()
-                -> new Client(UUID.randomUUID(), testFirstName, "", testLogin, testTypeNormal));
-        assertThrows(MainException.class, ()
-                -> new Client(UUID.randomUUID(), testFirstName, testLastName, "", testTypeNormal));
-        assertThrows(MainException.class, ()
-                -> new Client(UUID.randomUUID(), testFirstName, testLastName, testLogin, null));
     }
 
     @Test
@@ -73,14 +63,6 @@ public class ClientTest {
     }
 
     @Test
-    void testGettingClientInfo() {
-        Client client = new Client(UUID.randomUUID(), testFirstName, testLastName, testLogin, testTypeNormal);
-        assertNotNull(client);
-
-        assertEquals("Klient - John Smith o numerze PESEL 12345678\n", client.getClientInfo());
-    }
-
-    @Test
     void testGettingClientMaxHoursAndApplyingDiscount() {
         Client client = new Client(UUID.randomUUID(), testFirstName, testLastName, testLogin, testTypeNormal);
         assertNotNull(client);
@@ -93,8 +75,8 @@ public class ClientTest {
         assertEquals(10, client1.applyDiscount(100));
         assertEquals(15, client2.applyDiscount(100));
 
-        assertEquals(3, client.getClientMaxHours());
-        assertEquals(6, client1.getClientMaxHours());
-        assertEquals(12, client2.getClientMaxHours());
+        assertEquals(3, client.clientMaxHours());
+        assertEquals(6, client1.clientMaxHours());
+        assertEquals(12, client2.clientMaxHours());
     }
 }

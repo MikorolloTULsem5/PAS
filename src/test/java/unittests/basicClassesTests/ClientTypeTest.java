@@ -18,8 +18,7 @@ public class ClientTypeTest {
         assertEquals(0, type.applyDiscount(100));
         assertEquals(3, type.getMaxHours());
         assertEquals("Normal", type.getClientTypeName());
-        assertEquals("Maksymalna liczba godzin rezerwacji dla typu Normal wynosi 3%n".formatted(), type.getTypeInfo());
-    }
+       }
 
     @Test
     void testAthleteType() {
@@ -28,8 +27,7 @@ public class ClientTypeTest {
         assertEquals(10, type.applyDiscount(100));
         assertEquals(6, type.getMaxHours());
         assertEquals("Athlete", type.getClientTypeName());
-        assertEquals("Maksymalna liczba godzin rezerwacji dla typu Athlete wynosi 6%n".formatted(), type.getTypeInfo());
-    }
+        }
 
     @Test
     void testCoachType() {
@@ -38,6 +36,5 @@ public class ClientTypeTest {
         assertEquals(15, type.applyDiscount(100));
         assertEquals(12, type.getMaxHours());
         assertEquals("Coach", type.getClientTypeName());
-        assertEquals("Maksymalna liczba godzin rezerwacji dla typu Coach wynosi 12%n".formatted(), type.getTypeInfo());
-    }
+        }
 }

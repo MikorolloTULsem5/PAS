@@ -3,6 +3,7 @@ package nbd.gV.restapi.services.userservice;
 import com.mongodb.client.model.Filters;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
+import lombok.NoArgsConstructor;
 import nbd.gV.data.datahandling.dto.UserDTO;
 import nbd.gV.model.users.Client;
 import nbd.gV.model.users.clienttype.ClientType;
@@ -18,10 +19,16 @@ import java.util.List;
 import java.util.UUID;
 
 @ApplicationScoped
+@NoArgsConstructor
 public class ClientService extends UserService {
 
     @Inject
     private UserMongoRepository userRepository;
+
+    ///TODO kompatybilnosc testow potem wywalic
+    public ClientService(UserMongoRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 
     public Client registerClient(String firstName, String lastName, String login, ClientType clientType) {
         Client newClient = new Client(UUID.randomUUID(), firstName, lastName, login, clientType);

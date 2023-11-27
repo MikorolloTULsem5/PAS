@@ -25,6 +25,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 public class ClientManagerTest {
 
     static final UserMongoRepository clientRepository = new UserMongoRepository();
+    static final ClientService cm = new ClientService(clientRepository);
     final ClientType testClientType = new Normal();
 
     @BeforeAll
@@ -42,13 +43,10 @@ public class ClientManagerTest {
     void testCreatingClientManager() {
         ClientService clientManager = new ClientService();
         assertNotNull(clientManager);
-        assertEquals(0, clientManager.getAllClients().size());
     }
 
     @Test
-    void testRegisteringNewCourt() {
-        ClientService cm = new ClientService();
-        assertNotNull(cm);
+    void testRegisteringNewClient() {
         assertEquals(0, cm.getAllClients().size());
 
         Client newClient =
@@ -69,9 +67,6 @@ public class ClientManagerTest {
 
     @Test
     void testGettingClient() {
-        ClientService cm = new ClientService();
-        assertNotNull(cm);
-
         Client testClient1 =
                 cm.registerClient("Adam", "Smith", "12345678901", testClientType);
         assertNotNull(testClient1);
@@ -89,9 +84,6 @@ public class ClientManagerTest {
 
     @Test
     void testUnregisteringClient() {
-        ClientService cm = new ClientService();
-        assertNotNull(cm);
-
         Client testClient1 =
                 cm.registerClient("Adam", "Smith", "12345678901", testClientType);
         assertNotNull(testClient1);
@@ -128,9 +120,6 @@ public class ClientManagerTest {
 
     @Test
     public void testFindClientByLogin() {
-        ClientService cm = new ClientService();
-        assertNotNull(cm);
-
         Client testClient1 =
                 cm.registerClient("Adam", "Smith", "12345678901", testClientType);
         assertNotNull(testClient1);
@@ -149,9 +138,6 @@ public class ClientManagerTest {
 
     @Test
     public void testFindClientByLoginFitting() {
-        ClientService cm = new ClientService();
-        assertNotNull(cm);
-
         Client testClient1 =
                 cm.registerClient("Adam", "Smith", "adxam@smith", testClientType);
         assertNotNull(testClient1);
@@ -173,9 +159,6 @@ public class ClientManagerTest {
 
     @Test
     public void testModifyClient() {
-        ClientService cm = new ClientService();
-        assertNotNull(cm);
-
         Client testClient1 =
                 cm.registerClient("Adam", "Smith", "adxam@smith", testClientType);
         assertNotNull(testClient1);

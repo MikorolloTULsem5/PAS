@@ -15,9 +15,4 @@ public abstract class ClientType {
     public String getClientTypeName() {
         return name;
     }
-
-    public String getTypeInfo() {
-        return "%s %s wynosi %d%n".formatted("Maksymalna liczba godzin rezerwacji dla typu",
-                name, getMaxHours());
-    }
 }
