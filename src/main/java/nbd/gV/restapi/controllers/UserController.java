@@ -8,6 +8,8 @@ import jakarta.validation.Validator;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import nbd.gV.exceptions.UserException;
+import nbd.gV.exceptions.UserLoginException;
 import nbd.gV.model.users.Client;
 import nbd.gV.restapi.services.userservice.ClientService;
 
@@ -25,22 +27,25 @@ public class UserController {
 
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
     @Path("/addClient")
     public Response addClient(Client client) {
-        Set<ConstraintViolation<Client>> violation = validator.validate(client);
-        List<String> errors = violation.stream().map(ConstraintViolation::getMessage).collect(Collectors.toList());
-        if (!violation.isEmpty()) {
+        Set<ConstraintViolation<Client>> violations = validator.validate(client);
+        List<String> errors = violations.stream().map(ConstraintViolation::getMessage).collect(Collectors.toList());
+        if (!violations.isEmpty()) {
             return Response.status(Response.Status.BAD_REQUEST).entity(errors).build();
         }
 
-        Client newClient = clientService.registerClient(client.getFirstName(), client.getLastName(),
-                client.getLogin(), client.getClientTypeName());
-
-        if (newClient != null) {
-            return Response.status(Response.Status.CREATED).build();
-        } else {
-            return Response.status(Response.Status.CONFLICT).entity("This login is taken").build();
+        try {
+            clientService.registerClient(client.getFirstName(), client.getLastName(),
+                    client.getLogin(), client.getClientTypeName());
+        } catch (UserLoginException ule) {
+            return Response.status(Response.Status.CONFLICT).entity(ule.getMessage()).build();
+        } catch (UserException ue) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ue.getMessage()).build();
         }
+
+        return Response.status(Response.Status.CREATED).build();
     }
 
     @GET

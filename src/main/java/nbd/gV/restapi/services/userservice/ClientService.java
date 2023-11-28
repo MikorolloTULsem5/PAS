@@ -6,6 +6,7 @@ import jakarta.inject.Inject;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import nbd.gV.data.datahandling.dto.UserDTO;
+import nbd.gV.exceptions.UserLoginException;
 import nbd.gV.model.users.Client;
 import nbd.gV.exceptions.UserException;
 import nbd.gV.exceptions.MyMongoException;
@@ -34,7 +35,7 @@ public class ClientService extends UserService {
         Client newClient = new Client(UUID.randomUUID(), firstName, lastName, login, clientType);
         try {
             if (!userRepository.read(Filters.eq("login", login), ClientDTO.class).isEmpty()) {
-                throw new UserException("Nie udalo sie zarejestrowac klienta w bazie! - klient o tym loginie" +
+                throw new UserLoginException("Nie udalo sie zarejestrowac klienta w bazie! - klient o tym loginie" +
                         "znajduje sie juz w bazie");
             }
 
