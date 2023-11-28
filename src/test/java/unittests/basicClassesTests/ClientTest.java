@@ -1,15 +1,10 @@
 package unittests.basicClassesTests;
 
 import nbd.gV.model.users.Client;
-import nbd.gV.model.users.clienttype.Athlete;
-import nbd.gV.model.users.clienttype.ClientType;
-import nbd.gV.model.users.clienttype.Coach;
-import nbd.gV.model.users.clienttype.Normal;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
@@ -20,9 +15,9 @@ public class ClientTest {
     String testFirstName = "John";
     String testLastName = "Smith";
     String testLogin = "12345678";
-    ClientType testTypeAthlete = new Athlete();
-    ClientType testTypeCoach = new Coach();
-    ClientType testTypeNormal = new Normal();
+    String testTypeAthlete = "athlete";
+    String testTypeCoach = "coach";
+    String testTypeNormal = "normal";
 
     @Test
     void testCreatingClient() {
@@ -71,9 +66,9 @@ public class ClientTest {
         Client client2 = new Client(UUID.randomUUID(), testFirstName, testLastName, testLogin, testTypeCoach);
         assertNotNull(client2);
 
-        assertEquals(0, client.applyDiscount(100));
-        assertEquals(10, client1.applyDiscount(100));
-        assertEquals(15, client2.applyDiscount(100));
+        assertEquals(0, client.applyDiscount());
+        assertEquals(10, client1.applyDiscount());
+        assertEquals(20, client2.applyDiscount());
 
         assertEquals(3, client.clientMaxHours());
         assertEquals(6, client1.clientMaxHours());

@@ -3,10 +3,7 @@ package unittests.managersTests;
 import nbd.gV.data.datahandling.dto.ClientDTO;
 import nbd.gV.model.users.Client;
 import nbd.gV.restapi.services.userservice.ClientService;
-import nbd.gV.model.users.clienttype.ClientType;
-import nbd.gV.model.users.clienttype.Normal;
 import nbd.gV.exceptions.UserException;
-import nbd.gV.exceptions.MainException;
 import nbd.gV.data.repositories.UserMongoRepository;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -26,7 +23,7 @@ public class ClientManagerTest {
 
     static final UserMongoRepository clientRepository = new UserMongoRepository();
     static final ClientService cm = new ClientService(clientRepository);
-    final ClientType testClientType = new Normal();
+    final String testClientType = "normal";
 
     @BeforeAll
     @AfterAll

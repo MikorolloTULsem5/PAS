@@ -3,21 +3,46 @@ package nbd.gV.model.users;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import nbd.gV.model.users.clienttype.ClientType;
 
 import java.util.Objects;
 import java.util.UUID;
 
-@Getter
-@Setter
 @NoArgsConstructor
 public class Client extends User {
 
+    private enum ClientType {
+        NORMAL(0, 3), ATHLETE(10, 6), COACH(20, 12);
+
+        private final double discount;
+        private final int maxHours;
+        ClientType(double discount, int maxHours) {
+            this.discount = discount;
+            this.maxHours = maxHours;
+        }
+
+        public double applyDiscount() {
+            return discount;
+        }
+
+        public int getMaxHours() {
+            return maxHours;
+        }
+
+        @Override
+        public String toString() {
+            return this.name().toLowerCase();
+        }
+    }
+
+    @Getter
+    @Setter
     private String firstName;
+    @Getter
+    @Setter
     private String lastName;
     private ClientType clientType;
 
-    public Client(UUID id, String firstName, String lastName, String login, ClientType clientType) {
+    public Client(UUID id, String firstName, String lastName, String login, String clientType) {
         super(id, login);
 
         ///TODO do wywalenia przy zmianie walidacji
@@ -27,11 +52,15 @@ public class Client extends User {
 
         this.firstName = firstName;
         this.lastName = lastName;
-        this.clientType = clientType;
+        this.clientType = switch (clientType.toLowerCase()) {
+            case "athlete" -> ClientType.ATHLETE;
+            case "coach" -> ClientType.COACH;
+            default -> ClientType.NORMAL;
+        };
     }
 
-    public double applyDiscount(double price) {
-        return clientType.applyDiscount(price);
+    public double applyDiscount() {
+        return clientType.applyDiscount();
     }
 
     public int clientMaxHours() {
@@ -50,6 +79,17 @@ public class Client extends User {
 //                Objects.equals(firstName, client.firstName) &&
 //                Objects.equals(lastName, client.lastName) &&
 //                Objects.equals(getLogin(), client.getLogin()) &&
-//                Objects.equals(clientType.getClientTypeName(), client.clientType.getClientTypeName());
+    }
+
+    public String getClientType() {
+        return clientType.toString();
+    }
+
+    public void setClientType(String clientType) {
+        this.clientType = switch (clientType.toLowerCase()) {
+            case "athlete" -> ClientType.ATHLETE;
+            case "coach" -> ClientType.COACH;
+            default -> ClientType.NORMAL;
+        };
     }
 }

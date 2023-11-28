@@ -7,8 +7,6 @@ import nbd.gV.data.datahandling.dto.UserDTO;
 import nbd.gV.data.datahandling.mappers.ClientMapper;
 import nbd.gV.data.repositories.UserMongoRepository;
 import nbd.gV.model.users.Client;
-import nbd.gV.model.users.clienttype.ClientType;
-import nbd.gV.model.users.clienttype.Normal;
 import nbd.gV.exceptions.MyMongoException;
 import org.bson.Document;
 import org.junit.jupiter.api.AfterAll;
@@ -33,7 +31,7 @@ public class ClientMongoRepositoryTest {
     Client client1;
     Client client2;
     Client client3;
-    final ClientType testClientType = new Normal();
+    final String testClientType = "normal";
 
     private MongoCollection<ClientDTO> getTestCollection() {
         return clientRepository.getDatabase()

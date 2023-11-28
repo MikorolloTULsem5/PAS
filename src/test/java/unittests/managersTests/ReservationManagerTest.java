@@ -3,8 +3,6 @@ package unittests.managersTests;
 import com.mongodb.client.model.Filters;
 import nbd.gV.data.datahandling.dto.ClientDTO;
 import nbd.gV.model.users.Client;
-import nbd.gV.model.users.clienttype.ClientType;
-import nbd.gV.model.users.clienttype.Normal;
 import nbd.gV.model.courts.Court;
 import nbd.gV.exceptions.UserException;
 import nbd.gV.exceptions.CourtException;
@@ -38,7 +36,7 @@ public class ReservationManagerTest {
     static final ReservationMongoRepository reservationRepository = new ReservationMongoRepository();
     static final UserMongoRepository clientRepository = new UserMongoRepository();
     static final CourtMongoRepository courtRepository = new CourtMongoRepository();
-    ClientType testClientType;
+    String testClientType;
 
     Client testClient1;
     Client testClient2;
@@ -62,7 +60,7 @@ public class ReservationManagerTest {
     @BeforeEach
     void setUp() {
         cleanDB();
-        testClientType = new Normal();
+        testClientType = "normal";
 
         testClient1 = new Client(UUID.randomUUID(), "John", "Smith", "12345678901", testClientType);
         testClient2 = new Client(UUID.randomUUID(), "Eva", "Brown", "12345678902", testClientType);

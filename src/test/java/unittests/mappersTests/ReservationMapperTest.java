@@ -1,7 +1,6 @@
 package unittests.mappersTests;
 
 import nbd.gV.model.users.Client;
-import nbd.gV.model.users.clienttype.Normal;
 import nbd.gV.model.courts.Court;
 import nbd.gV.data.datahandling.dto.ClientDTO;
 import nbd.gV.data.datahandling.mappers.ClientMapper;
@@ -33,7 +32,7 @@ public class ReservationMapperTest {
 
     @BeforeEach
     void setUp() {
-        testClient = new Client(UUID.randomUUID(), "John", "Smith", "12345678901", new Normal());
+        testClient = new Client(UUID.randomUUID(), "John", "Smith", "12345678901", "normal");
         testClientMapper = ClientMapper.toMongoUser(testClient);
 
         testCourt = new Court(1000, 100, 1);

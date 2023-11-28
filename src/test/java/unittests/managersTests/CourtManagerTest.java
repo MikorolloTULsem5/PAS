@@ -13,7 +13,6 @@ import nbd.gV.data.repositories.ReservationMongoRepository;
 import nbd.gV.data.repositories.UserMongoRepository;
 import nbd.gV.model.reservations.Reservation;
 import nbd.gV.model.users.Client;
-import nbd.gV.model.users.clienttype.Normal;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -146,7 +145,7 @@ public class CourtManagerTest {
         CourtService courtManager = new CourtService();
         var collection = courtRepository.getDatabase().getCollection(courtRepository.getCollectionName(), CourtDTO.class);
         assertEquals(0, collection.find().into(new ArrayList<>()).size());
-        Client testClient1 = new Client(UUID.randomUUID(), "John", "Smith", "12345678901", new Normal());
+        Client testClient1 = new Client(UUID.randomUUID(), "John", "Smith", "12345678901", "normal");
         Court testCourt1 = new Court(1000, 100, 1);
         LocalDateTime testTimeStart = LocalDateTime.of(2023, Month.JUNE, 4, 12, 0);
         Reservation testReservation1 = new Reservation(testClient1, testCourt1, testTimeStart);

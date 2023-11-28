@@ -6,7 +6,6 @@ import jakarta.inject.Inject;
 import lombok.NoArgsConstructor;
 import nbd.gV.data.datahandling.dto.UserDTO;
 import nbd.gV.model.users.Client;
-import nbd.gV.model.users.clienttype.ClientType;
 import nbd.gV.exceptions.UserException;
 import nbd.gV.exceptions.MyMongoException;
 import nbd.gV.data.datahandling.dto.ClientDTO;
@@ -29,7 +28,7 @@ public class ClientService extends UserService {
         this.userRepository = userRepository;
     }
 
-    public Client registerClient(String firstName, String lastName, String login, ClientType clientType) {
+    public Client registerClient(String firstName, String lastName, String login, String clientType) {
         Client newClient = new Client(UUID.randomUUID(), firstName, lastName, login, clientType);
         try {
             if (!userRepository.read(Filters.eq("login", login), ClientDTO.class).isEmpty()) {

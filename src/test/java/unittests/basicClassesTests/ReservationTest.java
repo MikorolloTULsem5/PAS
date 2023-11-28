@@ -3,8 +3,6 @@ package unittests.basicClassesTests;
 import nbd.gV.model.users.Client;
 import nbd.gV.model.courts.Court;
 import nbd.gV.model.reservations.Reservation;
-import nbd.gV.model.users.clienttype.ClientType;
-import nbd.gV.model.users.clienttype.Normal;
 import nbd.gV.exceptions.MainException;
 import nbd.gV.exceptions.ReservationException;
 import org.junit.jupiter.api.BeforeEach;
@@ -23,13 +21,13 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class ReservationTest {
     Client testClient;
-    ClientType testClientType;
+    String testClientType;
     Court testCourt;
     UUID testUUID;
 
     @BeforeEach
     void setUp() {
-        testClientType = new Normal();
+        testClientType = "normal";
         testClient = new Client(UUID.randomUUID(), "John", "Smith", "123456789", testClientType);
         testCourt = new Court(1, 100, 1);
         testUUID = UUID.randomUUID();
