@@ -4,6 +4,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import jakarta.validation.constraints.NotEmpty;
+
 import java.util.UUID;
 
 @Getter
@@ -12,6 +14,7 @@ public abstract class User {
 
     private UUID id;
     @Setter
+    @NotEmpty
     private String login;
     @Setter
     private boolean archive = false;

@@ -2,26 +2,46 @@ package nbd.gV.restapi.controllers;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.Validation;
+import jakarta.validation.Validator;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
 import nbd.gV.model.users.Client;
+import nbd.gV.model.users.User;
 import nbd.gV.restapi.services.userservice.ClientService;
 
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Path("/users")
 @ApplicationScoped
 public class UserController {
     @Inject
     private ClientService clientService;
+    private final Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
 
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Path("/addClient")
-    public void addClient(Client client) {
+    public Response addClient(Client client) {
+        Set<ConstraintViolation<Client>> violation = validator.validate(client);
+        List<String> errors = violation.stream().map(ConstraintViolation::getMessage).collect(Collectors.toList());
+        if (!violation.isEmpty()) {
+            return Response.status(Response.Status.BAD_REQUEST).entity(errors).build();
+        }
+
         Client newClient = clientService.registerClient(client.getFirstName(), client.getLastName(),
                 client.getLogin(), client.getClientTypeName());
+
+        if (newClient != null) {
+            return Response.status(Response.Status.CREATED).build();
+        } else {
+            return Response.status(Response.Status.CONFLICT).entity("This login is taken").build();
+        }
     }
 
     @GET

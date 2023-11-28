@@ -1,5 +1,7 @@
 package nbd.gV.model.users;
 
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -14,6 +16,7 @@ public class Client extends User {
         NORMAL(0, 3), ATHLETE(10, 6), COACH(20, 12);
 
         private final double discount;
+        @Getter
         private final int maxHours;
         ClientType(double discount, int maxHours) {
             this.discount = discount;
@@ -24,10 +27,6 @@ public class Client extends User {
             return discount;
         }
 
-        public int getMaxHours() {
-            return maxHours;
-        }
-
         @Override
         public String toString() {
             return this.name().toLowerCase();
@@ -36,20 +35,20 @@ public class Client extends User {
 
     @Getter
     @Setter
+    @NotEmpty
     private String firstName;
     @Getter
     @Setter
+    @NotEmpty
     private String lastName;
     private ClientType clientType;
+
+    @Getter
+    @NotEmpty
     private String clientTypeName;
 
-    public Client(UUID id, String firstName, String lastName, String login, String clientType) {
+    public Client(UUID id, String firstName, String lastName, String login, @NotNull String clientType) {
         super(id, login);
-
-        ///TODO do wywalenia przy zmianie walidacji
-//        if (firstName.isEmpty() || lastName.isEmpty() || login.isEmpty() || clientType == null) {
-//            throw new MainException("Brakujacy parametr przy tworzeniu obiektu klienta!");
-//        }
 
         this.firstName = firstName;
         this.lastName = lastName;
@@ -58,6 +57,7 @@ public class Client extends User {
             case "coach" -> ClientType.COACH;
             default -> ClientType.NORMAL;
         };
+        this.clientTypeName = this.clientType.toString();
     }
 
     public double applyDiscount() {
@@ -82,15 +82,12 @@ public class Client extends User {
 //                Objects.equals(getLogin(), client.getLogin()) &&
     }
 
-    public String getClientTypeName() {
-        return clientType.toString();
-    }
-
-    public void setClientTypeName(String clientType) {
+    public void setClientTypeName(@NotNull String clientType) {
         this.clientType = switch (clientType.toLowerCase()) {
             case "athlete" -> ClientType.ATHLETE;
             case "coach" -> ClientType.COACH;
             default -> ClientType.NORMAL;
         };
+        this.clientTypeName = clientType;
     }
 }

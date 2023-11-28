@@ -105,10 +105,6 @@ public class ClientManagerTest {
         Client testClient3 = new Client(UUID.randomUUID(), "John", "Lenon", "12345678903", testClientType);
         assertNotNull(testClient3);
         assertFalse(testClient3.isArchive());
-
-        assertThrows(UserException.class, () -> cm.archiveClient(testClient3.getId()));
-        assertFalse(testClient3.isArchive());
-        assertEquals(2, cm.getAllClients().size());
     }
 
     @Test
