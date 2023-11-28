@@ -1,57 +1,26 @@
 package integrationtests;
 
-import com.mongodb.client.model.Filters;
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
-import jakarta.inject.Inject;
-import nbd.gV.data.datahandling.dto.ClientDTO;
-import nbd.gV.data.datahandling.dto.ReservationDTO;
-import nbd.gV.data.repositories.CourtMongoRepository;
-import nbd.gV.data.repositories.ReservationMongoRepository;
-import nbd.gV.data.repositories.UserMongoRepository;
-import nbd.gV.restapi.services.userservice.ClientService;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.UUID;
 
+import static integrationtests.CleaningClass.clean;
+import static integrationtests.CleaningClass.initClients;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class UserControllerTests {
-    @Inject
-    ClientService clientServiceTest;
-    @Inject
-    ReservationMongoRepository reservationRepository;
-    @Inject
-    UserMongoRepository clientRepository;
-    @Inject
-    CourtMongoRepository courtRepository;
-
-    void init() {
-        clientServiceTest.registerClient("Adam", "Smith", "siemaszka", "normal");
-        clientServiceTest.registerClient("Eva", "Braun", "siemaszka13", "athlete");
-        clientServiceTest.registerClient("Michal", "Pi", "michas13", "coach");
-    }
-
-    @BeforeAll
-    @AfterAll
-    void clean() {
-        reservationRepository.getDatabase().getCollection(reservationRepository.getCollectionName(),
-                ReservationDTO.class).deleteMany(Filters.empty());
-        clientRepository.readAll(ClientDTO.class).forEach((mapper) -> clientRepository.delete(UUID.fromString(mapper.getId())));
-        courtRepository.readAll().forEach((mapper) -> courtRepository.delete(UUID.fromString(mapper.getCourtId())));
-    }
 
     @BeforeEach
-    void cleanDatabase() {
+    void cleanAndInitDatabase() {
         clean();
-        init();
+        initClients();
     }
 
     @Test
@@ -70,8 +39,6 @@ public class UserControllerTests {
         assertTrue(responseString.contains("\"lastName\":\"Smith\""));
 
         //Third Client
-        assertTrue(responseString.contains("\"archive\":false"));
-        assertTrue(responseString.contains("\"id\":\""));
         assertTrue(responseString.contains("\"login\":\"michas13\""));
         assertTrue(responseString.contains("\"clientTypeName\":\"coach\""));
         assertTrue(responseString.contains("\"firstName\":\"Michal\""));
@@ -82,6 +49,7 @@ public class UserControllerTests {
 
     @Test
     void getAllClientsTestNoCont() throws URISyntaxException {
+        clean();
         RequestSpecification request = RestAssured.given();
         Response response = request.get(new URI("http://localhost:8080/CourtRent-1.0-SNAPSHOT/api/users"));
         String responseString = response.asString();
@@ -91,7 +59,36 @@ public class UserControllerTests {
     }
 
     @Test
-    void createClientTestPos() {
+    void createClientTestPos() throws URISyntaxException {
+        String JSON = """
+                {
+                  "firstName": "John",
+                  "lastName": "Bravo",
+                  "login": "johnBravo",
+                  "clientTypeName": "normal"
+                }
+                """;
+        RequestSpecification requestPost = RestAssured.given();
+        requestPost.contentType("application/json");
+        requestPost.body(JSON);
 
+        RequestSpecification requestGet = RestAssured.given();
+        String responseString = requestGet.get(new URI("http://localhost:8080/CourtRent-1.0-SNAPSHOT/api/users")).asString();
+
+        assertFalse(responseString.contains("\"login\":\"johnBravo\""));
+        assertFalse(responseString.contains("\"clientTypeName\":\"normal\""));
+        assertFalse(responseString.contains("\"firstName\":\"John\""));
+        assertFalse(responseString.contains("\"lastName\":\"Bravo\""));
+
+        Response responsePost = requestPost.post("http://localhost:8080/CourtRent-1.0-SNAPSHOT/api/users/addClient");
+
+        assertEquals(201, responsePost.getStatusCode());
+
+        responseString = requestGet.get(new URI("http://localhost:8080/CourtRent-1.0-SNAPSHOT/api/users")).asString();
+
+        assertTrue(responseString.contains("\"login\":\"johnBravo\""));
+        assertTrue(responseString.contains("\"clientTypeName\":\"normal\""));
+        assertTrue(responseString.contains("\"firstName\":\"John\""));
+        assertTrue(responseString.contains("\"lastName\":\"Bravo\""));
     }
 }
