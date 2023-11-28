@@ -79,7 +79,11 @@ public class UserController {
     @Consumes(MediaType.TEXT_PLAIN)
     @Path("/match")
     public List<Client> getClientByLoginMatching(@QueryParam("login") String login) {
-        return clientService.getClientByLoginMatching(login);
+        List<Client> resultList = clientService.getClientByLoginMatching(login);
+        if (resultList.isEmpty()) {
+            resultList = null;
+        }
+        return resultList;
     }
 
     @PUT

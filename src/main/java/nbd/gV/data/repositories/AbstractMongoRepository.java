@@ -77,7 +77,7 @@ public abstract class AbstractMongoRepository<T> implements AutoCloseable {
         InsertOneResult result;
         try {
             result = this.getCollection().insertOne(dto);
-        } catch (MongoWriteException | MongoTimeoutException e) {
+        } catch (MongoWriteException e) {
             throw new MyMongoException(e.getMessage());
         }
         return result.wasAcknowledged();
