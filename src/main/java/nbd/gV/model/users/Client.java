@@ -41,6 +41,7 @@ public class Client extends User {
     @Setter
     private String lastName;
     private ClientType clientType;
+    private String clientTypeName;
 
     public Client(UUID id, String firstName, String lastName, String login, String clientType) {
         super(id, login);
@@ -81,11 +82,11 @@ public class Client extends User {
 //                Objects.equals(getLogin(), client.getLogin()) &&
     }
 
-    public String getClientType() {
+    public String getClientTypeName() {
         return clientType.toString();
     }
 
-    public void setClientType(String clientType) {
+    public void setClientTypeName(String clientType) {
         this.clientType = switch (clientType.toLowerCase()) {
             case "athlete" -> ClientType.ATHLETE;
             case "coach" -> ClientType.COACH;

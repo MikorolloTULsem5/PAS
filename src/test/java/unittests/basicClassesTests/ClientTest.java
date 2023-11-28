@@ -27,7 +27,7 @@ public class ClientTest {
         assertEquals(testFirstName, client.getFirstName());
         assertEquals(testLastName, client.getLastName());
         assertEquals(testLogin, client.getLogin());
-        assertEquals(testTypeNormal, client.getClientType());
+        assertEquals(testTypeNormal, client.getClientTypeName());
         assertFalse(client.isArchive());
     }
 
@@ -50,11 +50,11 @@ public class ClientTest {
         client.setArchive(false);
         assertFalse(client.isArchive());
 
-        assertEquals(testTypeNormal, client.getClientType());
-        client.setClientType(testTypeAthlete);
-        assertEquals(testTypeAthlete, client.getClientType());
-        client.setClientType(testTypeCoach);
-        assertEquals(testTypeCoach, client.getClientType());
+        assertEquals(testTypeNormal, client.getClientTypeName());
+        client.setClientTypeName(testTypeAthlete);
+        assertEquals(testTypeAthlete, client.getClientTypeName());
+        client.setClientTypeName(testTypeCoach);
+        assertEquals(testTypeCoach, client.getClientTypeName());
     }
 
     @Test

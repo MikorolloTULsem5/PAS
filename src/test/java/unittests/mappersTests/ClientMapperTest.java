@@ -60,7 +60,7 @@ public class ClientMapperTest {
         assertEquals(client.getLastName(), clientDTO.getLastName());
         assertEquals(client.getLogin(), clientDTO.getLogin());
         assertFalse(clientDTO.isArchive());
-        assertEquals(client.getClientType(), clientDTO.getClientType());
+        assertEquals(client.getClientTypeName(), clientDTO.getClientType());
     }
 
     @Test
@@ -77,7 +77,7 @@ public class ClientMapperTest {
         assertEquals(clientDTO1.getLastName(), client1.getLastName());
         assertEquals(clientDTO1.getLogin(), client1.getLogin());
         assertTrue(client1.isArchive());
-        assertEquals(clientDTO1.getClientType(), client1.getClientType());
+        assertEquals(clientDTO1.getClientType(), client1.getClientTypeName());
 
         //Test other clientTypes
         ClientDTO clientDTO2 = new ClientDTO(UUID.randomUUID().toString(),
@@ -86,7 +86,7 @@ public class ClientMapperTest {
 
         Client client2 = ClientMapper.fromMongoUser(clientDTO2);
         assertNotNull(client2);
-        assertEquals(clientDTO2.getClientType(), client2.getClientType());
+        assertEquals(clientDTO2.getClientType(), client2.getClientTypeName());
 
         ClientDTO clientDTO3 = new ClientDTO(UUID.randomUUID().toString(), testFirstName, testLastName,
                 testLogin, false, testTypeCoach);
@@ -94,6 +94,6 @@ public class ClientMapperTest {
 
         Client client3 = ClientMapper.fromMongoUser(clientDTO3);
         assertNotNull(client3);
-        assertEquals(clientDTO3.getClientType(), client3.getClientType());
+        assertEquals(clientDTO3.getClientType(), client3.getClientTypeName());
     }
 }

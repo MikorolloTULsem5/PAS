@@ -10,7 +10,7 @@ public class ClientMapper {
     public static ClientDTO toMongoUser(Client client) {
         return new ClientDTO(client.getId().toString(), client.getFirstName(),
                 client.getLastName(), client.getLogin(), client.isArchive(),
-                client.getClientType());
+                client.getClientTypeName());
     }
 
     public static Client fromMongoUser(ClientDTO clientDTO) {
