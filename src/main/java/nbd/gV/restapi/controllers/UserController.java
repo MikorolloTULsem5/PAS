@@ -89,11 +89,23 @@ public class UserController {
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
     @Path("/modifyClient/{id}")
-    public void modifyClient(@PathParam("id") String id, Client modifiedClient) {
+    public Response modifyClient(@PathParam("id") String id, Client modifiedClient) {
+        Set<ConstraintViolation<Client>> violations = validator.validate(modifiedClient);
+        List<String> errors = violations.stream().map(ConstraintViolation::getMessage).collect(Collectors.toList());
+        if (!violations.isEmpty()) {
+            return Response.status(Response.Status.BAD_REQUEST).entity(errors).build();
+        }
+
+        try {
         Client finalModifyClient = new Client(UUID.fromString(id), modifiedClient.getFirstName(),
                 modifiedClient.getLastName(), modifiedClient.getLogin(), modifiedClient.getClientTypeName());
         finalModifyClient.setArchive(modifiedClient.isArchive());
         clientService.modifyClient(finalModifyClient);
+        } catch (UserException ue) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ue.getMessage()).build();
+        }
+
+        return Response.status(Response.Status.NO_CONTENT).build();
     }
 
     @POST
