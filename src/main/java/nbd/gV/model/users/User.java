@@ -1,10 +1,10 @@
 package nbd.gV.model.users;
 
+import jakarta.validation.constraints.NotBlank;
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import jakarta.validation.constraints.NotEmpty;
 
 import java.util.UUID;
 
@@ -14,7 +14,7 @@ public abstract class User {
 
     private UUID id;
     @Setter
-    @NotEmpty
+    @NotBlank
     private String login;
     @Setter
     private boolean archive = false;

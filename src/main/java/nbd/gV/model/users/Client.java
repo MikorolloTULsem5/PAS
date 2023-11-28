@@ -1,6 +1,6 @@
 package nbd.gV.model.users;
 
-import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -35,28 +35,31 @@ public class Client extends User {
 
     @Getter
     @Setter
-    @NotEmpty
+    @NotBlank
     private String firstName;
     @Getter
     @Setter
-    @NotEmpty
+    @NotBlank
     private String lastName;
     private ClientType clientType;
 
     @Getter
-    @NotEmpty
     private String clientTypeName;
 
-    public Client(UUID id, String firstName, String lastName, String login, @NotNull String clientType) {
+    public Client(UUID id, String firstName, String lastName, String login, String clientType) {
         super(id, login);
 
         this.firstName = firstName;
         this.lastName = lastName;
-        this.clientType = switch (clientType.toLowerCase()) {
-            case "athlete" -> ClientType.ATHLETE;
-            case "coach" -> ClientType.COACH;
-            default -> ClientType.NORMAL;
-        };
+        if (clientType != null) {
+            this.clientType = switch (clientType.toLowerCase()) {
+                case "athlete" -> ClientType.ATHLETE;
+                case "coach" -> ClientType.COACH;
+                default -> ClientType.NORMAL;
+            };
+        } else {
+            this.clientType = ClientType.NORMAL;
+        }
         this.clientTypeName = this.clientType.toString();
     }
 
@@ -83,11 +86,15 @@ public class Client extends User {
     }
 
     public void setClientTypeName(@NotNull String clientType) {
-        this.clientType = switch (clientType.toLowerCase()) {
-            case "athlete" -> ClientType.ATHLETE;
-            case "coach" -> ClientType.COACH;
-            default -> ClientType.NORMAL;
-        };
-        this.clientTypeName = clientType;
+        if (clientType != null) {
+            this.clientType = switch (clientType.toLowerCase()) {
+                case "athlete" -> ClientType.ATHLETE;
+                case "coach" -> ClientType.COACH;
+                default -> ClientType.NORMAL;
+            };
+        } else {
+            this.clientType = ClientType.NORMAL;
+        }
+        this.clientTypeName = this.clientType.toString();
     }
 }

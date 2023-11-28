@@ -9,7 +9,6 @@ import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import nbd.gV.model.users.Client;
-import nbd.gV.model.users.User;
 import nbd.gV.restapi.services.userservice.ClientService;
 
 import java.util.List;
@@ -47,7 +46,11 @@ public class UserController {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public List<Client> getAllClients() {
-        return clientService.getAllClients();
+        List<Client> resultList = clientService.getAllClients();
+        if (resultList.isEmpty()) {
+            resultList = null;
+        }
+        return resultList;
     }
 
     @GET
