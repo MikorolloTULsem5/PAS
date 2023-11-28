@@ -18,12 +18,9 @@ public class UserController {
 
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
-    @Path("/addClient/{typeName}")
-    public void addClient(@PathParam("typeName") String type, Client client) {
+    public void addClient(Client client) {
         Client newClient = clientService.registerClient(client.getFirstName(), client.getLastName(),
-                client.getLogin(), switch (type.toLowerCase()) {
-                    default -> null;
-                });
+                client.getLogin(), client.getClientType());
     }
 
     @GET
@@ -58,8 +55,11 @@ public class UserController {
 
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
-    @Path("/modifyClient")
-    public void modifyClient(Client modifiedClient) {
-        clientService.modifyClient(modifiedClient);
+    @Path("/modifyClient/{id}")
+    public void modifyClient(@PathParam("id") String id, Client modifiedClient) {
+        Client finalModifyClient = new Client(UUID.fromString(id), modifiedClient.getFirstName(),
+                modifiedClient.getLastName(), modifiedClient.getLogin(), modifiedClient.getClientType());
+        finalModifyClient.setArchive(modifiedClient.isArchive());
+        clientService.modifyClient(finalModifyClient);
     }
 }
