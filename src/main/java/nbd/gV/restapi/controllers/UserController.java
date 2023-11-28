@@ -33,8 +33,7 @@ public class UserController {
     }
 
     @GET
-//    @Produces(MediaType.APPLICATION_JSON)
-//    @Path("/all")
+    @Produces(MediaType.APPLICATION_JSON)
     public List<Client> getAllClients() {
         return clientService.getAllClients();
     }
@@ -61,5 +60,12 @@ public class UserController {
     @Path("/match")
     public List<Client> getClientByLoginMatching(@QueryParam("login") String login) {
         return clientService.getClientByLoginMatching(login);
+    }
+
+    @PUT
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Path("/modifyClient")
+    public void modifyClient(Client modifiedClient) {
+        clientService.modifyClient(modifiedClient);
     }
 }

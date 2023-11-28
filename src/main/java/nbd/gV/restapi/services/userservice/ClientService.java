@@ -8,7 +8,6 @@ import nbd.gV.data.datahandling.dto.UserDTO;
 import nbd.gV.model.users.Client;
 import nbd.gV.model.users.clienttype.ClientType;
 import nbd.gV.exceptions.UserException;
-import nbd.gV.exceptions.MainException;
 import nbd.gV.exceptions.MyMongoException;
 import nbd.gV.data.datahandling.dto.ClientDTO;
 import nbd.gV.data.datahandling.mappers.ClientMapper;
@@ -75,9 +74,6 @@ public class ClientService extends UserService {
     }
 
     public void modifyClient(Client modifiedClient) {
-        if (modifiedClient == null) {
-            throw new MainException("Nie mozna modyfikowac nieistniejacego klienta!");
-        }
         try {
             if (!userRepository.updateByReplace(modifiedClient.getId(), ClientMapper.toMongoUser(modifiedClient))) {
                 throw new UserException("Nie udalo sie wyrejestrowac podanego klienta.");
@@ -87,40 +83,22 @@ public class ClientService extends UserService {
         }
     }
 
-    public void activateClient(Client client) {
-        if (client == null) {
-            throw new MainException("Nie mozna wyrejestrowac nieistniejacego klienta!");
-        }
-        if (!client.isArchive()) {
-            throw new UserException("Ten klient jest juz aktywny!");
-        }
+    public void activateClient(UUID clientId) {
         try {
-            client.setArchive(false);
-            if (!userRepository.update(client.getId(), "archive", false)) {
-                client.setArchive(true);
+            if (!userRepository.update(clientId, "archive", false)) {
                 throw new UserException("Nie udalo sie wyrejestrowac podanego klienta.");
             }
         } catch (Exception exception) {
-            client.setArchive(true);
             throw new UserException("Nie udalo sie aktywowac podanego klienta. - nieznany blad");
         }
     }
 
-    public void archiveClient(Client client) {
-        if (client == null) {
-            throw new MainException("Nie mozna dezaktywowac nieistniejacego klienta!");
-        }
-        if (client.isArchive()) {
-            throw new UserException("Ten klient jest juz zarchiwizowany!");
-        }
+    public void archiveClient(UUID clientId) {
         try {
-            client.setArchive(true);
-            if (!userRepository.update(client.getId(), "archive", true)) {
-                client.setArchive(false);
+            if (!userRepository.update(clientId, "archive", true)) {
                 throw new UserException("Nie udalo sie wyrejestrowac podanego klienta.");
             }
         } catch (Exception exception) {
-            client.setArchive(false);
             throw new UserException("Nie udalo sie wyrejestrowac podanego klienta. - nieznany blad");
         }
     }

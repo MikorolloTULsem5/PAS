@@ -97,24 +97,20 @@ public class ClientManagerTest {
         assertEquals(testClient1, cm.getClientById(testClient1.getId()));
         assertFalse(testClient1.isArchive());
 
-        cm.archiveClient(testClient1);
+        cm.archiveClient(testClient1.getId());
 
         assertEquals(2, cm.getAllClients().size());
         Client dbClient = cm.getClientById(testClient1.getId());
         assertNotNull(dbClient);
         assertTrue(dbClient.isArchive());
 
-        // Testujemy wyrejestrowanie boiska ktore nie nalezy do repozytorium
+        // Testujemy archiwizajce klienta ktory nie nalezy do repozytorium
         Client testClient3 = new Client(UUID.randomUUID(), "John", "Lenon", "12345678903", testClientType);
         assertNotNull(testClient3);
         assertFalse(testClient3.isArchive());
 
-        assertThrows(UserException.class, () -> cm.archiveClient(testClient3));
+        assertThrows(UserException.class, () -> cm.archiveClient(testClient3.getId()));
         assertFalse(testClient3.isArchive());
-        assertEquals(2, cm.getAllClients().size());
-
-        // Testujemy wyrejestrowanie null'a
-        assertThrows(MainException.class, () -> cm.archiveClient(null));
         assertEquals(2, cm.getAllClients().size());
     }
 
