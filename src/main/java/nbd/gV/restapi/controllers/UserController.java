@@ -87,6 +87,7 @@ public class UserController {
     }
 
     @PUT
+    @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     @Path("/modifyClient/{id}")
     public Response modifyClient(@PathParam("id") String id, Client modifiedClient) {
@@ -109,12 +110,14 @@ public class UserController {
     }
 
     @POST
+    @Produces(MediaType.APPLICATION_JSON)
     @Path("/activate/{id}")
     public void activateClient(@PathParam("id") String id) {
         clientService.activateClient(UUID.fromString(id));
     }
 
     @POST
+    @Produces(MediaType.APPLICATION_JSON)
     @Path("/archive/{id}")
     public void archiveClient(@PathParam("id") String id) {
         clientService.archiveClient(UUID.fromString(id));
