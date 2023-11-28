@@ -3,6 +3,7 @@ package nbd.gV.data.repositories;
 import com.mongodb.ConnectionString;
 import com.mongodb.MongoClientSettings;
 import com.mongodb.MongoCredential;
+import com.mongodb.MongoTimeoutException;
 import com.mongodb.MongoWriteException;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
@@ -76,7 +77,7 @@ public abstract class AbstractMongoRepository<T> implements AutoCloseable {
         InsertOneResult result;
         try {
             result = this.getCollection().insertOne(dto);
-        } catch (MongoWriteException e) {
+        } catch (MongoWriteException | MongoTimeoutException e) {
             throw new MyMongoException(e.getMessage());
         }
         return result.wasAcknowledged();

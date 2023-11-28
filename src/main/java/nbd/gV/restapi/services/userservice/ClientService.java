@@ -35,7 +35,7 @@ public class ClientService extends UserService {
         Client newClient = new Client(UUID.randomUUID(), firstName, lastName, login, clientType);
         try {
             if (!userRepository.read(Filters.eq("login", login), ClientDTO.class).isEmpty()) {
-                throw new UserLoginException("Nie udalo sie zarejestrowac klienta w bazie! - klient o tym loginie" +
+                throw new UserLoginException("Nie udalo sie zarejestrowac klienta w bazie! - klient o tym loginie " +
                         "znajduje sie juz w bazie");
             }
 
