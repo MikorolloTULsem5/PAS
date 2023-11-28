@@ -4,6 +4,7 @@ import com.mongodb.client.model.Filters;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import lombok.NoArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import nbd.gV.data.datahandling.dto.UserDTO;
 import nbd.gV.model.users.Client;
 import nbd.gV.exceptions.UserException;
@@ -18,6 +19,7 @@ import java.util.UUID;
 
 @ApplicationScoped
 @NoArgsConstructor
+@Slf4j
 public class ClientService extends UserService {
 
     @Inject
@@ -73,33 +75,20 @@ public class ClientService extends UserService {
     }
 
     public void modifyClient(Client modifiedClient) {
-        try {
-            if (!userRepository.updateByReplace(modifiedClient.getId(), ClientMapper.toMongoUser(modifiedClient))) {
-                throw new UserException("Nie udalo sie wyrejestrowac podanego klienta.");
-            }
-        } catch (Exception exception) {
-            throw new UserException("Nie udalo sie aktywowac podanego klienta. - nieznany blad");
+        if (!userRepository.updateByReplace(modifiedClient.getId(), ClientMapper.toMongoUser(modifiedClient))) {
+            throw new UserException("Nie udalo sie zmodyfikowac podanego klienta.");
         }
     }
 
     public void activateClient(UUID clientId) {
-        try {
-            if (!userRepository.update(clientId, "archive", false)) {
-                throw new UserException("Nie udalo sie wyrejestrowac podanego klienta.");
-            }
-        } catch (Exception exception) {
-            throw new UserException("Nie udalo sie aktywowac podanego klienta. - nieznany blad");
+        ///TODO logi albo wywalic albo obsluzyc
+        if (!userRepository.update(clientId, "archive", false)) {
+            log.info("Nie udalo sie aktywowac podanego klienta.");
         }
     }
 
     public void archiveClient(UUID clientId) {
-        try {
-            if (!userRepository.update(clientId, "archive", true)) {
-                throw new UserException("Nie udalo sie wyrejestrowac podanego klienta.");
-            }
-        } catch (Exception exception) {
-            throw new UserException("Nie udalo sie wyrejestrowac podanego klienta. - nieznany blad");
-        }
+        userRepository.update(clientId, "archive", true);
     }
 
     @Override

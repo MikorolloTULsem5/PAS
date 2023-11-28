@@ -65,14 +65,12 @@ public class UserController {
     }
 
     @POST
-    @Consumes(MediaType.APPLICATION_JSON)
     @Path("/activate/{id}")
     public void activateClient(@PathParam("id") String id) {
         clientService.activateClient(UUID.fromString(id));
     }
 
     @POST
-    @Consumes(MediaType.APPLICATION_JSON)
     @Path("/archive/{id}")
     public void archiveClient(@PathParam("id") String id) {
         clientService.archiveClient(UUID.fromString(id));
