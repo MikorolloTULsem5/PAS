@@ -373,7 +373,7 @@ public class UserControllerTests {
         String JSON = """
                 {
                   "archive": true,
-                  "firstName": "   ",
+                  "firstName": "John",
                   "lastName": "Smith",
                   "login": "michas13",
                   "clientTypeName": "coach"
@@ -418,18 +418,18 @@ public class UserControllerTests {
 
         assertTrue(responseString.contains(
                 "\"archive\":false," +
-                        "\"id\":\"" + clientId + "\"," +
-                        "\"login\":\"loginek\"," +
-                        "\"clientTypeName\":\"normal\"," +
-                        "\"firstName\":\"Adam\"," +
-                        "\"lastName\":\"Smith\""));
+                "\"id\":\"" + clientId + "\"," +
+                "\"login\":\"loginek\"," +
+                "\"clientTypeName\":\"normal\"," +
+                "\"firstName\":\"Adam\"," +
+                "\"lastName\":\"Smith\""));
         assertFalse(responseString.contains(
                 "\"archive\":true," +
-                        "\"id\":\"" + clientId + "\"," +
-                        "\"login\":\"michas13\"," +
-                        "\"clientTypeName\":\"coach\"," +
-                        "\"firstName\":\"John\"," +
-                        "\"lastName\":\"Smith\""));
+                "\"id\":\"" + clientId + "\"," +
+                "\"login\":\"michas13\"," +
+                "\"clientTypeName\":\"coach\"," +
+                "\"firstName\":\"John\"," +
+                "\"lastName\":\"Smith\""));
     }
 
     @Test

@@ -76,10 +76,16 @@ public class ClientService extends UserService {
     }
 
     public void modifyClient(Client modifiedClient) {
-        if (!userRepository.read(Filters.and(
-                Filters.eq("login", modifiedClient.getLogin()),
-                Filters.not(Filters.eq("_id", modifiedClient.getId()))), ClientDTO.class).isEmpty()) {
-            throw new UserLoginException("Nie udalo sie zmodyfikowac podanego klienta - proba zmiany loginu na login wystepujacy juz u innego klienta");
+        ///TODO naprawic
+//        if (!userRepository.read(Filters.and(
+//                Filters.eq("login", modifiedClient.getLogin()),
+//                Filters.ne("_id", modifiedClient.getId())), ClientDTO.class).isEmpty()) {
+//            throw new UserLoginException("Nie udalo sie zmodyfikowac podanego klienta - proba zmiany loginu na login wystepujacy juz u innego klienta" + modifiedClient.getId());
+//        }
+
+        var list = userRepository.read(Filters.eq("login", modifiedClient.getLogin()), ClientDTO.class);
+        if (!list.isEmpty() && !list.get(0).getId().equals(modifiedClient.getId().toString())) {
+            throw new UserLoginException("Nie udalo sie zmodyfikowac podanego klienta - proba zmiany loginu na login wystepujacy juz u innego klienta" + modifiedClient.getId());
         }
         if (!userRepository.updateByReplace(modifiedClient.getId(), ClientMapper.toMongoUser(modifiedClient))) {
             throw new UserException("Nie udalo sie zmodyfikowac podanego klienta.");
