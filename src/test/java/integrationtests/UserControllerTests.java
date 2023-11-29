@@ -243,9 +243,7 @@ public class UserControllerTests {
         Response response = request.get(new URI("http://localhost:8080/CourtRent-1.0-SNAPSHOT/api/users/match?login=uwuwuuwuwu"));
         String responseString = response.asString();
 
-        String[] splitedRespStr = responseString.split("},");
-
-        assertEquals(0, splitedRespStr.length);
+        assertTrue(responseString.isEmpty());
 
         assertEquals(204, response.getStatusCode());
     }
@@ -356,18 +354,65 @@ public class UserControllerTests {
 
         assertTrue(responseString.contains(
                 "\"archive\":false," +
-                        "\"id\":\"" + clientId + "\"," +
-                        "\"login\":\"loginek\"," +
-                        "\"clientTypeName\":\"normal\"," +
-                        "\"firstName\":\"Adam\"," +
-                        "\"lastName\":\"Smith\""));
+                "\"id\":\"" + clientId + "\"," +
+                "\"login\":\"loginek\"," +
+                "\"clientTypeName\":\"normal\"," +
+                "\"firstName\":\"Adam\"," +
+                "\"lastName\":\"Smith\""));
         assertFalse(responseString.contains(
                 "\"archive\":true," +
-                        "\"id\":\"" + clientId + "\"," +
-                        "\"login\":\"loginek\"," +
-                        "\"clientTypeName\":\"coach\"," +
-                        "\"firstName\":\"John\"," +
-                        "\"lastName\":\"Smith\""));
+                "\"id\":\"" + clientId + "\"," +
+                "\"login\":\"loginek\"," +
+                "\"clientTypeName\":\"coach\"," +
+                "\"firstName\":\"John\"," +
+                "\"lastName\":\"Smith\""));
     }
 
+    @Test
+    void archiveAndActivateClientTest() throws URISyntaxException {
+        RequestSpecification requestGet = RestAssured.given();
+        String responseString = requestGet.get(new URI("http://localhost:8080/CourtRent-1.0-SNAPSHOT/api/users")).asString();
+
+        //Retrieve UUID
+        String responseLogin = requestGet.get(new URI("http://localhost:8080/CourtRent-1.0-SNAPSHOT/api/users/get?login=loginek")).asString();
+        int index = responseLogin.indexOf("\"id\":\"") + 6;
+        String clientId = responseLogin.substring(index, index + 36);
+
+        /*Archive test*/
+        assertTrue(responseString.contains(
+                "\"archive\":false," +
+                "\"id\":\"" + clientId + "\""));
+        assertFalse(responseString.contains(
+                "\"archive\":true," +
+                "\"id\":\"" + clientId + "\""));
+
+        RequestSpecification requestPost = RestAssured.given();
+        Response responsePost = requestPost.post("http://localhost:8080/CourtRent-1.0-SNAPSHOT/api/users/archive/" + clientId);
+
+        assertEquals(204, responsePost.getStatusCode());
+
+        responseString = requestGet.get(new URI("http://localhost:8080/CourtRent-1.0-SNAPSHOT/api/users")).asString();
+
+        assertFalse(responseString.contains(
+                "\"archive\":false," +
+                "\"id\":\"" + clientId + "\""));
+        assertTrue(responseString.contains(
+                "\"archive\":true," +
+                "\"id\":\"" + clientId + "\""));
+
+        /*Activate test*/
+        RequestSpecification requestPost2 = RestAssured.given();
+        Response responsePost2 = requestPost2.post("http://localhost:8080/CourtRent-1.0-SNAPSHOT/api/users/activate/" + clientId);
+
+        assertEquals(204, responsePost2.getStatusCode());
+
+        responseString = requestGet.get(new URI("http://localhost:8080/CourtRent-1.0-SNAPSHOT/api/users")).asString();
+
+        assertTrue(responseString.contains(
+                "\"archive\":false," +
+                "\"id\":\"" + clientId + "\""));
+        assertFalse(responseString.contains(
+                "\"archive\":true," +
+                "\"id\":\"" + clientId + "\""));
+    }
 }
