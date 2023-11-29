@@ -2,32 +2,32 @@ package nbd.gV.model.courts;
 
 import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
-import nbd.gV.exceptions.MainException;
+import nbd.gV.exceptions.ConstructorParameterException;
 
-import java.util.Formatter;
-import java.util.Locale;
 import java.util.Objects;
 import java.util.UUID;
 
 @Getter
 @Setter
+@NoArgsConstructor
 public class Court {
     @Setter(AccessLevel.NONE)
     private UUID courtId;
 
     private double area;
     private int baseCost;
-
-    @Setter(AccessLevel.NONE)
+    ///TODO setter or not setter
     private int courtNumber;
 
     private boolean archive = false;
     private boolean rented = false;
 
+    ///TODO raczej wywalic
     public Court(double area, int baseCost, int courtNumber) {
         if (area <= 0.0 || baseCost < 0 || courtNumber < 1) {
-            throw new MainException("Niepoprawny parametr przy tworzeniu obiektu boiska!");
+            throw new ConstructorParameterException("Niepoprawny parametr przy tworzeniu obiektu boiska!");
         }
         this.courtId = UUID.randomUUID();
         this.area = area;
@@ -38,11 +38,6 @@ public class Court {
     public Court(UUID courtId, double area, int baseCost, int courtNumber) {
         this(area, baseCost, courtNumber);
         this.courtId = courtId;
-    }
-
-    public String getCourtInfo() {
-        return new Formatter(Locale.GERMAN).format("Boisko nr %d o powierzchni %.2f i koszcie za " +
-                        "rezerwacje: %.2f PLN\n", getCourtNumber(), getArea(), (double) getBaseCost()).toString();
     }
 
     @Override

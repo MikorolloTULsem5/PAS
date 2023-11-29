@@ -1,7 +1,7 @@
 package unittests.basicClassesTests;
 
+import nbd.gV.exceptions.ConstructorParameterException;
 import nbd.gV.model.courts.Court;
-import nbd.gV.exceptions.MainException;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -23,9 +23,9 @@ public class CourtTest {
         assertFalse(newCourt1.isArchive());
         assertFalse(newCourt1.isRented());
 
-        assertThrows(MainException.class, () -> new Court(0, 100, 99));
-        assertThrows(MainException.class, () -> new Court(1, -100, 99));
-        assertThrows(MainException.class, () -> new Court(1, 100, 0));
+        assertThrows(ConstructorParameterException.class, () -> new Court(0, 100, 99));
+        assertThrows(ConstructorParameterException.class, () -> new Court(1, -100, 99));
+        assertThrows(ConstructorParameterException.class, () -> new Court(1, 100, 0));
     }
 
     @Test
@@ -52,14 +52,5 @@ public class CourtTest {
         assertTrue(newCourt.isRented());
         newCourt.setRented(false);
         assertFalse(newCourt.isRented());
-    }
-
-    @Test
-    void testGettingCourtInfo() {
-        Court newCourt = new Court(300, 100, 1);
-        assertNotNull(newCourt);
-
-        assertEquals("Boisko nr 1 o powierzchni 300,00 i koszcie za rezerwacje: 100,00 PLN\n",
-                newCourt.getCourtInfo());
     }
 }

@@ -30,7 +30,7 @@ public class CourtService {
     }
 
     public Court registerCourt(double area, int baseCost, int courtNumber) {
-        Court court = new Court(area, baseCost, courtNumber);
+        Court court = new Court(UUID.randomUUID(), area, baseCost, courtNumber);
         try {
             if (!courtRepository.read(Filters.eq("courtnumber", courtNumber)).isEmpty()) {
                 throw new CourtException("Nie udalo sie zarejestrowac boiska w bazie! - boisko o tym numerze " +
