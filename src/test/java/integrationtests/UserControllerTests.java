@@ -221,17 +221,92 @@ public class UserControllerTests {
         assertEquals(2, splitedRespStr.length);
 
         //First Client
-        assertTrue(splitedRespStr[0].contains( "\"login\":\"loginek\"" +
-                                            "\"clientTypeName\":\"normal\"" +
-                                            "\"firstName\":\"Adam\"" +
-                                            "\"lastName\":\"Smith\""));
+        assertTrue(splitedRespStr[0].contains(
+                "\"login\":\"loginek\"," +
+                "\"clientTypeName\":\"normal\"," +
+                "\"firstName\":\"Adam\"," +
+                "\"lastName\":\"Smith\""));
 
         //Second Client
-        assertTrue(splitedRespStr[1].contains( "\"login\":\"loginek13\"" +
-                                            "\"clientTypeName\":\"athlete\"" +
-                                            "\"firstName\":\"Eva\"" +
-                                            "\"lastName\":\"Braun\""));
+        assertTrue(splitedRespStr[1].contains(
+                "\"login\":\"loginek13\"," +
+                "\"clientTypeName\":\"athlete\"," +
+                "\"firstName\":\"Eva\"," +
+                "\"lastName\":\"Braun\""));
 
         assertEquals(200, response.getStatusCode());
+    }
+
+    @Test
+    void getClientByLoginMatchingNoCont() throws URISyntaxException {
+        RequestSpecification request = RestAssured.given();
+        Response response = request.get(new URI("http://localhost:8080/CourtRent-1.0-SNAPSHOT/api/users/match?login=uwuwuuwuwu"));
+        String responseString = response.asString();
+
+        String[] splitedRespStr = responseString.split("},");
+
+        assertEquals(0, splitedRespStr.length);
+
+        assertEquals(204, response.getStatusCode());
+    }
+
+    @Test
+    void modifyClientTest() throws URISyntaxException {
+        String JSON = """
+                {
+                  "archive": true,
+                  "firstName": "John",
+                  "lastName": "Smith",
+                  "login": "loginek",
+                  "clientTypeName": "coach"
+                }
+                """;
+        RequestSpecification requestPut = RestAssured.given();
+        requestPut.contentType("application/json");
+        requestPut.body(JSON);
+
+        RequestSpecification requestGet = RestAssured.given();
+        String responseString = requestGet.get(new URI("http://localhost:8080/CourtRent-1.0-SNAPSHOT/api/users")).asString();
+
+        //Retrieve UUID
+        String responseLogin = requestGet.get(new URI("http://localhost:8080/CourtRent-1.0-SNAPSHOT/api/users/get?login=loginek")).asString();
+        int index = responseLogin.indexOf("\"id\":\"") + 6;
+        String clientId = responseLogin.substring(index, index + 36);
+
+        assertTrue(responseString.contains(
+                "\"archive\":false," +
+                "\"id\":\"" + clientId + "\"," +
+                "\"login\":\"loginek\"," +
+                "\"clientTypeName\":\"normal\"," +
+                "\"firstName\":\"Adam\"," +
+                "\"lastName\":\"Smith\""));
+        assertFalse(responseString.contains(
+                "\"archive\":true," +
+                "\"id\":\"" + clientId + "\"," +
+                "\"login\":\"loginek\"," +
+                "\"clientTypeName\":\"coach\"," +
+                "\"firstName\":\"John\"," +
+                "\"lastName\":\"Smith\""));
+
+        Response responsePut = requestPut.put("http://localhost:8080/CourtRent-1.0-SNAPSHOT/api/users/modifyClient/" + clientId);
+
+        assertEquals(204, responsePut.getStatusCode());
+
+        responseString = requestGet.get(new URI("http://localhost:8080/CourtRent-1.0-SNAPSHOT/api/users")).asString();
+
+        assertFalse(responseString.contains(
+                "\"archive\":false," +
+                "\"id\":\"" + clientId + "\"," +
+                "\"login\":\"loginek\"," +
+                "\"clientTypeName\":\"normal\"," +
+                "\"firstName\":\"Adam\"," +
+                "\"lastName\":\"Smith\""));
+        assertTrue(responseString.contains(
+                "\"archive\":true," +
+                "\"id\":\"" + clientId + "\"," +
+                "\"login\":\"loginek\"," +
+                "\"clientTypeName\":\"coach\"," +
+                "\"firstName\":\"John\"," +
+                "\"lastName\":\"Smith\""));
     }
 }
