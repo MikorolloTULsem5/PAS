@@ -1,6 +1,7 @@
 package unittests.managersTests;
 
 import nbd.gV.data.datahandling.dto.ClientDTO;
+import nbd.gV.exceptions.UserLoginException;
 import nbd.gV.model.users.Client;
 import nbd.gV.restapi.services.userservice.ClientService;
 import nbd.gV.exceptions.UserException;
@@ -57,7 +58,7 @@ public class ClientManagerTest {
         cm.registerClient("Adam", "Brown", "12345678904", testClientType);
         assertEquals(4, cm.getAllClients().size());
 
-        assertThrows(UserException.class,
+        assertThrows(UserLoginException.class,
                 () -> cm.registerClient("Eva", "Brown", "12345678901", testClientType));
         assertEquals(4, cm.getAllClients().size());
     }
