@@ -309,4 +309,65 @@ public class UserControllerTests {
                 "\"firstName\":\"John\"," +
                 "\"lastName\":\"Smith\""));
     }
+
+    @Test
+    void modifyClientTestNegInvalidData() throws URISyntaxException {
+        String JSON = """
+                {
+                  "archive": true,
+                  "firstName": "   ",
+                  "lastName": "Smith",
+                  "login": "loginek",
+                  "clientTypeName": "coach"
+                }
+                """;
+        RequestSpecification requestPut = RestAssured.given();
+        requestPut.contentType("application/json");
+        requestPut.body(JSON);
+
+        RequestSpecification requestGet = RestAssured.given();
+        String responseString = requestGet.get(new URI("http://localhost:8080/CourtRent-1.0-SNAPSHOT/api/users")).asString();
+
+        //Retrieve UUID
+        String responseLogin = requestGet.get(new URI("http://localhost:8080/CourtRent-1.0-SNAPSHOT/api/users/get?login=loginek")).asString();
+        int index = responseLogin.indexOf("\"id\":\"") + 6;
+        String clientId = responseLogin.substring(index, index + 36);
+
+        assertTrue(responseString.contains(
+                "\"archive\":false," +
+                        "\"id\":\"" + clientId + "\"," +
+                        "\"login\":\"loginek\"," +
+                        "\"clientTypeName\":\"normal\"," +
+                        "\"firstName\":\"Adam\"," +
+                        "\"lastName\":\"Smith\""));
+        assertFalse(responseString.contains(
+                "\"archive\":true," +
+                        "\"id\":\"" + clientId + "\"," +
+                        "\"login\":\"loginek\"," +
+                        "\"clientTypeName\":\"coach\"," +
+                        "\"firstName\":\"John\"," +
+                        "\"lastName\":\"Smith\""));
+
+        Response responsePut = requestPut.put("http://localhost:8080/CourtRent-1.0-SNAPSHOT/api/users/modifyClient/" + clientId);
+
+        assertEquals(400, responsePut.getStatusCode());
+
+        responseString = requestGet.get(new URI("http://localhost:8080/CourtRent-1.0-SNAPSHOT/api/users")).asString();
+
+        assertTrue(responseString.contains(
+                "\"archive\":false," +
+                        "\"id\":\"" + clientId + "\"," +
+                        "\"login\":\"loginek\"," +
+                        "\"clientTypeName\":\"normal\"," +
+                        "\"firstName\":\"Adam\"," +
+                        "\"lastName\":\"Smith\""));
+        assertFalse(responseString.contains(
+                "\"archive\":true," +
+                        "\"id\":\"" + clientId + "\"," +
+                        "\"login\":\"loginek\"," +
+                        "\"clientTypeName\":\"coach\"," +
+                        "\"firstName\":\"John\"," +
+                        "\"lastName\":\"Smith\""));
+    }
+
 }
