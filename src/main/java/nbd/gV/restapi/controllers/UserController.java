@@ -74,6 +74,7 @@ public class UserController {
         return clientService.getClientByLogin(login);
     }
 
+    ///TODO odtad testyyyy dalej
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.TEXT_PLAIN)

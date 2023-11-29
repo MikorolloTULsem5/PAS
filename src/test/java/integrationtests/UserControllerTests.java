@@ -167,12 +167,8 @@ public class UserControllerTests {
         Response response = request.get(new URI("http://localhost:8080/CourtRent-1.0-SNAPSHOT/api/users/get?login=michas13"));
         String responseString = response.asString();
 
-        assertTrue(responseString.contains("""
-                "login": "michas13",
-                "clientTypeName": "coach",
-                "firstName": "Michal",
-                "lastName": "Pi"
-                """));
+        System.out.println(responseString);
+        assertTrue(responseString.contains("\"login\":\"michas13\",\"clientTypeName\":\"coach\",\"firstName\":\"Michal\",\"lastName\":\"Pi\""));
 
         assertEquals(200, response.getStatusCode());
     }
@@ -180,7 +176,7 @@ public class UserControllerTests {
     @Test
     void getClientByLoginTestNoCont() throws URISyntaxException {
         RequestSpecification request = RestAssured.given();
-        Response response = request.get(new URI("http://localhost:8080/CourtRent-1.0-SNAPSHOT/api/users/get?login=-$%^$%^$^%!@#!@#!@#"));
+        Response response = request.get(new URI("http://localhost:8080/CourtRent-1.0-SNAPSHOT/api/users/get?login=564545415612121121"));
         String responseString = response.asString();
 
         assertTrue(responseString.isEmpty());
@@ -193,18 +189,13 @@ public class UserControllerTests {
 
         //Retrieve UUID
         String responseLogin = request.get(new URI("http://localhost:8080/CourtRent-1.0-SNAPSHOT/api/users/get?login=michas13")).asString();
-        int index = responseLogin.indexOf("\"id\": \"") + 7;
+        int index = responseLogin.indexOf("\"id\":\"") + 6;
         String clientId = responseLogin.substring(index, index + 36);
 
         Response responseById = request.get(new URI("http://localhost:8080/CourtRent-1.0-SNAPSHOT/api/users/" + clientId));
-        String responseByIdString = responseById.toString();
+        String responseByIdString = responseById.asString();
 
-        assertTrue(responseByIdString.contains("""
-                "login": "michas13",
-                "clientTypeName": "coach",
-                "firstName": "Michal",
-                "lastName": "Pi"
-                """));
+        assertTrue(responseByIdString.contains("\"login\":\"michas13\",\"clientTypeName\":\"coach\",\"firstName\":\"Michal\",\"lastName\":\"Pi\""));
 
         assertEquals(200, responseById.getStatusCode());
     }
