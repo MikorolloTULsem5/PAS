@@ -25,8 +25,8 @@ public class CleaningClass {
     }
 
     static void initClients() {
-        clientServiceTest.registerClient("Adam", "Smith", "siemaszka", "normal");
-        clientServiceTest.registerClient("Eva", "Braun", "siemaszka13", "athlete");
+        clientServiceTest.registerClient("Adam", "Smith", "loginek", "normal");
+        clientServiceTest.registerClient("Eva", "Braun", "loginek13", "athlete");
         clientServiceTest.registerClient("Michal", "Pi", "michas13", "coach");
     }
 
