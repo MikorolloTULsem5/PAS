@@ -98,10 +98,12 @@ public class UserController {
         }
 
         try {
-        Client finalModifyClient = new Client(UUID.fromString(id), modifiedClient.getFirstName(),
-                modifiedClient.getLastName(), modifiedClient.getLogin(), modifiedClient.getClientTypeName());
-        finalModifyClient.setArchive(modifiedClient.isArchive());
-        clientService.modifyClient(finalModifyClient);
+            Client finalModifyClient = new Client(UUID.fromString(id), modifiedClient.getFirstName(),
+                    modifiedClient.getLastName(), modifiedClient.getLogin(), modifiedClient.getClientTypeName());
+            finalModifyClient.setArchive(modifiedClient.isArchive());
+            clientService.modifyClient(finalModifyClient);
+        } catch (UserLoginException ule) {
+            return Response.status(Response.Status.CONFLICT).entity(ule.getMessage()).build();
         } catch (UserException ue) {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ue.getMessage()).build();
         }
