@@ -7,7 +7,6 @@ import jakarta.inject.Inject;
 import lombok.NoArgsConstructor;
 import nbd.gV.model.courts.Court;
 import nbd.gV.exceptions.CourtException;
-import nbd.gV.exceptions.MainException;
 import nbd.gV.exceptions.MyMongoException;
 import nbd.gV.data.datahandling.dto.CourtDTO;
 import nbd.gV.data.datahandling.mappers.CourtMapper;
@@ -47,7 +46,7 @@ public class CourtService {
         return court;
     }
 
-    public Court getCourt(UUID courtID) {
+    public Court getCourtById(UUID courtID) {
         CourtDTO courtMapper = courtRepository.readByUUID(courtID);
         return courtMapper != null ? CourtMapper.fromMongoCourt(courtMapper) : null;
     }
@@ -60,7 +59,7 @@ public class CourtService {
         return courtsList;
     }
 
-    public Court findCourtByCourtNumber(int courtNumber) {
+    public Court getCourtByCourtNumber(int courtNumber) {
         var list = courtRepository.read(Filters.eq("courtnumber", courtNumber));
         return !list.isEmpty() ? CourtMapper.fromMongoCourt(list.get(0)) : null;
     }

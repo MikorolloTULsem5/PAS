@@ -7,7 +7,6 @@ import nbd.gV.data.datahandling.mappers.CourtMapper;
 import nbd.gV.data.datahandling.mappers.ReservationMapper;
 import nbd.gV.restapi.services.CourtService;
 import nbd.gV.exceptions.CourtException;
-import nbd.gV.exceptions.MainException;
 import nbd.gV.data.repositories.CourtMongoRepository;
 import nbd.gV.data.repositories.ReservationMongoRepository;
 import nbd.gV.data.repositories.UserMongoRepository;
@@ -60,7 +59,7 @@ public class CourtManagerTest {
         Court newCourt = cm.registerCourt(200, 200, 5);
         assertNotNull(newCourt);
         assertEquals(1, cm.getAllCourts().size());
-        assertEquals(newCourt, cm.getCourt(newCourt.getCourtId()));
+        assertEquals(newCourt, cm.getCourtById(newCourt.getCourtId()));
         assertThrows(CourtException.class, () -> cm.registerCourt(300, 300, 5));
         assertEquals(1, cm.getAllCourts().size());
 
@@ -80,9 +79,9 @@ public class CourtManagerTest {
         assertNotNull(testCourt2);
         assertEquals(2, cm.getAllCourts().size());
 
-        assertEquals(testCourt1, cm.getCourt(testCourt1.getCourtId()));
-        assertEquals(testCourt2, cm.getCourt(testCourt2.getCourtId()));
-        assertNull(cm.getCourt(UUID.randomUUID()));
+        assertEquals(testCourt1, cm.getCourtById(testCourt1.getCourtId()));
+        assertEquals(testCourt2, cm.getCourtById(testCourt2.getCourtId()));
+        assertNull(cm.getCourtById(UUID.randomUUID()));
     }
 
 //    @Test
@@ -169,10 +168,10 @@ public class CourtManagerTest {
         assertNotNull(testCourt2);
         assertEquals(2, cm.getAllCourts().size());
 
-        Court newCourt = cm.findCourtByCourtNumber(1);
+        Court newCourt = cm.getCourtByCourtNumber(1);
         assertNotNull(newCourt);
         assertEquals(testCourt1, newCourt);
-        Court newCourt2 = cm.findCourtByCourtNumber(4);
+        Court newCourt2 = cm.getCourtByCourtNumber(4);
         assertNull(newCourt2);
     }
 }
