@@ -3,11 +3,13 @@ package integrationtests;
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.UUID;
 
 import static integrationtests.CleaningClass.clean;
 import static integrationtests.CleaningClass.initClients;
@@ -16,6 +18,11 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class UserControllerTests {
+
+    @AfterAll
+    static void cleanAtTheEnd() {
+        clean();
+    }
 
     @BeforeEach
     void cleanAndInitDatabase() {
@@ -152,5 +159,63 @@ public class UserControllerTests {
 
         assertFalse(responseString.contains("\"firstName\":\"John\""));
         assertFalse(responseString.contains("\"lastName\":\"Bravo\""));
+    }
+
+    @Test
+    void getClientByLoginTest() throws URISyntaxException {
+        RequestSpecification request = RestAssured.given();
+        Response response = request.get(new URI("http://localhost:8080/CourtRent-1.0-SNAPSHOT/api/users/get?login=michas13"));
+        String responseString = response.asString();
+
+        assertTrue(responseString.contains("""
+                "login": "michas13",
+                "clientTypeName": "coach",
+                "firstName": "Michal",
+                "lastName": "Pi"
+                """));
+
+        assertEquals(200, response.getStatusCode());
+    }
+
+    @Test
+    void getClientByLoginTestNoCont() throws URISyntaxException {
+        RequestSpecification request = RestAssured.given();
+        Response response = request.get(new URI("http://localhost:8080/CourtRent-1.0-SNAPSHOT/api/users/get?login=-$%^$%^$^%!@#!@#!@#"));
+        String responseString = response.asString();
+
+        assertTrue(responseString.isEmpty());
+        assertEquals(204, response.getStatusCode());
+    }
+
+    @Test
+    void getClientByIdTest() throws URISyntaxException {
+        RequestSpecification request = RestAssured.given();
+
+        //Retrieve UUID
+        String responseLogin = request.get(new URI("http://localhost:8080/CourtRent-1.0-SNAPSHOT/api/users/get?login=michas13")).asString();
+        int index = responseLogin.indexOf("\"id\": \"") + 7;
+        String clientId = responseLogin.substring(index, index + 36);
+
+        Response responseById = request.get(new URI("http://localhost:8080/CourtRent-1.0-SNAPSHOT/api/users/" + clientId));
+        String responseByIdString = responseById.toString();
+
+        assertTrue(responseByIdString.contains("""
+                "login": "michas13",
+                "clientTypeName": "coach",
+                "firstName": "Michal",
+                "lastName": "Pi"
+                """));
+
+        assertEquals(200, responseById.getStatusCode());
+    }
+
+    @Test
+    void getClientByIdTestNoCont() throws URISyntaxException {
+        RequestSpecification request = RestAssured.given();
+        Response response = request.get(new URI("http://localhost:8080/CourtRent-1.0-SNAPSHOT/api/users/" + UUID.randomUUID()));
+        String responseString = response.asString();
+
+        assertTrue(responseString.isEmpty());
+        assertEquals(204, response.getStatusCode());
     }
 }
