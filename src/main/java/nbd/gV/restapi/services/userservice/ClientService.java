@@ -1,6 +1,5 @@
 package nbd.gV.restapi.services.userservice;
 
-import com.mongodb.MongoTimeoutException;
 import com.mongodb.client.model.Filters;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;

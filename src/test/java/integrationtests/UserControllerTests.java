@@ -26,7 +26,6 @@ public class UserControllerTests {
     @Test
     void getAllClientsTest() throws URISyntaxException {
         RequestSpecification request = RestAssured.given();
-//        request.relaxedHTTPSValidation();
         Response response = request.get(new URI("http://localhost:8080/CourtRent-1.0-SNAPSHOT/api/users"));
         String responseString = response.asString();
 
@@ -60,6 +59,7 @@ public class UserControllerTests {
 
     @Test
     void createClientTestPos() throws URISyntaxException {
+        clean();
         String JSON = """
                 {
                   "firstName": "John",
@@ -90,5 +90,67 @@ public class UserControllerTests {
         assertTrue(responseString.contains("\"clientTypeName\":\"normal\""));
         assertTrue(responseString.contains("\"firstName\":\"John\""));
         assertTrue(responseString.contains("\"lastName\":\"Bravo\""));
+    }
+
+    @Test
+    void createClientTestNegInvalidData() throws URISyntaxException {
+        String json = """
+                {
+                  "firstName": "John",
+                  "lastName": "  ",
+                  "login": "johnBravo",
+                  "clientTypeName": "normal"
+                }
+                """;
+        RequestSpecification requestPost = RestAssured.given();
+        requestPost.contentType("application/json");
+        requestPost.body(json);
+
+        RequestSpecification requestGet = RestAssured.given();
+        String responseString = requestGet.get(new URI("http://localhost:8080/CourtRent-1.0-SNAPSHOT/api/users")).asString();
+
+        assertFalse(responseString.contains("\"login\":\"johnBravo\""));
+        assertFalse(responseString.contains("\"lastName\":\"  \""));
+
+        Response responsePost = requestPost.post("http://localhost:8080/CourtRent-1.0-SNAPSHOT/api/users/addClient");
+
+        assertEquals(400, responsePost.getStatusCode());
+
+        responseString = requestGet.get(new URI("http://localhost:8080/CourtRent-1.0-SNAPSHOT/api/users")).asString();
+
+        assertFalse(responseString.contains("\"login\":\"johnBravo\""));
+        assertFalse(responseString.contains("\"lastName\":\"  \""));
+    }
+
+    @Test
+    void createClientTestNegSameLogin() throws URISyntaxException {
+        String json = """
+                {
+                  "firstName": "John",
+                  "lastName": "Bravo",
+                  "login": "michas13",
+                  "clientTypeName": "normal"
+                }
+                """;
+        RequestSpecification requestPost = RestAssured.given();
+        requestPost.contentType("application/json");
+        requestPost.body(json);
+
+        RequestSpecification requestGet = RestAssured.given();
+        String responseString = requestGet.get(new URI("http://localhost:8080/CourtRent-1.0-SNAPSHOT/api/users")).asString();
+
+        assertTrue(responseString.contains("\"login\":\"michas13\""));
+
+        assertFalse(responseString.contains("\"firstName\":\"John\""));
+        assertFalse(responseString.contains("\"lastName\":\"Bravo\""));
+
+        Response responsePost = requestPost.post("http://localhost:8080/CourtRent-1.0-SNAPSHOT/api/users/addClient");
+
+        assertEquals(409, responsePost.getStatusCode());
+
+        responseString = requestGet.get(new URI("http://localhost:8080/CourtRent-1.0-SNAPSHOT/api/users")).asString();
+
+        assertFalse(responseString.contains("\"firstName\":\"John\""));
+        assertFalse(responseString.contains("\"lastName\":\"Bravo\""));
     }
 }
