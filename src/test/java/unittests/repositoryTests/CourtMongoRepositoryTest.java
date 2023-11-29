@@ -269,7 +269,7 @@ public class CourtMongoRepositoryTest {
 
         court1.setArea(111);
         court1.setBaseCost(123);
-        assertTrue(courtRepository.update(CourtMapper.toMongoCourt(court1)));
+        assertTrue(courtRepository.updateByReplace(court1.getCourtId(), CourtMapper.toMongoCourt(court1)));
         Court court1Copy = CourtMapper.fromMongoCourt(courtRepository.readByUUID(court1.getCourtId()));
         assertEquals(court1Copy, court1);
     }
@@ -283,6 +283,6 @@ public class CourtMongoRepositoryTest {
 
         court1.setArea(111);
         court1.setBaseCost(123);
-        assertFalse(courtRepository.update(CourtMapper.toMongoCourt(court1)));
+        assertFalse(courtRepository.updateByReplace(court1.getCourtId(), CourtMapper.toMongoCourt(court1)));
     }
 }

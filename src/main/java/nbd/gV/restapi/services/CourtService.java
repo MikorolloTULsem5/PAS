@@ -2,6 +2,9 @@ package nbd.gV.restapi.services;
 
 import com.mongodb.client.model.Filters;
 
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
+import lombok.NoArgsConstructor;
 import nbd.gV.model.courts.Court;
 import nbd.gV.exceptions.CourtException;
 import nbd.gV.exceptions.MainException;
@@ -14,12 +17,17 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+
+@ApplicationScoped
+@NoArgsConstructor
 public class CourtService {
 
-    private final CourtMongoRepository courtRepository;
+    @Inject
+    private CourtMongoRepository courtRepository;
 
-    public CourtService() {
-        courtRepository = new CourtMongoRepository();
+    ///TODO kompatybilnosc testow potem wywalic
+    public CourtService(CourtMongoRepository courtRepository) {
+        this.courtRepository = courtRepository;
     }
 
     public Court registerCourt(double area, int baseCost, int courtNumber) {
@@ -39,59 +47,47 @@ public class CourtService {
         return court;
     }
 
-    public void unregisterCourt(Court court) {
-        if (court == null) {
-            throw new MainException("Nie mozna wyrejestrowac nieistniejacego boiska!");
-        }
-        try {
-            court.setArchive(true);
-            if (!courtRepository.update(court.getCourtId(), "archive", true)) {
-                court.setArchive(false);
-                throw new CourtException("Nie udalo sie wyrejestrowac podanego boiska.");
-            }
-        } catch (Exception exception) {
-            court.setArchive(false);
-            throw new CourtException("Nie udalo sie wyrejestrowac podanego boiska.");
-        }
-    }
-
-    public void deleteCourt(Court court) {
-        if (court == null) {
-            throw new MainException("Nie mozna usunac nieistniejacego boiska!");
-        }
-        try {
-            if (!courtRepository.delete(court.getCourtId())) {
-                throw new CourtException("Nie mozna usunac boiska - istnieja powiazanie z nim rezerwacje");
-            }
-        } catch (Exception exception) {
-            court.setArchive(false);
-            throw new CourtException("Nie udalo sie wyrejestrowac podanego boiska.");
-        }
-    }
-
     public Court getCourt(UUID courtID) {
-        try {
-            CourtDTO courtMapper = courtRepository.readByUUID(courtID);
-            return courtMapper != null ? CourtMapper.fromMongoCourt(courtMapper) : null;
-        } catch (Exception exception) {
-            throw new CourtException("Blad transakcji.");
-        }
+        CourtDTO courtMapper = courtRepository.readByUUID(courtID);
+        return courtMapper != null ? CourtMapper.fromMongoCourt(courtMapper) : null;
     }
 
     public List<Court> getAllCourts() {
-        try {
-            List<Court> courtsList = new ArrayList<>();
-            for (var el : courtRepository.readAll()) {
-                courtsList.add(CourtMapper.fromMongoCourt(el));
-            }
-            return courtsList;
-        } catch (Exception exception) {
-            throw new CourtException("Nie udalo sie uzyskac boisk.");
+        List<Court> courtsList = new ArrayList<>();
+        for (var el : courtRepository.readAll()) {
+            courtsList.add(CourtMapper.fromMongoCourt(el));
         }
+        return courtsList;
     }
 
     public Court findCourtByCourtNumber(int courtNumber) {
         var list = courtRepository.read(Filters.eq("courtnumber", courtNumber));
         return !list.isEmpty() ? CourtMapper.fromMongoCourt(list.get(0)) : null;
+    }
+
+    /*-----------------------------------------------------------------------------------------------------*/
+
+    public void modifyCourt(Court modifiedCourt) {
+        if (courtRepository.updateByReplace(modifiedCourt.getCourtId(), CourtMapper.toMongoCourt(modifiedCourt))) {
+            throw new CourtException("Nie udalo się zmodyfikowac podanego boiska");
+        }
+    }
+
+    public void activateCourt(UUID courtId) {
+        courtRepository.update(courtId, "archive", false);
+    }
+
+    public void archiveClient(UUID courtId) {
+        courtRepository.update(courtId, "archive", true);
+    }
+
+    public void deleteCourt(UUID courtId) {
+        try {
+            if (!courtRepository.delete(courtId)) {
+                throw new CourtException("Nie mozna usunac boiska - istnieja powiazanie z nim rezerwacje");
+            }
+        } catch (Exception exception) {
+            throw new CourtException("Nie udalo sie usunac podanego boiska.");
+        }
     }
 }

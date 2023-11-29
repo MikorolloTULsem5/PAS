@@ -5,7 +5,6 @@ import com.mongodb.client.MongoCollection;
 import com.mongodb.client.model.CreateCollectionOptions;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.ValidationOptions;
-import com.mongodb.client.result.UpdateResult;
 import jakarta.enterprise.context.ApplicationScoped;
 import nbd.gV.data.datahandling.dto.CourtDTO;
 import nbd.gV.data.datahandling.dto.ReservationDTO;
@@ -67,6 +66,7 @@ public class CourtMongoRepository extends AbstractMongoRepository<CourtDTO> {
         Bson filter = Filters.eq("courtid", uuid.toString());
         ClientSession clientSession = getMongoClient().startSession();
         try {
+            ///TODO ty no nwm xdd
             clientSession.startTransaction();
             var reservation = this.getDatabase().getCollection(ReservationMongoRepository.COLLECTION_NAME, ReservationDTO.class).find(filter).first();
             if (reservation != null) {
@@ -86,12 +86,5 @@ public class CourtMongoRepository extends AbstractMongoRepository<CourtDTO> {
         } finally {
             clientSession.close();
         }
-    }
-
-    ///TODO przepiac metode
-    public boolean update(CourtDTO court){
-        Bson filter = Filters.eq("_id", court.getCourtId());
-        UpdateResult result = getCollection().replaceOne(filter,court);
-        return result.getModifiedCount() != 0;
     }
 }
