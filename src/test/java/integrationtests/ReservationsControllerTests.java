@@ -11,6 +11,8 @@ import java.net.URI;
 import java.net.URISyntaxException;
 
 import static integrationtests.CleaningClass.clean;
+import static integrationtests.CleaningClass.client3;
+import static integrationtests.CleaningClass.court3;
 import static integrationtests.CleaningClass.initClients;
 import static integrationtests.CleaningClass.initCourts;
 import static integrationtests.CleaningClass.initReservations;
@@ -106,39 +108,33 @@ public class ReservationsControllerTests {
         assertTrue(responseString.isEmpty());
         assertEquals(204, response.getStatusCode());
     }
-//
-//    @Test
-//    void createCourtTestPos() throws URISyntaxException {
-//        clean();
-//        String JSON = """
-//                {
-//                  "area": 120.0,
-//                  "baseCost": 50,
-//                  "courtNumber": 15
-//                }
-//                """;
-//        RequestSpecification requestPost = RestAssured.given();
-//        requestPost.contentType("application/json");
-//        requestPost.body(JSON);
-//
-//        RequestSpecification requestGet = RestAssured.given();
-//        String responseString = requestGet.get(new URI(appUrlCourt)).asString();
-//
-//        assertTrue(responseString.isEmpty());
-//
-//        Response responsePost = requestPost.post(appUrlCourt + "/addCourt");
-//
-//        assertEquals(201, responsePost.getStatusCode());
-//
-//        responseString = requestGet.get(new URI(appUrlCourt)).asString();
-//
-//        assertTrue(responseString.contains("\"archive\":false"));
-//        assertTrue(responseString.contains("\"area\":120"));
-//        assertTrue(responseString.contains("\"baseCost\":50"));
-//        assertTrue(responseString.contains("\"courtNumber\":15"));
-//        assertTrue(responseString.contains("\"id\":\""));
-//        assertTrue(responseString.contains("\"rented\":false"));
-//    }
+
+    @Test
+    void createReservationTestPos() throws URISyntaxException {
+        clean();
+        initClients();
+        initCourts();
+        RequestSpecification requestPost = RestAssured.given();
+
+        RequestSpecification requestGet = RestAssured.given();
+        String responseString = requestGet.get(new URI(appUrlReservation)).asString();
+
+        assertTrue(responseString.isEmpty());
+
+        Response responsePost = requestPost.post(appUrlReservation +
+                "/addReservation?clientId=%s&courtId=%s&date=%s".formatted(client3.getId(), court3.getId(),
+                        "2023-11-30T17:03:22"));
+
+        assertEquals(201, responsePost.getStatusCode());
+
+        responseString = requestGet.get(new URI(appUrlReservation)).asString();
+
+        assertTrue(responseString.contains("\"beginTime\":\"2023-11-30T17:03:22\""));
+        assertTrue(responseString.contains("\"client\":{\""));
+        assertTrue(responseString.contains("\"id\":\"%s\"".formatted(client3.getId())));
+        assertTrue(responseString.contains("\"court\":{\""));
+        assertTrue(responseString.contains("\"id\":\"%s\"".formatted(court3.getId())));
+    }
 //
 //    @Test
 //    void createCourtTestNegInvalidData() throws URISyntaxException {

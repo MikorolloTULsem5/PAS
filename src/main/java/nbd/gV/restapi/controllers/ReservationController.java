@@ -12,6 +12,8 @@ import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.QueryParam;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import nbd.gV.exceptions.CourtException;
+import nbd.gV.exceptions.CourtNumberException;
 import nbd.gV.exceptions.MyMongoException;
 import nbd.gV.model.reservations.Reservation;
 import nbd.gV.restapi.services.ReservationService;
@@ -29,16 +31,25 @@ public class ReservationController {
     private final Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
 
     @POST
-    @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/addReservation")
-    public void addReseravtion(@QueryParam("clientId") String clientId, @QueryParam("courtId") String courtId,
-                               @QueryParam("date") String date) {
-        if (date == null) {
-            reservationService.makeReservation(UUID.fromString(clientId), UUID.fromString(courtId));
-        } else {
-            reservationService.makeReservation(UUID.fromString(clientId), UUID.fromString(courtId), LocalDateTime.parse(date));
+    public Response addReseravtion(@QueryParam("clientId") String clientId, @QueryParam("courtId") String courtId,
+                                   @QueryParam("date") String date) {
+        try {
+            if (date == null) {
+                reservationService.makeReservation(UUID.fromString(clientId), UUID.fromString(courtId));
+            } else {
+                reservationService.makeReservation(UUID.fromString(clientId), UUID.fromString(courtId), LocalDateTime.parse(date));
+            }
+        } catch (IllegalArgumentException | NullPointerException ex) {
+            return Response.status(Response.Status.BAD_REQUEST).entity(ex.getMessage()).build();
+        } catch (CourtNumberException cne) {
+            return Response.status(Response.Status.CONFLICT).entity(cne.getMessage()).build();
+        } catch (CourtException ce) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ce.getMessage()).build();
         }
+
+        return Response.status(Response.Status.CREATED).build();
     }
 
     @GET

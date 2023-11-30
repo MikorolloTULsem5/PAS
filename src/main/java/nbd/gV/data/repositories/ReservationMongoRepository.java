@@ -11,6 +11,7 @@ import com.mongodb.client.model.ValidationOptions;
 import com.mongodb.client.result.InsertOneResult;
 import jakarta.enterprise.context.ApplicationScoped;
 import nbd.gV.data.datahandling.mappers.CourtMapper;
+import nbd.gV.exceptions.MultiReservationException;
 import nbd.gV.model.users.Client;
 import nbd.gV.model.courts.Court;
 import nbd.gV.exceptions.UserException;
@@ -104,7 +105,7 @@ public class ReservationMongoRepository extends AbstractMongoRepository<Reservat
             } else if (courtFound.isArchive()) {
                 throw new CourtException("Nie udalo sie utworzyc rezerwacji - boisko jest archiwalne!");
             } else {
-                throw new ReservationException("To boisko jest aktualnie wypozyczone!");
+                throw new MultiReservationException("To boisko jest aktualnie wypozyczone!");
             }
         } catch (MongoWriteException | MongoCommandException exception) {
             throw new MyMongoException(exception.getMessage());
