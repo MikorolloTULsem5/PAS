@@ -47,18 +47,18 @@ public class CourtControllerTests {
         assertTrue(splitedRespStr[0].contains("\"rented\":false"));
 
         //Third Court
-        assertTrue(splitedRespStr[1].contains("\"archive\":false"));
-        assertTrue(splitedRespStr[1].contains("\"area\":300"));
-        assertTrue(splitedRespStr[1].contains("\"baseCost\":200"));
-        assertTrue(splitedRespStr[1].contains("\"courtId\":\""));
-        assertTrue(splitedRespStr[1].contains("\"courtNumber\":3"));
-        assertTrue(splitedRespStr[1].contains("\"rented\":false"));
+        assertTrue(splitedRespStr[2].contains("\"archive\":false"));
+        assertTrue(splitedRespStr[2].contains("\"area\":300"));
+        assertTrue(splitedRespStr[2].contains("\"baseCost\":200"));
+        assertTrue(splitedRespStr[2].contains("\"courtId\":\""));
+        assertTrue(splitedRespStr[2].contains("\"courtNumber\":3"));
+        assertTrue(splitedRespStr[2].contains("\"rented\":false"));
 
         assertEquals(200, response.getStatusCode());
     }
 
     @Test
-    void getAllClientsTestNoCont() throws URISyntaxException {
+    void getAllCourtsTestNoCont() throws URISyntaxException {
         clean();
         RequestSpecification request = RestAssured.given();
         Response response = request.get(new URI("http://localhost:8080/CourtRent-1.0-SNAPSHOT/api/courts"));
@@ -69,7 +69,7 @@ public class CourtControllerTests {
     }
 
     @Test
-    void createClientTestPos() throws URISyntaxException {
+    void createCourtTestPos() throws URISyntaxException {
         clean();
         String JSON = """
                 {
