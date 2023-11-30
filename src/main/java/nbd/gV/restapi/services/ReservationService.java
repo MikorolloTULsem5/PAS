@@ -52,12 +52,12 @@ public class ReservationService {
             Reservation newReservation = new Reservation(client, court, beginTime);
             boolean result = reservationRepository.create(ReservationMapper.toMongoReservation(newReservation));
             if (!result) {
-                throw new ReservationException("Nie udalo sie utworzyc transkacji!");
+                throw new ReservationException("Nie udalo sie utworzyc rezerwacji! - brak odpowiedzi");
             }
             court.setRented(true);
             return newReservation;
         } catch (MyMongoException exception) {
-            throw new ReservationException("Blad transakcji.");
+            throw new ReservationException("Nie udalo sie utowrzyc rezerwacji");
         }
     }
 
