@@ -21,6 +21,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class CourtControllerTests {
 
+    static final String appUrl = "http://localhost:8080/CourtRent-1.0-SNAPSHOT/api/courts";
+
     @AfterAll
     static void cleanAtTheEnd() {
         clean();
@@ -35,7 +37,7 @@ public class CourtControllerTests {
     @Test
     void getAllCourtsTest() throws URISyntaxException {
         RequestSpecification request = RestAssured.given();
-        Response response = request.get(new URI("http://localhost:8080/CourtRent-1.0-SNAPSHOT/api/courts"));
+        Response response = request.get(new URI(appUrl));
         String responseString = response.asString();
         String[] splitedRespStr = responseString.split("},");
 
@@ -64,7 +66,7 @@ public class CourtControllerTests {
     void getAllCourtsTestNoCont() throws URISyntaxException {
         clean();
         RequestSpecification request = RestAssured.given();
-        Response response = request.get(new URI("http://localhost:8080/CourtRent-1.0-SNAPSHOT/api/courts"));
+        Response response = request.get(new URI(appUrl));
         String responseString = response.asString();
 
         assertTrue(responseString.isEmpty());
@@ -86,15 +88,15 @@ public class CourtControllerTests {
         requestPost.body(JSON);
 
         RequestSpecification requestGet = RestAssured.given();
-        String responseString = requestGet.get(new URI("http://localhost:8080/CourtRent-1.0-SNAPSHOT/api/courts")).asString();
+        String responseString = requestGet.get(new URI(appUrl)).asString();
 
         assertTrue(responseString.isEmpty());
 
-        Response responsePost = requestPost.post("http://localhost:8080/CourtRent-1.0-SNAPSHOT/api/courts/addCourt");
+        Response responsePost = requestPost.post(appUrl + "/addCourt");
 
         assertEquals(201, responsePost.getStatusCode());
 
-        responseString = requestGet.get(new URI("http://localhost:8080/CourtRent-1.0-SNAPSHOT/api/courts")).asString();
+        responseString = requestGet.get(new URI(appUrl)).asString();
 
         assertTrue(responseString.contains("\"archive\":false"));
         assertTrue(responseString.contains("\"area\":120"));
@@ -118,16 +120,16 @@ public class CourtControllerTests {
         requestPost.body(json);
 
         RequestSpecification requestGet = RestAssured.given();
-        String responseString = requestGet.get(new URI("http://localhost:8080/CourtRent-1.0-SNAPSHOT/api/courts")).asString();
+        String responseString = requestGet.get(new URI(appUrl)).asString();
 
         assertFalse(responseString.contains("\"courtNumber\":15"));
         assertFalse(responseString.contains("\"baseCost\":-50"));
 
-        Response responsePost = requestPost.post("http://localhost:8080/CourtRent-1.0-SNAPSHOT/api/courts/addCourt");
+        Response responsePost = requestPost.post(appUrl + "/addCourt");
 
         assertEquals(400, responsePost.getStatusCode());
 
-        responseString = requestGet.get(new URI("http://localhost:8080/CourtRent-1.0-SNAPSHOT/api/courts")).asString();
+        responseString = requestGet.get(new URI(appUrl)).asString();
 
         assertFalse(responseString.contains("\"courtNumber\":15"));
         assertFalse(responseString.contains("\"baseCost\":-50"));
@@ -147,18 +149,18 @@ public class CourtControllerTests {
         requestPost.body(json);
 
         RequestSpecification requestGet = RestAssured.given();
-        String responseString = requestGet.get(new URI("http://localhost:8080/CourtRent-1.0-SNAPSHOT/api/courts")).asString();
+        String responseString = requestGet.get(new URI(appUrl)).asString();
 
         assertTrue(responseString.contains("\"courtNumber\":2"));
 
         assertFalse(responseString.contains("\"area\":120.0"));
         assertFalse(responseString.contains("\"baseCost\":50"));
 
-        Response responsePost = requestPost.post("http://localhost:8080/CourtRent-1.0-SNAPSHOT/api/courts/addCourt");
+        Response responsePost = requestPost.post(appUrl + "/addCourt");
 
         assertEquals(409, responsePost.getStatusCode());
 
-        responseString = requestGet.get(new URI("http://localhost:8080/CourtRent-1.0-SNAPSHOT/api/courts")).asString();
+        responseString = requestGet.get(new URI(appUrl)).asString();
 
         assertTrue(responseString.contains("\"courtNumber\":2"));
 
@@ -169,7 +171,7 @@ public class CourtControllerTests {
     @Test
     void getCourtByCourtNumberTest() throws URISyntaxException {
         RequestSpecification request = RestAssured.given();
-        Response response = request.get(new URI("http://localhost:8080/CourtRent-1.0-SNAPSHOT/api/courts/get?number=3"));
+        Response response = request.get(new URI(appUrl + "/get?number=3"));
         String responseString = response.asString();
         String[] splitedRespStr = responseString.split("},");
 
@@ -188,7 +190,7 @@ public class CourtControllerTests {
     @Test
     void getCourtByCourtNumberTestNoCont() throws URISyntaxException {
         RequestSpecification request = RestAssured.given();
-        Response response = request.get(new URI("http://localhost:8080/CourtRent-1.0-SNAPSHOT/api/users/get?number=42343242"));
+        Response response = request.get(new URI(appUrl + "/get?number=42343242"));
         String responseString = response.asString();
 
         assertTrue(responseString.isEmpty());
@@ -200,11 +202,11 @@ public class CourtControllerTests {
         RequestSpecification request = RestAssured.given();
 
         //Retrieve UUID
-        String responseNumber = request.get(new URI("http://localhost:8080/CourtRent-1.0-SNAPSHOT/api/courts/get?number=1")).asString();
+        String responseNumber = request.get(new URI(appUrl + "/get?number=1")).asString();
         int index = responseNumber.indexOf("\"id\":\"") + 6;
         String courtId = responseNumber.substring(index, index + 36);
 
-        Response responseById = request.get(new URI("http://localhost:8080/CourtRent-1.0-SNAPSHOT/api/courts/" + courtId));
+        Response responseById = request.get(new URI(appUrl + "/" + courtId));
         String responseByIdString = responseById.asString();
         String[] splitedRespStr = responseByIdString.split("},");
 
@@ -223,7 +225,7 @@ public class CourtControllerTests {
     @Test
     void getCourtByIdTestNoCont() throws URISyntaxException {
         RequestSpecification request = RestAssured.given();
-        Response response = request.get(new URI("http://localhost:8080/CourtRent-1.0-SNAPSHOT/api/courts/" + UUID.randomUUID()));
+        Response response = request.get(new URI(appUrl + "/" + UUID.randomUUID()));
         String responseString = response.asString();
 
         assertTrue(responseString.isEmpty());
@@ -244,10 +246,10 @@ public class CourtControllerTests {
         requestPut.body(JSON);
 
         RequestSpecification requestGet = RestAssured.given();
-        String responseString = requestGet.get(new URI("http://localhost:8080/CourtRent-1.0-SNAPSHOT/api/courts")).asString();
+        String responseString = requestGet.get(new URI(appUrl)).asString();
 
         //Retrieve UUID
-        String responseNumber = requestGet.get(new URI("http://localhost:8080/CourtRent-1.0-SNAPSHOT/api/courts/get?number=2")).asString();
+        String responseNumber = requestGet.get(new URI(appUrl + "/get?number=2")).asString();
         int index = responseNumber.indexOf("\"id\":\"") + 6;
         String courtId = responseNumber.substring(index, index + 36);
 
@@ -266,11 +268,11 @@ public class CourtControllerTests {
                         "\"id\":\"" + courtId + "\"," +
                         "\"rented\":false"));
 
-        Response responsePut = requestPut.put("http://localhost:8080/CourtRent-1.0-SNAPSHOT/api/courts/modifyCourt/" + courtId);
+        Response responsePut = requestPut.put(appUrl + "/modifyCourt/" + courtId);
 
         assertEquals(204, responsePut.getStatusCode());
 
-        responseString = requestGet.get(new URI("http://localhost:8080/CourtRent-1.0-SNAPSHOT/api/courts")).asString();
+        responseString = requestGet.get(new URI(appUrl)).asString();
 
         assertFalse(responseString.contains(
                 "\"archive\":false," +
@@ -302,10 +304,10 @@ public class CourtControllerTests {
         requestPut.body(JSON);
 
         RequestSpecification requestGet = RestAssured.given();
-        String responseString = requestGet.get(new URI("http://localhost:8080/CourtRent-1.0-SNAPSHOT/api/courts")).asString();
+        String responseString = requestGet.get(new URI(appUrl)).asString();
 
         //Retrieve UUID
-        String responseNumber = requestGet.get(new URI("http://localhost:8080/CourtRent-1.0-SNAPSHOT/api/courts/get?number=2")).asString();
+        String responseNumber = requestGet.get(new URI(appUrl + "/get?number=2")).asString();
         int index = responseNumber.indexOf("\"id\":\"") + 6;
         String courtId = responseNumber.substring(index, index + 36);
 
@@ -324,11 +326,11 @@ public class CourtControllerTests {
                         "\"id\":\"" + courtId + "\"," +
                         "\"rented\":false"));
 
-        Response responsePut = requestPut.put("http://localhost:8080/CourtRent-1.0-SNAPSHOT/api/courts/modifyCourt/" + courtId);
+        Response responsePut = requestPut.put(appUrl + "/modifyCourt/" + courtId);
 
         assertEquals(400, responsePut.getStatusCode());
 
-        responseString = requestGet.get(new URI("http://localhost:8080/CourtRent-1.0-SNAPSHOT/api/courts")).asString();
+        responseString = requestGet.get(new URI(appUrl)).asString();
 
         assertTrue(responseString.contains(
                 "\"archive\":false," +
@@ -360,10 +362,10 @@ public class CourtControllerTests {
         requestPut.body(JSON);
 
         RequestSpecification requestGet = RestAssured.given();
-        String responseString = requestGet.get(new URI("http://localhost:8080/CourtRent-1.0-SNAPSHOT/api/courts")).asString();
+        String responseString = requestGet.get(new URI(appUrl)).asString();
 
         //Retrieve UUID
-        String responseNumber = requestGet.get(new URI("http://localhost:8080/CourtRent-1.0-SNAPSHOT/api/courts/get?number=2")).asString();
+        String responseNumber = requestGet.get(new URI(appUrl + "/get?number=2")).asString();
         int index = responseNumber.indexOf("\"id\":\"") + 6;
         String courtId = responseNumber.substring(index, index + 36);
 
@@ -382,11 +384,11 @@ public class CourtControllerTests {
                         "\"id\":\"" + courtId + "\"," +
                         "\"rented\":false"));
 
-        Response responsePut = requestPut.put("http://localhost:8080/CourtRent-1.0-SNAPSHOT/api/courts/modifyCourt/" + courtId);
+        Response responsePut = requestPut.put(appUrl + "/modifyCourt/" + courtId);
 
         assertEquals(409, responsePut.getStatusCode());
 
-        responseString = requestGet.get(new URI("http://localhost:8080/CourtRent-1.0-SNAPSHOT/api/courts")).asString();
+        responseString = requestGet.get(new URI(appUrl)).asString();
 
         assertTrue(responseString.contains(
                 "\"archive\":false," +
@@ -407,10 +409,10 @@ public class CourtControllerTests {
     @Test
     void archiveAndActivateClientTest() throws URISyntaxException {
         RequestSpecification requestGet = RestAssured.given();
-        String responseString = requestGet.get(new URI("http://localhost:8080/CourtRent-1.0-SNAPSHOT/api/courts")).asString();
+        String responseString = requestGet.get(new URI(appUrl)).asString();
 
         //Retrieve UUID
-        String responseNumber = requestGet.get(new URI("http://localhost:8080/CourtRent-1.0-SNAPSHOT/api/courts/get?number=3")).asString();
+        String responseNumber = requestGet.get(new URI(appUrl + "/get?number=3")).asString();
         int index = responseNumber.indexOf("\"id\":\"") + 6;
         String courtId = responseNumber.substring(index, index + 36);
 
@@ -431,11 +433,11 @@ public class CourtControllerTests {
                         "\"rented\":false"));
 
         RequestSpecification requestPost = RestAssured.given();
-        Response responsePost = requestPost.post("http://localhost:8080/CourtRent-1.0-SNAPSHOT/api/courts/archive/" + courtId);
+        Response responsePost = requestPost.post(appUrl + "/archive/" + courtId);
 
         assertEquals(204, responsePost.getStatusCode());
 
-        responseString = requestGet.get(new URI("http://localhost:8080/CourtRent-1.0-SNAPSHOT/api/courts")).asString();
+        responseString = requestGet.get(new URI(appUrl)).asString();
 
         assertFalse(responseString.contains(
                 "\"archive\":false," +
@@ -454,11 +456,11 @@ public class CourtControllerTests {
 
         /*Activate test*/
         RequestSpecification requestPost2 = RestAssured.given();
-        Response responsePost2 = requestPost2.post("http://localhost:8080/CourtRent-1.0-SNAPSHOT/api/courts/activate/" + courtId);
+        Response responsePost2 = requestPost2.post(appUrl + "/activate/" + courtId);
 
         assertEquals(204, responsePost2.getStatusCode());
 
-        responseString = requestGet.get(new URI("http://localhost:8080/CourtRent-1.0-SNAPSHOT/api/courts")).asString();
+        responseString = requestGet.get(new URI(appUrl)).asString();
 
         assertTrue(responseString.contains(
                 "\"archive\":false," +
@@ -479,10 +481,10 @@ public class CourtControllerTests {
     @Test
     void deleteCourtTestPos() throws URISyntaxException {
         RequestSpecification requestGet = RestAssured.given();
-        String responseString = requestGet.get(new URI("http://localhost:8080/CourtRent-1.0-SNAPSHOT/api/courts")).asString();
+        String responseString = requestGet.get(new URI(appUrl)).asString();
 
         //Retrieve UUID
-        String responseNumber = requestGet.get(new URI("http://localhost:8080/CourtRent-1.0-SNAPSHOT/api/courts/get?number=3")).asString();
+        String responseNumber = requestGet.get(new URI(appUrl + "/get?number=3")).asString();
         int index = responseNumber.indexOf("\"id\":\"") + 6;
         String courtId = responseNumber.substring(index, index + 36);
 
@@ -495,11 +497,11 @@ public class CourtControllerTests {
                         "\"rented\":false"));
 
         RequestSpecification requestDelete = RestAssured.given();
-        Response responseDelete = requestDelete.delete("http://localhost:8080/CourtRent-1.0-SNAPSHOT/api/courts/delete/" + courtId);
+        Response responseDelete = requestDelete.delete(appUrl + "/delete/" + courtId);
 
         assertEquals(204, responseDelete.getStatusCode());
 
-        responseString = requestGet.get(new URI("http://localhost:8080/CourtRent-1.0-SNAPSHOT/api/courts")).asString();
+        responseString = requestGet.get(new URI(appUrl)).asString();
 
         assertFalse(responseString.contains(
                 "\"archive\":false," +
@@ -509,7 +511,7 @@ public class CourtControllerTests {
                         "\"id\":\"" + courtId + "\"," +
                         "\"rented\":false"));
 
-        Response responseDelete2 = requestDelete.delete("http://localhost:8080/CourtRent-1.0-SNAPSHOT/api/courts/delete/" + courtId);
+        Response responseDelete2 = requestDelete.delete(appUrl + "/delete/" + courtId);
 
         assertEquals(204, responseDelete2.getStatusCode());
     }
@@ -521,10 +523,10 @@ public class CourtControllerTests {
         initReservations();
 
         RequestSpecification requestGet = RestAssured.given();
-        String responseString = requestGet.get(new URI("http://localhost:8080/CourtRent-1.0-SNAPSHOT/api/courts")).asString();
+        String responseString = requestGet.get(new URI(appUrl)).asString();
 
         //Retrieve UUID
-        String responseNumber = requestGet.get(new URI("http://localhost:8080/CourtRent-1.0-SNAPSHOT/api/courts/get?number=1")).asString();
+        String responseNumber = requestGet.get(new URI(appUrl + "/get?number=1")).asString();
         int index = responseNumber.indexOf("\"id\":\"") + 6;
         String courtId = responseNumber.substring(index, index + 36);
 
@@ -537,11 +539,11 @@ public class CourtControllerTests {
                 "\"rented\":true"));
 
         RequestSpecification requestDelete = RestAssured.given();
-        Response responseDelete = requestDelete.delete("http://localhost:8080/CourtRent-1.0-SNAPSHOT/api/courts/delete/" + courtId);
+        Response responseDelete = requestDelete.delete(appUrl + "/delete/" + courtId);
 
         assertEquals(409, responseDelete.getStatusCode());
 
-        responseString = requestGet.get(new URI("http://localhost:8080/CourtRent-1.0-SNAPSHOT/api/courts")).asString();
+        responseString = requestGet.get(new URI(appUrl)).asString();
 
         assertTrue(responseString.contains(
                 "\"archive\":false," +
