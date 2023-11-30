@@ -251,18 +251,18 @@ public class CourtControllerTests {
 
         assertTrue(responseString.contains(
                 "\"archive\":false," +
-                "\"area\":100," +
-                "\"baseCost\":200," +
-                "\"courtNumber\":2," +
-                "\"id\":\"" + courtId + "\"," +
-                "\"rented\":\"false\""));
+                        "\"area\":100.0," +
+                        "\"baseCost\":200," +
+                        "\"courtNumber\":2," +
+                        "\"id\":\"" + courtId + "\"," +
+                        "\"rented\":false"));
         assertFalse(responseString.contains(
                 "\"archive\":false," +
-                "\"area\":150," +
-                "\"baseCost\":75," +
-                "\"courtNumber\":2," +
-                "\"id\":\"" + courtId + "\"," +
-                "\"rented\":\"false\""));
+                        "\"area\":150.0," +
+                        "\"baseCost\":75," +
+                        "\"courtNumber\":2," +
+                        "\"id\":\"" + courtId + "\"," +
+                        "\"rented\":false"));
 
         Response responsePut = requestPut.put("http://localhost:8080/CourtRent-1.0-SNAPSHOT/api/courts/modifyCourt/" + courtId);
 
@@ -272,18 +272,18 @@ public class CourtControllerTests {
 
         assertFalse(responseString.contains(
                 "\"archive\":false," +
-                "\"area\":100," +
-                "\"baseCost\":200," +
-                "\"courtNumber\":2," +
-                "\"id\":\"" + courtId + "\"," +
-                "\"rented\":\"false\""));
+                        "\"area\":100.0," +
+                        "\"baseCost\":200," +
+                        "\"courtNumber\":2," +
+                        "\"id\":\"" + courtId + "\"," +
+                        "\"rented\":false"));
         assertTrue(responseString.contains(
                 "\"archive\":false," +
-                "\"area\":150," +
-                "\"baseCost\":75," +
-                "\"courtNumber\":2," +
-                "\"id\":\"" + courtId + "\"," +
-                "\"rented\":\"false\""));
+                        "\"area\":150.0," +
+                        "\"baseCost\":75," +
+                        "\"courtNumber\":2," +
+                        "\"id\":\"" + courtId + "\"," +
+                        "\"rented\":false"));
     }
 
 //    @Test
