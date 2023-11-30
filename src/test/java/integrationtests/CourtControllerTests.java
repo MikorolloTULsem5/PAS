@@ -42,16 +42,16 @@ public class CourtControllerTests {
         assertTrue(splitedRespStr[0].contains("\"archive\":false"));
         assertTrue(splitedRespStr[0].contains("\"area\":100"));
         assertTrue(splitedRespStr[0].contains("\"baseCost\":100"));
-        assertTrue(splitedRespStr[0].contains("\"id\":\""));
         assertTrue(splitedRespStr[0].contains("\"courtNumber\":1"));
+        assertTrue(splitedRespStr[0].contains("\"id\":\""));
         assertTrue(splitedRespStr[0].contains("\"rented\":false"));
 
         //Third Court
         assertTrue(splitedRespStr[2].contains("\"archive\":false"));
         assertTrue(splitedRespStr[2].contains("\"area\":300"));
         assertTrue(splitedRespStr[2].contains("\"baseCost\":200"));
-        assertTrue(splitedRespStr[2].contains("\"id\":\""));
         assertTrue(splitedRespStr[2].contains("\"courtNumber\":3"));
+        assertTrue(splitedRespStr[2].contains("\"id\":\""));
         assertTrue(splitedRespStr[2].contains("\"rented\":false"));
 
         assertEquals(200, response.getStatusCode());
@@ -96,8 +96,8 @@ public class CourtControllerTests {
         assertTrue(responseString.contains("\"archive\":false"));
         assertTrue(responseString.contains("\"area\":120"));
         assertTrue(responseString.contains("\"baseCost\":50"));
-        assertTrue(responseString.contains("\"id\":\""));
         assertTrue(responseString.contains("\"courtNumber\":15"));
+        assertTrue(responseString.contains("\"id\":\""));
         assertTrue(responseString.contains("\"rented\":false"));
     }
 
@@ -173,8 +173,8 @@ public class CourtControllerTests {
         assertTrue(splitedRespStr[0].contains("\"archive\":false"));
         assertTrue(splitedRespStr[0].contains("\"area\":300"));
         assertTrue(splitedRespStr[0].contains("\"baseCost\":200"));
-        assertTrue(splitedRespStr[0].contains("\"id\":\""));
         assertTrue(splitedRespStr[0].contains("\"courtNumber\":3"));
+        assertTrue(splitedRespStr[0].contains("\"id\":\""));
         assertTrue(splitedRespStr[0].contains("\"rented\":false"));
 
         assertEquals(200, response.getStatusCode());
@@ -208,8 +208,8 @@ public class CourtControllerTests {
         assertTrue(splitedRespStr[0].contains("\"archive\":false"));
         assertTrue(splitedRespStr[0].contains("\"area\":100"));
         assertTrue(splitedRespStr[0].contains("\"baseCost\":100"));
-        assertTrue(splitedRespStr[0].contains("\"id\":\""));
         assertTrue(splitedRespStr[0].contains("\"courtNumber\":1"));
+        assertTrue(splitedRespStr[0].contains("\"id\":\""));
         assertTrue(splitedRespStr[0].contains("\"rented\":false"));
 
         assertEquals(200, responseById.getStatusCode());
