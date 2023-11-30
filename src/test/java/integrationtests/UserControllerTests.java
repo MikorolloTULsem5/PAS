@@ -19,6 +19,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class UserControllerTests {
 
+    ///TODO zmienic sciezki na final'a jednego
+
     @AfterAll
     static void cleanAtTheEnd() {
         clean();
