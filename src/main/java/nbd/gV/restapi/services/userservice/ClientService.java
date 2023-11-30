@@ -108,10 +108,10 @@ public class ClientService extends UserService {
 
     @PostConstruct
     private void init() {
-        registerClient("Adam", "Smith", "loginek", "normal");
-        registerClient("Eva", "Braun", "loginek13", "athlete");
-        registerClient("Michal", "Pi", "michas13", "coach");
-        registerClient("Krzysztof", "Scala", "scKrzy", "normal");
-        registerClient("Adam", "Scout", "scAdam", "normal");
+        userRepository.create(ClientMapper.toMongoUser(new Client(UUID.fromString("80e62401-6517-4392-856c-e22ef5f3d6a2"), "Adam", "Smith", "loginek", "normal")));
+        userRepository.create(ClientMapper.toMongoUser(new Client(UUID.fromString("b6f5bcb8-7f01-4470-8238-cc3320326157"), "Eva", "Braun", "loginek13", "athlete")));
+        userRepository.create(ClientMapper.toMongoUser(new Client(UUID.fromString("6dc63417-0a21-462c-a97a-e0bf6055a3ea"), "Michal", "Pi", "michas13", "coach")));
+        userRepository.create(ClientMapper.toMongoUser(new Client(UUID.fromString("3a722080-9668-42a2-9788-4695a4b9f5a7"), "Krzysztof", "Scala", "scKrzy", "normal")));
+        userRepository.create(ClientMapper.toMongoUser(new Client(UUID.fromString("126778af-0e19-46d4-b329-0b6b92548f9a"), "Adam", "Scout", "scAdam", "normal")));
     }
 }

@@ -26,10 +26,6 @@ public class Reservation {
     private double reservationCost;
 
     public Reservation(Client client, Court court, LocalDateTime beginTime) {
-        if (client == null || court == null) {
-            throw new MainException("Niepoprawny parametr przy tworzeniu obiektu rezerwacji!");
-        }
-
         this.id = UUID.randomUUID();
         this.client = client;
         this.court = court;
@@ -38,9 +34,6 @@ public class Reservation {
 
     public Reservation(UUID id, Client client, Court court, LocalDateTime beginTime) {
         this(client, court, beginTime);
-        if (id == null) {
-            throw new MainException("UUID nie moze byc null'em!");
-        }
         this.id = id;
     }
 

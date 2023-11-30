@@ -2,6 +2,8 @@ package nbd.gV.restapi.services;
 
 import com.mongodb.client.model.Filters;
 
+import jakarta.annotation.PostConstruct;
+import jakarta.annotation.PreDestroy;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import lombok.NoArgsConstructor;
@@ -21,6 +23,7 @@ import nbd.gV.data.repositories.ReservationMongoRepository;
 import org.bson.conversions.Bson;
 
 import java.time.LocalDateTime;
+import java.time.Month;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -33,22 +36,22 @@ public class ReservationService {
     @Inject
     private UserMongoRepository clientsRepository;
     @Inject
-    private CourtMongoRepository courtMongoRepository;
+    private CourtMongoRepository courtRepository;
 
     public ReservationService(ReservationMongoRepository reservationRepository) {
         this.reservationRepository = reservationRepository;
 
         ///TODO do wywalenia
         clientsRepository = new UserMongoRepository();
-        courtMongoRepository = new CourtMongoRepository();
+        courtRepository = new CourtMongoRepository();
     }
 
     public Reservation makeReservation(UUID clientId, UUID courtId, LocalDateTime beginTime) {
         try {
             Client client = ClientMapper.fromMongoUser((ClientDTO) clientsRepository.readByUUID(clientId, ClientDTO.class));
-            Court court = CourtMapper.fromMongoCourt(courtMongoRepository.readByUUID(courtId));
+            Court court = CourtMapper.fromMongoCourt(courtRepository.readByUUID(courtId));
 
-            Reservation newReservation = new Reservation(client, court, beginTime);
+            Reservation newReservation = new Reservation(UUID.randomUUID(), client, court, beginTime);
             boolean result = reservationRepository.create(ReservationMapper.toMongoReservation(newReservation));
             if (!result) {
                 throw new ReservationException("Nie udalo sie utworzyc rezerwacji! - brak odpowiedzi");
@@ -66,7 +69,7 @@ public class ReservationService {
 
     public void returnCourt(UUID courtId, LocalDateTime endTime) {
         try {
-            Court court = CourtMapper.fromMongoCourt(courtMongoRepository.readByUUID(courtId));
+            Court court = CourtMapper.fromMongoCourt(courtRepository.readByUUID(courtId));
             reservationRepository.update(court, endTime);
         } catch (MyMongoException exception) {
             throw new ReservationException("Blad transakcji.");
@@ -81,7 +84,7 @@ public class ReservationService {
         ReservationDTO reservationMapper = reservationRepository.readByUUID(uuid);
         return ReservationMapper.fromMongoReservation(reservationMapper,
                 (ClientDTO) clientsRepository.readByUUID(UUID.fromString(reservationMapper.getClientId()), ClientDTO.class),
-                courtMongoRepository.readByUUID(UUID.fromString(reservationMapper.getCourtId())));
+                courtRepository.readByUUID(UUID.fromString(reservationMapper.getCourtId())));
     }
 
     public List<Reservation> getAllCurrentReservations() {
@@ -133,12 +136,31 @@ public class ReservationService {
     private List<Reservation> getReservationsWithBsonFilter(Bson filter) {
         List<Reservation> reservations = new ArrayList<>();
         var clientsRepo = clientsRepository;
-        var courtsRepo = courtMongoRepository;
+        var courtsRepo = courtRepository;
         for (var r : reservationRepository.read(filter)) {
             reservations.add(ReservationMapper.fromMongoReservation(r,
                     (ClientDTO) clientsRepo.readByUUID(UUID.fromString(r.getClientId()), ClientDTO.class),
                     courtsRepo.readByUUID(UUID.fromString(r.getCourtId()))));
         }
         return reservations;
+    }
+
+    @PostConstruct
+    private void init() {
+        LocalDateTime dataStart = LocalDateTime.of(2023, Month.NOVEMBER, 30, 14, 20);
+
+        makeReservation(UUID.fromString("80e62401-6517-4392-856c-e22ef5f3d6a2"), UUID.fromString("634d9130-0015-42bb-a70a-543dee846760"), dataStart);
+        makeReservation(UUID.fromString("b6f5bcb8-7f01-4470-8238-cc3320326157"), UUID.fromString("fe6a35bb-7535-4c23-a259-a14ac0ccedba"), dataStart);
+        makeReservation(UUID.fromString("6dc63417-0a21-462c-a97a-e0bf6055a3ea"), UUID.fromString("30ac2027-dcc8-4af7-920f-831b51023bc9"), LocalDateTime.of(2023, Month.NOVEMBER, 28, 14, 20));
+
+        returnCourt(UUID.fromString("30ac2027-dcc8-4af7-920f-831b51023bc9"), dataStart);
+       }
+
+    @PreDestroy
+    private void destroy() {
+        reservationRepository.getDatabase().getCollection(reservationRepository.getCollectionName(),
+                ReservationDTO.class).deleteMany(Filters.empty());
+        clientsRepository.readAll(ClientDTO.class).forEach((mapper) -> clientsRepository.delete(UUID.fromString(mapper.getId())));
+        courtRepository.readAll().forEach((mapper) -> courtRepository.delete(UUID.fromString(mapper.getId())));
     }
 }
