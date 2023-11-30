@@ -9,59 +9,61 @@ import org.junit.jupiter.api.Test;
 
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.UUID;
 
 import static integrationtests.CleaningClass.clean;
 import static integrationtests.CleaningClass.initClients;
 import static integrationtests.CleaningClass.initCourts;
 import static integrationtests.CleaningClass.initReservations;
+import static integrationtests.CleaningClass.reservation1;
+import static integrationtests.CleaningClass.reservation2;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class ReservationsControllerTests {
-//
-//    static final String appUrlCourt = "http://localhost:8080/CourtRent-1.0-SNAPSHOT/api/courts";
-//
-//    @AfterAll
-//    static void cleanAtTheEnd() {
-//        clean();
-//    }
-//
-//    @BeforeEach
-//    void cleanAndInitDatabase() {
-//        clean();
-//        initCourts();
-//    }
-//
-//    @Test
-//    void getAllCourtsTest() throws URISyntaxException {
-//        RequestSpecification request = RestAssured.given();
-//        Response response = request.get(new URI(appUrlCourt));
-//        String responseString = response.asString();
-//        String[] splitedRespStr = responseString.split("},");
-//
-//        assertEquals(3, splitedRespStr.length);
-//
-//        //First Court
-//        assertTrue(splitedRespStr[0].contains("\"archive\":false"));
-//        assertTrue(splitedRespStr[0].contains("\"area\":100"));
-//        assertTrue(splitedRespStr[0].contains("\"baseCost\":100"));
-//        assertTrue(splitedRespStr[0].contains("\"courtNumber\":1"));
-//        assertTrue(splitedRespStr[0].contains("\"id\":\""));
-//        assertTrue(splitedRespStr[0].contains("\"rented\":false"));
-//
-//        //Third Court
-//        assertTrue(splitedRespStr[2].contains("\"archive\":false"));
-//        assertTrue(splitedRespStr[2].contains("\"area\":300"));
-//        assertTrue(splitedRespStr[2].contains("\"baseCost\":200"));
-//        assertTrue(splitedRespStr[2].contains("\"courtNumber\":3"));
-//        assertTrue(splitedRespStr[2].contains("\"id\":\""));
-//        assertTrue(splitedRespStr[2].contains("\"rented\":false"));
-//
-//        assertEquals(200, response.getStatusCode());
-//    }
-//
+
+    static final String appUrlReservation = "http://localhost:8080/CourtRent-1.0-SNAPSHOT/api/reservations";
+
+    @AfterAll
+    static void cleanAtTheEnd() {
+        clean();
+    }
+
+    @BeforeEach
+    void cleanAndInitDatabase() {
+        clean();
+        initClients();
+        initCourts();
+        initReservations();
+    }
+
+    @Test
+    void getAllCurrentReservationsTest() throws URISyntaxException {
+        RequestSpecification request = RestAssured.given();
+        Response response = request.get(new URI(appUrlReservation));
+        String responseString = response.asString();
+        String[] splitedRespStr = responseString.split("},");
+
+        assertEquals(2, splitedRespStr.length);
+
+        //First Reservation
+        assertTrue(splitedRespStr[0].contains("\"beginTime\":\"2023-11-28T14:20:00\""));
+        assertTrue(splitedRespStr[0].contains("\"client\":\""));
+        assertTrue(splitedRespStr[0].contains("\"court\":\""));
+        assertTrue(splitedRespStr[0].contains("\"id\":\"" + reservation1.getId() + "\""));
+        assertTrue(splitedRespStr[0].contains("\"reservationCost\":0"));
+        assertTrue(splitedRespStr[0].contains("\"reservationHours\":0"));
+
+        //Second Reservation
+        assertTrue(splitedRespStr[1].contains("\"archive\":false"));
+        assertTrue(splitedRespStr[1].contains("\"area\":300"));
+        assertTrue(splitedRespStr[1].contains("\"baseCost\":200"));
+        assertTrue(splitedRespStr[1].contains("\"courtNumber\":3"));
+        assertTrue(splitedRespStr[0].contains("\"id\":\"" + reservation2.getId() + "\""));
+        assertTrue(splitedRespStr[1].contains("\"rented\":false"));
+
+        assertEquals(200, response.getStatusCode());
+    }
+
 //    @Test
 //    void getAllCourtsTestNoCont() throws URISyntaxException {
 //        clean();

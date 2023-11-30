@@ -38,6 +38,8 @@ public class CleaningClass {
     static Reservation reservation2;
     static Reservation reservation3;
 
+    static final LocalDateTime dataStart = LocalDateTime.of(2023, Month.NOVEMBER, 30, 14, 20);
+
     static void clean() {
         reservationRepository.getDatabase().getCollection(reservationRepository.getCollectionName(),
                 ReservationDTO.class).deleteMany(Filters.empty());
@@ -58,10 +60,10 @@ public class CleaningClass {
     }
 
     static void initReservations() {
-        reservation1 = reservationServiceTest.makeReservation(client1.getId(), court1.getId(), LocalDateTime.now());
-        reservation2 = reservationServiceTest.makeReservation(client2.getId(), court2.getId(), LocalDateTime.now());
+        reservation1 = reservationServiceTest.makeReservation(client1.getId(), court1.getId(), dataStart);
+        reservation2 = reservationServiceTest.makeReservation(client2.getId(), court2.getId(), dataStart);
         reservation3 = reservationServiceTest.makeReservation(client3.getId(), court3.getId(), LocalDateTime.of(2023, Month.NOVEMBER, 28, 14, 20));
-        reservationServiceTest.returnCourt(court3, LocalDateTime.now());
+        reservationServiceTest.returnCourt(court3, dataStart);
     }
 
     ///TODO wywalic
