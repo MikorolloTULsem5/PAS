@@ -197,12 +197,20 @@ public class CourtControllerTests {
         //Retrieve UUID
         String responseNumber = request.get(new URI("http://localhost:8080/CourtRent-1.0-SNAPSHOT/api/users/get?number=1")).asString();
         int index = responseNumber.indexOf("\"id\":\"") + 6;
-        String clientId = responseNumber.substring(index, index + 36);
+        String courtId = responseNumber.substring(index, index + 36);
 
-        Response responseById = request.get(new URI("http://localhost:8080/CourtRent-1.0-SNAPSHOT/api/users/" + clientId));
+        Response responseById = request.get(new URI("http://localhost:8080/CourtRent-1.0-SNAPSHOT/api/courts/" + courtId));
         String responseByIdString = responseById.asString();
+        String[] splitedRespStr = responseByIdString.split("},");
 
-        assertTrue(responseByIdString.contains("\"login\":\"michas13\",\"clientTypeName\":\"coach\",\"firstName\":\"Michal\",\"lastName\":\"Pi\""));
+        assertEquals(1, splitedRespStr.length);
+
+        assertTrue(splitedRespStr[0].contains("\"archive\":false"));
+        assertTrue(splitedRespStr[0].contains("\"area\":100"));
+        assertTrue(splitedRespStr[0].contains("\"baseCost\":100"));
+        assertTrue(splitedRespStr[0].contains("\"id\":\""));
+        assertTrue(splitedRespStr[0].contains("\"courtNumber\":1"));
+        assertTrue(splitedRespStr[0].contains("\"rented\":false"));
 
         assertEquals(200, responseById.getStatusCode());
     }
