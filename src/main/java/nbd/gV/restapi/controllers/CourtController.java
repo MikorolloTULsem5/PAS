@@ -76,7 +76,7 @@ public class CourtController {
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.TEXT_PLAIN)
     @Path("/get")
-    public Court getCourtByCourtNumber(@QueryParam("number") int number) {
-        return courtService.getCourtByCourtNumber(number);
+    public Court getCourtByCourtNumber(@QueryParam("number") String number) {
+        return courtService.getCourtByCourtNumber(Integer.parseInt(number));
     }
 }

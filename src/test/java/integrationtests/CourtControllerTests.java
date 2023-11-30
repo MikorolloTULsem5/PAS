@@ -74,7 +74,7 @@ public class CourtControllerTests {
         String JSON = """
                 {
                   "area": 120.0,
-                  "baseCost": -50,
+                  "baseCost": 50,
                   "courtNumber": 15
                 }
                 """;
@@ -106,7 +106,7 @@ public class CourtControllerTests {
         String json = """
                 {
                   "area": 120.0,
-                  "baseCost": 50,
+                  "baseCost": -50,
                   "courtNumber": 15
                 }
                 """;
@@ -131,7 +131,7 @@ public class CourtControllerTests {
     }
 
     @Test
-    void createCourtTestNegSameLogin() throws URISyntaxException {
+    void createCourtTestNegSameNumber() throws URISyntaxException {
         String json = """
                 {
                   "area": 120.0,
@@ -146,7 +146,7 @@ public class CourtControllerTests {
         RequestSpecification requestGet = RestAssured.given();
         String responseString = requestGet.get(new URI("http://localhost:8080/CourtRent-1.0-SNAPSHOT/api/courts")).asString();
 
-        assertTrue(responseString.contains("\"courtNumber\":\"2\""));
+        assertTrue(responseString.contains("\"courtNumber\":2"));
 
         assertFalse(responseString.contains("\"area\":120.0"));
         assertFalse(responseString.contains("\"baseCost\":50"));
@@ -156,6 +156,8 @@ public class CourtControllerTests {
         assertEquals(409, responsePost.getStatusCode());
 
         responseString = requestGet.get(new URI("http://localhost:8080/CourtRent-1.0-SNAPSHOT/api/courts")).asString();
+        
+        assertTrue(responseString.contains("\"courtNumber\":2"));
 
         assertFalse(responseString.contains("\"area\":120.0"));
         assertFalse(responseString.contains("\"baseCost\":50"));
