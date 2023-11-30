@@ -2,8 +2,6 @@ package nbd.gV.restapi.controllers;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
-import jakarta.validation.Validation;
-import jakarta.validation.Validator;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.POST;
@@ -27,7 +25,6 @@ public class ReservationController {
 
     @Inject
     private ReservationService reservationService;
-    private final Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
 
     @POST
     @Produces(MediaType.APPLICATION_JSON)
@@ -96,7 +93,7 @@ public class ReservationController {
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.TEXT_PLAIN)
     @Path("/{id}")
-    public Reservation getCourtById(@PathParam("id") String id) {
+    public Reservation getReservationById(@PathParam("id") String id) {
         return reservationService.getReservationById(UUID.fromString(id));
     }
 

@@ -1,6 +1,7 @@
 package nbd.gV.restapi.services.userservice;
 
 import com.mongodb.client.model.Filters;
+import jakarta.annotation.PostConstruct;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import lombok.NoArgsConstructor;
@@ -103,5 +104,14 @@ public class ClientService extends UserService {
     @Override
     public int usersSize() {
         return userRepository.readAll(UserDTO.class).size();
+    }
+
+    @PostConstruct
+    private void init() {
+        registerClient("Adam", "Smith", "loginek", "normal");
+        registerClient("Eva", "Braun", "loginek13", "athlete");
+        registerClient("Michal", "Pi", "michas13", "coach");
+        registerClient("Krzysztof", "Scala", "scKrzy", "normal");
+        registerClient("Adam", "Scout", "scAdam", "normal");
     }
 }

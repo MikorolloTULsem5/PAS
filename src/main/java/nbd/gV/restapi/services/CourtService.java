@@ -2,6 +2,7 @@ package nbd.gV.restapi.services;
 
 import com.mongodb.client.model.Filters;
 
+import jakarta.annotation.PostConstruct;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import lombok.NoArgsConstructor;
@@ -94,5 +95,14 @@ public class CourtService {
         } catch (MyMongoException exception) {
             throw new MyMongoException("Nie udalo sie usunac podanego boiska. - " + exception.getMessage());
         }
+    }
+
+    @PostConstruct
+    private void init() {
+        registerCourt(100, 100, 1);
+        registerCourt(100, 200, 2);
+        registerCourt(300, 200, 3);
+        registerCourt(350, 100, 4);
+        registerCourt(150, 200, 5);
     }
 }
