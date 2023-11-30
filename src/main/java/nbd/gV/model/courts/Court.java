@@ -1,7 +1,6 @@
 package nbd.gV.model.courts;
 
 import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.PositiveOrZero;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -17,7 +16,7 @@ import java.util.UUID;
 @NoArgsConstructor
 public class Court {
     @Setter(AccessLevel.NONE)
-    private UUID courtId;
+    private UUID id;
 
     @PositiveOrZero
     private double area;
@@ -35,15 +34,15 @@ public class Court {
         if (area <= 0.0 || baseCost < 0 || courtNumber < 1) {
             throw new ConstructorParameterException("Niepoprawny parametr przy tworzeniu obiektu boiska!");
         }
-        this.courtId = UUID.randomUUID();
+        this.id = UUID.randomUUID();
         this.area = area;
         this.baseCost = baseCost;
         this.courtNumber = courtNumber;
     }
 
-    public Court(UUID courtId, double area, int baseCost, int courtNumber) {
+    public Court(UUID id, double area, int baseCost, int courtNumber) {
         this(area, baseCost, courtNumber);
-        this.courtId = courtId;
+        this.id = id;
     }
 
     @Override
@@ -52,7 +51,7 @@ public class Court {
         if (o == null || getClass() != o.getClass()) return false;
         Court court = (Court) o;
         ///TODO czy to spelnienie 1 wymagania z zadania (o byciu podstawa rownosci obiektow)???
-        return Objects.equals(courtId, court.courtId);
+        return Objects.equals(id, court.id);
 //        return Double.compare(area, court.area) == 0 &&
 //                baseCost == court.baseCost &&
 //                courtNumber == court.courtNumber &&

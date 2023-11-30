@@ -164,7 +164,6 @@ public class UserControllerTests {
         Response response = request.get(new URI("http://localhost:8080/CourtRent-1.0-SNAPSHOT/api/users/get?login=michas13"));
         String responseString = response.asString();
 
-        System.out.println(responseString);
         assertTrue(responseString.contains("\"login\":\"michas13\",\"clientTypeName\":\"coach\",\"firstName\":\"Michal\",\"lastName\":\"Pi\""));
 
         assertEquals(200, response.getStatusCode());

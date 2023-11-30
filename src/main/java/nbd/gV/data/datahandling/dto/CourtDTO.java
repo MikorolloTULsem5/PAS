@@ -11,7 +11,7 @@ import java.util.Objects;
 @FieldDefaults(makeFinal = true)
 public class CourtDTO {
     @BsonProperty("_id")
-    private String courtId;
+    private String id;
     @BsonProperty("area")
     private double area;
     @BsonProperty("basecost")
@@ -24,13 +24,13 @@ public class CourtDTO {
     private int rented;
 
     @BsonCreator
-    public CourtDTO(@BsonProperty("_id") String courtId,
+    public CourtDTO(@BsonProperty("_id") String id,
                     @BsonProperty("area") double area,
                     @BsonProperty("basecost") int baseCost,
                     @BsonProperty("courtnumber") int courtNumber,
                     @BsonProperty("archive") boolean archive,
                     @BsonProperty("rented") int rented) {
-        this.courtId = courtId;
+        this.id = id;
         this.area = area;
         this.baseCost = baseCost;
         this.courtNumber = courtNumber;
@@ -52,6 +52,6 @@ public class CourtDTO {
                 courtNumber == that.courtNumber &&
                 archive == that.archive &&
                 rented == that.rented &&
-                Objects.equals(courtId, that.courtId);
+                Objects.equals(id, that.id);
     }
 }

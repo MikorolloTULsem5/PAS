@@ -20,7 +20,7 @@ public class CourtMapperTest {
                 false, 1);
         assertNotNull(courtMapper);
 
-        assertEquals(uuid, UUID.fromString(courtMapper.getCourtId()));
+        assertEquals(uuid, UUID.fromString(courtMapper.getId()));
         assertEquals(300, courtMapper.getArea());
         assertEquals(200, courtMapper.getBaseCost());
         assertEquals(1, courtMapper.getCourtNumber());
@@ -36,7 +36,7 @@ public class CourtMapperTest {
         CourtDTO courtMapper = CourtMapper.toMongoCourt(court);
         assertNotNull(courtMapper);
 
-        assertEquals(court.getCourtId(), UUID.fromString(courtMapper.getCourtId()));
+        assertEquals(court.getId(), UUID.fromString(courtMapper.getId()));
         assertEquals(court.getArea(), courtMapper.getArea());
         assertEquals(court.getBaseCost(), courtMapper.getBaseCost());
         assertEquals(court.getCourtNumber(), courtMapper.getCourtNumber());
@@ -53,7 +53,7 @@ public class CourtMapperTest {
         Court court = CourtMapper.fromMongoCourt(courtMapper);
         assertNotNull(court);
 
-        assertEquals(UUID.fromString(courtMapper.getCourtId()), court.getCourtId());
+        assertEquals(UUID.fromString(courtMapper.getId()), court.getId());
         assertEquals(courtMapper.getArea(), court.getArea());
         assertEquals(courtMapper.getBaseCost(), court.getBaseCost());
         assertEquals(courtMapper.getCourtNumber(), court.getCourtNumber());

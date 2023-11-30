@@ -87,7 +87,7 @@ public class ReservationMongoRepository extends AbstractMongoRepository<Reservat
                     if (result.wasAcknowledged()) {
                         getDatabase().getCollection(CourtMongoRepository.COLLECTION_NAME, CourtDTO.class).updateOne(
                                 clientSession,
-                                Filters.eq("_id", courtFound.getCourtId().toString()),
+                                Filters.eq("_id", courtFound.getId().toString()),
                                 Updates.inc("rented", 1));
                     }
                     clientSession.commitTransaction();
@@ -114,7 +114,7 @@ public class ReservationMongoRepository extends AbstractMongoRepository<Reservat
     public void update(Court court, LocalDateTime endTime) {
         //Find court
         var listCourt = getDatabase().getCollection(CourtMongoRepository.COLLECTION_NAME, CourtDTO.class)
-                .find(Filters.eq("_id", court.getCourtId().toString())).into(new ArrayList<>());
+                .find(Filters.eq("_id", court.getId().toString())).into(new ArrayList<>());
         if (listCourt.isEmpty()) {
             throw new ReservationException("Brak podanego boiska w bazie!");
         }
@@ -124,7 +124,7 @@ public class ReservationMongoRepository extends AbstractMongoRepository<Reservat
 
         //Find reservation
         var listReservation = getDatabase().getCollection(COLLECTION_NAME,
-                ReservationDTO.class).find(Filters.eq("courtid", court.getCourtId().toString()))
+                ReservationDTO.class).find(Filters.eq("courtid", court.getId().toString()))
                 .into(new ArrayList<>());
         if (listReservation.isEmpty()) {
             throw new ReservationException("Brak rezerwacji, dla podanego boiska, w bazie!");
@@ -154,7 +154,7 @@ public class ReservationMongoRepository extends AbstractMongoRepository<Reservat
             //Update court's "rented" field
             getDatabase().getCollection(CourtMongoRepository.COLLECTION_NAME, CourtDTO.class).updateOne(
                     clientSession,
-                    Filters.eq("_id", listCourt.get(0).getCourtId().toString()),
+                    Filters.eq("_id", listCourt.get(0).getId().toString()),
                     Updates.inc("rented", -1));
 
             clientSession.commitTransaction();

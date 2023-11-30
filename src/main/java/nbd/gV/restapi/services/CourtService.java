@@ -66,7 +66,7 @@ public class CourtService {
     }
 
     public void modifyCourt(Court modifiedCourt) {
-        if (courtRepository.updateByReplace(modifiedCourt.getCourtId(), CourtMapper.toMongoCourt(modifiedCourt))) {
+        if (courtRepository.updateByReplace(modifiedCourt.getId(), CourtMapper.toMongoCourt(modifiedCourt))) {
             throw new CourtException("Nie udalo się zmodyfikowac podanego boiska");
         }
     }

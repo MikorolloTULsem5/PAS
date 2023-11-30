@@ -57,7 +57,7 @@ public class ReservationMongoRepositoryTest {
         reservationRepository.getDatabase().getCollection(reservationRepository.getCollectionName(),
                 ReservationDTO.class).deleteMany(Filters.empty());
         clientRepository.readAll(ClientDTO.class).forEach((mapper) -> clientRepository.delete(UUID.fromString(mapper.getId())));
-        courtRepository.readAll().forEach((mapper) -> courtRepository.delete(UUID.fromString(mapper.getCourtId())));
+        courtRepository.readAll().forEach((mapper) -> courtRepository.delete(UUID.fromString(mapper.getId())));
     }
 
     @BeforeEach
@@ -136,7 +136,7 @@ public class ReservationMongoRepositoryTest {
                 ReservationMapper.toMongoReservation(new Reservation(testClient3, testCourt3, testTimeStart))));
 
         //Archive court
-        courtRepository.update(testCourt4.getCourtId(), "archive", true);
+        courtRepository.update(testCourt4.getId(), "archive", true);
         assertThrows(CourtException.class, () -> reservationRepository.create(
                 ReservationMapper.toMongoReservation(new Reservation(testClient2, testCourt4, testTimeStart))));
     }

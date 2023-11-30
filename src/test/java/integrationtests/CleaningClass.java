@@ -23,7 +23,7 @@ public class CleaningClass {
         reservationRepository.getDatabase().getCollection(reservationRepository.getCollectionName(),
                 ReservationDTO.class).deleteMany(Filters.empty());
         clientRepository.readAll(ClientDTO.class).forEach((mapper) -> clientRepository.delete(UUID.fromString(mapper.getId())));
-        courtRepository.readAll().forEach((mapper) -> courtRepository.delete(UUID.fromString(mapper.getCourtId())));
+        courtRepository.readAll().forEach((mapper) -> courtRepository.delete(UUID.fromString(mapper.getId())));
     }
 
     static void initClients() {

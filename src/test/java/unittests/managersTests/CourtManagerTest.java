@@ -38,7 +38,7 @@ public class CourtManagerTest {
     @BeforeAll
     @AfterAll
     static void cleanDatabaseFirstAndLastTime() {
-        courtRepository.readAll().forEach((mapper) -> courtRepository.delete(UUID.fromString(mapper.getCourtId())));
+        courtRepository.readAll().forEach((mapper) -> courtRepository.delete(UUID.fromString(mapper.getId())));
     }
 
     @BeforeEach
@@ -60,7 +60,7 @@ public class CourtManagerTest {
         Court newCourt = cm.registerCourt(200, 200, 5);
         assertNotNull(newCourt);
         assertEquals(1, cm.getAllCourts().size());
-        assertEquals(newCourt, cm.getCourtById(newCourt.getCourtId()));
+        assertEquals(newCourt, cm.getCourtById(newCourt.getId()));
         assertThrows(CourtNumberException.class, () -> cm.registerCourt(300, 300, 5));
         assertEquals(1, cm.getAllCourts().size());
 
@@ -80,8 +80,8 @@ public class CourtManagerTest {
         assertNotNull(testCourt2);
         assertEquals(2, cm.getAllCourts().size());
 
-        assertEquals(testCourt1, cm.getCourtById(testCourt1.getCourtId()));
-        assertEquals(testCourt2, cm.getCourtById(testCourt2.getCourtId()));
+        assertEquals(testCourt1, cm.getCourtById(testCourt1.getId()));
+        assertEquals(testCourt2, cm.getCourtById(testCourt2.getId()));
         assertNull(cm.getCourtById(UUID.randomUUID()));
     }
 
@@ -95,13 +95,13 @@ public class CourtManagerTest {
 //        assertEquals(2, cm.getAllCourts().size());
 //
 //        assertEquals(2, cm.getAllCourts().size());
-//        assertEquals(testCourt1, cm.getCourt(testCourt1.getCourtId()));
+//        assertEquals(testCourt1, cm.getCourt(testCourt1.getId()));
 //        assertFalse(testCourt1.isArchive());
 //
 //        cm.unregisterCourt(testCourt1);
 //
 //        assertEquals(2, cm.getAllCourts().size());
-//        Court dbCourt = cm.getCourt(testCourt1.getCourtId());
+//        Court dbCourt = cm.getCourt(testCourt1.getId());
 //        assertNotNull(dbCourt);
 //        assertTrue(dbCourt.isArchive());
 //
@@ -128,7 +128,7 @@ public class CourtManagerTest {
         assertTrue(courtRepository.create(CourtMapper.toMongoCourt(testCourt1)));
         assertEquals(1, collection.find().into(new ArrayList<>()).size());
 
-        cm.deleteCourt(testCourt1.getCourtId());
+        cm.deleteCourt(testCourt1.getId());
         assertEquals(0, collection.find().into(new ArrayList<>()).size());
     }
 
@@ -149,14 +149,14 @@ public class CourtManagerTest {
              UserMongoRepository userMongoRepository = new UserMongoRepository()) {
             userMongoRepository.create(ClientMapper.toMongoUser(testClient1));
             reservationMongoRepository.create(ReservationMapper.toMongoReservation(testReservation1));
-            assertThrows(CourtException.class, () -> cm.deleteCourt(testCourt1.getCourtId()));
+            assertThrows(CourtException.class, () -> cm.deleteCourt(testCourt1.getId()));
             assertEquals(1, collection.find().into(new ArrayList<>()).size());
 
             reservationMongoRepository.delete(testReservation1.getId());
-            userMongoRepository.delete(testCourt1.getCourtId());
+            userMongoRepository.delete(testCourt1.getId());
         }
 
-        assertTrue(courtRepository.delete(testCourt1.getCourtId()));
+        assertTrue(courtRepository.delete(testCourt1.getId()));
         assertEquals(0, collection.find().into(new ArrayList<>()).size());
     }
 

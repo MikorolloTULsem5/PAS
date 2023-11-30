@@ -141,11 +141,11 @@ public class CourtMongoRepositoryTest {
         assertTrue(courtRepository.create(courtMapper3));
         assertEquals(3, getTestCollection().find().into(new ArrayList<>()).size());
 
-        CourtDTO couMapper1 = courtRepository.readByUUID(UUID.fromString(courtMapper1.getCourtId()));
+        CourtDTO couMapper1 = courtRepository.readByUUID(UUID.fromString(courtMapper1.getId()));
         assertNotNull(couMapper1);
         assertEquals(courtMapper1, couMapper1);
 
-        CourtDTO couMapper3 = courtRepository.readByUUID(UUID.fromString(courtMapper3.getCourtId()));
+        CourtDTO couMapper3 = courtRepository.readByUUID(UUID.fromString(courtMapper3.getId()));
         assertNotNull(couMapper3);
         assertEquals(courtMapper3, couMapper3);
     }
@@ -158,7 +158,7 @@ public class CourtMongoRepositoryTest {
         assertTrue(courtRepository.create(courtMapper3));
         assertEquals(3, getTestCollection().find().into(new ArrayList<>()).size());
 
-        assertTrue(courtRepository.delete(UUID.fromString(courtMapper2.getCourtId())));
+        assertTrue(courtRepository.delete(UUID.fromString(courtMapper2.getId())));
         assertEquals(2, getTestCollection().find().into(new ArrayList<>()).size());
 
         //Check the rest
@@ -176,10 +176,10 @@ public class CourtMongoRepositoryTest {
         assertTrue(courtRepository.create(courtMapper3));
         assertEquals(3, getTestCollection().find().into(new ArrayList<>()).size());
 
-        assertTrue(courtRepository.delete(UUID.fromString(courtMapper3.getCourtId())));
+        assertTrue(courtRepository.delete(UUID.fromString(courtMapper3.getId())));
         assertEquals(2, getTestCollection().find().into(new ArrayList<>()).size());
 
-        assertFalse(courtRepository.delete(UUID.fromString(courtMapper3.getCourtId())));
+        assertFalse(courtRepository.delete(UUID.fromString(courtMapper3.getId())));
         assertEquals(2, getTestCollection().find().into(new ArrayList<>()).size());
     }
 
@@ -200,14 +200,14 @@ public class CourtMongoRepositoryTest {
              UserMongoRepository userMongoRepository = new UserMongoRepository()) {
             userMongoRepository.create(ClientMapper.toMongoUser(testClient1));
             reservationMongoRepository.create(ReservationMapper.toMongoReservation(testReservation1));
-            assertFalse(courtRepository.delete(testCourt1.getCourtId()));
+            assertFalse(courtRepository.delete(testCourt1.getId()));
             assertEquals(3, getTestCollection().find().into(new ArrayList<>()).size());
 
             reservationMongoRepository.delete(testReservation1.getId());
-            userMongoRepository.delete(testCourt1.getCourtId());
+            userMongoRepository.delete(testCourt1.getId());
         }
 
-        assertTrue(courtRepository.delete(testCourt1.getCourtId()));
+        assertTrue(courtRepository.delete(testCourt1.getId()));
         assertEquals(2, getTestCollection().find().into(new ArrayList<>()).size());
     }
 
@@ -220,27 +220,27 @@ public class CourtMongoRepositoryTest {
         assertEquals(3, getTestCollection().find().into(new ArrayList<>()).size());
 
         assertEquals(200,
-                courtRepository.readByUUID(UUID.fromString(courtMapper1.getCourtId())).getBaseCost());
-        assertTrue(courtRepository.update(UUID.fromString(courtMapper1.getCourtId()),
+                courtRepository.readByUUID(UUID.fromString(courtMapper1.getId())).getBaseCost());
+        assertTrue(courtRepository.update(UUID.fromString(courtMapper1.getId()),
                 "basecost", 350));
         assertEquals(350,
-                courtRepository.readByUUID(UUID.fromString(courtMapper1.getCourtId())).getBaseCost());
+                courtRepository.readByUUID(UUID.fromString(courtMapper1.getId())).getBaseCost());
 
         //Test adding new value to document
         assertFalse(courtRepository.getDatabase().getCollection(courtRepository.getCollectionName(), Document.class)
-                .find(Filters.eq("_id", courtMapper2.getCourtId().toString()))
+                .find(Filters.eq("_id", courtMapper2.getId().toString()))
                 .into(new ArrayList<>()).get(0).containsKey("field"));
 
-        assertTrue(courtRepository.update(UUID.fromString(courtMapper2.getCourtId()),
+        assertTrue(courtRepository.update(UUID.fromString(courtMapper2.getId()),
                 "field", "newValue"));
 
         assertTrue(courtRepository.getDatabase().getCollection(courtRepository.getCollectionName(), Document.class)
-                .find(Filters.eq("_id", courtMapper2.getCourtId().toString()))
+                .find(Filters.eq("_id", courtMapper2.getId().toString()))
                 .into(new ArrayList<>()).get(0).containsKey("field"));
 
         assertEquals("newValue",
                 courtRepository.getDatabase().getCollection(courtRepository.getCollectionName(), Document.class)
-                        .find(Filters.eq("_id", courtMapper2.getCourtId().toString()))
+                        .find(Filters.eq("_id", courtMapper2.getId().toString()))
                         .into(new ArrayList<>()).get(0).getString("field"));
     }
 
@@ -253,7 +253,7 @@ public class CourtMongoRepositoryTest {
         assertEquals(3, getTestCollection().find().into(new ArrayList<>()).size());
 
         assertThrows(MyMongoException.class,
-                () -> courtRepository.update(UUID.fromString(courtMapper3.getCourtId()),
+                () -> courtRepository.update(UUID.fromString(courtMapper3.getId()),
                         "_id", UUID.randomUUID().toString()));
 
         assertFalse(courtRepository.update(UUID.randomUUID(), "area", 435.0));
@@ -269,8 +269,8 @@ public class CourtMongoRepositoryTest {
 
         court1.setArea(111);
         court1.setBaseCost(123);
-        assertTrue(courtRepository.updateByReplace(court1.getCourtId(), CourtMapper.toMongoCourt(court1)));
-        Court court1Copy = CourtMapper.fromMongoCourt(courtRepository.readByUUID(court1.getCourtId()));
+        assertTrue(courtRepository.updateByReplace(court1.getId(), CourtMapper.toMongoCourt(court1)));
+        Court court1Copy = CourtMapper.fromMongoCourt(courtRepository.readByUUID(court1.getId()));
         assertEquals(court1Copy, court1);
     }
 
@@ -283,6 +283,6 @@ public class CourtMongoRepositoryTest {
 
         court1.setArea(111);
         court1.setBaseCost(123);
-        assertFalse(courtRepository.updateByReplace(court1.getCourtId(), CourtMapper.toMongoCourt(court1)));
+        assertFalse(courtRepository.updateByReplace(court1.getId(), CourtMapper.toMongoCourt(court1)));
     }
 }
