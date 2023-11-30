@@ -8,7 +8,6 @@ import lombok.NoArgsConstructor;
 import nbd.gV.data.datahandling.dto.ClientDTO;
 import nbd.gV.data.datahandling.mappers.ClientMapper;
 import nbd.gV.data.datahandling.mappers.CourtMapper;
-import nbd.gV.exceptions.MainException;
 import nbd.gV.model.reservations.Reservation;
 import nbd.gV.model.users.Client;
 import nbd.gV.model.courts.Court;
@@ -78,7 +77,7 @@ public class ReservationService {
         returnCourt(courtId, LocalDateTime.now());
     }
 
-    public Reservation getReservationByID(UUID uuid) {
+    public Reservation getReservationById(UUID uuid) {
         ReservationDTO reservationMapper = reservationRepository.readByUUID(uuid);
         return ReservationMapper.fromMongoReservation(reservationMapper,
                 (ClientDTO) clientsRepository.readByUUID(UUID.fromString(reservationMapper.getClientId()), ClientDTO.class),
@@ -93,7 +92,6 @@ public class ReservationService {
         return getReservationsWithBsonFilter(Filters.not(Filters.eq("endtime", null)));
     }
 
-    ///TODO przetestowac co gdy UUID jest zly
     public List<Reservation> getAllClientReservations(UUID clientId) {
         return getReservationsWithBsonFilter(Filters.eq("clientid", clientId.toString()));
     }

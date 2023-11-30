@@ -8,14 +8,12 @@ import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
+import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.QueryParam;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
-import nbd.gV.exceptions.CourtException;
-import nbd.gV.exceptions.CourtNumberException;
 import nbd.gV.exceptions.MultiReservationException;
-import nbd.gV.exceptions.MyMongoException;
 import nbd.gV.model.reservations.Reservation;
 import nbd.gV.restapi.services.ReservationService;
 
@@ -91,5 +89,78 @@ public class ReservationController {
         }
 
         return Response.status(Response.Status.NO_CONTENT).build();
+    }
+
+    ///TODO test 1
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.TEXT_PLAIN)
+    @Path("/{id}")
+    public Reservation getCourtById(@PathParam("id") String id) {
+        return reservationService.getReservationById(UUID.fromString(id));
+    }
+
+    ///TODO test 2
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/clientReservation")
+    public List<Reservation> getAllClientReservations(@QueryParam("clientId") String clientId) {
+        List<Reservation> resultList = reservationService.getAllClientReservations(UUID.fromString(clientId));
+        if (resultList.isEmpty()) {
+            resultList = null;
+        }
+        return resultList;
+    }
+
+    ///TODO test 3
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/clientReservation/current")
+    public List<Reservation> getClientCurrentReservations(@QueryParam("clientId") String clientId) {
+        List<Reservation> resultList = reservationService.getClientCurrentReservations(UUID.fromString(clientId));
+        if (resultList.isEmpty()) {
+            resultList = null;
+        }
+        return resultList;
+    }
+
+    ///TODO test 4
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/clientReservation/ended")
+    public List<Reservation> getClientEndedReservations(@QueryParam("clientId") String clientId) {
+        List<Reservation> resultList = reservationService.getClientEndedReservations(UUID.fromString(clientId));
+        if (resultList.isEmpty()) {
+            resultList = null;
+        }
+        return resultList;
+    }
+
+    ///TODO test 5
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/courtReservation/current")
+    public Reservation getCourtCurrentReservation(@QueryParam("courtId") String courtId) {
+        return reservationService.getCourtCurrentReservation(UUID.fromString(courtId));
+    }
+
+    ///TODO test 6
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/courtReservation/ended")
+    public List<Reservation> getCourtEndedReservation(@QueryParam("courtId") String courtId) {
+        List<Reservation> resultList = reservationService.getCourtEndedReservation(UUID.fromString(courtId));
+        if (resultList.isEmpty()) {
+            resultList = null;
+        }
+        return resultList;
+    }
+
+    ///TODO test 7
+    @GET
+    @Produces(MediaType.TEXT_PLAIN)
+    @Path("/courtReservation/ended")
+    public double checkClientReservationBalance(@QueryParam("clientId") String clientId) {
+        return reservationService.checkClientReservationBalance(UUID.fromString(clientId));
     }
 }

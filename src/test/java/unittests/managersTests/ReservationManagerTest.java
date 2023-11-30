@@ -99,7 +99,7 @@ public class ReservationManagerTest {
         Reservation newReservation = rm.makeReservation(testClient1.getId(), testCourt1.getId(), testTimeStart);
 
         assertEquals(rm.getAllCurrentReservations().size(), 1);
-        assertEquals(newReservation, rm.getReservationByID(newReservation.getId()));
+        assertEquals(newReservation, rm.getReservationById(newReservation.getId()));
         assertTrue(newReservation.getCourt().isRented());
 
 
@@ -107,7 +107,7 @@ public class ReservationManagerTest {
         Reservation newReservation2 = rm.makeReservation(testClient1.getId(), testCourt2.getId());
 
         assertEquals(rm.getAllCurrentReservations().size(), 2);
-        assertEquals(newReservation2, rm.getReservationByID(newReservation2.getId()));
+        assertEquals(newReservation2, rm.getReservationById(newReservation2.getId()));
         assertTrue(newReservation2.getCourt().isRented());
 
         assertThrows(ReservationException.class, () -> rm.makeReservation(testClient1.getId(), testCourt1.getId(), testTimeStart));
