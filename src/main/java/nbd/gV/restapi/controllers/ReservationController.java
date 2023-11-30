@@ -33,6 +33,9 @@ public class ReservationController {
     @Path("/addReservation")
     public void addReseravtion(@QueryParam("clientId") String clientId, @QueryParam("courtId") String courtId,
                                @QueryParam("date") String date) {
+        if (date == null) {
+            reservationService.makeReservation(UUID.fromString(clientId), UUID.fromString(courtId));
+        }
         reservationService.makeReservation(UUID.fromString(clientId), UUID.fromString(courtId), LocalDateTime.parse(date));
     }
 
