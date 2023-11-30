@@ -47,7 +47,6 @@ public class ReservationsControllerTests {
         assertEquals(2, splitedRespStr.length);
 
         //First Reservation
-        System.out.println(splitedRespStr[0]);
         assertTrue(splitedRespStr[0].contains("\"beginTime\":\"2023-11-30T14:20:00\""));
         assertTrue(splitedRespStr[0].contains("\"client\":{\""));
         assertTrue(splitedRespStr[0].contains("\"court\":{\""));
@@ -86,12 +85,10 @@ public class ReservationsControllerTests {
 
         assertEquals(1, splitedRespStr.length);
 
-        //First Reservation
-        System.out.println(splitedRespStr[0]);
         assertTrue(splitedRespStr[0].contains("\"beginTime\":\"2023-11-28T14:20:00\""));
         assertTrue(splitedRespStr[0].contains("\"client\":{\""));
         assertTrue(splitedRespStr[0].contains("\"court\":{\""));
-        assertTrue(splitedRespStr[0].contains("\"beginTime\":\"2023-11-30T14:20:00\""));
+        assertTrue(splitedRespStr[0].contains("\"endTime\":\"2023-11-30T14:20:00\""));
         assertTrue(splitedRespStr[0].contains("\"id\":\"" + reservation3.getId() + "\""));
         assertTrue(splitedRespStr[0].contains("\"reservationCost\":13180"));
         assertTrue(splitedRespStr[0].contains("\"reservationHours\":48"));
@@ -441,153 +438,5 @@ public class ReservationsControllerTests {
 //                        "\"courtNumber\":1," +
 //                        "\"id\":\"" + courtId + "\"," +
 //                        "\"rented\":false"));
-//    }
-//
-//    @Test
-//    void archiveAndActivateClientTest() throws URISyntaxException {
-//        RequestSpecification requestGet = RestAssured.given();
-//        String responseString = requestGet.get(new URI(appUrlCourt)).asString();
-//
-//        //Retrieve UUID
-//        String responseNumber = requestGet.get(new URI(appUrlCourt + "/get?number=3")).asString();
-//        int index = responseNumber.indexOf("\"id\":\"") + 6;
-//        String courtId = responseNumber.substring(index, index + 36);
-//
-//        /*Archive test*/
-//        assertTrue(responseString.contains(
-//                "\"archive\":false," +
-//                        "\"area\":300.0," +
-//                        "\"baseCost\":200," +
-//                        "\"courtNumber\":3," +
-//                        "\"id\":\"" + courtId + "\"," +
-//                        "\"rented\":false"));
-//        assertFalse(responseString.contains(
-//                "\"archive\":true," +
-//                        "\"area\":300.0," +
-//                        "\"baseCost\":200," +
-//                        "\"courtNumber\":3," +
-//                        "\"id\":\"" + courtId + "\"," +
-//                        "\"rented\":false"));
-//
-//        RequestSpecification requestPost = RestAssured.given();
-//        Response responsePost = requestPost.post(appUrlCourt + "/archive/" + courtId);
-//
-//        assertEquals(204, responsePost.getStatusCode());
-//
-//        responseString = requestGet.get(new URI(appUrlCourt)).asString();
-//
-//        assertFalse(responseString.contains(
-//                "\"archive\":false," +
-//                        "\"area\":300.0," +
-//                        "\"baseCost\":200," +
-//                        "\"courtNumber\":3," +
-//                        "\"id\":\"" + courtId + "\"," +
-//                        "\"rented\":false"));
-//        assertTrue(responseString.contains(
-//                "\"archive\":true," +
-//                        "\"area\":300.0," +
-//                        "\"baseCost\":200," +
-//                        "\"courtNumber\":3," +
-//                        "\"id\":\"" + courtId + "\"," +
-//                        "\"rented\":false"));
-//
-//        /*Activate test*/
-//        RequestSpecification requestPost2 = RestAssured.given();
-//        Response responsePost2 = requestPost2.post(appUrlCourt + "/activate/" + courtId);
-//
-//        assertEquals(204, responsePost2.getStatusCode());
-//
-//        responseString = requestGet.get(new URI(appUrlCourt)).asString();
-//
-//        assertTrue(responseString.contains(
-//                "\"archive\":false," +
-//                        "\"area\":300.0," +
-//                        "\"baseCost\":200," +
-//                        "\"courtNumber\":3," +
-//                        "\"id\":\"" + courtId + "\"," +
-//                        "\"rented\":false"));
-//        assertFalse(responseString.contains(
-//                "\"archive\":true," +
-//                        "\"area\":300.0," +
-//                        "\"baseCost\":200," +
-//                        "\"courtNumber\":3," +
-//                        "\"id\":\"" + courtId + "\"," +
-//                        "\"rented\":false"));
-//    }
-//
-//    @Test
-//    void deleteCourtTestPos() throws URISyntaxException {
-//        RequestSpecification requestGet = RestAssured.given();
-//        String responseString = requestGet.get(new URI(appUrlCourt)).asString();
-//
-//        //Retrieve UUID
-//        String responseNumber = requestGet.get(new URI(appUrlCourt + "/get?number=3")).asString();
-//        int index = responseNumber.indexOf("\"id\":\"") + 6;
-//        String courtId = responseNumber.substring(index, index + 36);
-//
-//        assertTrue(responseString.contains(
-//                "\"archive\":false," +
-//                        "\"area\":300.0," +
-//                        "\"baseCost\":200," +
-//                        "\"courtNumber\":3," +
-//                        "\"id\":\"" + courtId + "\"," +
-//                        "\"rented\":false"));
-//
-//        RequestSpecification requestDelete = RestAssured.given();
-//        Response responseDelete = requestDelete.delete(appUrlCourt + "/delete/" + courtId);
-//
-//        assertEquals(204, responseDelete.getStatusCode());
-//
-//        responseString = requestGet.get(new URI(appUrlCourt)).asString();
-//
-//        assertFalse(responseString.contains(
-//                "\"archive\":false," +
-//                        "\"area\":300.0," +
-//                        "\"baseCost\":200," +
-//                        "\"courtNumber\":3," +
-//                        "\"id\":\"" + courtId + "\"," +
-//                        "\"rented\":false"));
-//
-//        Response responseDelete2 = requestDelete.delete(appUrlCourt + "/delete/" + courtId);
-//
-//        assertEquals(204, responseDelete2.getStatusCode());
-//    }
-//
-//    @Test
-//    void deleteCourtTestNeg() throws URISyntaxException {
-//        //Additional preparing
-//        initClients();
-//        initReservations();
-//
-//        RequestSpecification requestGet = RestAssured.given();
-//        String responseString = requestGet.get(new URI(appUrlCourt)).asString();
-//
-//        //Retrieve UUID
-//        String responseNumber = requestGet.get(new URI(appUrlCourt + "/get?number=1")).asString();
-//        int index = responseNumber.indexOf("\"id\":\"") + 6;
-//        String courtId = responseNumber.substring(index, index + 36);
-//
-//        assertTrue(responseString.contains(
-//                "\"archive\":false," +
-//                "\"area\":100.0," +
-//                "\"baseCost\":100," +
-//                "\"courtNumber\":1," +
-//                "\"id\":\"" + courtId + "\"," +
-//                "\"rented\":true"));
-//
-//        RequestSpecification requestDelete = RestAssured.given();
-//        Response responseDelete = requestDelete.delete(appUrlCourt + "/delete/" + courtId);
-//
-//        assertEquals(409, responseDelete.getStatusCode());
-//
-//        responseString = requestGet.get(new URI(appUrlCourt)).asString();
-//
-//        assertTrue(responseString.contains(
-//                "\"archive\":false," +
-//                "\"area\":100.0," +
-//                "\"baseCost\":100," +
-//                "\"courtNumber\":1," +
-//                "\"id\":\"" + courtId + "\"," +
-//                "\"rented\":true"));
 //    }
 }
