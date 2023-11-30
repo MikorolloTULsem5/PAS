@@ -12,6 +12,7 @@ import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.QueryParam;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import nbd.gV.exceptions.MyMongoException;
 import nbd.gV.model.reservations.Reservation;
 import nbd.gV.restapi.services.ReservationService;
 
@@ -33,10 +34,11 @@ public class ReservationController {
     @Path("/addReservation")
     public void addReseravtion(@QueryParam("clientId") String clientId, @QueryParam("courtId") String courtId,
                                @QueryParam("date") String date) {
-        if (date == null) {
-            reservationService.makeReservation(UUID.fromString(clientId), UUID.fromString(courtId));
-        }
-        reservationService.makeReservation(UUID.fromString(clientId), UUID.fromString(courtId), LocalDateTime.parse(date));
+        throw new MyMongoException((date == null) + "");
+//        if (date == null) {
+//            reservationService.makeReservation(UUID.fromString(clientId), UUID.fromString(courtId));
+//        }
+//        reservationService.makeReservation(UUID.fromString(clientId), UUID.fromString(courtId), LocalDateTime.parse(date));
     }
 
     @GET
