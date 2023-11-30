@@ -14,6 +14,7 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import nbd.gV.exceptions.CourtException;
 import nbd.gV.exceptions.CourtNumberException;
+import nbd.gV.exceptions.MultiReservationException;
 import nbd.gV.exceptions.MyMongoException;
 import nbd.gV.model.reservations.Reservation;
 import nbd.gV.restapi.services.ReservationService;
@@ -43,9 +44,9 @@ public class ReservationController {
             }
         } catch (IllegalArgumentException | NullPointerException ex) {
             return Response.status(Response.Status.BAD_REQUEST).entity(ex.getMessage()).build();
-        } catch (CourtNumberException cne) {
+        } catch (MultiReservationException cne) {
             return Response.status(Response.Status.CONFLICT).entity(cne.getMessage()).build();
-        } catch (CourtException ce) {
+        } catch (Exception ce) {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ce.getMessage()).build();
         }
 
