@@ -16,6 +16,7 @@ import static integrationtests.CleaningClass.initCourts;
 import static integrationtests.CleaningClass.initReservations;
 import static integrationtests.CleaningClass.reservation1;
 import static integrationtests.CleaningClass.reservation2;
+import static integrationtests.CleaningClass.reservation3;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -41,39 +42,73 @@ public class ReservationsControllerTests {
         RequestSpecification request = RestAssured.given();
         Response response = request.get(new URI(appUrlReservation));
         String responseString = response.asString();
-        String[] splitedRespStr = responseString.split("},");
+        String[] splitedRespStr = responseString.split("},\\{");
 
         assertEquals(2, splitedRespStr.length);
 
         //First Reservation
-        assertTrue(splitedRespStr[0].contains("\"beginTime\":\"2023-11-28T14:20:00\""));
-        assertTrue(splitedRespStr[0].contains("\"client\":\""));
-        assertTrue(splitedRespStr[0].contains("\"court\":\""));
+        System.out.println(splitedRespStr[0]);
+        assertTrue(splitedRespStr[0].contains("\"beginTime\":\"2023-11-30T14:20:00\""));
+        assertTrue(splitedRespStr[0].contains("\"client\":{\""));
+        assertTrue(splitedRespStr[0].contains("\"court\":{\""));
         assertTrue(splitedRespStr[0].contains("\"id\":\"" + reservation1.getId() + "\""));
         assertTrue(splitedRespStr[0].contains("\"reservationCost\":0"));
         assertTrue(splitedRespStr[0].contains("\"reservationHours\":0"));
 
         //Second Reservation
-        assertTrue(splitedRespStr[1].contains("\"archive\":false"));
-        assertTrue(splitedRespStr[1].contains("\"area\":300"));
-        assertTrue(splitedRespStr[1].contains("\"baseCost\":200"));
-        assertTrue(splitedRespStr[1].contains("\"courtNumber\":3"));
-        assertTrue(splitedRespStr[0].contains("\"id\":\"" + reservation2.getId() + "\""));
-        assertTrue(splitedRespStr[1].contains("\"rented\":false"));
+        assertTrue(splitedRespStr[1].contains("\"beginTime\":\"2023-11-30T14:20:00\""));
+        assertTrue(splitedRespStr[1].contains("\"client\":{\""));
+        assertTrue(splitedRespStr[1].contains("\"court\":{\""));
+        assertTrue(splitedRespStr[1].contains("\"id\":\"" + reservation2.getId() + "\""));
+        assertTrue(splitedRespStr[1].contains("\"reservationCost\":0"));
+        assertTrue(splitedRespStr[1].contains("\"reservationHours\":0"));
 
         assertEquals(200, response.getStatusCode());
     }
 
-//    @Test
-//    void getAllCourtsTestNoCont() throws URISyntaxException {
-//        clean();
-//        RequestSpecification request = RestAssured.given();
-//        Response response = request.get(new URI(appUrlCourt));
-//        String responseString = response.asString();
-//
-//        assertTrue(responseString.isEmpty());
-//        assertEquals(204, response.getStatusCode());
-//    }
+    @Test
+    void getAllCurrentReservationsTestNoCont() throws URISyntaxException {
+        clean();
+        RequestSpecification request = RestAssured.given();
+        Response response = request.get(new URI(appUrlReservation));
+        String responseString = response.asString();
+
+        assertTrue(responseString.isEmpty());
+        assertEquals(204, response.getStatusCode());
+    }
+
+    @Test
+    void getAllArchiveReservationsTest() throws URISyntaxException {
+        RequestSpecification request = RestAssured.given();
+        Response response = request.get(new URI(appUrlReservation + "/archive"));
+        String responseString = response.asString();
+        String[] splitedRespStr = responseString.split("},\\{");
+
+        assertEquals(1, splitedRespStr.length);
+
+        //First Reservation
+        System.out.println(splitedRespStr[0]);
+        assertTrue(splitedRespStr[0].contains("\"beginTime\":\"2023-11-28T14:20:00\""));
+        assertTrue(splitedRespStr[0].contains("\"client\":{\""));
+        assertTrue(splitedRespStr[0].contains("\"court\":{\""));
+        assertTrue(splitedRespStr[0].contains("\"beginTime\":\"2023-11-30T14:20:00\""));
+        assertTrue(splitedRespStr[0].contains("\"id\":\"" + reservation3.getId() + "\""));
+        assertTrue(splitedRespStr[0].contains("\"reservationCost\":13180"));
+        assertTrue(splitedRespStr[0].contains("\"reservationHours\":48"));
+
+        assertEquals(200, response.getStatusCode());
+    }
+
+    @Test
+    void getAllArchiveReservationsTestNoCont() throws URISyntaxException {
+        clean();
+        RequestSpecification request = RestAssured.given();
+        Response response = request.get(new URI(appUrlReservation + "/archive"));
+        String responseString = response.asString();
+
+        assertTrue(responseString.isEmpty());
+        assertEquals(204, response.getStatusCode());
+    }
 //
 //    @Test
 //    void createCourtTestPos() throws URISyntaxException {
