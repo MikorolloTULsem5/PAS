@@ -106,4 +106,18 @@ public class CourtController {
 
         return Response.status(Response.Status.NO_CONTENT).build();
     }
+
+    @POST
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/activate/{id}")
+    public void activateCourt(@PathParam("id") String id) {
+        courtService.activateCourt(UUID.fromString(id));
+    }
+
+    @POST
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/archive/{id}")
+    public void archiveCourt(@PathParam("id") String id) {
+        courtService.archiveCourt(UUID.fromString(id));
+    }
 }

@@ -5,9 +5,7 @@ import com.mongodb.client.model.Filters;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import lombok.NoArgsConstructor;
-import nbd.gV.data.datahandling.dto.ClientDTO;
 import nbd.gV.exceptions.CourtNumberException;
-import nbd.gV.exceptions.UserLoginException;
 import nbd.gV.model.courts.Court;
 import nbd.gV.exceptions.CourtException;
 import nbd.gV.exceptions.MyMongoException;
@@ -84,7 +82,7 @@ public class CourtService {
         courtRepository.update(courtId, "archive", false);
     }
 
-    public void archiveClient(UUID courtId) {
+    public void archiveCourt(UUID courtId) {
         courtRepository.update(courtId, "archive", true);
     }
 
