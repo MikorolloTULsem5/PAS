@@ -350,7 +350,7 @@ public class CourtControllerTests {
                 {
                   "area": 150.0,
                   "baseCost": 75,
-                  "courtNumber": 2
+                  "courtNumber": 1
                 }
                 """;
         RequestSpecification requestPut = RestAssured.given();
@@ -376,7 +376,7 @@ public class CourtControllerTests {
                 "\"archive\":false," +
                         "\"area\":150.0," +
                         "\"baseCost\":75," +
-                        "\"courtNumber\":2," +
+                        "\"courtNumber\":1," +
                         "\"id\":\"" + courtId + "\"," +
                         "\"rented\":false"));
 
@@ -397,7 +397,7 @@ public class CourtControllerTests {
                 "\"archive\":false," +
                         "\"area\":150.0," +
                         "\"baseCost\":75," +
-                        "\"courtNumber\":2," +
+                        "\"courtNumber\":1," +
                         "\"id\":\"" + courtId + "\"," +
                         "\"rented\":false"));
     }
