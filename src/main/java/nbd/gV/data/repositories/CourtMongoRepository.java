@@ -6,8 +6,10 @@ import com.mongodb.client.model.CreateCollectionOptions;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.ValidationOptions;
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.ws.rs.ForbiddenException;
 import nbd.gV.data.datahandling.dto.CourtDTO;
 import nbd.gV.data.datahandling.dto.ReservationDTO;
+import nbd.gV.exceptions.CourtException;
 import nbd.gV.exceptions.MyMongoException;
 import org.bson.Document;
 import org.bson.conversions.Bson;
@@ -70,7 +72,7 @@ public class CourtMongoRepository extends AbstractMongoRepository<CourtDTO> {
             clientSession.startTransaction();
             var reservation = this.getDatabase().getCollection(ReservationMongoRepository.COLLECTION_NAME, ReservationDTO.class).find(filter).first();
             if (reservation != null) {
-                return false;
+                throw new IllegalStateException();
             }
             boolean result = super.delete(uuid);
             if (result) {
