@@ -82,10 +82,7 @@ public class UserControllerTests {
         RequestSpecification requestGet = RestAssured.given();
         String responseString = requestGet.get(new URI("http://localhost:8080/CourtRent-1.0-SNAPSHOT/api/users")).asString();
 
-        assertFalse(responseString.contains("\"login\":\"johnBravo\""));
-        assertFalse(responseString.contains("\"clientTypeName\":\"normal\""));
-        assertFalse(responseString.contains("\"firstName\":\"John\""));
-        assertFalse(responseString.contains("\"lastName\":\"Bravo\""));
+        assertTrue(responseString.isEmpty());
 
         Response responsePost = requestPost.post("http://localhost:8080/CourtRent-1.0-SNAPSHOT/api/users/addClient");
 

@@ -6,6 +6,7 @@ import nbd.gV.data.datahandling.dto.ReservationDTO;
 import nbd.gV.data.repositories.CourtMongoRepository;
 import nbd.gV.data.repositories.ReservationMongoRepository;
 import nbd.gV.data.repositories.UserMongoRepository;
+import nbd.gV.restapi.services.CourtService;
 import nbd.gV.restapi.services.userservice.ClientService;
 import org.junit.jupiter.api.Test;
 
@@ -16,6 +17,7 @@ public class CleaningClass {
     static final UserMongoRepository clientRepository = new UserMongoRepository();
     static final CourtMongoRepository courtRepository = new CourtMongoRepository();
     static final ClientService clientServiceTest = new ClientService(clientRepository);
+    static final CourtService courtServiceTest = new CourtService(courtRepository);
 
     static void clean() {
         reservationRepository.getDatabase().getCollection(reservationRepository.getCollectionName(),
@@ -30,6 +32,11 @@ public class CleaningClass {
         clientServiceTest.registerClient("Michal", "Pi", "michas13", "coach");
     }
 
+    static void initCourts() {
+        courtServiceTest.registerCourt(100, 100, 1);
+        courtServiceTest.registerCourt(100, 200, 2);
+        courtServiceTest.registerCourt(300, 200, 3);
+    }
 
     ///TODO wywalic
     @Test
