@@ -5,6 +5,7 @@ import com.mongodb.client.model.Filters;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import lombok.NoArgsConstructor;
+import nbd.gV.exceptions.CourtNumberException;
 import nbd.gV.model.courts.Court;
 import nbd.gV.exceptions.CourtException;
 import nbd.gV.exceptions.MyMongoException;
@@ -33,7 +34,7 @@ public class CourtService {
         Court court = new Court(UUID.randomUUID(), area, baseCost, courtNumber);
         try {
             if (!courtRepository.read(Filters.eq("courtnumber", courtNumber)).isEmpty()) {
-                throw new CourtException("Nie udalo sie zarejestrowac boiska w bazie! - boisko o tym numerze " +
+                throw new CourtNumberException("Nie udalo sie zarejestrowac boiska w bazie! - boisko o tym numerze " +
                         "znajduje sie juz w bazie");
             }
 
@@ -63,8 +64,6 @@ public class CourtService {
         var list = courtRepository.read(Filters.eq("courtnumber", courtNumber));
         return !list.isEmpty() ? CourtMapper.fromMongoCourt(list.get(0)) : null;
     }
-
-    /*-----------------------------------------------------------------------------------------------------*/
 
     public void modifyCourt(Court modifiedCourt) {
         if (courtRepository.updateByReplace(modifiedCourt.getCourtId(), CourtMapper.toMongoCourt(modifiedCourt))) {

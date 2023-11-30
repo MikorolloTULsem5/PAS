@@ -1,5 +1,6 @@
 package unittests.managersTests;
 
+import nbd.gV.exceptions.CourtNumberException;
 import nbd.gV.model.courts.Court;
 import nbd.gV.data.datahandling.dto.CourtDTO;
 import nbd.gV.data.datahandling.mappers.ClientMapper;
@@ -60,7 +61,7 @@ public class CourtManagerTest {
         assertNotNull(newCourt);
         assertEquals(1, cm.getAllCourts().size());
         assertEquals(newCourt, cm.getCourtById(newCourt.getCourtId()));
-        assertThrows(CourtException.class, () -> cm.registerCourt(300, 300, 5));
+        assertThrows(CourtNumberException.class, () -> cm.registerCourt(300, 300, 5));
         assertEquals(1, cm.getAllCourts().size());
 
         cm.registerCourt(200, 200, 6);

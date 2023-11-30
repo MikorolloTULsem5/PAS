@@ -1,5 +1,8 @@
 package nbd.gV.model.courts;
 
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.PositiveOrZero;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,9 +19,12 @@ public class Court {
     @Setter(AccessLevel.NONE)
     private UUID courtId;
 
+    @PositiveOrZero
     private double area;
+    @PositiveOrZero
     private int baseCost;
     ///TODO setter or not setter
+    @Min(value = 1)
     private int courtNumber;
 
     private boolean archive = false;
