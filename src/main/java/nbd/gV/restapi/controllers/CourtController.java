@@ -104,6 +104,6 @@ public class CourtController {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ce.getMessage()).build();
         }
 
-        return Response.status(Response.Status.CREATED).build();
+        return Response.status(Response.Status.NO_CONTENT).build();
     }
 }

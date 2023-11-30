@@ -75,7 +75,7 @@ public class CourtService {
             throw new CourtNumberException("Nie udalo sie zmodyfikowac podanego boiska - " +
                     "proba zmiany numeru boiska na numer wystepujacy juz u innego boiska");
         }
-        if (courtRepository.updateByReplace(modifiedCourt.getId(), CourtMapper.toMongoCourt(modifiedCourt))) {
+        if (!courtRepository.updateByReplace(modifiedCourt.getId(), CourtMapper.toMongoCourt(modifiedCourt))) {
             throw new CourtException("Nie udalo się zmodyfikowac podanego boiska");
         }
     }

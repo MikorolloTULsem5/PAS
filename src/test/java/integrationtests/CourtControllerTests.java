@@ -229,7 +229,7 @@ public class CourtControllerTests {
     }
 
     @Test
-    void modifyClientTest() throws URISyntaxException {
+    void modifyCourtTest() throws URISyntaxException {
         String JSON = """
                 {
                   "area": 150.0,
