@@ -3,10 +3,6 @@ package integrationtests;
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
-import nbd.gV.data.datahandling.dto.CourtDTO;
-import nbd.gV.data.datahandling.dto.ReservationDTO;
-import nbd.gV.data.repositories.CourtMongoRepository;
-import nbd.gV.data.repositories.ReservationMongoRepository;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -528,17 +524,17 @@ public class CourtControllerTests {
         String responseString = requestGet.get(new URI("http://localhost:8080/CourtRent-1.0-SNAPSHOT/api/courts")).asString();
 
         //Retrieve UUID
-        String responseNumber = requestGet.get(new URI("http://localhost:8080/CourtRent-1.0-SNAPSHOT/api/courts/get?number=3")).asString();
+        String responseNumber = requestGet.get(new URI("http://localhost:8080/CourtRent-1.0-SNAPSHOT/api/courts/get?number=1")).asString();
         int index = responseNumber.indexOf("\"id\":\"") + 6;
         String courtId = responseNumber.substring(index, index + 36);
 
         assertTrue(responseString.contains(
                 "\"archive\":false," +
-                        "\"area\":300.0," +
-                        "\"baseCost\":200," +
-                        "\"courtNumber\":3," +
-                        "\"id\":\"" + courtId + "\"," +
-                        "\"rented\":false"));
+                "\"area\":100.0," +
+                "\"baseCost\":100," +
+                "\"courtNumber\":1," +
+                "\"id\":\"" + courtId + "\"," +
+                "\"rented\":true"));
 
         RequestSpecification requestDelete = RestAssured.given();
         Response responseDelete = requestDelete.delete("http://localhost:8080/CourtRent-1.0-SNAPSHOT/api/courts/delete/" + courtId);
@@ -549,10 +545,10 @@ public class CourtControllerTests {
 
         assertTrue(responseString.contains(
                 "\"archive\":false," +
-                        "\"area\":300.0," +
-                        "\"baseCost\":200," +
-                        "\"courtNumber\":3," +
-                        "\"id\":\"" + courtId + "\"," +
-                        "\"rented\":false"));
+                "\"area\":100.0," +
+                "\"baseCost\":100," +
+                "\"courtNumber\":1," +
+                "\"id\":\"" + courtId + "\"," +
+                "\"rented\":true"));
     }
 }
