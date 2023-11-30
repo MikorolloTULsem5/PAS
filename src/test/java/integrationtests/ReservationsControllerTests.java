@@ -13,6 +13,7 @@ import java.net.URISyntaxException;
 import static integrationtests.CleaningClass.clean;
 import static integrationtests.CleaningClass.client2;
 import static integrationtests.CleaningClass.client3;
+import static integrationtests.CleaningClass.court1;
 import static integrationtests.CleaningClass.court2;
 import static integrationtests.CleaningClass.court3;
 import static integrationtests.CleaningClass.initClients;
@@ -190,6 +191,65 @@ public class ReservationsControllerTests {
         assertTrue(responseString.contains("\"id\":\"%s\"".formatted(court2.getId())));
     }
 
+    @Test
+    void returnCourtTestPos() throws URISyntaxException {
+        RequestSpecification request = RestAssured.given();
+
+        //Check current reservations
+        Response response = request.get(new URI(appUrlReservation));
+        String responseString = response.asString();
+        String[] splitedRespStr = responseString.split("},\\{");
+
+        assertEquals(2, splitedRespStr.length);
+
+            //First Reservation
+        assertTrue(responseString.contains("\"beginTime\":\"2023-11-30T14:20:00\""));
+        assertTrue(responseString.contains("\"id\":\"" + reservation1.getId() + "\""));
+        assertFalse(responseString.contains("\"endTime\":\"2023-12-5T17:03:22\""));
+
+        //Check archive reservations
+        Response responseArch = request.get(new URI(appUrlReservation));
+        String responseStringArch = responseArch.asString();
+        String[] splitedRespStrArch = responseStringArch.split("},\\{");
+
+        assertEquals(1, splitedRespStrArch.length);
+
+            //First Reservation
+        assertFalse(responseStringArch.contains("\"beginTime\":\"2023-11-30T14:20:00\""));
+        assertFalse(responseStringArch.contains("\"id\":\"" + reservation1.getId() + "\""));
+        assertFalse(responseStringArch.contains("\"endTime\":\"2023-12-5T17:03:22\""));
+
+        //Do return
+        RequestSpecification requestPost = RestAssured.given();
+        Response responsePostReturning = requestPost.post(appUrlReservation +
+                "/returnCourt?courtId=%s&date=%s".formatted(court1.getId(), "2023-12-5T17:03:22"));
+
+        assertEquals(204, responsePostReturning.getStatusCode());
+
+        //Check current reservations
+        response = request.get(new URI(appUrlReservation));
+        responseString = response.asString();
+        splitedRespStr = responseString.split("},\\{");
+
+        assertEquals(1, splitedRespStr.length);
+
+        //First Reservation
+        assertFalse(responseString.contains("\"beginTime\":\"2023-11-30T14:20:00\""));
+        assertFalse(responseString.contains("\"id\":\"" + reservation1.getId() + "\""));
+        assertFalse(responseString.contains("\"endTime\":\"2023-12-5T17:03:22\""));
+
+        //Check archive reservations
+        responseArch = request.get(new URI(appUrlReservation));
+        responseStringArch = responseArch.asString();
+        splitedRespStrArch = responseStringArch.split("},\\{");
+
+        assertEquals(2, splitedRespStrArch.length);
+
+        //First Reservation
+        assertTrue(responseStringArch.contains("\"beginTime\":\"2023-11-30T14:20:00\""));
+        assertTrue(responseStringArch.contains("\"id\":\"" + reservation1.getId() + "\""));
+        assertTrue(responseStringArch.contains("\"endTime\":\"2023-12-5T17:03:22\""));
+    }
 //    @Test
 //    void getCourtByIdTest() throws URISyntaxException {
 //        RequestSpecification request = RestAssured.given();

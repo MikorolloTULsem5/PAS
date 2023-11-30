@@ -76,6 +76,7 @@ public class ReservationController {
 
     @POST
     @Produces(MediaType.APPLICATION_JSON)
+    @Path("/returnCourt")
     public Response returnCourt(@QueryParam("courtId") String courtId, @QueryParam("date") String date) {
         try {
             if (date == null) {
