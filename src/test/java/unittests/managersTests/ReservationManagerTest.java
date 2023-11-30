@@ -36,6 +36,8 @@ public class ReservationManagerTest {
     static final ReservationMongoRepository reservationRepository = new ReservationMongoRepository();
     static final UserMongoRepository clientRepository = new UserMongoRepository();
     static final CourtMongoRepository courtRepository = new CourtMongoRepository();
+    static final ReservationService rm = new ReservationService(reservationRepository);
+
     String testClientType;
 
     Client testClient1;
@@ -91,8 +93,6 @@ public class ReservationManagerTest {
 
     @Test
     void testMakingReservation() {
-        ReservationService rm = new ReservationService();
-        assertNotNull(rm);
         assertEquals(rm.getAllCurrentReservations().size(), 0);
         assertFalse(testCourt1.isRented());
 
@@ -125,9 +125,6 @@ public class ReservationManagerTest {
 
     @Test
     void testCreatingReservationManagerWithNullDate() {
-        ReservationService rm = new ReservationService();
-        assertNotNull(rm);
-
         assertEquals(0, rm.getAllCurrentReservations().size());
         Reservation newReservation = rm.makeReservation(testClient1.getId(), testCourt1.getId());
         var reservations = rm.getAllCurrentReservations();
@@ -137,9 +134,6 @@ public class ReservationManagerTest {
 
     @Test
     void testEndReservation() {
-        ReservationService rm = new ReservationService();
-        assertNotNull(rm);
-
         rm.makeReservation(testClient1.getId(), testCourt1.getId(), testTimeStart);
         rm.makeReservation(testClient2.getId(), testCourt2.getId(), testTimeStart);
 
@@ -164,8 +158,6 @@ public class ReservationManagerTest {
     void testCheckingClientBalance() {
         var testSuperTimeEnd = LocalDateTime.of(2023, Month.JUNE, 5, 12, 0);
         var testSuperTimeEnd2 = LocalDateTime.of(2023, Month.JUNE, 6, 12, 0);
-        ReservationService rm = new ReservationService();
-        assertNotNull(rm);
 
         rm.makeReservation(testClient1.getId(), testCourt1.getId(), testTimeStart);
         rm.makeReservation(testClient1.getId(), testCourt2.getId(), testTimeStart);

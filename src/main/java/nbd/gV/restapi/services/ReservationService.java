@@ -2,6 +2,9 @@ package nbd.gV.restapi.services;
 
 import com.mongodb.client.model.Filters;
 
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
+import lombok.NoArgsConstructor;
 import nbd.gV.data.datahandling.dto.ClientDTO;
 import nbd.gV.data.datahandling.mappers.ClientMapper;
 import nbd.gV.data.datahandling.mappers.CourtMapper;
@@ -23,18 +26,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+@ApplicationScoped
+@NoArgsConstructor
 public class ReservationService {
-    private final ReservationMongoRepository reservationRepository;
-    private final UserMongoRepository clientsRepository;
-    private final CourtMongoRepository courtMongoRepository;
-
-    public ReservationService() {
-        reservationRepository = new ReservationMongoRepository();
-
-        ///TODO do wywalenia
-        clientsRepository = new UserMongoRepository();
-        courtMongoRepository = new CourtMongoRepository();
-    }
+    @Inject
+    private ReservationMongoRepository reservationRepository;
+    @Inject
+    private UserMongoRepository clientsRepository;
+    @Inject
+    private CourtMongoRepository courtMongoRepository;
 
     public ReservationService(ReservationMongoRepository reservationRepository) {
         this.reservationRepository = reservationRepository;
@@ -81,16 +81,19 @@ public class ReservationService {
         returnCourt(court, LocalDateTime.now());
     }
 
-    private List<Reservation> getReservationsWithBsonFilter(Bson filter) {
-        List<Reservation> reservations = new ArrayList<>();
-        var clientsRepo = new UserMongoRepository();
-        var courtsRepo = new CourtMongoRepository();
-        for (var r : reservationRepository.read(filter)) {
-            reservations.add(ReservationMapper.fromMongoReservation(r,
-                    (ClientDTO) clientsRepo.readByUUID(UUID.fromString(r.getClientId()), ClientDTO.class),
-                    courtsRepo.readByUUID(UUID.fromString(r.getCourtId()))));
-        }
-        return reservations;
+    public Reservation getReservationByID(UUID uuid) {
+        ReservationDTO reservationMapper = reservationRepository.readByUUID(uuid);
+        return ReservationMapper.fromMongoReservation(reservationMapper,
+                (ClientDTO) clientsRepository.readByUUID(UUID.fromString(reservationMapper.getClientId()), ClientDTO.class),
+                courtMongoRepository.readByUUID(UUID.fromString(reservationMapper.getCourtId())));
+    }
+
+    public List<Reservation> getAllCurrentReservations() {
+        return getReservationsWithBsonFilter(Filters.eq("endtime", null));
+    }
+
+    public List<Reservation> getAllArchiveReservations() {
+        return getReservationsWithBsonFilter(Filters.not(Filters.eq("endtime", null)));
     }
 
     ///TODO przetestowac co gdy UUID jest zly
@@ -116,8 +119,6 @@ public class ReservationService {
         return !list.isEmpty() ? list.get(0) : null;
     }
 
-    ///TODO obtestowac
-
     public List<Reservation> getCourtEndedReservation(UUID courtId) {
         return getReservationsWithBsonFilter(Filters.and(
                 Filters.eq("courtid", courtId.toString()),
@@ -133,18 +134,16 @@ public class ReservationService {
         return sum;
     }
 
-    public List<Reservation> getAllCurrentReservations() {
-        return getReservationsWithBsonFilter(Filters.eq("endtime", null));
-    }
 
-    public List<Reservation> getAllArchiveReservations() {
-        return getReservationsWithBsonFilter(Filters.not(Filters.eq("endtime", null)));
-    }
-
-    public Reservation getReservationByID(UUID uuid) {
-        ReservationDTO reservationMapper = reservationRepository.readByUUID(uuid);
-        return ReservationMapper.fromMongoReservation(reservationMapper,
-                (ClientDTO) clientsRepository.readByUUID(UUID.fromString(reservationMapper.getClientId()), ClientDTO.class),
-                courtMongoRepository.readByUUID(UUID.fromString(reservationMapper.getCourtId())));
+    private List<Reservation> getReservationsWithBsonFilter(Bson filter) {
+        List<Reservation> reservations = new ArrayList<>();
+        var clientsRepo = clientsRepository;
+        var courtsRepo = courtMongoRepository;
+        for (var r : reservationRepository.read(filter)) {
+            reservations.add(ReservationMapper.fromMongoReservation(r,
+                    (ClientDTO) clientsRepo.readByUUID(UUID.fromString(r.getClientId()), ClientDTO.class),
+                    courtsRepo.readByUUID(UUID.fromString(r.getCourtId()))));
+        }
+        return reservations;
     }
 }

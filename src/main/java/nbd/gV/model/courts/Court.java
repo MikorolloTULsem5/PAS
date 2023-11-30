@@ -22,7 +22,6 @@ public class Court {
     private double area;
     @PositiveOrZero
     private int baseCost;
-    ///TODO setter or not setter
     @Min(value = 1)
     private int courtNumber;
 

@@ -15,6 +15,7 @@ import nbd.gV.restapi.services.userservice.ClientService;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
+import java.time.Month;
 import java.util.UUID;
 
 public class CleaningClass {
@@ -35,6 +36,7 @@ public class CleaningClass {
 
     static Reservation reservation1;
     static Reservation reservation2;
+    static Reservation reservation3;
 
     static void clean() {
         reservationRepository.getDatabase().getCollection(reservationRepository.getCollectionName(),
@@ -58,6 +60,8 @@ public class CleaningClass {
     static void initReservations() {
         reservation1 = reservationServiceTest.makeReservation(client1.getId(), court1.getId(), LocalDateTime.now());
         reservation2 = reservationServiceTest.makeReservation(client2.getId(), court2.getId(), LocalDateTime.now());
+        reservation3 = reservationServiceTest.makeReservation(client3.getId(), court3.getId(), LocalDateTime.of(2023, Month.NOVEMBER, 28, 14, 20));
+        reservationServiceTest.returnCourt(court3, LocalDateTime.now());
     }
 
     ///TODO wywalic
