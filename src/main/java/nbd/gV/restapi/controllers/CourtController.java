@@ -8,6 +8,7 @@ import jakarta.validation.Validator;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.POST;
+import jakarta.ws.rs.PUT;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
@@ -78,5 +79,31 @@ public class CourtController {
     @Path("/get")
     public Court getCourtByCourtNumber(@QueryParam("number") String number) {
         return courtService.getCourtByCourtNumber(Integer.parseInt(number));
+    }
+
+    @PUT
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/modifyCourt/{id}")
+    public Response modifyCourt(@PathParam("id") String id, Court modifiedCourt) {
+        Set<ConstraintViolation<Court>> violations = validator.validate(modifiedCourt);
+        List<String> errors = violations.stream().map(ConstraintViolation::getMessage).collect(Collectors.toList());
+        if (!violations.isEmpty()) {
+            return Response.status(Response.Status.BAD_REQUEST).entity(errors).build();
+        }
+
+        try {
+            Court finalModifyCourt = new Court(UUID.fromString(id), modifiedCourt.getArea(), modifiedCourt.getBaseCost(),
+                    modifiedCourt.getCourtNumber());
+            finalModifyCourt.setArchive(modifiedCourt.isArchive());
+            finalModifyCourt.setRented(modifiedCourt.isRented());
+            courtService.modifyCourt(finalModifyCourt);
+        } catch (CourtNumberException cne) {
+            return Response.status(Response.Status.CONFLICT).entity(cne.getMessage()).build();
+        } catch (CourtException ce) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ce.getMessage()).build();
+        }
+
+        return Response.status(Response.Status.CREATED).build();
     }
 }
