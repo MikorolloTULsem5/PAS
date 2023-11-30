@@ -36,6 +36,14 @@ public class ReservationService {
         courtMongoRepository = new CourtMongoRepository();
     }
 
+    public ReservationService(ReservationMongoRepository reservationRepository) {
+        this.reservationRepository = reservationRepository;
+
+        ///TODO do wywalenia
+        clientsRepository = new UserMongoRepository();
+        courtMongoRepository = new CourtMongoRepository();
+    }
+
     public Reservation makeReservation(UUID clientId, UUID courtId, LocalDateTime beginTime) {
         try {
             Client client = ClientMapper.fromMongoUser((ClientDTO) clientsRepository.readByUUID(clientId, ClientDTO.class));

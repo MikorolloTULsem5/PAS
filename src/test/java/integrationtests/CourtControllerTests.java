@@ -4,7 +4,9 @@ import io.restassured.RestAssured;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
 import nbd.gV.data.datahandling.dto.CourtDTO;
+import nbd.gV.data.datahandling.dto.ReservationDTO;
 import nbd.gV.data.repositories.CourtMongoRepository;
+import nbd.gV.data.repositories.ReservationMongoRepository;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -14,7 +16,9 @@ import java.net.URISyntaxException;
 import java.util.UUID;
 
 import static integrationtests.CleaningClass.clean;
+import static integrationtests.CleaningClass.initClients;
 import static integrationtests.CleaningClass.initCourts;
+import static integrationtests.CleaningClass.initReservations;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -516,24 +520,22 @@ public class CourtControllerTests {
 
     @Test
     void deleteCourtTestNeg() throws URISyntaxException {
-        new CourtMongoRepository().create(new CourtDTO(UUID.randomUUID().toString(), 999.0, 111,
-                5, false, 1));
-
+        initReservations();
         RequestSpecification requestGet = RestAssured.given();
         String responseString = requestGet.get(new URI("http://localhost:8080/CourtRent-1.0-SNAPSHOT/api/courts")).asString();
 
         //Retrieve UUID
-        String responseNumber = requestGet.get(new URI("http://localhost:8080/CourtRent-1.0-SNAPSHOT/api/courts/get?number=5")).asString();
+        String responseNumber = requestGet.get(new URI("http://localhost:8080/CourtRent-1.0-SNAPSHOT/api/courts/get?number=3")).asString();
         int index = responseNumber.indexOf("\"id\":\"") + 6;
         String courtId = responseNumber.substring(index, index + 36);
 
         assertTrue(responseString.contains(
                 "\"archive\":false," +
-                "\"area\":999.0," +
-                "\"baseCost\":111," +
-                "\"courtNumber\":5," +
+                "\"area\":300.0," +
+                "\"baseCost\":200," +
+                "\"courtNumber\":3," +
                 "\"id\":\"" + courtId + "\"," +
-                "\"rented\":true"));
+                "\"rented\":false"));
 
         RequestSpecification requestDelete = RestAssured.given();
         Response responseDelete = requestDelete.delete("http://localhost:8080/CourtRent-1.0-SNAPSHOT/api/courts/delete/" + courtId);
@@ -544,10 +546,10 @@ public class CourtControllerTests {
 
         assertTrue(responseString.contains(
                 "\"archive\":false," +
-                "\"area\":999.0," +
-                "\"baseCost\":111," +
-                "\"courtNumber\":5," +
+                "\"area\":300.0," +
+                "\"baseCost\":200," +
+                "\"courtNumber\":3," +
                 "\"id\":\"" + courtId + "\"," +
-                "\"rented\":true"));
+                "\"rented\":false"));
     }
 }
