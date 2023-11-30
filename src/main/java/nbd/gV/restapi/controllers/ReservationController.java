@@ -73,4 +73,22 @@ public class ReservationController {
         }
         return resultList;
     }
+
+    @POST
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response returnCourt(@QueryParam("courtId") String courtId, @QueryParam("date") String date) {
+        try {
+            if (date == null) {
+                reservationService.returnCourt(UUID.fromString(courtId));
+            } else {
+                reservationService.returnCourt(UUID.fromString(courtId), LocalDateTime.parse(date));
+            }
+        } catch (IllegalArgumentException | NullPointerException ex) {
+            return Response.status(Response.Status.BAD_REQUEST).entity(ex.getMessage()).build();
+        } catch (Exception ce) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ce.getMessage()).build();
+        }
+
+        return Response.status(Response.Status.NO_CONTENT).build();
+    }
 }

@@ -57,7 +57,7 @@ public class ReservationService {
             court.setRented(true);
             return newReservation;
         } catch (MyMongoException exception) {
-            throw new ReservationException("Nie udalo sie utowrzyc rezerwacji");
+            throw new ReservationException("Nie udalo sie utworzyc rezerwacji");
         }
     }
 
@@ -65,20 +65,17 @@ public class ReservationService {
         return makeReservation(clientId, courtId, LocalDateTime.now());
     }
 
-    public void returnCourt(Court court, LocalDateTime endTime) {
-        if (court == null) {
-            throw new MainException("Nie mozna zwrocic nieistniejacego boiska!");
-        } else {
-            try {
-                reservationRepository.update(court, endTime);
-            } catch (MyMongoException exception) {
-                throw new ReservationException("Blad transakcji.");
-            }
+    public void returnCourt(UUID courtId, LocalDateTime endTime) {
+        try {
+            Court court = CourtMapper.fromMongoCourt(courtMongoRepository.readByUUID(courtId));
+            reservationRepository.update(court, endTime);
+        } catch (MyMongoException exception) {
+            throw new ReservationException("Blad transakcji.");
         }
     }
 
-    public void returnCourt(Court court) {
-        returnCourt(court, LocalDateTime.now());
+    public void returnCourt(UUID courtId) {
+        returnCourt(courtId, LocalDateTime.now());
     }
 
     public Reservation getReservationByID(UUID uuid) {

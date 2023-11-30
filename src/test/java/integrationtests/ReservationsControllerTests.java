@@ -13,6 +13,7 @@ import java.net.URISyntaxException;
 import static integrationtests.CleaningClass.clean;
 import static integrationtests.CleaningClass.client2;
 import static integrationtests.CleaningClass.client3;
+import static integrationtests.CleaningClass.court2;
 import static integrationtests.CleaningClass.court3;
 import static integrationtests.CleaningClass.initClients;
 import static integrationtests.CleaningClass.initCourts;
@@ -167,30 +168,17 @@ public class ReservationsControllerTests {
 
     @Test
     void createReservationTestNegReservedCourt() throws URISyntaxException {
-        clean();
-        initClients();
-        initCourts();
         RequestSpecification requestPost = RestAssured.given();
 
         RequestSpecification requestGet = RestAssured.given();
         String responseString = requestGet.get(new URI(appUrlReservation)).asString();
 
-        assertTrue(responseString.isEmpty());
-
-        Response responsePost = requestPost.post(appUrlReservation +
-                "/addReservation?clientId=%s&courtId=%s&date=%s".formatted(client3.getId(), court3.getId(),
-                        "2023-11-30T17:03:22"));
-
-        assertEquals(201, responsePost.getStatusCode());
-
-        responseString = requestGet.get(new URI(appUrlReservation)).asString();
-
-        assertTrue(responseString.contains("\"beginTime\":\"2023-11-30T17:03:22\""));
-        assertTrue(responseString.contains("\"id\":\"%s\"".formatted(client3.getId())));
-        assertTrue(responseString.contains("\"id\":\"%s\"".formatted(court3.getId())));
+        assertFalse(responseString.contains("\"beginTime\":\"2023-12-15T17:03:22\""));
+        assertFalse(responseString.contains("\"id\":\"%s\"".formatted(client3.getId())));
+        assertTrue(responseString.contains("\"id\":\"%s\"".formatted(court2.getId())));
 
         Response responsePostNeg = requestPost.post(appUrlReservation +
-                "/addReservation?clientId=%s&courtId=%s&date=%s".formatted(client3.getId(), court3.getId(),
+                "/addReservation?clientId=%s&courtId=%s&date=%s".formatted(client3.getId(), court2.getId(),
                         "2023-12-15T17:03:22"));
 
         assertEquals(409, responsePostNeg.getStatusCode());
@@ -198,39 +186,10 @@ public class ReservationsControllerTests {
         responseString = requestGet.get(new URI(appUrlReservation)).asString();
 
         assertFalse(responseString.contains("\"beginTime\":\"2023-12-15T17:03:22\""));
-        assertFalse(responseString.contains("\"id\":\"%s\"".formatted(client2.getId())));
-        assertTrue(responseString.contains("\"id\":\"%s\"".formatted(court3.getId())));
+        assertFalse(responseString.contains("\"id\":\"%s\"".formatted(client3.getId())));
+        assertTrue(responseString.contains("\"id\":\"%s\"".formatted(court2.getId())));
     }
-//
-//    @Test
-//    void getCourtByCourtNumberTest() throws URISyntaxException {
-//        RequestSpecification request = RestAssured.given();
-//        Response response = request.get(new URI(appUrlCourt + "/get?number=3"));
-//        String responseString = response.asString();
-//        String[] splitedRespStr = responseString.split("},");
-//
-//        assertEquals(1, splitedRespStr.length);
-//
-//        assertTrue(splitedRespStr[0].contains("\"archive\":false"));
-//        assertTrue(splitedRespStr[0].contains("\"area\":300"));
-//        assertTrue(splitedRespStr[0].contains("\"baseCost\":200"));
-//        assertTrue(splitedRespStr[0].contains("\"courtNumber\":3"));
-//        assertTrue(splitedRespStr[0].contains("\"id\":\""));
-//        assertTrue(splitedRespStr[0].contains("\"rented\":false"));
-//
-//        assertEquals(200, response.getStatusCode());
-//    }
-//
-//    @Test
-//    void getCourtByCourtNumberTestNoCont() throws URISyntaxException {
-//        RequestSpecification request = RestAssured.given();
-//        Response response = request.get(new URI(appUrlCourt + "/get?number=42343242"));
-//        String responseString = response.asString();
-//
-//        assertTrue(responseString.isEmpty());
-//        assertEquals(204, response.getStatusCode());
-//    }
-//
+
 //    @Test
 //    void getCourtByIdTest() throws URISyntaxException {
 //        RequestSpecification request = RestAssured.given();

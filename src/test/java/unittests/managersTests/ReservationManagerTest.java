@@ -140,17 +140,17 @@ public class ReservationManagerTest {
         assertEquals(0, rm.getAllArchiveReservations().size());
         assertEquals(2, rm.getAllCurrentReservations().size());
         System.out.println(testCourt1.isRented());
-        rm.returnCourt(testCourt1, testTimeEnd);
+        rm.returnCourt(testCourt1.getId(), testTimeEnd);
 
         assertEquals(1, rm.getAllArchiveReservations().size());
         assertEquals(1, rm.getAllCurrentReservations().size());
-        rm.returnCourt(testCourt2);
+        rm.returnCourt(testCourt2.getId());
 
         assertEquals(2, rm.getAllArchiveReservations().size());
         assertEquals(0, rm.getAllCurrentReservations().size());
 
         assertThrows(MainException.class, () -> rm.returnCourt(null));
-        assertThrows(ReservationException.class, () -> rm.returnCourt(testCourt3));
+        assertThrows(ReservationException.class, () -> rm.returnCourt(testCourt3.getId()));
     }
 
 
@@ -164,13 +164,13 @@ public class ReservationManagerTest {
         rm.makeReservation(testClient1.getId(), testCourt3.getId(), testTimeStart);
 
         assertEquals(0, rm.checkClientReservationBalance(testClient1.getId()));
-        rm.returnCourt(testCourt1, testTimeEnd);
+        rm.returnCourt(testCourt1.getId(), testTimeEnd);
         assertEquals(300, rm.checkClientReservationBalance(testClient1.getId()));
 
-        rm.returnCourt(testCourt2, testSuperTimeEnd);
+        rm.returnCourt(testCourt2.getId(), testSuperTimeEnd);
         assertEquals(3750, rm.checkClientReservationBalance(testClient1.getId()));
 
-        rm.returnCourt(testCourt3, testSuperTimeEnd2);
+        rm.returnCourt(testCourt3.getId(), testSuperTimeEnd2);
         assertEquals(10800, rm.checkClientReservationBalance(testClient1.getId()));
     }
 }

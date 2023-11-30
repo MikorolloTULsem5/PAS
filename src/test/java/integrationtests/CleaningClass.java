@@ -63,7 +63,7 @@ public class CleaningClass {
         reservation1 = reservationServiceTest.makeReservation(client1.getId(), court1.getId(), dataStart);
         reservation2 = reservationServiceTest.makeReservation(client2.getId(), court2.getId(), dataStart);
         reservation3 = reservationServiceTest.makeReservation(client3.getId(), court3.getId(), LocalDateTime.of(2023, Month.NOVEMBER, 28, 14, 20));
-        reservationServiceTest.returnCourt(court3, dataStart);
+        reservationServiceTest.returnCourt(court3.getId(), dataStart);
     }
 
     ///TODO wywalic
