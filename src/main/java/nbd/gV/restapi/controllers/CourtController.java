@@ -6,6 +6,7 @@ import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validation;
 import jakarta.validation.Validator;
 import jakarta.ws.rs.Consumes;
+import jakarta.ws.rs.DELETE;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.PUT;
@@ -17,6 +18,7 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import nbd.gV.exceptions.CourtException;
 import nbd.gV.exceptions.CourtNumberException;
+import nbd.gV.exceptions.MyMongoException;
 import nbd.gV.model.courts.Court;
 import nbd.gV.restapi.services.CourtService;
 
@@ -119,5 +121,20 @@ public class CourtController {
     @Path("/archive/{id}")
     public void archiveCourt(@PathParam("id") String id) {
         courtService.archiveCourt(UUID.fromString(id));
+    }
+
+    @DELETE
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/delete/{id}")
+    public Response deleteCourt(@PathParam("id") String id) {
+        try {
+            courtService.deleteCourt(UUID.fromString(id));
+        } catch (CourtException ce) {
+            return Response.status(Response.Status.CONFLICT).entity(ce.getMessage()).build();
+        } catch (MyMongoException mme) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(mme.getMessage()).build();
+        }
+
+        return Response.status(Response.Status.NO_CONTENT).build();
     }
 }

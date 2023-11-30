@@ -251,18 +251,18 @@ public class CourtControllerTests {
 
         assertTrue(responseString.contains(
                 "\"archive\":false," +
-                        "\"area\":100.0," +
-                        "\"baseCost\":200," +
-                        "\"courtNumber\":2," +
-                        "\"id\":\"" + courtId + "\"," +
-                        "\"rented\":false"));
+                "\"area\":100.0," +
+                "\"baseCost\":200," +
+                "\"courtNumber\":2," +
+                "\"id\":\"" + courtId + "\"," +
+                "\"rented\":false"));
         assertFalse(responseString.contains(
                 "\"archive\":false," +
-                        "\"area\":150.0," +
-                        "\"baseCost\":75," +
-                        "\"courtNumber\":2," +
-                        "\"id\":\"" + courtId + "\"," +
-                        "\"rented\":false"));
+                "\"area\":150.0," +
+                "\"baseCost\":75," +
+                "\"courtNumber\":2," +
+                "\"id\":\"" + courtId + "\"," +
+                "\"rented\":false"));
 
         Response responsePut = requestPut.put("http://localhost:8080/CourtRent-1.0-SNAPSHOT/api/courts/modifyCourt/" + courtId);
 
@@ -272,18 +272,18 @@ public class CourtControllerTests {
 
         assertFalse(responseString.contains(
                 "\"archive\":false," +
-                        "\"area\":100.0," +
-                        "\"baseCost\":200," +
-                        "\"courtNumber\":2," +
-                        "\"id\":\"" + courtId + "\"," +
-                        "\"rented\":false"));
+                "\"area\":100.0," +
+                "\"baseCost\":200," +
+                "\"courtNumber\":2," +
+                "\"id\":\"" + courtId + "\"," +
+                "\"rented\":false"));
         assertTrue(responseString.contains(
                 "\"archive\":false," +
-                        "\"area\":150.0," +
-                        "\"baseCost\":75," +
-                        "\"courtNumber\":2," +
-                        "\"id\":\"" + courtId + "\"," +
-                        "\"rented\":false"));
+                "\"area\":150.0," +
+                "\"baseCost\":75," +
+                "\"courtNumber\":2," +
+                "\"id\":\"" + courtId + "\"," +
+                "\"rented\":false"));
     }
 
     @Test
@@ -367,18 +367,18 @@ public class CourtControllerTests {
 
         assertTrue(responseString.contains(
                 "\"archive\":false," +
-                        "\"area\":100.0," +
-                        "\"baseCost\":200," +
-                        "\"courtNumber\":2," +
-                        "\"id\":\"" + courtId + "\"," +
-                        "\"rented\":false"));
+                "\"area\":100.0," +
+                "\"baseCost\":200," +
+                "\"courtNumber\":2," +
+                "\"id\":\"" + courtId + "\"," +
+                "\"rented\":false"));
         assertFalse(responseString.contains(
                 "\"archive\":false," +
-                        "\"area\":150.0," +
-                        "\"baseCost\":75," +
-                        "\"courtNumber\":1," +
-                        "\"id\":\"" + courtId + "\"," +
-                        "\"rented\":false"));
+                "\"area\":150.0," +
+                "\"baseCost\":75," +
+                "\"courtNumber\":1," +
+                "\"id\":\"" + courtId + "\"," +
+                "\"rented\":false"));
 
         Response responsePut = requestPut.put("http://localhost:8080/CourtRent-1.0-SNAPSHOT/api/courts/modifyCourt/" + courtId);
 
@@ -452,11 +452,11 @@ public class CourtControllerTests {
 
         /*Activate test*/
         RequestSpecification requestPost2 = RestAssured.given();
-        Response responsePost2 = requestPost2.post("http://localhost:8080/CourtRent-1.0-SNAPSHOT/api/users/activate/" + courtId);
+        Response responsePost2 = requestPost2.post("http://localhost:8080/CourtRent-1.0-SNAPSHOT/api/courts/activate/" + courtId);
 
         assertEquals(204, responsePost2.getStatusCode());
 
-        responseString = requestGet.get(new URI("http://localhost:8080/CourtRent-1.0-SNAPSHOT/api/users")).asString();
+        responseString = requestGet.get(new URI("http://localhost:8080/CourtRent-1.0-SNAPSHOT/api/courts")).asString();
 
         assertTrue(responseString.contains(
                 "\"archive\":false," +

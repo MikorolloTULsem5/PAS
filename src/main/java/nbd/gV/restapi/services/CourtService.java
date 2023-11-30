@@ -91,8 +91,8 @@ public class CourtService {
             if (!courtRepository.delete(courtId)) {
                 throw new CourtException("Nie mozna usunac boiska - istnieja powiazanie z nim rezerwacje");
             }
-        } catch (Exception exception) {
-            throw new CourtException("Nie udalo sie usunac podanego boiska.");
+        } catch (MyMongoException exception) {
+            throw new MyMongoException("Nie udalo sie usunac podanego boiska. - " + exception.getMessage());
         }
     }
 }
