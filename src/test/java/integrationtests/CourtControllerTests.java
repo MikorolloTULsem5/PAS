@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.UUID;
 
 import static integrationtests.CleaningClass.clean;
 import static integrationtests.CleaningClass.initCourts;
@@ -156,7 +157,7 @@ public class CourtControllerTests {
         assertEquals(409, responsePost.getStatusCode());
 
         responseString = requestGet.get(new URI("http://localhost:8080/CourtRent-1.0-SNAPSHOT/api/courts")).asString();
-        
+
         assertTrue(responseString.contains("\"courtNumber\":2"));
 
         assertFalse(responseString.contains("\"area\":120.0"));
@@ -166,7 +167,7 @@ public class CourtControllerTests {
     @Test
     void getCourtByCourtNumberTest() throws URISyntaxException {
         RequestSpecification request = RestAssured.given();
-        Response response = request.get(new URI("http://localhost:8080/CourtRent-1.0-SNAPSHOT/api/users/get?number=3"));
+        Response response = request.get(new URI("http://localhost:8080/CourtRent-1.0-SNAPSHOT/api/courts/get?number=3"));
         String responseString = response.asString();
         String[] splitedRespStr = responseString.split("},");
 
@@ -197,7 +198,7 @@ public class CourtControllerTests {
         RequestSpecification request = RestAssured.given();
 
         //Retrieve UUID
-        String responseNumber = request.get(new URI("http://localhost:8080/CourtRent-1.0-SNAPSHOT/api/users/get?number=1")).asString();
+        String responseNumber = request.get(new URI("http://localhost:8080/CourtRent-1.0-SNAPSHOT/api/courts/get?number=1")).asString();
         int index = responseNumber.indexOf("\"id\":\"") + 6;
         String courtId = responseNumber.substring(index, index + 36);
 
@@ -216,17 +217,17 @@ public class CourtControllerTests {
 
         assertEquals(200, responseById.getStatusCode());
     }
-//
-//    @Test
-//    void getClientByIdTestNoCont() throws URISyntaxException {
-//        RequestSpecification request = RestAssured.given();
-//        Response response = request.get(new URI("http://localhost:8080/CourtRent-1.0-SNAPSHOT/api/users/" + UUID.randomUUID()));
-//        String responseString = response.asString();
-//
-//        assertTrue(responseString.isEmpty());
-//        assertEquals(204, response.getStatusCode());
-//    }
-//
+
+    @Test
+    void getCourtByIdTestNoCont() throws URISyntaxException {
+        RequestSpecification request = RestAssured.given();
+        Response response = request.get(new URI("http://localhost:8080/CourtRent-1.0-SNAPSHOT/api/courts/" + UUID.randomUUID()));
+        String responseString = response.asString();
+
+        assertTrue(responseString.isEmpty());
+        assertEquals(204, response.getStatusCode());
+    }
+
 //    @Test
 //    void modifyClientTest() throws URISyntaxException {
 //        String JSON = """
