@@ -84,8 +84,8 @@ public class ReservationController {
             } else {
                 reservationService.returnCourt(UUID.fromString(courtId), LocalDateTime.parse(date));
             }
-        } catch (IllegalArgumentException | NullPointerException ex) {
-            return Response.status(Response.Status.BAD_REQUEST).entity(ex.getMessage()).build();
+        } catch (IllegalArgumentException iae) {
+            return Response.status(Response.Status.BAD_REQUEST).entity(iae.getMessage()).build();
         } catch (Exception ce) {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ce.getMessage()).build();
         }
