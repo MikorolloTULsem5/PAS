@@ -286,130 +286,122 @@ public class CourtControllerTests {
                         "\"rented\":false"));
     }
 
-//    @Test
-//    void modifyClientTestNegInvalidData() throws URISyntaxException {
-//        String JSON = """
-//                {
-//                  "archive": true,
-//                  "firstName": "   ",
-//                  "lastName": "Smith",
-//                  "login": "loginek",
-//                  "clientTypeName": "coach"
-//                }
-//                """;
-//        RequestSpecification requestPut = RestAssured.given();
-//        requestPut.contentType("application/json");
-//        requestPut.body(JSON);
-//
-//        RequestSpecification requestGet = RestAssured.given();
-//        String responseString = requestGet.get(new URI("http://localhost:8080/CourtRent-1.0-SNAPSHOT/api/users")).asString();
-//
-//        //Retrieve UUID
-//        String responseLogin = requestGet.get(new URI("http://localhost:8080/CourtRent-1.0-SNAPSHOT/api/users/get?login=loginek")).asString();
-//        int index = responseLogin.indexOf("\"id\":\"") + 6;
-//        String clientId = responseLogin.substring(index, index + 36);
-//
-//        assertTrue(responseString.contains(
-//                "\"archive\":false," +
-//                        "\"id\":\"" + clientId + "\"," +
-//                        "\"login\":\"loginek\"," +
-//                        "\"clientTypeName\":\"normal\"," +
-//                        "\"firstName\":\"Adam\"," +
-//                        "\"lastName\":\"Smith\""));
-//        assertFalse(responseString.contains(
-//                "\"archive\":true," +
-//                        "\"id\":\"" + clientId + "\"," +
-//                        "\"login\":\"loginek\"," +
-//                        "\"clientTypeName\":\"coach\"," +
-//                        "\"firstName\":\"John\"," +
-//                        "\"lastName\":\"Smith\""));
-//
-//        Response responsePut = requestPut.put("http://localhost:8080/CourtRent-1.0-SNAPSHOT/api/users/modifyClient/" + clientId);
-//
-//        assertEquals(400, responsePut.getStatusCode());
-//
-//        responseString = requestGet.get(new URI("http://localhost:8080/CourtRent-1.0-SNAPSHOT/api/users")).asString();
-//
-//        assertTrue(responseString.contains(
-//                "\"archive\":false," +
-//                "\"id\":\"" + clientId + "\"," +
-//                "\"login\":\"loginek\"," +
-//                "\"clientTypeName\":\"normal\"," +
-//                "\"firstName\":\"Adam\"," +
-//                "\"lastName\":\"Smith\""));
-//        assertFalse(responseString.contains(
-//                "\"archive\":true," +
-//                "\"id\":\"" + clientId + "\"," +
-//                "\"login\":\"loginek\"," +
-//                "\"clientTypeName\":\"coach\"," +
-//                "\"firstName\":\"John\"," +
-//                "\"lastName\":\"Smith\""));
-//    }
-//
-//    @Test
-//    void modifyClientTestNegRepeatLoginOfAnotherClient() throws URISyntaxException {
-//        String JSON = """
-//                {
-//                  "archive": true,
-//                  "firstName": "John",
-//                  "lastName": "Smith",
-//                  "login": "michas13",
-//                  "clientTypeName": "coach"
-//                }
-//                """;
-//        RequestSpecification requestPut = RestAssured.given();
-//        requestPut.contentType("application/json");
-//        requestPut.body(JSON);
-//
-//        RequestSpecification requestGet = RestAssured.given();
-//        String responseString = requestGet.get(new URI("http://localhost:8080/CourtRent-1.0-SNAPSHOT/api/users")).asString();
-//
-//        //Retrieve UUID
-//        String responseLogin = requestGet.get(new URI("http://localhost:8080/CourtRent-1.0-SNAPSHOT/api/users/get?login=loginek")).asString();
-//        int index = responseLogin.indexOf("\"id\":\"") + 6;
-//        String clientId = responseLogin.substring(index, index + 36);
-//
-//        assertTrue(responseString.contains("\"login\":\"michas13\""));
-//
-//        assertTrue(responseString.contains(
-//                "\"archive\":false," +
-//                "\"id\":\"" + clientId + "\"," +
-//                "\"login\":\"loginek\"," +
-//                "\"clientTypeName\":\"normal\"," +
-//                "\"firstName\":\"Adam\"," +
-//                "\"lastName\":\"Smith\""));
-//        assertFalse(responseString.contains(
-//                "\"archive\":true," +
-//                "\"id\":\"" + clientId + "\"," +
-//                "\"login\":\"michas13\"," +
-//                "\"clientTypeName\":\"coach\"," +
-//                "\"firstName\":\"John\"," +
-//                "\"lastName\":\"Smith\""));
-//
-//        Response responsePut = requestPut.put("http://localhost:8080/CourtRent-1.0-SNAPSHOT/api/users/modifyClient/" + clientId);
-//
-//        assertEquals(409, responsePut.getStatusCode());
-//
-//        responseString = requestGet.get(new URI("http://localhost:8080/CourtRent-1.0-SNAPSHOT/api/users")).asString();
-//
-//        assertTrue(responseString.contains("\"login\":\"michas13\""));
-//
-//        assertTrue(responseString.contains(
-//                "\"archive\":false," +
-//                "\"id\":\"" + clientId + "\"," +
-//                "\"login\":\"loginek\"," +
-//                "\"clientTypeName\":\"normal\"," +
-//                "\"firstName\":\"Adam\"," +
-//                "\"lastName\":\"Smith\""));
-//        assertFalse(responseString.contains(
-//                "\"archive\":true," +
-//                "\"id\":\"" + clientId + "\"," +
-//                "\"login\":\"michas13\"," +
-//                "\"clientTypeName\":\"coach\"," +
-//                "\"firstName\":\"John\"," +
-//                "\"lastName\":\"Smith\""));
-//    }
-//
+    @Test
+    void modifyCourtTestNegInvalidData() throws URISyntaxException {
+        String JSON = """
+                {
+                  "area": 150.0,
+                  "baseCost": -75,
+                  "courtNumber": 2
+                }
+                """;
+        RequestSpecification requestPut = RestAssured.given();
+        requestPut.contentType("application/json");
+        requestPut.body(JSON);
+
+        RequestSpecification requestGet = RestAssured.given();
+        String responseString = requestGet.get(new URI("http://localhost:8080/CourtRent-1.0-SNAPSHOT/api/courts")).asString();
+
+        //Retrieve UUID
+        String responseNumber = requestGet.get(new URI("http://localhost:8080/CourtRent-1.0-SNAPSHOT/api/courts/get?number=2")).asString();
+        int index = responseNumber.indexOf("\"id\":\"") + 6;
+        String courtId = responseNumber.substring(index, index + 36);
+
+        assertTrue(responseString.contains(
+                "\"archive\":false," +
+                "\"area\":100.0," +
+                "\"baseCost\":200," +
+                "\"courtNumber\":2," +
+                "\"id\":\"" + courtId + "\"," +
+                "\"rented\":false"));
+        assertFalse(responseString.contains(
+                "\"archive\":false," +
+                "\"area\":150.0," +
+                "\"baseCost\":-75," +
+                "\"courtNumber\":2," +
+                "\"id\":\"" + courtId + "\"," +
+                "\"rented\":false"));
+
+        Response responsePut = requestPut.put("http://localhost:8080/CourtRent-1.0-SNAPSHOT/api/courts/modifyCourt/" + courtId);
+
+        assertEquals(400, responsePut.getStatusCode());
+
+        responseString = requestGet.get(new URI("http://localhost:8080/CourtRent-1.0-SNAPSHOT/api/courts")).asString();
+
+        assertTrue(responseString.contains(
+                "\"archive\":false," +
+                "\"area\":100.0," +
+                "\"baseCost\":200," +
+                "\"courtNumber\":2," +
+                "\"id\":\"" + courtId + "\"," +
+                "\"rented\":false"));
+        assertFalse(responseString.contains(
+                "\"archive\":false," +
+                "\"area\":150.0," +
+                "\"baseCost\":-75," +
+                "\"courtNumber\":2," +
+                "\"id\":\"" + courtId + "\"," +
+                "\"rented\":false"));
+    }
+
+    @Test
+    void modifyCourtTestNegRepeatNumberOfAnotherCourt() throws URISyntaxException {
+        String JSON = """
+                {
+                  "area": 150.0,
+                  "baseCost": 75,
+                  "courtNumber": 2
+                }
+                """;
+        RequestSpecification requestPut = RestAssured.given();
+        requestPut.contentType("application/json");
+        requestPut.body(JSON);
+
+        RequestSpecification requestGet = RestAssured.given();
+        String responseString = requestGet.get(new URI("http://localhost:8080/CourtRent-1.0-SNAPSHOT/api/courts")).asString();
+
+        //Retrieve UUID
+        String responseNumber = requestGet.get(new URI("http://localhost:8080/CourtRent-1.0-SNAPSHOT/api/courts/get?number=2")).asString();
+        int index = responseNumber.indexOf("\"id\":\"") + 6;
+        String courtId = responseNumber.substring(index, index + 36);
+
+        assertTrue(responseString.contains(
+                "\"archive\":false," +
+                        "\"area\":100.0," +
+                        "\"baseCost\":200," +
+                        "\"courtNumber\":2," +
+                        "\"id\":\"" + courtId + "\"," +
+                        "\"rented\":false"));
+        assertFalse(responseString.contains(
+                "\"archive\":false," +
+                        "\"area\":150.0," +
+                        "\"baseCost\":75," +
+                        "\"courtNumber\":2," +
+                        "\"id\":\"" + courtId + "\"," +
+                        "\"rented\":false"));
+
+        Response responsePut = requestPut.put("http://localhost:8080/CourtRent-1.0-SNAPSHOT/api/courts/modifyCourt/" + courtId);
+
+        assertEquals(409, responsePut.getStatusCode());
+
+        responseString = requestGet.get(new URI("http://localhost:8080/CourtRent-1.0-SNAPSHOT/api/courts")).asString();
+
+        assertTrue(responseString.contains(
+                "\"archive\":false," +
+                        "\"area\":100.0," +
+                        "\"baseCost\":200," +
+                        "\"courtNumber\":2," +
+                        "\"id\":\"" + courtId + "\"," +
+                        "\"rented\":false"));
+        assertFalse(responseString.contains(
+                "\"archive\":false," +
+                        "\"area\":150.0," +
+                        "\"baseCost\":75," +
+                        "\"courtNumber\":2," +
+                        "\"id\":\"" + courtId + "\"," +
+                        "\"rented\":false"));
+    }
+
 //    @Test
 //    void archiveAndActivateClientTest() throws URISyntaxException {
 //        RequestSpecification requestGet = RestAssured.given();
