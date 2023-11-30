@@ -4,8 +4,13 @@ import com.mongodb.client.MongoCollection;
 import com.mongodb.client.model.CreateCollectionOptions;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.ValidationOptions;
+import jakarta.annotation.PostConstruct;
+import jakarta.annotation.PreDestroy;
 import jakarta.enterprise.context.ApplicationScoped;
+import nbd.gV.data.datahandling.dto.ClientDTO;
 import nbd.gV.data.datahandling.dto.UserDTO;
+import nbd.gV.data.datahandling.mappers.ClientMapper;
+import nbd.gV.model.users.Client;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 
@@ -83,4 +88,18 @@ public class UserMongoRepository extends AbstractMongoRepository<UserDTO> {
 //    public boolean delete(UUID uuid) {
 //        throw new UnsupportedOperationException();
 //    }
+
+    @PostConstruct
+    private void init() {
+        create(ClientMapper.toMongoUser(new Client(UUID.fromString("80e62401-6517-4392-856c-e22ef5f3d6a2"), "Adam", "Smith", "loginek", "normal")));
+        create(ClientMapper.toMongoUser(new Client(UUID.fromString("b6f5bcb8-7f01-4470-8238-cc3320326157"), "Eva", "Braun", "loginek13", "athlete")));
+        create(ClientMapper.toMongoUser(new Client(UUID.fromString("6dc63417-0a21-462c-a97a-e0bf6055a3ea"), "Michal", "Pi", "michas13", "coach")));
+        create(ClientMapper.toMongoUser(new Client(UUID.fromString("3a722080-9668-42a2-9788-4695a4b9f5a7"), "Krzysztof", "Scala", "scKrzy", "normal")));
+        create(ClientMapper.toMongoUser(new Client(UUID.fromString("126778af-0e19-46d4-b329-0b6b92548f9a"), "Adam", "Scout", "scAdam", "normal")));
+    }
+
+    @PreDestroy
+    private void destroy() {
+        readAll(ClientDTO.class).forEach((mapper) -> super.delete(UUID.fromString(mapper.getId())));
+    }
 }

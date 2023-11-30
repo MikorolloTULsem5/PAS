@@ -6,6 +6,7 @@ import com.mongodb.client.model.CreateCollectionOptions;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.ValidationOptions;
 import jakarta.annotation.PostConstruct;
+import jakarta.annotation.PreDestroy;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.ws.rs.ForbiddenException;
 import nbd.gV.data.datahandling.dto.CourtDTO;
@@ -103,5 +104,10 @@ public class CourtMongoRepository extends AbstractMongoRepository<CourtDTO> {
         create(CourtMapper.toMongoCourt(new Court(UUID.fromString("30ac2027-dcc8-4af7-920f-831b51023bc9"),300, 200, 3)));
         create(CourtMapper.toMongoCourt(new Court(UUID.fromString("d820d682-0f5d-46b7-9963-66291e5f64b0"),350, 100, 4)));
         create(CourtMapper.toMongoCourt(new Court(UUID.fromString("2e9258b2-98dd-4f9a-8f73-6f4f56c2e618"),150, 200, 5)));
+    }
+
+    @PreDestroy
+    private void destroy() {
+       readAll().forEach((mapper) -> super.delete(UUID.fromString(mapper.getId())));
     }
 }

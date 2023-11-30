@@ -145,22 +145,4 @@ public class ReservationService {
         return reservations;
     }
 
-    @PostConstruct
-    private void init() {
-        LocalDateTime dataStart = LocalDateTime.of(2023, Month.NOVEMBER, 30, 14, 20);
-
-        makeReservation(UUID.fromString("80e62401-6517-4392-856c-e22ef5f3d6a2"), UUID.fromString("634d9130-0015-42bb-a70a-543dee846760"), dataStart);
-        makeReservation(UUID.fromString("b6f5bcb8-7f01-4470-8238-cc3320326157"), UUID.fromString("fe6a35bb-7535-4c23-a259-a14ac0ccedba"), dataStart);
-        makeReservation(UUID.fromString("6dc63417-0a21-462c-a97a-e0bf6055a3ea"), UUID.fromString("30ac2027-dcc8-4af7-920f-831b51023bc9"), LocalDateTime.of(2023, Month.NOVEMBER, 28, 14, 20));
-
-        returnCourt(UUID.fromString("30ac2027-dcc8-4af7-920f-831b51023bc9"), dataStart);
-       }
-
-    @PreDestroy
-    private void destroy() {
-        reservationRepository.getDatabase().getCollection(reservationRepository.getCollectionName(),
-                ReservationDTO.class).deleteMany(Filters.empty());
-        clientsRepository.readAll(ClientDTO.class).forEach((mapper) -> clientsRepository.delete(UUID.fromString(mapper.getId())));
-        courtRepository.readAll().forEach((mapper) -> courtRepository.delete(UUID.fromString(mapper.getId())));
-    }
 }
