@@ -3,6 +3,8 @@ package integrationtests;
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
+import nbd.gV.data.datahandling.dto.CourtDTO;
+import nbd.gV.data.repositories.CourtMongoRepository;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -510,5 +512,42 @@ public class CourtControllerTests {
         Response responseDelete2 = requestDelete.delete("http://localhost:8080/CourtRent-1.0-SNAPSHOT/api/courts/delete/" + courtId);
 
         assertEquals(204, responseDelete2.getStatusCode());
+    }
+
+    @Test
+    void deleteCourtTestNeg() throws URISyntaxException {
+        new CourtMongoRepository().create(new CourtDTO(UUID.randomUUID().toString(), 999.0, 111,
+                5, false, 1));
+
+        RequestSpecification requestGet = RestAssured.given();
+        String responseString = requestGet.get(new URI("http://localhost:8080/CourtRent-1.0-SNAPSHOT/api/courts")).asString();
+
+        //Retrieve UUID
+        String responseNumber = requestGet.get(new URI("http://localhost:8080/CourtRent-1.0-SNAPSHOT/api/courts/get?number=5")).asString();
+        int index = responseNumber.indexOf("\"id\":\"") + 6;
+        String courtId = responseNumber.substring(index, index + 36);
+
+        assertTrue(responseString.contains(
+                "\"archive\":false," +
+                "\"area\":999.0," +
+                "\"baseCost\":111," +
+                "\"courtNumber\":5," +
+                "\"id\":\"" + courtId + "\"," +
+                "\"rented\":true"));
+
+        RequestSpecification requestDelete = RestAssured.given();
+        Response responseDelete = requestDelete.delete("http://localhost:8080/CourtRent-1.0-SNAPSHOT/api/courts/delete/" + courtId);
+
+        assertEquals(409, responseDelete.getStatusCode());
+
+        responseString = requestGet.get(new URI("http://localhost:8080/CourtRent-1.0-SNAPSHOT/api/courts")).asString();
+
+        assertTrue(responseString.contains(
+                "\"archive\":false," +
+                "\"area\":999.0," +
+                "\"baseCost\":111," +
+                "\"courtNumber\":5," +
+                "\"id\":\"" + courtId + "\"," +
+                "\"rented\":true"));
     }
 }
