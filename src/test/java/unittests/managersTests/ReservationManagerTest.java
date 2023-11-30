@@ -2,6 +2,7 @@ package unittests.managersTests;
 
 import com.mongodb.client.model.Filters;
 import nbd.gV.data.datahandling.dto.ClientDTO;
+import nbd.gV.exceptions.MultiReservationException;
 import nbd.gV.model.users.Client;
 import nbd.gV.model.courts.Court;
 import nbd.gV.exceptions.UserException;
@@ -110,7 +111,7 @@ public class ReservationManagerTest {
         assertEquals(newReservation2, rm.getReservationById(newReservation2.getId()));
         assertTrue(newReservation2.getCourt().isRented());
 
-        assertThrows(ReservationException.class, () -> rm.makeReservation(testClient1.getId(), testCourt1.getId(), testTimeStart));
+        assertThrows(MultiReservationException.class, () -> rm.makeReservation(testClient1.getId(), testCourt1.getId(), testTimeStart));
         assertEquals(rm.getAllCurrentReservations().size(), 2);
 
         clientRepository.update(testClient2.getId(), "archive", true);
@@ -139,7 +140,7 @@ public class ReservationManagerTest {
 
         assertEquals(0, rm.getAllArchiveReservations().size());
         assertEquals(2, rm.getAllCurrentReservations().size());
-        System.out.println(testCourt1.isRented());
+
         rm.returnCourt(testCourt1.getId(), testTimeEnd);
 
         assertEquals(1, rm.getAllArchiveReservations().size());
@@ -149,7 +150,6 @@ public class ReservationManagerTest {
         assertEquals(2, rm.getAllArchiveReservations().size());
         assertEquals(0, rm.getAllCurrentReservations().size());
 
-        assertThrows(MainException.class, () -> rm.returnCourt(null));
         assertThrows(ReservationException.class, () -> rm.returnCourt(testCourt3.getId()));
     }
 

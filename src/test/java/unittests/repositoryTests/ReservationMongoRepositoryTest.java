@@ -4,6 +4,7 @@ import com.mongodb.client.MongoCollection;
 import com.mongodb.client.model.Filters;
 
 import nbd.gV.data.datahandling.dto.ClientDTO;
+import nbd.gV.exceptions.MultiReservationException;
 import nbd.gV.model.users.Client;
 import nbd.gV.model.courts.Court;
 import nbd.gV.exceptions.UserException;
@@ -117,7 +118,7 @@ public class ReservationMongoRepositoryTest {
         //Reserve reserved court
         Reservation reservation2 = new Reservation(testClient2, testCourt1, testTimeStart);
         assertNotNull(reservation2);
-        assertThrows(ReservationException.class, () -> reservationRepository.create(
+        assertThrows(MultiReservationException.class, () -> reservationRepository.create(
                 ReservationMapper.toMongoReservation(reservation2)));
 
         //No client in the database
@@ -296,7 +297,7 @@ public class ReservationMongoRepositoryTest {
 
         assertNull(reservationRepository.readByUUID(reservation.getId()).getEndTime());
         assertEquals(0, reservationRepository.readByUUID(reservation.getId()).getReservationCost());
-        reservationRepository.update(testCourt1, testTimeEnd);
+        reservationRepository.update(testCourt1.getId(), testTimeEnd);
         assertEquals(testTimeEnd, reservationRepository.readByUUID(reservation.getId()).getEndTime());
         assertEquals(300, reservationRepository.readByUUID(reservation.getId()).getReservationCost());
     }
@@ -309,7 +310,7 @@ public class ReservationMongoRepositoryTest {
         reservationRepository.create(ReservationMapper.toMongoReservation(reservation));
         assertEquals(1, getTestCollection().find().into(new ArrayList<>()).size());
 
-        reservationRepository.update(testCourt1, testTimeEnd);
-        assertThrows(ReservationException.class, () -> reservationRepository.update(testCourt1, testTimeEnd));
+        reservationRepository.update(testCourt1.getId(), testTimeEnd);
+        assertThrows(ReservationException.class, () -> reservationRepository.update(testCourt1.getId(), testTimeEnd));
     }
 }

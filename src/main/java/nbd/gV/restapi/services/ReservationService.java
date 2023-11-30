@@ -2,8 +2,6 @@ package nbd.gV.restapi.services;
 
 import com.mongodb.client.model.Filters;
 
-import jakarta.annotation.PostConstruct;
-import jakarta.annotation.PreDestroy;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import lombok.NoArgsConstructor;
@@ -69,8 +67,7 @@ public class ReservationService {
 
     public void returnCourt(UUID courtId, LocalDateTime endTime) {
         try {
-            Court court = CourtMapper.fromMongoCourt(courtRepository.readByUUID(courtId));
-            reservationRepository.update(court, endTime);
+            reservationRepository.update(courtId, endTime);
         } catch (MyMongoException exception) {
             throw new ReservationException("Blad transakcji.");
         }

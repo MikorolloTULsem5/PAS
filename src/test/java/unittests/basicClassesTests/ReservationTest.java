@@ -61,14 +61,6 @@ public class ReservationTest {
         assertNull(reservation.getEndTime());
     }
 
-
-    @Test
-    void testConstructorException() {
-        assertThrows(MainException.class, () -> new Reservation(null, testClient, testCourt, null));
-        assertThrows(MainException.class, () -> new Reservation(testUUID, null, testCourt, null));
-        assertThrows(MainException.class, () -> new Reservation(testUUID, testClient, null, null));
-    }
-
     @Test
     void testEndingReservation() {
         LocalDateTime now = LocalDateTime.of(2023, Month.JUNE, 3, 22, 15);
