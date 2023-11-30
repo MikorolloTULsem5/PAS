@@ -84,6 +84,9 @@ public class CourtMongoRepository extends AbstractMongoRepository<CourtDTO> {
         } catch (Exception exception) {
             clientSession.abortTransaction();
             clientSession.close();
+            if (exception instanceof IllegalStateException ise) {
+                throw ise;
+            }
             throw new MyMongoException(exception.getMessage());
         } finally {
             clientSession.close();

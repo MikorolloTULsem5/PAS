@@ -63,7 +63,10 @@ public class CleaningClass {
     ///TODO wywalic
     @Test
     void cleanTest() {
-        clean();
+//        clean();
+//        initClients();
+//        initCourts();
+//        initReservations();
     }
 
 }

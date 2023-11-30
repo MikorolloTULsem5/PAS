@@ -200,7 +200,7 @@ public class CourtMongoRepositoryTest {
              UserMongoRepository userMongoRepository = new UserMongoRepository()) {
             userMongoRepository.create(ClientMapper.toMongoUser(testClient1));
             reservationMongoRepository.create(ReservationMapper.toMongoReservation(testReservation1));
-            assertFalse(courtRepository.delete(testCourt1.getId()));
+            assertThrows(IllegalStateException.class, () -> courtRepository.delete(testCourt1.getId()));
             assertEquals(3, getTestCollection().find().into(new ArrayList<>()).size());
 
             reservationMongoRepository.delete(testReservation1.getId());

@@ -257,18 +257,18 @@ public class CourtControllerTests {
 
         assertTrue(responseString.contains(
                 "\"archive\":false," +
-                "\"area\":100.0," +
-                "\"baseCost\":200," +
-                "\"courtNumber\":2," +
-                "\"id\":\"" + courtId + "\"," +
-                "\"rented\":false"));
+                        "\"area\":100.0," +
+                        "\"baseCost\":200," +
+                        "\"courtNumber\":2," +
+                        "\"id\":\"" + courtId + "\"," +
+                        "\"rented\":false"));
         assertFalse(responseString.contains(
                 "\"archive\":false," +
-                "\"area\":150.0," +
-                "\"baseCost\":75," +
-                "\"courtNumber\":2," +
-                "\"id\":\"" + courtId + "\"," +
-                "\"rented\":false"));
+                        "\"area\":150.0," +
+                        "\"baseCost\":75," +
+                        "\"courtNumber\":2," +
+                        "\"id\":\"" + courtId + "\"," +
+                        "\"rented\":false"));
 
         Response responsePut = requestPut.put("http://localhost:8080/CourtRent-1.0-SNAPSHOT/api/courts/modifyCourt/" + courtId);
 
@@ -278,18 +278,18 @@ public class CourtControllerTests {
 
         assertFalse(responseString.contains(
                 "\"archive\":false," +
-                "\"area\":100.0," +
-                "\"baseCost\":200," +
-                "\"courtNumber\":2," +
-                "\"id\":\"" + courtId + "\"," +
-                "\"rented\":false"));
+                        "\"area\":100.0," +
+                        "\"baseCost\":200," +
+                        "\"courtNumber\":2," +
+                        "\"id\":\"" + courtId + "\"," +
+                        "\"rented\":false"));
         assertTrue(responseString.contains(
                 "\"archive\":false," +
-                "\"area\":150.0," +
-                "\"baseCost\":75," +
-                "\"courtNumber\":2," +
-                "\"id\":\"" + courtId + "\"," +
-                "\"rented\":false"));
+                        "\"area\":150.0," +
+                        "\"baseCost\":75," +
+                        "\"courtNumber\":2," +
+                        "\"id\":\"" + courtId + "\"," +
+                        "\"rented\":false"));
     }
 
     @Test
@@ -315,18 +315,18 @@ public class CourtControllerTests {
 
         assertTrue(responseString.contains(
                 "\"archive\":false," +
-                "\"area\":100.0," +
-                "\"baseCost\":200," +
-                "\"courtNumber\":2," +
-                "\"id\":\"" + courtId + "\"," +
-                "\"rented\":false"));
+                        "\"area\":100.0," +
+                        "\"baseCost\":200," +
+                        "\"courtNumber\":2," +
+                        "\"id\":\"" + courtId + "\"," +
+                        "\"rented\":false"));
         assertFalse(responseString.contains(
                 "\"archive\":false," +
-                "\"area\":150.0," +
-                "\"baseCost\":-75," +
-                "\"courtNumber\":2," +
-                "\"id\":\"" + courtId + "\"," +
-                "\"rented\":false"));
+                        "\"area\":150.0," +
+                        "\"baseCost\":-75," +
+                        "\"courtNumber\":2," +
+                        "\"id\":\"" + courtId + "\"," +
+                        "\"rented\":false"));
 
         Response responsePut = requestPut.put("http://localhost:8080/CourtRent-1.0-SNAPSHOT/api/courts/modifyCourt/" + courtId);
 
@@ -336,18 +336,18 @@ public class CourtControllerTests {
 
         assertTrue(responseString.contains(
                 "\"archive\":false," +
-                "\"area\":100.0," +
-                "\"baseCost\":200," +
-                "\"courtNumber\":2," +
-                "\"id\":\"" + courtId + "\"," +
-                "\"rented\":false"));
+                        "\"area\":100.0," +
+                        "\"baseCost\":200," +
+                        "\"courtNumber\":2," +
+                        "\"id\":\"" + courtId + "\"," +
+                        "\"rented\":false"));
         assertFalse(responseString.contains(
                 "\"archive\":false," +
-                "\"area\":150.0," +
-                "\"baseCost\":-75," +
-                "\"courtNumber\":2," +
-                "\"id\":\"" + courtId + "\"," +
-                "\"rented\":false"));
+                        "\"area\":150.0," +
+                        "\"baseCost\":-75," +
+                        "\"courtNumber\":2," +
+                        "\"id\":\"" + courtId + "\"," +
+                        "\"rented\":false"));
     }
 
     @Test
@@ -373,18 +373,18 @@ public class CourtControllerTests {
 
         assertTrue(responseString.contains(
                 "\"archive\":false," +
-                "\"area\":100.0," +
-                "\"baseCost\":200," +
-                "\"courtNumber\":2," +
-                "\"id\":\"" + courtId + "\"," +
-                "\"rented\":false"));
+                        "\"area\":100.0," +
+                        "\"baseCost\":200," +
+                        "\"courtNumber\":2," +
+                        "\"id\":\"" + courtId + "\"," +
+                        "\"rented\":false"));
         assertFalse(responseString.contains(
                 "\"archive\":false," +
-                "\"area\":150.0," +
-                "\"baseCost\":75," +
-                "\"courtNumber\":1," +
-                "\"id\":\"" + courtId + "\"," +
-                "\"rented\":false"));
+                        "\"area\":150.0," +
+                        "\"baseCost\":75," +
+                        "\"courtNumber\":1," +
+                        "\"id\":\"" + courtId + "\"," +
+                        "\"rented\":false"));
 
         Response responsePut = requestPut.put("http://localhost:8080/CourtRent-1.0-SNAPSHOT/api/courts/modifyCourt/" + courtId);
 
@@ -394,18 +394,18 @@ public class CourtControllerTests {
 
         assertTrue(responseString.contains(
                 "\"archive\":false," +
-                "\"area\":100.0," +
-                "\"baseCost\":200," +
-                "\"courtNumber\":2," +
-                "\"id\":\"" + courtId + "\"," +
-                "\"rented\":false"));
+                        "\"area\":100.0," +
+                        "\"baseCost\":200," +
+                        "\"courtNumber\":2," +
+                        "\"id\":\"" + courtId + "\"," +
+                        "\"rented\":false"));
         assertFalse(responseString.contains(
                 "\"archive\":false," +
-                "\"area\":150.0," +
-                "\"baseCost\":75," +
-                "\"courtNumber\":1," +
-                "\"id\":\"" + courtId + "\"," +
-                "\"rented\":false"));
+                        "\"area\":150.0," +
+                        "\"baseCost\":75," +
+                        "\"courtNumber\":1," +
+                        "\"id\":\"" + courtId + "\"," +
+                        "\"rented\":false"));
     }
 
     @Test
@@ -421,18 +421,18 @@ public class CourtControllerTests {
         /*Archive test*/
         assertTrue(responseString.contains(
                 "\"archive\":false," +
-                "\"area\":300.0," +
-                "\"baseCost\":200," +
-                "\"courtNumber\":3," +
-                "\"id\":\"" + courtId + "\"," +
-                "\"rented\":false"));
+                        "\"area\":300.0," +
+                        "\"baseCost\":200," +
+                        "\"courtNumber\":3," +
+                        "\"id\":\"" + courtId + "\"," +
+                        "\"rented\":false"));
         assertFalse(responseString.contains(
                 "\"archive\":true," +
-                "\"area\":300.0," +
-                "\"baseCost\":200," +
-                "\"courtNumber\":3," +
-                "\"id\":\"" + courtId + "\"," +
-                "\"rented\":false"));
+                        "\"area\":300.0," +
+                        "\"baseCost\":200," +
+                        "\"courtNumber\":3," +
+                        "\"id\":\"" + courtId + "\"," +
+                        "\"rented\":false"));
 
         RequestSpecification requestPost = RestAssured.given();
         Response responsePost = requestPost.post("http://localhost:8080/CourtRent-1.0-SNAPSHOT/api/courts/archive/" + courtId);
@@ -443,18 +443,18 @@ public class CourtControllerTests {
 
         assertFalse(responseString.contains(
                 "\"archive\":false," +
-                "\"area\":300.0," +
-                "\"baseCost\":200," +
-                "\"courtNumber\":3," +
-                "\"id\":\"" + courtId + "\"," +
-                "\"rented\":false"));
+                        "\"area\":300.0," +
+                        "\"baseCost\":200," +
+                        "\"courtNumber\":3," +
+                        "\"id\":\"" + courtId + "\"," +
+                        "\"rented\":false"));
         assertTrue(responseString.contains(
                 "\"archive\":true," +
-                "\"area\":300.0," +
-                "\"baseCost\":200," +
-                "\"courtNumber\":3," +
-                "\"id\":\"" + courtId + "\"," +
-                "\"rented\":false"));
+                        "\"area\":300.0," +
+                        "\"baseCost\":200," +
+                        "\"courtNumber\":3," +
+                        "\"id\":\"" + courtId + "\"," +
+                        "\"rented\":false"));
 
         /*Activate test*/
         RequestSpecification requestPost2 = RestAssured.given();
@@ -466,18 +466,18 @@ public class CourtControllerTests {
 
         assertTrue(responseString.contains(
                 "\"archive\":false," +
-                "\"area\":300.0," +
-                "\"baseCost\":200," +
-                "\"courtNumber\":3," +
-                "\"id\":\"" + courtId + "\"," +
-                "\"rented\":false"));
+                        "\"area\":300.0," +
+                        "\"baseCost\":200," +
+                        "\"courtNumber\":3," +
+                        "\"id\":\"" + courtId + "\"," +
+                        "\"rented\":false"));
         assertFalse(responseString.contains(
                 "\"archive\":true," +
-                "\"area\":300.0," +
-                "\"baseCost\":200," +
-                "\"courtNumber\":3," +
-                "\"id\":\"" + courtId + "\"," +
-                "\"rented\":false"));
+                        "\"area\":300.0," +
+                        "\"baseCost\":200," +
+                        "\"courtNumber\":3," +
+                        "\"id\":\"" + courtId + "\"," +
+                        "\"rented\":false"));
     }
 
     @Test
@@ -492,11 +492,11 @@ public class CourtControllerTests {
 
         assertTrue(responseString.contains(
                 "\"archive\":false," +
-                "\"area\":300.0," +
-                "\"baseCost\":200," +
-                "\"courtNumber\":3," +
-                "\"id\":\"" + courtId + "\"," +
-                "\"rented\":false"));
+                        "\"area\":300.0," +
+                        "\"baseCost\":200," +
+                        "\"courtNumber\":3," +
+                        "\"id\":\"" + courtId + "\"," +
+                        "\"rented\":false"));
 
         RequestSpecification requestDelete = RestAssured.given();
         Response responseDelete = requestDelete.delete("http://localhost:8080/CourtRent-1.0-SNAPSHOT/api/courts/delete/" + courtId);
@@ -507,11 +507,11 @@ public class CourtControllerTests {
 
         assertFalse(responseString.contains(
                 "\"archive\":false," +
-                "\"area\":300.0," +
-                "\"baseCost\":200," +
-                "\"courtNumber\":3," +
-                "\"id\":\"" + courtId + "\"," +
-                "\"rented\":false"));
+                        "\"area\":300.0," +
+                        "\"baseCost\":200," +
+                        "\"courtNumber\":3," +
+                        "\"id\":\"" + courtId + "\"," +
+                        "\"rented\":false"));
 
         Response responseDelete2 = requestDelete.delete("http://localhost:8080/CourtRent-1.0-SNAPSHOT/api/courts/delete/" + courtId);
 
@@ -520,7 +520,10 @@ public class CourtControllerTests {
 
     @Test
     void deleteCourtTestNeg() throws URISyntaxException {
+        //Additional preparing
+        initClients();
         initReservations();
+
         RequestSpecification requestGet = RestAssured.given();
         String responseString = requestGet.get(new URI("http://localhost:8080/CourtRent-1.0-SNAPSHOT/api/courts")).asString();
 
@@ -531,11 +534,11 @@ public class CourtControllerTests {
 
         assertTrue(responseString.contains(
                 "\"archive\":false," +
-                "\"area\":300.0," +
-                "\"baseCost\":200," +
-                "\"courtNumber\":3," +
-                "\"id\":\"" + courtId + "\"," +
-                "\"rented\":false"));
+                        "\"area\":300.0," +
+                        "\"baseCost\":200," +
+                        "\"courtNumber\":3," +
+                        "\"id\":\"" + courtId + "\"," +
+                        "\"rented\":false"));
 
         RequestSpecification requestDelete = RestAssured.given();
         Response responseDelete = requestDelete.delete("http://localhost:8080/CourtRent-1.0-SNAPSHOT/api/courts/delete/" + courtId);
@@ -546,10 +549,10 @@ public class CourtControllerTests {
 
         assertTrue(responseString.contains(
                 "\"archive\":false," +
-                "\"area\":300.0," +
-                "\"baseCost\":200," +
-                "\"courtNumber\":3," +
-                "\"id\":\"" + courtId + "\"," +
-                "\"rented\":false"));
+                        "\"area\":300.0," +
+                        "\"baseCost\":200," +
+                        "\"courtNumber\":3," +
+                        "\"id\":\"" + courtId + "\"," +
+                        "\"rented\":false"));
     }
 }
