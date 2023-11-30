@@ -1,5 +1,6 @@
 package nbd.gV.model.reservations;
 
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import nbd.gV.model.users.Client;
 import nbd.gV.model.courts.Court;
@@ -15,7 +16,9 @@ import java.util.UUID;
 public class Reservation {
     private UUID id;
 
+    @NotNull
     private final Client client;
+    @NotNull
     private final Court court;
     private final LocalDateTime beginTime;
 

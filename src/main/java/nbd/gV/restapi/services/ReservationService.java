@@ -45,6 +45,9 @@ public class ReservationService {
     }
 
     public Reservation makeReservation(UUID clientId, UUID courtId, LocalDateTime beginTime) {
+        if (beginTime == null) {
+            return makeReservation(clientId, courtId);
+        }
         try {
             Client client = ClientMapper.fromMongoUser((ClientDTO) clientsRepository.readByUUID(clientId, ClientDTO.class));
             Court court = CourtMapper.fromMongoCourt(courtMongoRepository.readByUUID(courtId));
