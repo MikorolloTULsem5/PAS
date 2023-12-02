@@ -206,7 +206,7 @@ public class ReservationsControllerTests {
         String responseString = response.asString();
         String[] splitedRespStr = responseString.split("},\\{");
 
-        assertEquals(2, splitedRespStr.length);
+        assertEquals(4, splitedRespStr.length);
 
         //First Reservation
         assertTrue(responseString.contains("\"id\":\"" + reservation1.getId() + "\""));

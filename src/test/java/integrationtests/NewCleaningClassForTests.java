@@ -58,6 +58,7 @@ public class NewCleaningClassForTests {
     static Client client1;
     static Client client2;
     static Client client3;
+    static Client client4;
 
     static Court court1;
     static Court court2;
@@ -87,6 +88,7 @@ public class NewCleaningClassForTests {
         client1 = clientServiceTest.registerClient("Adam", "Smith", "loginek", "normal");
         client2 = clientServiceTest.registerClient("Eva", "Braun", "loginek13", "athlete");
         client3 = clientServiceTest.registerClient("Michal", "Pi", "michas13", "coach");
+        client4 = clientServiceTest.registerClient("Michal", "Pi", "michas13", "coach");
     }
 
     static void initCourts() {
