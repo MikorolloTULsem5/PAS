@@ -16,6 +16,7 @@ import static integrationtests.NewCleaningClassForTests.cleanAll;
 import static integrationtests.NewCleaningClassForTests.cleanReservations;
 import static integrationtests.NewCleaningClassForTests.client2;
 import static integrationtests.NewCleaningClassForTests.client3;
+import static integrationtests.NewCleaningClassForTests.client4;
 import static integrationtests.NewCleaningClassForTests.court1;
 import static integrationtests.NewCleaningClassForTests.court3;
 import static integrationtests.NewCleaningClassForTests.court2;
@@ -181,11 +182,11 @@ public class ReservationsControllerTests {
         String responseString = requestGet.get(new URI(appUrlReservation)).asString();
 
         assertFalse(responseString.contains("\"beginTime\":\"2023-12-15T17:03:22\""));
-        assertFalse(responseString.contains("\"id\":\"%s\"".formatted(client3.getId())));
+        assertFalse(responseString.contains("\"id\":\"%s\"".formatted(client4.getId())));
         assertTrue(responseString.contains("\"id\":\"%s\"".formatted(court2.getId())));
 
         Response responsePostNeg = requestPost.post(appUrlReservation +
-                "/addReservation?clientId=%s&courtId=%s&date=%s".formatted(client3.getId(), court2.getId(),
+                "/addReservation?clientId=%s&courtId=%s&date=%s".formatted(client4.getId(), court2.getId(),
                         "2023-12-15T17:03:22"));
 
         assertEquals(409, responsePostNeg.getStatusCode());
@@ -193,7 +194,7 @@ public class ReservationsControllerTests {
         responseString = requestGet.get(new URI(appUrlReservation)).asString();
 
         assertFalse(responseString.contains("\"beginTime\":\"2023-12-15T17:03:22\""));
-        assertFalse(responseString.contains("\"id\":\"%s\"".formatted(client3.getId())));
+        assertFalse(responseString.contains("\"id\":\"%s\"".formatted(client4.getId())));
         assertTrue(responseString.contains("\"id\":\"%s\"".formatted(court2.getId())));
     }
 
