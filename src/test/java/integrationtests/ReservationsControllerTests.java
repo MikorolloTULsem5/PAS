@@ -26,6 +26,7 @@ import static integrationtests.NewCleaningClassForTests.initReservations;
 import static integrationtests.NewCleaningClassForTests.reservation1;
 import static integrationtests.NewCleaningClassForTests.reservation2;
 import static integrationtests.NewCleaningClassForTests.reservation3;
+import static integrationtests.NewCleaningClassForTests.reservation7;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -399,9 +400,40 @@ public class ReservationsControllerTests {
     }
 
 
+    @Test
+    void getAllClientReservationsTest() throws URISyntaxException {
+        RequestSpecification request = RestAssured.given();
+        Response response = request.get(new URI(appUrlReservation + "/clientReservation?clientId" + client3.getId().toString()));
+        String responseString = response.asString();
+        String[] splitedRespStr = responseString.split("},\\{");
 
+        assertEquals(3, splitedRespStr.length);
 
+        //First Reservation
+        assertTrue(splitedRespStr[0].contains("\"beginTime\":\"2023-11-28T14:20:00\""));
+        assertTrue(splitedRespStr[0].contains("\"client\":\"" + client3.getId() + "\""));
+        assertTrue(splitedRespStr[0].contains("\"court\":\"" + court3.getId() + "\""));
+        assertTrue(splitedRespStr[0].contains("\"id\":\"" + reservation3.getId() + "\""));
 
+        //Third Reservation
+        assertTrue(splitedRespStr[2].contains("\"beginTime\":\"2023-12-16T10:00:00\""));
+        assertTrue(splitedRespStr[2].contains("\"client\":\"" + client3.getId() + "\""));
+        assertTrue(splitedRespStr[2].contains("\"court\":\"" + court3.getId() + "\""));
+        assertTrue(splitedRespStr[2].contains("\"id\":\"" + reservation7.getId() + "\""));
+
+        assertEquals(200, response.getStatusCode());
+    }
+
+    @Test
+    void getAllClientReservationsTestNoCont() throws URISyntaxException {
+        cleanReservations();
+        RequestSpecification request = RestAssured.given();
+        Response response = request.get(new URI(appUrlReservation + "/clientReservation?clientId" + client4.getId().toString()));
+        String responseString = response.asString();
+
+        assertTrue(responseString.isEmpty());
+        assertEquals(204, response.getStatusCode());
+    }
 
 //    @Test
 //    void deleteCourtTestNeg() throws URISyntaxException {
