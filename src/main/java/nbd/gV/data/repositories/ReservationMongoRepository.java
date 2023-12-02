@@ -173,7 +173,11 @@ public class ReservationMongoRepository extends AbstractMongoRepository<Reservat
 
     @Override
     public boolean delete(UUID uuid) {
-        if (readByUUID(uuid).getEndTime() != null) {
+        var res = readByUUID(uuid);
+        if (res == null) {
+            return true;
+        }
+        if (res.getEndTime() != null) {
             throw new IllegalStateException();
         }
         return super.delete(uuid);
