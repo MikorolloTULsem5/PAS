@@ -47,7 +47,7 @@ public class CourtControllerTests {
         String responseString = response.asString();
         String[] splitedRespStr = responseString.split("},");
 
-        assertEquals(3, splitedRespStr.length);
+        assertEquals(5, splitedRespStr.length);
 
         //First Court
         assertTrue(splitedRespStr[0].contains("\"archive\":false"));

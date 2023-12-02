@@ -62,10 +62,16 @@ public class NewCleaningClassForTests {
     static Court court1;
     static Court court2;
     static Court court3;
+    static Court court4;
+    static Court court5;
 
     static Reservation reservation1;
     static Reservation reservation2;
     static Reservation reservation3;
+    static Reservation reservation4;
+    static Reservation reservation5;
+    static Reservation reservation6;
+    static Reservation reservation7;
 
     static final LocalDateTime dataStart = LocalDateTime.of(2023, Month.NOVEMBER, 30, 14, 20);
 
@@ -89,6 +95,8 @@ public class NewCleaningClassForTests {
         court1 = courtServiceTest.registerCourt(100, 100, 1);
         court2 = courtServiceTest.registerCourt(100, 200, 2);
         court3 = courtServiceTest.registerCourt(300, 200, 3);
+        court4 = courtServiceTest.registerCourt(300, 200, 4);
+        court5 = courtServiceTest.registerCourt(300, 200, 6);
     }
 
     static void initReservations() {
@@ -100,6 +108,14 @@ public class NewCleaningClassForTests {
         reservation2 = reservationServiceTest.makeReservation(client2.getId(), court2.getId(), dataStart);
         reservation3 = reservationServiceTest.makeReservation(client3.getId(), court3.getId(), LocalDateTime.of(2023, Month.NOVEMBER, 28, 14, 20));
         reservationServiceTest.returnCourt(court3.getId(), dataStart);
+
+        //Extra for getters
+        reservation4 = reservationServiceTest.makeReservation(client2.getId(), court3.getId(), LocalDateTime.of(2023, Month.NOVEMBER, 28, 15, 0));
+        reservationServiceTest.returnCourt(court3.getId(), LocalDateTime.of(2023, Month.DECEMBER, 2, 12, 20));
+        reservation5 = reservationServiceTest.makeReservation(client3.getId(), court4.getId(), dataStart);
+        reservationServiceTest.returnCourt(court4.getId(), LocalDateTime.of(2023, Month.DECEMBER, 1, 14, 20));
+        reservation6 = reservationServiceTest.makeReservation(client1.getId(), court3.getId(), LocalDateTime.of(2023, Month.DECEMBER, 15, 10,0));
+        reservation7 = reservationServiceTest.makeReservation(client3.getId(), court5.getId(),  LocalDateTime.of(2023, Month.DECEMBER, 16, 10,0));
     }
 
     @Test

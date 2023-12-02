@@ -56,7 +56,7 @@ public class ReservationsControllerTests {
         String responseString = response.asString();
         String[] splitedRespStr = responseString.split("},\\{");
 
-        assertEquals(2, splitedRespStr.length);
+        assertEquals(4, splitedRespStr.length);
 
         //First Reservation
         assertTrue(splitedRespStr[0].contains("\"beginTime\":\"2023-11-30T14:20:00\""));
@@ -95,7 +95,7 @@ public class ReservationsControllerTests {
         String responseString = response.asString();
         String[] splitedRespStr = responseString.split("},\\{");
 
-        assertEquals(1, splitedRespStr.length);
+        assertEquals(3, splitedRespStr.length);
 
         assertTrue(splitedRespStr[0].contains("\"beginTime\":\"2023-11-28T14:20:00\""));
         assertTrue(splitedRespStr[0].contains("\"client\":{\""));
@@ -217,7 +217,7 @@ public class ReservationsControllerTests {
         String responseStringArch = responseArch.asString();
         String[] splitedRespStrArch = responseStringArch.split("},\\{");
 
-        assertEquals(1, splitedRespStrArch.length);
+        assertEquals(3, splitedRespStrArch.length);
 
         //First Reservation
         assertFalse(responseStringArch.contains("\"id\":\"" + reservation1.getId() + "\""));
@@ -236,7 +236,7 @@ public class ReservationsControllerTests {
         responseString = response.asString();
         splitedRespStr = responseString.split("},\\{");
 
-        assertEquals(1, splitedRespStr.length);
+        assertEquals(3, splitedRespStr.length);
 
         //First Reservation
         assertFalse(responseString.contains("\"id\":\"" + reservation1.getId() + "\""));
@@ -247,7 +247,7 @@ public class ReservationsControllerTests {
         responseStringArch = responseArch.asString();
         splitedRespStrArch = responseStringArch.split("},\\{");
 
-        assertEquals(2, splitedRespStrArch.length);
+        assertEquals(4, splitedRespStrArch.length);
 
         //First Reservation
         assertTrue(responseStringArch.contains("\"id\":\"" + reservation1.getId() + "\""));
@@ -263,7 +263,7 @@ public class ReservationsControllerTests {
         String responseString = response.asString();
         String[] splitedRespStr = responseString.split("},\\{");
 
-        assertEquals(2, splitedRespStr.length);
+        assertEquals(4, splitedRespStr.length);
 
         //First Reservation
         assertTrue(responseString.contains("\"id\":\"" + reservation1.getId() + "\""));
@@ -274,7 +274,7 @@ public class ReservationsControllerTests {
         String responseStringArch = responseArch.asString();
         String[] splitedRespStrArch = responseStringArch.split("},\\{");
 
-        assertEquals(1, splitedRespStrArch.length);
+        assertEquals(3, splitedRespStrArch.length);
 
         //First Reservation
         assertFalse(responseStringArch.contains("\"id\":\"" + reservation1.getId() + "\""));
@@ -292,7 +292,7 @@ public class ReservationsControllerTests {
         responseString = response.asString();
         splitedRespStr = responseString.split("},\\{");
 
-        assertEquals(2, splitedRespStr.length);
+        assertEquals(4, splitedRespStr.length);
 
         //First Reservation
         assertTrue(responseString.contains("\"id\":\"" + reservation1.getId() + "\""));
@@ -303,7 +303,7 @@ public class ReservationsControllerTests {
         responseStringArch = responseArch.asString();
         splitedRespStrArch = responseStringArch.split("},\\{");
 
-        assertEquals(1, splitedRespStrArch.length);
+        assertEquals(3, splitedRespStrArch.length);
 
         //First Reservation
         assertFalse(responseStringArch.contains("\"id\":\"" + reservation1.getId() + "\""));
@@ -319,7 +319,7 @@ public class ReservationsControllerTests {
         String responseString = response.asString();
         String[] splitedRespStr = responseString.split("},\\{");
 
-        assertEquals(2, splitedRespStr.length);
+        assertEquals(4, splitedRespStr.length);
 
         //First Reservation
         assertTrue(responseString.contains("\"id\":\"" + reservation1.getId() + "\""));
@@ -330,7 +330,7 @@ public class ReservationsControllerTests {
         String responseStringArch = responseArch.asString();
         String[] splitedRespStrArch = responseStringArch.split("},\\{");
 
-        assertEquals(1, splitedRespStrArch.length);
+        assertEquals(3, splitedRespStrArch.length);
 
         //First Reservation
         assertFalse(responseStringArch.contains("\"id\":\"" + reservation1.getId() + "\""));
@@ -348,7 +348,7 @@ public class ReservationsControllerTests {
         responseString = response.asString();
         splitedRespStr = responseString.split("},\\{");
 
-        assertEquals(2, splitedRespStr.length);
+        assertEquals(4, splitedRespStr.length);
 
         //First Reservation
         assertTrue(responseString.contains("\"id\":\"" + reservation1.getId() + "\""));
@@ -359,7 +359,7 @@ public class ReservationsControllerTests {
         responseStringArch = responseArch.asString();
         splitedRespStrArch = responseStringArch.split("},\\{");
 
-        assertEquals(1, splitedRespStrArch.length);
+        assertEquals(3, splitedRespStrArch.length);
 
         //First Reservation
         assertFalse(responseStringArch.contains("\"id\":\"" + reservation1.getId() + "\""));
@@ -396,6 +396,10 @@ public class ReservationsControllerTests {
         assertTrue(responseString.isEmpty());
         assertEquals(204, response.getStatusCode());
     }
+
+
+
+
 
 
 //    @Test
