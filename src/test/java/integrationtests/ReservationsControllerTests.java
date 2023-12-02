@@ -610,5 +610,33 @@ public class ReservationsControllerTests {
 
         //First Reservation after deleting
         assertFalse(responseGetString.contains("\"id\":\"" + reservation1.getId() + "\""));
+
+        assertEquals(204, responseDelete.getStatusCode());
+    }
+
+    @Test
+    void deleteCourtTestNeg() throws URISyntaxException {
+        RequestSpecification requestGet = RestAssured.given();
+        RequestSpecification requestDelete = RestAssured.given();
+
+        Response responseGet = requestGet.get(new URI(appUrlReservation));
+        String responseGetString = responseGet.asString();
+
+        assertEquals(3, responseGetString.split("},\\{").length);
+
+        //Third Reservation before deleting
+        assertTrue(responseGetString.contains("\"id\":\"" + reservation3.getId() + "\""));
+
+        Response responseDelete = requestDelete.delete(new URI(appUrlReservation + "/delete/" + reservation3.getId()));
+
+        responseGet = requestGet.get(new URI(appUrlReservation));
+        responseGetString = responseGet.asString();
+
+        assertEquals(3, responseGetString.split("},\\{").length);
+
+        //Third Reservation after deleting
+        assertTrue(responseGetString.contains("\"id\":\"" + reservation3.getId() + "\""));
+
+        assertEquals(409, responseDelete.getStatusCode());
     }
 }
