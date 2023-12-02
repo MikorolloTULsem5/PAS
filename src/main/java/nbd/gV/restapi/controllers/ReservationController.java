@@ -160,7 +160,6 @@ public class ReservationController {
         return reservationService.checkClientReservationBalance(UUID.fromString(clientId));
     }
 
-    ///TODO test 8
     @DELETE
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/delete/{id}")

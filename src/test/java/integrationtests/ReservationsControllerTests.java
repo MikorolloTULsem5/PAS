@@ -619,7 +619,7 @@ public class ReservationsControllerTests {
         RequestSpecification requestGet = RestAssured.given();
         RequestSpecification requestDelete = RestAssured.given();
 
-        Response responseGet = requestGet.get(new URI(appUrlReservation));
+        Response responseGet = requestGet.get(new URI(appUrlReservation + "/archive"));
         String responseGetString = responseGet.asString();
 
         assertEquals(3, responseGetString.split("},\\{").length);
@@ -629,7 +629,7 @@ public class ReservationsControllerTests {
 
         Response responseDelete = requestDelete.delete(new URI(appUrlReservation + "/delete/" + reservation3.getId()));
 
-        responseGet = requestGet.get(new URI(appUrlReservation));
+        responseGet = requestGet.get(new URI(appUrlReservation + "/archive"));
         responseGetString = responseGet.asString();
 
         assertEquals(3, responseGetString.split("},\\{").length);
