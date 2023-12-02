@@ -571,6 +571,23 @@ public class ReservationsControllerTests {
         assertEquals(204, response.getStatusCode());
     }
 
+    @Test
+    void checkClientReservationBalanceTest() throws URISyntaxException {
+        RequestSpecification request = RestAssured.given();
+        Response response = request.get(new URI(appUrlReservation + "/clientBalance?clientId=" + client3.getId()));
+        double balance = Double.parseDouble(response.asString());
+
+        assertEquals(0, balance);
+    }
+
+    @Test
+    void checkClientReservationBalanceTestZero() throws URISyntaxException {
+        RequestSpecification request = RestAssured.given();
+        Response response = request.get(new URI(appUrlReservation + "/clientBalance?clientId=" + client4.getId()));
+        double balance = Double.parseDouble(response.asString());
+
+        assertEquals(0, balance);
+    }
 //    @Test
 //    void deleteCourtTestNeg() throws URISyntaxException {
 //        //Additional preparing

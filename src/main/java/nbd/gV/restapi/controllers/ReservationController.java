@@ -142,7 +142,6 @@ public class ReservationController {
         return reservationService.getCourtCurrentReservation(UUID.fromString(courtId));
     }
 
-    ///TODO test 6
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/courtReservation/ended")
@@ -154,7 +153,6 @@ public class ReservationController {
         return resultList;
     }
 
-    ///TODO test 7
     @GET
     @Produces(MediaType.TEXT_PLAIN)
     @Path("/clientBalance")
