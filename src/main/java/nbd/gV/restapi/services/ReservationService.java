@@ -2,6 +2,7 @@ package nbd.gV.restapi.services;
 
 import com.mongodb.client.model.Filters;
 
+import jakarta.annotation.PostConstruct;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import lombok.NoArgsConstructor;
@@ -142,4 +143,9 @@ public class ReservationService {
         return reservations;
     }
 
+    @PostConstruct
+    private void init() {
+        LocalDateTime endDate = LocalDateTime.of(2023, Month.NOVEMBER, 28, 14, 20);
+        returnCourt(UUID.fromString("30ac2027-dcc8-4af7-920f-831b51023bc9"), endDate);
+    }
 }
