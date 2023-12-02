@@ -118,9 +118,9 @@ public class CourtController {
 
     @POST
     @Produces(MediaType.APPLICATION_JSON)
-    @Path("/archive/{id}")
+    @Path("/deactivate/{id}")
     public void archiveCourt(@PathParam("id") String id) {
-        courtService.archiveCourt(UUID.fromString(id));
+        courtService.deactivateCourt(UUID.fromString(id));
     }
 
     @DELETE

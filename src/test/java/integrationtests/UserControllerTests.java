@@ -455,7 +455,7 @@ public class UserControllerTests {
                 "\"id\":\"" + clientId + "\""));
 
         RequestSpecification requestPost = RestAssured.given();
-        Response responsePost = requestPost.post("http://localhost:8080/CourtRent-1.0-SNAPSHOT/api/users/archive/" + clientId);
+        Response responsePost = requestPost.post("http://localhost:8080/CourtRent-1.0-SNAPSHOT/api/users/deactivate/" + clientId);
 
         assertEquals(204, responsePost.getStatusCode());
 

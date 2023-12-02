@@ -13,7 +13,7 @@ import java.util.UUID;
 public abstract class User {
 
     private UUID id;
-///TODO to chyba nie powinno miec settera
+    //TODO sprawdzic przy modyfikacji
     @Setter
     @NotBlank
     private String login;

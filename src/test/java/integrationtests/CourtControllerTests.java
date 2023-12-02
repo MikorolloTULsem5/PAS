@@ -439,7 +439,7 @@ cleanCourts();
                         "\"rented\":false"));
 
         RequestSpecification requestPost = RestAssured.given();
-        Response responsePost = requestPost.post(appUrlCourt + "/archive/" + courtId);
+        Response responsePost = requestPost.post(appUrlCourt + "/deactivate/" + courtId);
 
         assertEquals(204, responsePost.getStatusCode());
 

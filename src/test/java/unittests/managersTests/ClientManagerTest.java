@@ -4,7 +4,6 @@ import nbd.gV.data.datahandling.dto.ClientDTO;
 import nbd.gV.exceptions.UserLoginException;
 import nbd.gV.model.users.Client;
 import nbd.gV.restapi.services.userservice.ClientService;
-import nbd.gV.exceptions.UserException;
 import nbd.gV.data.repositories.UserMongoRepository;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -95,7 +94,7 @@ public class ClientManagerTest {
         assertEquals(testClient1, cm.getClientById(testClient1.getId()));
         assertFalse(testClient1.isArchive());
 
-        cm.archiveClient(testClient1.getId());
+        cm.deactivateClient(testClient1.getId());
 
         assertEquals(2, cm.getAllClients().size());
         Client dbClient = cm.getClientById(testClient1.getId());

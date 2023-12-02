@@ -120,8 +120,8 @@ public class UserController {
 
     @POST
     @Produces(MediaType.APPLICATION_JSON)
-    @Path("/archive/{id}")
+    @Path("/deactivate/{id}")
     public void archiveClient(@PathParam("id") String id) {
-        clientService.archiveClient(UUID.fromString(id));
+        clientService.deactivateClient(UUID.fromString(id));
     }
 }

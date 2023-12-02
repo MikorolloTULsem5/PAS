@@ -2,7 +2,6 @@ package nbd.gV.restapi.services;
 
 import com.mongodb.client.model.Filters;
 
-import jakarta.annotation.PostConstruct;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import lombok.NoArgsConstructor;
@@ -83,7 +82,7 @@ public class CourtService {
         courtRepository.update(courtId, "archive", false);
     }
 
-    public void archiveCourt(UUID courtId) {
+    public void deactivateCourt(UUID courtId) {
         courtRepository.update(courtId, "archive", true);
     }
 

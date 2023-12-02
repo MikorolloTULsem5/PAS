@@ -1,7 +1,6 @@
 package nbd.gV.restapi.services.userservice;
 
 import com.mongodb.client.model.Filters;
-import jakarta.annotation.PostConstruct;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import lombok.NoArgsConstructor;
@@ -97,7 +96,7 @@ public class ClientService extends UserService {
         }
     }
 
-    public void archiveClient(UUID clientId) {
+    public void deactivateClient(UUID clientId) {
         userRepository.update(clientId, "archive", true);
     }
 

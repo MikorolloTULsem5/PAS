@@ -77,12 +77,6 @@ public class Client extends User {
         if (o == null || getClass() != o.getClass()) return false;
         Client client = (Client) o;
         return Objects.equals(getId(), client.getId());
-        ///TODO czy to spelnienie 1 wymagania z zadania (o byciu podstawa rownosci obiektow)???
-//        return isArchive() == client.isArchive() &&
-//                Objects.equals(getId(), client.getId()) &&
-//                Objects.equals(firstName, client.firstName) &&
-//                Objects.equals(lastName, client.lastName) &&
-//                Objects.equals(getLogin(), client.getLogin()) &&
     }
 
     public void setClientTypeName(@NotNull String clientType) {
