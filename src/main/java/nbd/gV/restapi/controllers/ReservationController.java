@@ -135,7 +135,6 @@ public class ReservationController {
         return resultList;
     }
 
-    ///TODO test 5
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/courtReservation/current")
