@@ -120,6 +120,16 @@ public class ReservationService {
                 Filters.not(Filters.eq("endtime", null))));
     }
 
+    public void deleteReservation(UUID reservationId) {
+        try {
+            reservationRepository.delete(reservationId);
+        } catch (IllegalStateException e) {
+            throw new ReservationException("Nie mozna usunac zakonczonej rezerwacji");
+        } catch (Exception exception) {
+            throw new MyMongoException("Nie udalo sie usunac podanej rezerwacji. - " + exception.getMessage());
+        }
+    }
+
     public double checkClientReservationBalance(UUID clientId) {
         double sum = 0;
         List<Reservation> reservationList = getClientEndedReservations(clientId);
@@ -128,7 +138,6 @@ public class ReservationService {
         }
         return sum;
     }
-
 
     private List<Reservation> getReservationsWithBsonFilter(Bson filter) {
         List<Reservation> reservations = new ArrayList<>();

@@ -27,6 +27,7 @@ import nbd.gV.data.datahandling.dto.ReservationDTO;
 import nbd.gV.data.datahandling.mappers.ReservationMapper;
 import nbd.gV.model.reservations.Reservation;
 import org.bson.Document;
+import org.bson.conversions.Bson;
 
 import java.time.LocalDateTime;
 import java.time.Month;
@@ -168,6 +169,14 @@ public class ReservationMongoRepository extends AbstractMongoRepository<Reservat
         } finally {
             clientSession.close();
         }
+    }
+
+    @Override
+    public boolean delete(UUID uuid) {
+        if (readByUUID(uuid).getEndTime() != null) {
+            throw new IllegalStateException();
+        }
+        return super.delete(uuid);
     }
 
     @Override
