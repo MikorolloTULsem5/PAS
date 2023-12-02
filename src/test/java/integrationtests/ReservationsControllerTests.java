@@ -45,8 +45,6 @@ public class ReservationsControllerTests {
     @BeforeEach
     void cleanAndInitDatabase() {
         cleanAll();
-        initClients();
-        initCourts();
         initReservations();
     }
 

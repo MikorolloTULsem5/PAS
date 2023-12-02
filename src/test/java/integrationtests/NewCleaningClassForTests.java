@@ -92,8 +92,6 @@ public class NewCleaningClassForTests {
     }
 
     static void initReservations() {
-        new UserMongoRepository();
-        new CourtMongoRepository();
         ReservationService reservationServiceTest = new ReservationService(new ReservationMongoRepository());
         cleanAll();
         initClients();
