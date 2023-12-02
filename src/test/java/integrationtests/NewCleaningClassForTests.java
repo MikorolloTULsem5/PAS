@@ -88,7 +88,7 @@ public class NewCleaningClassForTests {
         client1 = clientServiceTest.registerClient("Adam", "Smith", "loginek", "normal");
         client2 = clientServiceTest.registerClient("Eva", "Braun", "loginek13", "athlete");
         client3 = clientServiceTest.registerClient("Michal", "Pi", "michas13", "coach");
-        client4 = clientServiceTest.registerClient("Michal", "Pi", "michas13", "coach");
+        client4 = clientServiceTest.registerClient("Peter", "Grif", "griffPet", "normal");
     }
 
     static void initCourts() {
