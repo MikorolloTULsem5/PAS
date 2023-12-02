@@ -112,14 +112,16 @@ public class ReservationService {
 
     public Reservation getCourtCurrentReservation(UUID courtId) {
         var list = getReservationsWithBsonFilter(
-                Filters.eq("courtid", courtId.toString()));
+                Filters.and(
+                        Filters.eq("courtid", courtId.toString()),
+                        Filters.eq("endtime", null)));
         return !list.isEmpty() ? list.get(0) : null;
     }
 
     public List<Reservation> getCourtEndedReservation(UUID courtId) {
         return getReservationsWithBsonFilter(Filters.and(
                 Filters.eq("courtid", courtId.toString()),
-                Filters.not(Filters.eq("endtime", null))));
+                Filters.ne("endtime", null)));
     }
 
     public void deleteReservation(UUID reservationId) {
