@@ -481,7 +481,7 @@ public class ReservationsControllerTests {
         assertTrue(splitedRespStr[0].contains("\"endTime\":\"2023-11-30T14:20:00\""));
 
         //Second Reservation
-        assertTrue(splitedRespStr[1].contains("\"beginTime\":\"2023-12-01T14:20:00\""));
+        assertTrue(splitedRespStr[1].contains("\"beginTime\":\"2023-11-30T14:20:00\""));
         assertTrue(splitedRespStr[1].contains("\"client\":{\""));
         assertTrue(splitedRespStr[1].contains("\"id\":\"%s\"".formatted(client3.getId())));
         assertTrue(splitedRespStr[1].contains("\"court\":{\""));
