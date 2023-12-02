@@ -78,17 +78,17 @@ public class NewCleaningClassForTests {
     static void initClients() {
         ClientService clientServiceTest = new ClientService(new UserMongoRepository());
         cleanUsers();
-        clientServiceTest.registerClient("Adam", "Smith", "loginek", "normal");
-        clientServiceTest.registerClient("Eva", "Braun", "loginek13", "athlete");
-        clientServiceTest.registerClient("Michal", "Pi", "michas13", "coach");
+        client1 = clientServiceTest.registerClient("Adam", "Smith", "loginek", "normal");
+        client2 = clientServiceTest.registerClient("Eva", "Braun", "loginek13", "athlete");
+        client3 = clientServiceTest.registerClient("Michal", "Pi", "michas13", "coach");
     }
 
     static void initCourts() {
         CourtService courtServiceTest = new CourtService(new CourtMongoRepository());
         cleanCourts();
-        courtServiceTest.registerCourt(100, 100, 1);
-        courtServiceTest.registerCourt(100, 200, 2);
-        courtServiceTest.registerCourt(300, 200, 3);
+        court1 = courtServiceTest.registerCourt(100, 100, 1);
+        court2 = courtServiceTest.registerCourt(100, 200, 2);
+        court3 = courtServiceTest.registerCourt(300, 200, 3);
     }
 
     static void initReservations() {

@@ -14,6 +14,7 @@ import java.util.UUID;
 
 import static integrationtests.NewCleaningClassForTests.cleanCourts;
 import static integrationtests.NewCleaningClassForTests.initClients;
+import static integrationtests.NewCleaningClassForTests.initCourts;
 import static integrationtests.NewCleaningClassForTests.initReservations;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -36,7 +37,7 @@ public class CourtControllerTests {
     @BeforeEach
     void cleanAndInitDatabase() {
         cleanCourts();
-        cleanCourts();
+        initCourts();
     }
 
     @Test
