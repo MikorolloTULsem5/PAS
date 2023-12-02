@@ -11,8 +11,8 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.UUID;
 
-import static integrationtests.CleaningClass.clean;
-import static integrationtests.CleaningClass.initClients;
+import static integrationtests.NewCleaningClassForTests.cleanUsers;
+import static integrationtests.NewCleaningClassForTests.initClients;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -23,12 +23,12 @@ public class UserControllerTests {
 
     @AfterAll
     static void cleanAtTheEnd() {
-        clean();
+        cleanUsers();
     }
 
     @BeforeEach
     void cleanAndInitDatabase() {
-        clean();
+        cleanUsers();
         initClients();
     }
 
@@ -57,7 +57,7 @@ public class UserControllerTests {
 
     @Test
     void getAllClientsTestNoCont() throws URISyntaxException {
-        clean();
+        cleanUsers();
         RequestSpecification request = RestAssured.given();
         Response response = request.get(new URI("http://localhost:8080/CourtRent-1.0-SNAPSHOT/api/users"));
         String responseString = response.asString();
@@ -68,7 +68,7 @@ public class UserControllerTests {
 
     @Test
     void createClientTestPos() throws URISyntaxException {
-        clean();
+        cleanUsers();
         String JSON = """
                 {
                   "firstName": "John",
