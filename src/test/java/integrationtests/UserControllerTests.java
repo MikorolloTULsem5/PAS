@@ -4,6 +4,7 @@ import io.restassured.RestAssured;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
 import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -20,6 +21,11 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 public class UserControllerTests {
 
     ///TODO zmienic sciezki na final'a jednego
+
+    @BeforeAll
+    static void init() throws URISyntaxException  {
+        RestAssured.given().get(new URI("http://localhost:8080/CourtRent-1.0-SNAPSHOT/api/users"));
+    }
 
     @AfterAll
     static void cleanAtTheEnd() {
