@@ -588,39 +588,27 @@ public class ReservationsControllerTests {
 
         assertEquals(0, balance);
     }
-//    @Test
-//    void deleteCourtTestNeg() throws URISyntaxException {
-//        //Additional preparing
-//
-//        RequestSpecification requestGet = RestAssured.given();
-//        String responseString = requestGet.get(new URI(appUrlReservation)).asString();
-//
-//        //Retrieve UUID
-//        String responseNumber = requestGet.get(new URI(appUrlReservation + "/get?number=1")).asString();
-//        int index = responseNumber.indexOf("\"id\":\"") + 6;
-//        String courtId = responseNumber.substring(index, index + 36);
-//
-//        assertTrue(responseString.contains(
-//                "\"archive\":false," +
-//                        "\"area\":100.0," +
-//                        "\"baseCost\":100," +
-//                        "\"courtNumber\":1," +
-//                        "\"id\":\"" + courtId + "\"," +
-//                        "\"rented\":true"));
-//
-//        RequestSpecification requestDelete = RestAssured.given();
-//        Response responseDelete = requestDelete.delete(appUrlCourt + "/delete/" + courtId);
-//
-//        assertEquals(409, responseDelete.getStatusCode());
-//
-//        responseString = requestGet.get(new URI(appUrlCourt)).asString();
-//
-//        assertTrue(responseString.contains(
-//                "\"archive\":false," +
-//                        "\"area\":100.0," +
-//                        "\"baseCost\":100," +
-//                        "\"courtNumber\":1," +
-//                        "\"id\":\"" + courtId + "\"," +
-//                        "\"rented\":true"));
-//    }
+    @Test
+    void deleteCourtTestPos() throws URISyntaxException {
+        RequestSpecification requestGet = RestAssured.given();
+        RequestSpecification requestDelete = RestAssured.given();
+
+        Response responseGet = requestGet.get(new URI(appUrlReservation));
+        String responseGetString = responseGet.asString();
+
+        assertEquals(4, responseGetString.split("},\\{").length);
+
+        //First Reservation before deleting
+        assertTrue(responseGetString.contains("\"id\":\"" + reservation1.getId() + "\""));
+
+        Response responseDelete = requestDelete.delete(new URI(appUrlReservation + "/delete/" + reservation1.getId()));
+
+        responseGet = requestGet.get(new URI(appUrlReservation));
+        responseGetString = responseGet.asString();
+
+        assertEquals(3, responseGetString.split("},\\{").length);
+
+        //First Reservation after deleting
+        assertFalse(responseGetString.contains("\"id\":\"" + reservation1.getId() + "\""));
+    }
 }
