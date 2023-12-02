@@ -531,6 +531,46 @@ public class ReservationsControllerTests {
         assertEquals(204, response.getStatusCode());
     }
 
+    @Test
+    void getCourtEndedReservationTest() throws URISyntaxException {
+        RequestSpecification request = RestAssured.given();
+        Response response = request.get(new URI(appUrlReservation + "/courtReservation/ended?courtId=" + court3.getId()));
+        String responseString = response.asString();
+        String[] splitedRespStr = responseString.split("},\\{");
+
+        assertEquals(2, splitedRespStr.length);
+
+        //First Reservation
+        assertTrue(splitedRespStr[0].contains("\"beginTime\":\"2023-11-28T14:20:00\""));
+        assertTrue(splitedRespStr[0].contains("\"client\":{\""));
+        assertTrue(splitedRespStr[0].contains("\"id\":\"%s\"".formatted(client3.getId())));
+        assertTrue(splitedRespStr[0].contains("\"court\":{\""));
+        assertTrue(splitedRespStr[0].contains("\"id\":\"%s\"".formatted(court3.getId())));
+        assertTrue(splitedRespStr[0].contains("\"id\":\"" + reservation3.getId() + "\""));
+        assertTrue(splitedRespStr[0].contains("\"endTime\":\"2023-11-30T14:20:00\""));
+
+        //Second Reservation
+        assertTrue(splitedRespStr[1].contains("\"beginTime\":\"2023-11-28T15:00:00\""));
+        assertTrue(splitedRespStr[1].contains("\"client\":{\""));
+        assertTrue(splitedRespStr[1].contains("\"id\":\"%s\"".formatted(client2.getId())));
+        assertTrue(splitedRespStr[1].contains("\"court\":{\""));
+        assertTrue(splitedRespStr[1].contains("\"id\":\"%s\"".formatted(court3.getId())));
+        assertTrue(splitedRespStr[1].contains("\"id\":\"" + reservation4.getId() + "\""));
+        assertTrue(splitedRespStr[1].contains("\"endTime\":\"2023-12-02T12:20:00\""));
+
+        assertEquals(200, response.getStatusCode());
+    }
+
+    @Test
+    void getCourtEndedReservationTestNoCont() throws URISyntaxException {
+        RequestSpecification request = RestAssured.given();
+        Response response = request.get(new URI(appUrlReservation + "/courtReservation/ended?courtId=" + court1.getId()));
+        String responseString = response.asString();
+
+        assertTrue(responseString.isEmpty());
+        assertEquals(204, response.getStatusCode());
+    }
+
 //    @Test
 //    void deleteCourtTestNeg() throws URISyntaxException {
 //        //Additional preparing
