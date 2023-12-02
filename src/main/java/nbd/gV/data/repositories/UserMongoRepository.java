@@ -89,17 +89,19 @@ public class UserMongoRepository extends AbstractMongoRepository<UserDTO> {
 //        throw new UnsupportedOperationException();
 //    }
 
-//    @PostConstruct
-//    private void init() {
-//        create(ClientMapper.toMongoUser(new Client(UUID.fromString("80e62401-6517-4392-856c-e22ef5f3d6a2"), "Adam", "Smith", "loginek", "normal")));
-//        create(ClientMapper.toMongoUser(new Client(UUID.fromString("b6f5bcb8-7f01-4470-8238-cc3320326157"), "Eva", "Braun", "loginek13", "athlete")));
-//        create(ClientMapper.toMongoUser(new Client(UUID.fromString("6dc63417-0a21-462c-a97a-e0bf6055a3ea"), "Michal", "Pi", "michas13", "coach")));
-//        create(ClientMapper.toMongoUser(new Client(UUID.fromString("3a722080-9668-42a2-9788-4695a4b9f5a7"), "Krzysztof", "Scala", "scKrzy", "normal")));
-//        create(ClientMapper.toMongoUser(new Client(UUID.fromString("126778af-0e19-46d4-b329-0b6b92548f9a"), "Adam", "Scout", "scAdam", "normal")));
-//    }
-//
-//    @PreDestroy
-//    private void destroy() {
-//        getCollection().deleteMany(Filters.empty());
-//    }
+    @PostConstruct
+    private void init() {
+        destroy();
+
+        create(ClientMapper.toMongoUser(new Client(UUID.fromString("80e62401-6517-4392-856c-e22ef5f3d6a2"), "Adam", "Smith", "loginek", "normal")));
+        create(ClientMapper.toMongoUser(new Client(UUID.fromString("b6f5bcb8-7f01-4470-8238-cc3320326157"), "Eva", "Braun", "loginek13", "athlete")));
+        create(ClientMapper.toMongoUser(new Client(UUID.fromString("6dc63417-0a21-462c-a97a-e0bf6055a3ea"), "Michal", "Pi", "michas13", "coach")));
+        create(ClientMapper.toMongoUser(new Client(UUID.fromString("3a722080-9668-42a2-9788-4695a4b9f5a7"), "Krzysztof", "Scala", "scKrzy", "normal")));
+        create(ClientMapper.toMongoUser(new Client(UUID.fromString("126778af-0e19-46d4-b329-0b6b92548f9a"), "Adam", "Scout", "scAdam", "normal")));
+    }
+
+    @PreDestroy
+    private void destroy() {
+        getCollection().deleteMany(Filters.empty());
+    }
 }

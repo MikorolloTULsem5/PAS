@@ -180,20 +180,22 @@ public class ReservationMongoRepository extends AbstractMongoRepository<Reservat
         return COLLECTION_NAME;
     }
 
-//    @PostConstruct
-//    private void init() {
-//        LocalDateTime dataStart = LocalDateTime.of(2023, Month.NOVEMBER, 30, 14, 20);
-//        LocalDateTime secondDate = LocalDateTime.of(2023, Month.NOVEMBER, 28, 14, 20);
-//
-//        create(new ReservationDTO(UUID.randomUUID().toString(), UUID.fromString("80e62401-6517-4392-856c-e22ef5f3d6a2").toString(), UUID.fromString("634d9130-0015-42bb-a70a-543dee846760").toString(), dataStart , null, 0));
-//        create(new ReservationDTO(UUID.randomUUID().toString(), UUID.fromString("b6f5bcb8-7f01-4470-8238-cc3320326157").toString(), UUID.fromString("fe6a35bb-7535-4c23-a259-a14ac0ccedba").toString(), dataStart , null, 0));
-//        create(new ReservationDTO(UUID.randomUUID().toString(), UUID.fromString("6dc63417-0a21-462c-a97a-e0bf6055a3ea").toString(), UUID.fromString("30ac2027-dcc8-4af7-920f-831b51023bc9").toString(), secondDate, null, 0));
-//
-//        update(UUID.fromString("30ac2027-dcc8-4af7-920f-831b51023bc9"), dataStart);
-//    }
-//
-//    @PreDestroy
-//    private void destroy() {
-//        getCollection().deleteMany(Filters.empty());
-//    }
+    @PostConstruct
+    private void init() {
+        destroy();
+
+        LocalDateTime dataStart = LocalDateTime.of(2023, Month.NOVEMBER, 30, 14, 20);
+        LocalDateTime secondDate = LocalDateTime.of(2023, Month.NOVEMBER, 28, 14, 20);
+
+        create(new ReservationDTO(UUID.randomUUID().toString(), UUID.fromString("80e62401-6517-4392-856c-e22ef5f3d6a2").toString(), UUID.fromString("634d9130-0015-42bb-a70a-543dee846760").toString(), dataStart , null, 0));
+        create(new ReservationDTO(UUID.randomUUID().toString(), UUID.fromString("b6f5bcb8-7f01-4470-8238-cc3320326157").toString(), UUID.fromString("fe6a35bb-7535-4c23-a259-a14ac0ccedba").toString(), dataStart , null, 0));
+        create(new ReservationDTO(UUID.randomUUID().toString(), UUID.fromString("6dc63417-0a21-462c-a97a-e0bf6055a3ea").toString(), UUID.fromString("30ac2027-dcc8-4af7-920f-831b51023bc9").toString(), secondDate, null, 0));
+
+        update(UUID.fromString("30ac2027-dcc8-4af7-920f-831b51023bc9"), dataStart);
+    }
+
+    @PreDestroy
+    private void destroy() {
+        getCollection().deleteMany(Filters.empty());
+    }
 }
