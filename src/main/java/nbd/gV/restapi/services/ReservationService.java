@@ -78,6 +78,9 @@ public class ReservationService {
 
     public Reservation getReservationById(UUID uuid) {
         ReservationDTO reservationMapper = reservationRepository.readByUUID(uuid);
+        if (reservationMapper == null) {
+            return null;
+        }
         return ReservationMapper.fromMongoReservation(reservationMapper,
                 (ClientDTO) clientsRepository.readByUUID(UUID.fromString(reservationMapper.getClientId()), ClientDTO.class),
                 courtRepository.readByUUID(UUID.fromString(reservationMapper.getCourtId())));

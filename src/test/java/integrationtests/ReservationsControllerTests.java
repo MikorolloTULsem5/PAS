@@ -14,6 +14,7 @@ import java.util.UUID;
 
 import static integrationtests.NewCleaningClassForTests.cleanAll;
 import static integrationtests.NewCleaningClassForTests.cleanReservations;
+import static integrationtests.NewCleaningClassForTests.client2;
 import static integrationtests.NewCleaningClassForTests.client3;
 import static integrationtests.NewCleaningClassForTests.court1;
 import static integrationtests.NewCleaningClassForTests.court3;
@@ -372,16 +373,16 @@ public class ReservationsControllerTests {
         //Retrieve UUID
         Response responseById = request.get(new URI(appUrlReservation + "/" + reservation2.getId().toString()));
         String responseByIdString = responseById.asString();
-        String[] splitedRespStr = responseByIdString.split("},");
+        String[] splitedRespStr = responseByIdString.split("},\\{");
 
         assertEquals(1, splitedRespStr.length);
 
-        assertFalse(splitedRespStr[0].contains("\"beginTime\":\"2023-11-30T14:20:00\""));
-        assertFalse(splitedRespStr[0].contains("\"client\":{\""));
-        assertFalse(splitedRespStr[0].contains("\"id\":\"%s\"".formatted(client3.getId())));
-        assertFalse(splitedRespStr[0].contains("\"court\":{\""));
-        assertFalse(splitedRespStr[0].contains("\"id\":\"%s\"".formatted(court3.getId())));
-        assertFalse(splitedRespStr[0].contains("\"id\":\"%s\"".formatted(reservation2.getId())));
+        assertTrue(splitedRespStr[0].contains("\"beginTime\":\"2023-11-30T14:20:00\""));
+        assertTrue(splitedRespStr[0].contains("\"client\":{\""));
+        assertTrue(splitedRespStr[0].contains("\"id\":\"%s\"".formatted(client2.getId())));
+        assertTrue(splitedRespStr[0].contains("\"court\":{\""));
+        assertTrue(splitedRespStr[0].contains("\"id\":\"%s\"".formatted(court2.getId())));
+        assertTrue(splitedRespStr[0].contains("\"id\":\"%s\"".formatted(reservation2.getId())));
 
         assertEquals(200, responseById.getStatusCode());
     }

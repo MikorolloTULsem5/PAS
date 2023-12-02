@@ -93,8 +93,7 @@ public class ReservationController {
 
         return Response.status(Response.Status.NO_CONTENT).build();
     }
-
-    ///TODO test 1
+    
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.TEXT_PLAIN)
