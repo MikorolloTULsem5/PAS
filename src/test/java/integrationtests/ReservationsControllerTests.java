@@ -434,7 +434,6 @@ public class ReservationsControllerTests {
 
     @Test
     void getAllClientReservationsTestNoCont() throws URISyntaxException {
-        cleanReservations();
         RequestSpecification request = RestAssured.given();
         Response response = request.get(new URI(appUrlReservation + "/clientReservation?clientId=" + client4.getId().toString()));
         String responseString = response.asString();
@@ -461,21 +460,58 @@ public class ReservationsControllerTests {
         assertTrue(splitedRespStr[0].contains("\"id\":\"" + reservation1.getId() + "\""));
 
         //Second Reservation
-        assertTrue(splitedRespStr[2].contains("\"beginTime\":\"2023-12-15T10:00:00\""));
-        assertTrue(splitedRespStr[2].contains("\"client\":{\""));
-        assertTrue(splitedRespStr[2].contains("\"id\":\"%s\"".formatted(client3.getId())));
-        assertTrue(splitedRespStr[2].contains("\"court\":{\""));
-        assertTrue(splitedRespStr[2].contains("\"id\":\"%s\"".formatted(court3.getId())));
-        assertTrue(splitedRespStr[2].contains("\"id\":\"" + reservation6.getId() + "\""));
+        assertTrue(splitedRespStr[1].contains("\"beginTime\":\"2023-12-15T10:00:00\""));
+        assertTrue(splitedRespStr[1].contains("\"client\":{\""));
+        assertTrue(splitedRespStr[1].contains("\"id\":\"%s\"".formatted(client1.getId())));
+        assertTrue(splitedRespStr[1].contains("\"court\":{\""));
+        assertTrue(splitedRespStr[1].contains("\"id\":\"%s\"".formatted(court3.getId())));
+        assertTrue(splitedRespStr[1].contains("\"id\":\"" + reservation6.getId() + "\""));
 
         assertEquals(200, response.getStatusCode());
     }
 
     @Test
     void getClientCurrentReservationsTestNoCont() throws URISyntaxException {
-        cleanReservations();
         RequestSpecification request = RestAssured.given();
-        Response response = request.get(new URI(appUrlReservation + "/clientReservation?clientId=" + client2.getId().toString()));
+        Response response = request.get(new URI(appUrlReservation + "/clientReservation/current?clientId=" + client2.getId().toString()));
+        String responseString = response.asString();
+
+        assertTrue(responseString.isEmpty());
+        assertEquals(204, response.getStatusCode());
+    }
+
+    @Test
+    void getClientEndedReservationsTest() throws URISyntaxException {
+        RequestSpecification request = RestAssured.given();
+        Response response = request.get(new URI(appUrlReservation + "/clientReservation/ended?clientId=" + client3.getId().toString()));
+        String responseString = response.asString();
+        String[] splitedRespStr = responseString.split("},\\{");
+
+        assertEquals(2, splitedRespStr.length);
+
+        //First Reservation
+        assertTrue(splitedRespStr[0].contains("\"beginTime\":\"2023-11-30T14:20:00\""));
+        assertTrue(splitedRespStr[0].contains("\"client\":{\""));
+        assertTrue(splitedRespStr[0].contains("\"id\":\"%s\"".formatted(client1.getId())));
+        assertTrue(splitedRespStr[0].contains("\"court\":{\""));
+        assertTrue(splitedRespStr[0].contains("\"id\":\"%s\"".formatted(court1.getId())));
+        assertTrue(splitedRespStr[0].contains("\"id\":\"" + reservation1.getId() + "\""));
+
+        //Second Reservation
+        assertTrue(splitedRespStr[1].contains("\"beginTime\":\"2023-12-01T14:20:00\""));
+        assertTrue(splitedRespStr[1].contains("\"client\":{\""));
+        assertTrue(splitedRespStr[1].contains("\"id\":\"%s\"".formatted(client1.getId())));
+        assertTrue(splitedRespStr[1].contains("\"court\":{\""));
+        assertTrue(splitedRespStr[1].contains("\"id\":\"%s\"".formatted(court4.getId())));
+        assertTrue(splitedRespStr[1].contains("\"id\":\"" + reservation1.getId() + "\""));
+
+        assertEquals(200, response.getStatusCode());
+    }
+
+    @Test
+    void getClientEndedReservationsTestNoCont() throws URISyntaxException {
+        RequestSpecification request = RestAssured.given();
+        Response response = request.get(new URI(appUrlReservation + "/clientReservation/ended?clientId=" + client4.getId().toString()));
         String responseString = response.asString();
 
         assertTrue(responseString.isEmpty());

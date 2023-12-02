@@ -113,7 +113,6 @@ public class ReservationController {
         return resultList;
     }
 
-    ///TODO test 3
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/clientReservation/current")
@@ -125,7 +124,6 @@ public class ReservationController {
         return resultList;
     }
 
-    ///TODO test 4
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/clientReservation/ended")
