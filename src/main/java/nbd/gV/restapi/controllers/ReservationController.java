@@ -93,7 +93,7 @@ public class ReservationController {
 
         return Response.status(Response.Status.NO_CONTENT).build();
     }
-    
+
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.TEXT_PLAIN)
@@ -102,7 +102,6 @@ public class ReservationController {
         return reservationService.getReservationById(UUID.fromString(id));
     }
 
-    ///TODO test 2
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/clientReservation")
