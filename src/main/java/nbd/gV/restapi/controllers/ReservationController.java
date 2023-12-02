@@ -162,10 +162,4 @@ public class ReservationController {
     public double checkClientReservationBalance(@QueryParam("clientId") String clientId) {
         return reservationService.checkClientReservationBalance(UUID.fromString(clientId));
     }
-
-    @PostConstruct
-    private void init() {
-        LocalDateTime endDate = LocalDateTime.of(2023, Month.NOVEMBER, 28, 14, 20);
-        reservationService.returnCourt(UUID.fromString("30ac2027-dcc8-4af7-920f-831b51023bc9"), endDate);
-    }
 }
