@@ -4,6 +4,7 @@ import jakarta.annotation.PostConstruct;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.Consumes;
+import jakarta.ws.rs.DELETE;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
@@ -12,7 +13,10 @@ import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.QueryParam;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import nbd.gV.exceptions.CourtException;
 import nbd.gV.exceptions.MultiReservationException;
+import nbd.gV.exceptions.MyMongoException;
+import nbd.gV.exceptions.ReservationException;
 import nbd.gV.model.reservations.Reservation;
 import nbd.gV.restapi.services.ReservationService;
 
@@ -158,8 +162,25 @@ public class ReservationController {
     ///TODO test 7
     @GET
     @Produces(MediaType.TEXT_PLAIN)
-    @Path("/courtReservation/ended")
+    @Path("/clientBalance")
     public double checkClientReservationBalance(@QueryParam("clientId") String clientId) {
         return reservationService.checkClientReservationBalance(UUID.fromString(clientId));
     }
+
+    ///TODO test 8
+    @DELETE
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/delete/{id}")
+    public Response deleteReservation(@PathParam("id") String id) {
+        try {
+            reservationService.deleteReservation(UUID.fromString(id));
+        } catch (ReservationException re) {
+            return Response.status(Response.Status.CONFLICT).entity(re.getMessage()).build();
+        } catch (MyMongoException mme) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(mme.getMessage()).build();
+        }
+
+        return Response.status(Response.Status.NO_CONTENT).build();
+    }
+
 }

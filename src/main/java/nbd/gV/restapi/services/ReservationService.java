@@ -2,7 +2,6 @@ package nbd.gV.restapi.services;
 
 import com.mongodb.client.model.Filters;
 
-import jakarta.annotation.PostConstruct;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import lombok.NoArgsConstructor;
