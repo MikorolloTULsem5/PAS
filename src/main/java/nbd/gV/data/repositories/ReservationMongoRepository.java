@@ -129,7 +129,9 @@ public class ReservationMongoRepository extends AbstractMongoRepository<Reservat
 
         //Find reservation
         var listReservation = getDatabase().getCollection(COLLECTION_NAME,
-                ReservationDTO.class).find(Filters.eq("courtid", courtId.toString()))
+                ReservationDTO.class).find(Filters.and(
+                        Filters.eq("courtid", courtId.toString()),
+                        Filters.eq("endtime", null)))
                 .into(new ArrayList<>());
         if (listReservation.isEmpty()) {
             throw new ReservationException("Brak rezerwacji, dla podanego boiska, w bazie!");
