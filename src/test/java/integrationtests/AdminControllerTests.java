@@ -73,16 +73,13 @@ public class AdminControllerTests {
         assertTrue(responseString.isEmpty());
         assertEquals(204, response.getStatusCode());
     }
-/*
+
     @Test
     void createAdminTestPos() throws URISyntaxException {
         cleanUsers();
         String JSON = """
                 {
-                  "firstName": "John",
-                  "lastName": "Bravo",
                   "login": "johnBravo",
-                  "AdminTypeName": "normal"
                 }
                 """;
         RequestSpecification requestPost = RestAssured.given();
@@ -101,19 +98,13 @@ public class AdminControllerTests {
         responseString = requestGet.get(new URI(appUrlAdmins)).asString();
 
         assertTrue(responseString.contains("\"login\":\"johnBravo\""));
-        assertTrue(responseString.contains("\"AdminTypeName\":\"normal\""));
-        assertTrue(responseString.contains("\"firstName\":\"John\""));
-        assertTrue(responseString.contains("\"lastName\":\"Bravo\""));
     }
 
     @Test
     void createAdminTestNegInvalidData() throws URISyntaxException {
         String json = """
                 {
-                  "firstName": "John",
-                  "lastName": "  ",
-                  "login": "johnBravo",
-                  "AdminTypeName": "normal"
+                  "login": " ",
                 }
                 """;
         RequestSpecification requestPost = RestAssured.given();
@@ -123,8 +114,7 @@ public class AdminControllerTests {
         RequestSpecification requestGet = RestAssured.given();
         String responseString = requestGet.get(new URI(appUrlAdmins)).asString();
 
-        assertFalse(responseString.contains("\"login\":\"johnBravo\""));
-        assertFalse(responseString.contains("\"lastName\":\"  \""));
+        assertFalse(responseString.contains("\"login\":\" \""));
 
         Response responsePost = requestPost.post(appUrlAdmins + "/addAdmin");
 
@@ -132,18 +122,14 @@ public class AdminControllerTests {
 
         responseString = requestGet.get(new URI(appUrlAdmins)).asString();
 
-        assertFalse(responseString.contains("\"login\":\"johnBravo\""));
-        assertFalse(responseString.contains("\"lastName\":\"  \""));
+        assertFalse(responseString.contains("\"login\":\" \""));
     }
 
     @Test
     void createAdminTestNegSameLogin() throws URISyntaxException {
         String json = """
                 {
-                  "firstName": "John",
-                  "lastName": "Bravo",
-                  "login": "michas13",
-                  "AdminTypeName": "normal"
+                  "login": "adminek1@1234",
                 }
                 """;
         RequestSpecification requestPost = RestAssured.given();
@@ -153,28 +139,20 @@ public class AdminControllerTests {
         RequestSpecification requestGet = RestAssured.given();
         String responseString = requestGet.get(new URI(appUrlAdmins)).asString();
 
-        assertTrue(responseString.contains("\"login\":\"michas13\""));
-
-        assertFalse(responseString.contains("\"firstName\":\"John\""));
-        assertFalse(responseString.contains("\"lastName\":\"Bravo\""));
+        assertTrue(responseString.contains("\"login\":\"adminek1@1234\""));
 
         Response responsePost = requestPost.post(appUrlAdmins + "/addAdmin");
 
         assertEquals(409, responsePost.getStatusCode());
-
-        responseString = requestGet.get(new URI(appUrlAdmins)).asString();
-
-        assertFalse(responseString.contains("\"firstName\":\"John\""));
-        assertFalse(responseString.contains("\"lastName\":\"Bravo\""));
     }
 
     @Test
     void getAdminByLoginTest() throws URISyntaxException {
         RequestSpecification request = RestAssured.given();
-        Response response = request.get(new URI(appUrlAdmins + "/get?login=michas13"));
+        Response response = request.get(new URI(appUrlAdmins + "/get?login=adminek1@1234"));
         String responseString = response.asString();
 
-        assertTrue(responseString.contains("\"login\":\"michas13\",\"AdminTypeName\":\"coach\",\"firstName\":\"Michal\",\"lastName\":\"Pi\""));
+        assertTrue(responseString.contains("\"login\":\"adminek1@1234\",\"id\":\"%s\"".formatted(admin1.getId())));
 
         assertEquals(200, response.getStatusCode());
     }
@@ -193,15 +171,10 @@ public class AdminControllerTests {
     void getAdminByIdTest() throws URISyntaxException {
         RequestSpecification request = RestAssured.given();
 
-        //Retrieve UUID
-        String responseLogin = request.get(new URI(appUrlAdmins + "/get?login=michas13")).asString();
-        int index = responseLogin.indexOf("\"id\":\"") + 6;
-        String AdminId = responseLogin.substring(index, index + 36);
-
-        Response responseById = request.get(new URI(appUrlAdmins + "/" + AdminId));
+        Response responseById = request.get(new URI(appUrlAdmins + "/" + admin1.getId()));
         String responseByIdString = responseById.asString();
 
-        assertTrue(responseByIdString.contains("\"login\":\"michas13\",\"AdminTypeName\":\"coach\",\"firstName\":\"Michal\",\"lastName\":\"Pi\""));
+        assertTrue(responseByIdString.contains("\"login\":\"adminek1@1234\",\"id\":\"%s\"".formatted(admin1.getId())));
 
         assertEquals(200, responseById.getStatusCode());
     }
@@ -215,7 +188,7 @@ public class AdminControllerTests {
         assertTrue(responseString.isEmpty());
         assertEquals(204, response.getStatusCode());
     }
-
+/*
     @Test
     void getAdminByLoginMatchingPos() throws URISyntaxException {
         RequestSpecification request = RestAssured.given();
