@@ -62,8 +62,7 @@ public class ReservationMongoRepository extends AbstractMongoRepository<Reservat
     }
 
     //Checking database consistency
-    @Override
-    public boolean create(ReservationDTO reservationMapper) {
+    public Reservation createNew(ReservationDTO reservationMapper) {
         try {
             //Check client
             var list1 = getDatabase().getCollection(UserMongoRepository.COLLECTION_NAME, ClientDTO.class)
@@ -82,13 +81,14 @@ public class ReservationMongoRepository extends AbstractMongoRepository<Reservat
             Court courtFound = CourtMapper.fromMongoCourt(list2.get(0));
 
             if (!courtFound.isRented() && !clientFound.isArchive() && !courtFound.isArchive()) {
+                Reservation newReservation = new Reservation(UUID.randomUUID(),
+                        clientFound, courtFound, reservationMapper.getBeginTime());
+
                 InsertOneResult result;
                 ClientSession clientSession = getMongoClient().startSession();
                 try {
                     clientSession.startTransaction();
-                    result = this.getCollection().insertOne(clientSession, ReservationMapper.toMongoReservation(
-                            new Reservation(UUID.fromString(reservationMapper.getId()),
-                                    clientFound, courtFound, reservationMapper.getBeginTime())));
+                    result = this.getCollection().insertOne(clientSession, ReservationMapper.toMongoReservation(newReservation));
                     if (result.wasAcknowledged()) {
                         getDatabase().getCollection(CourtMongoRepository.COLLECTION_NAME, CourtDTO.class).updateOne(
                                 clientSession,
@@ -103,7 +103,8 @@ public class ReservationMongoRepository extends AbstractMongoRepository<Reservat
                 } finally {
                     clientSession.close();
                 }
-                return result.wasAcknowledged();
+                courtFound.setRented(true);
+                return result.wasAcknowledged() ? newReservation : null;
             } else if (clientFound.isArchive()) {
                 throw new UserException("Nie udalo sie utworzyc rezerwacji - klient jest archiwalny!");
             } else if (courtFound.isArchive()) {
@@ -114,6 +115,12 @@ public class ReservationMongoRepository extends AbstractMongoRepository<Reservat
         } catch (MongoWriteException | MongoCommandException exception) {
             throw new MyMongoException(exception.getMessage());
         }
+    }
+
+    ///TODO poprawka
+    @Override
+    public boolean create(ReservationDTO dto) {
+        return createNew(dto) != null;
     }
 
     public void update(UUID courtId, LocalDateTime endTime) {

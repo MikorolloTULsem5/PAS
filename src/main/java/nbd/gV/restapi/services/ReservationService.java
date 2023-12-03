@@ -45,18 +45,16 @@ public class ReservationService {
 
     public Reservation makeReservation(UUID clientId, UUID courtId, LocalDateTime beginTime) {
         try {
-            Client client = ClientMapper.fromMongoUser((ClientDTO) clientsRepository.readByUUID(clientId, ClientDTO.class));
-            Court court = CourtMapper.fromMongoCourt(courtRepository.readByUUID(courtId));
+            ReservationDTO reservationDTO = new ReservationDTO(null, clientId.toString(), courtId.toString(),
+                    beginTime, null, 0);
 
-            Reservation newReservation = new Reservation(UUID.randomUUID(), client, court, beginTime);
-            boolean result = reservationRepository.create(ReservationMapper.toMongoReservation(newReservation));
-            if (!result) {
+            Reservation newReservation = reservationRepository.createNew(reservationDTO);
+            if (newReservation == null) {
                 throw new ReservationException("Nie udalo sie utworzyc rezerwacji! - brak odpowiedzi");
             }
-            court.setRented(true);
             return newReservation;
         } catch (MyMongoException exception) {
-            throw new ReservationException("Nie udalo sie utworzyc rezerwacji");
+            throw new ReservationException("Nie udalo sie utworzyc rezerwacji - " + exception.getMessage());
         }
     }
 
