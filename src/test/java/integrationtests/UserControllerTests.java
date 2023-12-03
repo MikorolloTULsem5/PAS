@@ -20,7 +20,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class UserControllerTests {
 
-    static final String appUrlClient = "http://localhost:8080/CourtRent-1.0-SNAPSHOT/api/users";
+    static final String appUrlClient = "http://localhost:8080/CourtRent-1.0-SNAPSHOT/api/clients";
 
     @BeforeAll
     static void init() throws URISyntaxException  {

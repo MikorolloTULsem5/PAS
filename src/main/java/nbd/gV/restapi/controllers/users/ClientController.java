@@ -1,4 +1,4 @@
-package nbd.gV.restapi.controllers;
+package nbd.gV.restapi.controllers.users;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
@@ -18,9 +18,9 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-@Path("/users")
+@Path("/clients")
 @ApplicationScoped
-public class UserController {
+public class ClientController {
     @Inject
     private ClientService clientService;
     private final Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
