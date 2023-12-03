@@ -8,7 +8,6 @@ import com.mongodb.client.model.ValidationOptions;
 import jakarta.annotation.PostConstruct;
 import jakarta.annotation.PreDestroy;
 import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.ws.rs.ForbiddenException;
 import nbd.gV.data.datahandling.dto.CourtDTO;
 import nbd.gV.data.datahandling.dto.ReservationDTO;
 import nbd.gV.data.datahandling.mappers.CourtMapper;
