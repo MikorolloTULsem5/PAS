@@ -10,8 +10,10 @@ import jakarta.enterprise.context.ApplicationScoped;
 import nbd.gV.data.datahandling.dto.UserDTO;
 import nbd.gV.data.datahandling.mappers.AdminMapper;
 import nbd.gV.data.datahandling.mappers.ClientMapper;
+import nbd.gV.data.datahandling.mappers.ResourceAdminMapper;
 import nbd.gV.model.users.Admin;
 import nbd.gV.model.users.Client;
+import nbd.gV.model.users.ResourceAdmin;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 
@@ -104,6 +106,9 @@ public class UserMongoRepository extends AbstractMongoRepository<UserDTO> {
 
         create(AdminMapper.toMongoUser(new Admin(UUID.fromString("3b197615-6931-4aad-941a-44f78f527053"), "mainAdmin1@example")));
         create(AdminMapper.toMongoUser(new Admin(UUID.fromString("4844c398-5cf1-44e0-a6d8-34c8a939d2ea"), "secondAdmin2@example")));
+
+        create(ResourceAdminMapper.toMongoUser(new ResourceAdmin(UUID.fromString("83b29a7a-aa96-4ff2-823d-f3d0d6372c94"), "admRes1@test")));
+        create(ResourceAdminMapper.toMongoUser(new ResourceAdmin(UUID.fromString("a2f6cb49-5e9d-4069-ab91-f337224e833a"), "admRes2@test")));
     }
 
     @PreDestroy

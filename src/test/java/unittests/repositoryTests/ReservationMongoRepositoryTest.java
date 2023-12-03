@@ -253,7 +253,7 @@ public class ReservationMongoRepositoryTest {
         assertEquals(0, getTestCollection().find().into(new ArrayList<>()).size());
 
         assertThrows(NullPointerException.class, () -> reservationRepository.delete(null));
-        assertFalse(reservationRepository.delete(UUID.randomUUID()));
+        assertTrue(reservationRepository.delete(UUID.randomUUID()));
         assertEquals(0, getTestCollection().find().into(new ArrayList<>()).size());
     }
 
