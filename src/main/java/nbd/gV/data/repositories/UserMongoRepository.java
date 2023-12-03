@@ -60,7 +60,9 @@ public class UserMongoRepository extends AbstractMongoRepository<UserDTO> {
 
 
     public List<UserDTO> readAll(Class<? extends UserDTO> clazz) {
-        return this.read(Filters.empty(), clazz);
+//        return this.read(Filters.empty(), clazz);
+        String name = clazz.getSimpleName().toLowerCase();
+        return this.read(Filters.eq("_clazz", name.substring(0, name.length() - 3)), clazz);
     }
 
     public UserDTO readByUUID(UUID uuid, Class<? extends UserDTO> clazz) {

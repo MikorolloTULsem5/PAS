@@ -122,6 +122,6 @@ public class NewCleaningClassForTests {
 
     @Test
     void test() {
-//        cleanAll();
+        cleanAll();
     }
 }
