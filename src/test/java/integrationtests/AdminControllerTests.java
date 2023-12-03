@@ -264,7 +264,7 @@ public class AdminControllerTests {
         String JSON = """
                 {
                   "archive": true,
-                  "login": " ",
+                  "login": " "
                 }
                 """;
         RequestSpecification requestPut = RestAssured.given();
@@ -304,7 +304,7 @@ public class AdminControllerTests {
         String JSON = """
                 {
                   "archive": true,
-                  "login": "adminek2@9876",
+                  "login": "adminek2@9876"
                 }
                 """;
         RequestSpecification requestPut = RestAssured.given();
@@ -343,52 +343,46 @@ public class AdminControllerTests {
                 "\"login\":\"adminek2@9876\""));
     }
 
-//    @Test
-//    void archiveAndActivateAdminTest() throws URISyntaxException {
-//        RequestSpecification requestGet = RestAssured.given();
-//        String responseString = requestGet.get(new URI(appUrlAdmins)).asString();
-//
-//        //Retrieve UUID
-//        String responseLogin = requestGet.get(new URI(appUrlAdmins + "/get?login=loginek")).asString();
-//        int index = responseLogin.indexOf("\"id\":\"") + 6;
-//        String AdminId = responseLogin.substring(index, index + 36);
-//
-//        /*Archive test*/
-//        assertTrue(responseString.contains(
-//                "\"archive\":false," +
-//                "\"id\":\"" + AdminId + "\""));
-//        assertFalse(responseString.contains(
-//                "\"archive\":true," +
-//                "\"id\":\"" + AdminId + "\""));
-//
-//        RequestSpecification requestPost = RestAssured.given();
-//        Response responsePost = requestPost.post(appUrlAdmins + "/deactivate/" + AdminId);
-//
-//        assertEquals(204, responsePost.getStatusCode());
-//
-//        responseString = requestGet.get(new URI(appUrlAdmins)).asString();
-//
-//        assertFalse(responseString.contains(
-//                "\"archive\":false," +
-//                "\"id\":\"" + AdminId + "\""));
-//        assertTrue(responseString.contains(
-//                "\"archive\":true," +
-//                "\"id\":\"" + AdminId + "\""));
-//
-//        /*Activate test*/
-//        RequestSpecification requestPost2 = RestAssured.given();
-//        Response responsePost2 = requestPost2.post(appUrlAdmins + "/activate/" + AdminId);
-//
-//        assertEquals(204, responsePost2.getStatusCode());
-//
-//        responseString = requestGet.get(new URI(appUrlAdmins)).asString();
-//
-//        assertTrue(responseString.contains(
-//                "\"archive\":false," +
-//                "\"id\":\"" + AdminId + "\""));
-//        assertFalse(responseString.contains(
-//                "\"archive\":true," +
-//                "\"id\":\"" + AdminId + "\""));
-//    }
+    @Test
+    void archiveAndActivateAdminTest() throws URISyntaxException {
+        RequestSpecification requestGet = RestAssured.given();
+        String responseString = requestGet.get(new URI(appUrlAdmins)).asString();
 
+        /*Archive test*/
+        assertTrue(responseString.contains(
+            "\"archive\":false," +
+            "\"id\":\"" + admin1.getId() + "\""));
+        assertFalse(responseString.contains(
+            "\"archive\":true," +
+            "\"id\":\"" + admin1.getId() + "\""));
+
+        RequestSpecification requestPost = RestAssured.given();
+        Response responsePost = requestPost.post(appUrlAdmins + "/deactivate/" + admin1.getId());
+
+        assertEquals(204, responsePost.getStatusCode());
+
+        responseString = requestGet.get(new URI(appUrlAdmins)).asString();
+
+        assertFalse(responseString.contains(
+                "\"archive\":false," +
+                "\"id\":\"" + admin1.getId() + "\""));
+        assertTrue(responseString.contains(
+                "\"archive\":true," +
+                "\"id\":\"" + admin1.getId() + "\""));
+
+        /*Activate test*/
+        RequestSpecification requestPost2 = RestAssured.given();
+        Response responsePost2 = requestPost2.post(appUrlAdmins + "/activate/" + admin1.getId());
+
+        assertEquals(204, responsePost2.getStatusCode());
+
+        responseString = requestGet.get(new URI(appUrlAdmins)).asString();
+
+        assertTrue(responseString.contains(
+                "\"archive\":false," +
+                "\"id\":\"" + admin1.getId() + "\""));
+        assertFalse(responseString.contains(
+                "\"archive\":true," +
+                "\"id\":\"" + admin1.getId() + "\""));
+    }
 }
