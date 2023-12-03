@@ -25,26 +25,31 @@ public class CourtService {
     @Inject
     private CourtMongoRepository courtRepository;
 
-    ///TODO kompatybilnosc testow potem wywalic
     public CourtService(CourtMongoRepository courtRepository) {
         this.courtRepository = courtRepository;
     }
 
     public Court registerCourt(double area, int baseCost, int courtNumber) {
-        Court court = new Court(UUID.randomUUID(), area, baseCost, courtNumber);
-        try {
-            if (!courtRepository.read(Filters.eq("courtnumber", courtNumber)).isEmpty()) {
-                throw new CourtNumberException("Nie udalo sie zarejestrowac boiska w bazie! - boisko o tym numerze " +
-                        "znajduje sie juz w bazie");
-            }
+//        Court court = new Court(UUID.randomUUID(), area, baseCost, courtNumber);
+//        try {
+//            if (!courtRepository.read(Filters.eq("courtnumber", courtNumber)).isEmpty()) {
+//                throw new CourtNumberException("Nie udalo sie zarejestrowac boiska w bazie! - boisko o tym numerze " +
+//                        "znajduje sie juz w bazie");
+//            }
+//
+//            if (!courtRepository.create(CourtMapper.toMongoCourt(court))) {
+//                throw new CourtException("Nie udalo sie zarejestrowac boiska w bazie! - brak odpowiedzi");
+//            }
+//        } catch (MyMongoException exception) {
+//            throw new CourtException("Nie udalo sie dodac boiska.");
+//        }
+//        return court;
 
-            if (!courtRepository.create(CourtMapper.toMongoCourt(court))) {
-                throw new CourtException("Nie udalo sie zarejestrowac boiska w bazie! - brak odpowiedzi");
-            }
+        try {
+            return courtRepository.create(area, baseCost, courtNumber);
         } catch (MyMongoException exception) {
             throw new CourtException("Nie udalo sie dodac boiska.");
         }
-        return court;
     }
 
     public Court getCourtById(UUID courtID) {

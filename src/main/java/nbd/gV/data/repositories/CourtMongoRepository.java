@@ -13,6 +13,7 @@ import nbd.gV.data.datahandling.dto.CourtDTO;
 import nbd.gV.data.datahandling.dto.ReservationDTO;
 import nbd.gV.data.datahandling.mappers.CourtMapper;
 import nbd.gV.exceptions.CourtException;
+import nbd.gV.exceptions.CourtNumberException;
 import nbd.gV.exceptions.MyMongoException;
 import nbd.gV.model.courts.Court;
 import org.bson.Document;
@@ -65,6 +66,18 @@ public class CourtMongoRepository extends AbstractMongoRepository<CourtDTO> {
     @Override
     public String getCollectionName() {
         return COLLECTION_NAME;
+    }
+
+    public Court create(double area, int baseCost, int courtNumber) {
+        Court court = new Court(UUID.randomUUID(), area, baseCost, courtNumber);
+        if (!read(Filters.eq("courtnumber", courtNumber)).isEmpty()) {
+            throw new CourtNumberException("Nie udalo sie zarejestrowac boiska w bazie! - boisko o tym numerze " +
+                    "znajduje sie juz w bazie");
+        }
+        if (!super.create(CourtMapper.toMongoCourt(court))) {
+            throw new CourtException("Nie udalo sie zarejestrowac boiska w bazie! - brak odpowiedzi");
+        }
+        return court;
     }
 
     @Override
