@@ -95,7 +95,7 @@ public class ResourceAdminController {
     @PUT
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    @Path("/modifyAdmin/{id}")
+    @Path("/modifyResAdmin/{id}")
     public Response modifyResAdmin(@PathParam("id") String id, ResourceAdmin modifyResourceAdmin) {
         Set<ConstraintViolation<ResourceAdmin>> violations = validator.validate(modifyResourceAdmin);
         List<String> errors = violations.stream().map(ConstraintViolation::getMessage).collect(Collectors.toList());
