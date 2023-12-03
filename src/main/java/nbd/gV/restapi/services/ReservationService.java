@@ -38,7 +38,6 @@ public class ReservationService {
     public ReservationService(ReservationMongoRepository reservationRepository) {
         this.reservationRepository = reservationRepository;
 
-        ///TODO do wywalenia
         clientsRepository = new UserMongoRepository();
         courtRepository = new CourtMongoRepository();
     }

@@ -26,8 +26,6 @@ public class ClientService extends UserService {
 
     @Inject
     private UserMongoRepository userRepository;
-
-    ///TODO kompatybilnosc testow potem wywalic
     public ClientService(UserMongoRepository userRepository) {
         this.userRepository = userRepository;
     }
