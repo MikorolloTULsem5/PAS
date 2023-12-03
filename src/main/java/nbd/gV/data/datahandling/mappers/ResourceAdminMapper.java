@@ -1,6 +1,7 @@
 package nbd.gV.data.datahandling.mappers;
 
 import nbd.gV.data.datahandling.dto.ResourceAdminDTO;
+import nbd.gV.model.users.Admin;
 import nbd.gV.model.users.ResourceAdmin;
 
 import java.util.UUID;
@@ -12,6 +13,8 @@ public class ResourceAdminMapper {
     }
 
     public static ResourceAdmin fromMongoUser(ResourceAdminDTO resourceAdminDTO) {
-        return new ResourceAdmin(UUID.fromString(resourceAdminDTO.getId()), resourceAdminDTO.getLogin());
+        ResourceAdmin newResourceAdmin = new ResourceAdmin(UUID.fromString(resourceAdminDTO.getId()), resourceAdminDTO.getLogin());
+        newResourceAdmin.setArchive(resourceAdminDTO.isArchive());
+        return newResourceAdmin;
     }
 }
