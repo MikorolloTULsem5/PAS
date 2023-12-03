@@ -79,7 +79,7 @@ public class AdminControllerTests {
         cleanUsers();
         String JSON = """
                 {
-                  "login": "johnBravo",
+                  "login": "johnBravo"
                 }
                 """;
         RequestSpecification requestPost = RestAssured.given();
@@ -104,7 +104,7 @@ public class AdminControllerTests {
     void createAdminTestNegInvalidData() throws URISyntaxException {
         String json = """
                 {
-                  "login": " ",
+                  "login": " "
                 }
                 """;
         RequestSpecification requestPost = RestAssured.given();
@@ -129,7 +129,7 @@ public class AdminControllerTests {
     void createAdminTestNegSameLogin() throws URISyntaxException {
         String json = """
                 {
-                  "login": "adminek1@1234",
+                  "login": "adminek1@1234"
                 }
                 """;
         RequestSpecification requestPost = RestAssured.given();
