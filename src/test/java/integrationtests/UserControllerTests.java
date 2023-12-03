@@ -20,11 +20,11 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class UserControllerTests {
 
-    ///TODO zmienic sciezki na final'a jednego
+    static final String appUrlClient = "http://localhost:8080/CourtRent-1.0-SNAPSHOT/api/users";
 
     @BeforeAll
     static void init() throws URISyntaxException  {
-        RestAssured.given().get(new URI("http://localhost:8080/CourtRent-1.0-SNAPSHOT/api/users"));
+        RestAssured.given().get(new URI(appUrlClient));
     }
 
     @AfterAll
@@ -41,7 +41,7 @@ public class UserControllerTests {
     @Test
     void getAllClientsTest() throws URISyntaxException {
         RequestSpecification request = RestAssured.given();
-        Response response = request.get(new URI("http://localhost:8080/CourtRent-1.0-SNAPSHOT/api/users"));
+        Response response = request.get(new URI(appUrlClient));
         String responseString = response.asString();
 
         //First Client
@@ -65,7 +65,7 @@ public class UserControllerTests {
     void getAllClientsTestNoCont() throws URISyntaxException {
         cleanUsers();
         RequestSpecification request = RestAssured.given();
-        Response response = request.get(new URI("http://localhost:8080/CourtRent-1.0-SNAPSHOT/api/users"));
+        Response response = request.get(new URI(appUrlClient));
         String responseString = response.asString();
 
         assertTrue(responseString.isEmpty());
@@ -88,15 +88,15 @@ public class UserControllerTests {
         requestPost.body(JSON);
 
         RequestSpecification requestGet = RestAssured.given();
-        String responseString = requestGet.get(new URI("http://localhost:8080/CourtRent-1.0-SNAPSHOT/api/users")).asString();
+        String responseString = requestGet.get(new URI(appUrlClient)).asString();
 
         assertTrue(responseString.isEmpty());
 
-        Response responsePost = requestPost.post("http://localhost:8080/CourtRent-1.0-SNAPSHOT/api/users/addClient");
+        Response responsePost = requestPost.post(appUrlClient + "/addClient");
 
         assertEquals(201, responsePost.getStatusCode());
 
-        responseString = requestGet.get(new URI("http://localhost:8080/CourtRent-1.0-SNAPSHOT/api/users")).asString();
+        responseString = requestGet.get(new URI(appUrlClient)).asString();
 
         assertTrue(responseString.contains("\"login\":\"johnBravo\""));
         assertTrue(responseString.contains("\"clientTypeName\":\"normal\""));
@@ -119,16 +119,16 @@ public class UserControllerTests {
         requestPost.body(json);
 
         RequestSpecification requestGet = RestAssured.given();
-        String responseString = requestGet.get(new URI("http://localhost:8080/CourtRent-1.0-SNAPSHOT/api/users")).asString();
+        String responseString = requestGet.get(new URI(appUrlClient)).asString();
 
         assertFalse(responseString.contains("\"login\":\"johnBravo\""));
         assertFalse(responseString.contains("\"lastName\":\"  \""));
 
-        Response responsePost = requestPost.post("http://localhost:8080/CourtRent-1.0-SNAPSHOT/api/users/addClient");
+        Response responsePost = requestPost.post(appUrlClient + "/addClient");
 
         assertEquals(400, responsePost.getStatusCode());
 
-        responseString = requestGet.get(new URI("http://localhost:8080/CourtRent-1.0-SNAPSHOT/api/users")).asString();
+        responseString = requestGet.get(new URI(appUrlClient)).asString();
 
         assertFalse(responseString.contains("\"login\":\"johnBravo\""));
         assertFalse(responseString.contains("\"lastName\":\"  \""));
@@ -149,18 +149,18 @@ public class UserControllerTests {
         requestPost.body(json);
 
         RequestSpecification requestGet = RestAssured.given();
-        String responseString = requestGet.get(new URI("http://localhost:8080/CourtRent-1.0-SNAPSHOT/api/users")).asString();
+        String responseString = requestGet.get(new URI(appUrlClient)).asString();
 
         assertTrue(responseString.contains("\"login\":\"michas13\""));
 
         assertFalse(responseString.contains("\"firstName\":\"John\""));
         assertFalse(responseString.contains("\"lastName\":\"Bravo\""));
 
-        Response responsePost = requestPost.post("http://localhost:8080/CourtRent-1.0-SNAPSHOT/api/users/addClient");
+        Response responsePost = requestPost.post(appUrlClient + "/addClient");
 
         assertEquals(409, responsePost.getStatusCode());
 
-        responseString = requestGet.get(new URI("http://localhost:8080/CourtRent-1.0-SNAPSHOT/api/users")).asString();
+        responseString = requestGet.get(new URI(appUrlClient)).asString();
 
         assertFalse(responseString.contains("\"firstName\":\"John\""));
         assertFalse(responseString.contains("\"lastName\":\"Bravo\""));
@@ -169,7 +169,7 @@ public class UserControllerTests {
     @Test
     void getClientByLoginTest() throws URISyntaxException {
         RequestSpecification request = RestAssured.given();
-        Response response = request.get(new URI("http://localhost:8080/CourtRent-1.0-SNAPSHOT/api/users/get?login=michas13"));
+        Response response = request.get(new URI(appUrlClient + "/get?login=michas13"));
         String responseString = response.asString();
 
         assertTrue(responseString.contains("\"login\":\"michas13\",\"clientTypeName\":\"coach\",\"firstName\":\"Michal\",\"lastName\":\"Pi\""));
@@ -180,7 +180,7 @@ public class UserControllerTests {
     @Test
     void getClientByLoginTestNoCont() throws URISyntaxException {
         RequestSpecification request = RestAssured.given();
-        Response response = request.get(new URI("http://localhost:8080/CourtRent-1.0-SNAPSHOT/api/users/get?login=564545415612121121"));
+        Response response = request.get(new URI(appUrlClient + "/get?login=564545415612121121"));
         String responseString = response.asString();
 
         assertTrue(responseString.isEmpty());
@@ -192,11 +192,11 @@ public class UserControllerTests {
         RequestSpecification request = RestAssured.given();
 
         //Retrieve UUID
-        String responseLogin = request.get(new URI("http://localhost:8080/CourtRent-1.0-SNAPSHOT/api/users/get?login=michas13")).asString();
+        String responseLogin = request.get(new URI(appUrlClient + "/get?login=michas13")).asString();
         int index = responseLogin.indexOf("\"id\":\"") + 6;
         String clientId = responseLogin.substring(index, index + 36);
 
-        Response responseById = request.get(new URI("http://localhost:8080/CourtRent-1.0-SNAPSHOT/api/users/" + clientId));
+        Response responseById = request.get(new URI(appUrlClient + "/" + clientId));
         String responseByIdString = responseById.asString();
 
         assertTrue(responseByIdString.contains("\"login\":\"michas13\",\"clientTypeName\":\"coach\",\"firstName\":\"Michal\",\"lastName\":\"Pi\""));
@@ -207,7 +207,7 @@ public class UserControllerTests {
     @Test
     void getClientByIdTestNoCont() throws URISyntaxException {
         RequestSpecification request = RestAssured.given();
-        Response response = request.get(new URI("http://localhost:8080/CourtRent-1.0-SNAPSHOT/api/users/" + UUID.randomUUID()));
+        Response response = request.get(new URI(appUrlClient + "/" + UUID.randomUUID()));
         String responseString = response.asString();
 
         assertTrue(responseString.isEmpty());
@@ -217,7 +217,7 @@ public class UserControllerTests {
     @Test
     void getClientByLoginMatchingPos() throws URISyntaxException {
         RequestSpecification request = RestAssured.given();
-        Response response = request.get(new URI("http://localhost:8080/CourtRent-1.0-SNAPSHOT/api/users/match?login=login"));
+        Response response = request.get(new URI(appUrlClient + "/match?login=login"));
         String responseString = response.asString();
 
         String[] splitedRespStr = responseString.split("},");
@@ -244,7 +244,7 @@ public class UserControllerTests {
     @Test
     void getClientByLoginMatchingNoCont() throws URISyntaxException {
         RequestSpecification request = RestAssured.given();
-        Response response = request.get(new URI("http://localhost:8080/CourtRent-1.0-SNAPSHOT/api/users/match?login=uwuwuuwuwu"));
+        Response response = request.get(new URI(appUrlClient + "/match?login=uwuwuuwuwu"));
         String responseString = response.asString();
 
         assertTrue(responseString.isEmpty());
@@ -268,10 +268,10 @@ public class UserControllerTests {
         requestPut.body(JSON);
 
         RequestSpecification requestGet = RestAssured.given();
-        String responseString = requestGet.get(new URI("http://localhost:8080/CourtRent-1.0-SNAPSHOT/api/users")).asString();
+        String responseString = requestGet.get(new URI(appUrlClient)).asString();
 
         //Retrieve UUID
-        String responseLogin = requestGet.get(new URI("http://localhost:8080/CourtRent-1.0-SNAPSHOT/api/users/get?login=loginek")).asString();
+        String responseLogin = requestGet.get(new URI(appUrlClient + "/get?login=loginek")).asString();
         int index = responseLogin.indexOf("\"id\":\"") + 6;
         String clientId = responseLogin.substring(index, index + 36);
 
@@ -290,11 +290,11 @@ public class UserControllerTests {
                 "\"firstName\":\"John\"," +
                 "\"lastName\":\"Smith\""));
 
-        Response responsePut = requestPut.put("http://localhost:8080/CourtRent-1.0-SNAPSHOT/api/users/modifyClient/" + clientId);
+        Response responsePut = requestPut.put(appUrlClient + "/modifyClient/" + clientId);
 
         assertEquals(204, responsePut.getStatusCode());
 
-        responseString = requestGet.get(new URI("http://localhost:8080/CourtRent-1.0-SNAPSHOT/api/users")).asString();
+        responseString = requestGet.get(new URI(appUrlClient)).asString();
 
         assertFalse(responseString.contains(
                 "\"archive\":false," +
@@ -328,10 +328,10 @@ public class UserControllerTests {
         requestPut.body(JSON);
 
         RequestSpecification requestGet = RestAssured.given();
-        String responseString = requestGet.get(new URI("http://localhost:8080/CourtRent-1.0-SNAPSHOT/api/users")).asString();
+        String responseString = requestGet.get(new URI(appUrlClient)).asString();
 
         //Retrieve UUID
-        String responseLogin = requestGet.get(new URI("http://localhost:8080/CourtRent-1.0-SNAPSHOT/api/users/get?login=loginek")).asString();
+        String responseLogin = requestGet.get(new URI(appUrlClient + "/get?login=loginek")).asString();
         int index = responseLogin.indexOf("\"id\":\"") + 6;
         String clientId = responseLogin.substring(index, index + 36);
 
@@ -350,11 +350,11 @@ public class UserControllerTests {
                         "\"firstName\":\"John\"," +
                         "\"lastName\":\"Smith\""));
 
-        Response responsePut = requestPut.put("http://localhost:8080/CourtRent-1.0-SNAPSHOT/api/users/modifyClient/" + clientId);
+        Response responsePut = requestPut.put(appUrlClient + "/modifyClient/" + clientId);
 
         assertEquals(400, responsePut.getStatusCode());
 
-        responseString = requestGet.get(new URI("http://localhost:8080/CourtRent-1.0-SNAPSHOT/api/users")).asString();
+        responseString = requestGet.get(new URI(appUrlClient)).asString();
 
         assertTrue(responseString.contains(
                 "\"archive\":false," +
@@ -388,10 +388,10 @@ public class UserControllerTests {
         requestPut.body(JSON);
 
         RequestSpecification requestGet = RestAssured.given();
-        String responseString = requestGet.get(new URI("http://localhost:8080/CourtRent-1.0-SNAPSHOT/api/users")).asString();
+        String responseString = requestGet.get(new URI(appUrlClient)).asString();
 
         //Retrieve UUID
-        String responseLogin = requestGet.get(new URI("http://localhost:8080/CourtRent-1.0-SNAPSHOT/api/users/get?login=loginek")).asString();
+        String responseLogin = requestGet.get(new URI(appUrlClient + "/get?login=loginek")).asString();
         int index = responseLogin.indexOf("\"id\":\"") + 6;
         String clientId = responseLogin.substring(index, index + 36);
 
@@ -412,11 +412,11 @@ public class UserControllerTests {
                 "\"firstName\":\"John\"," +
                 "\"lastName\":\"Smith\""));
 
-        Response responsePut = requestPut.put("http://localhost:8080/CourtRent-1.0-SNAPSHOT/api/users/modifyClient/" + clientId);
+        Response responsePut = requestPut.put(appUrlClient + "/modifyClient/" + clientId);
 
         assertEquals(409, responsePut.getStatusCode());
 
-        responseString = requestGet.get(new URI("http://localhost:8080/CourtRent-1.0-SNAPSHOT/api/users")).asString();
+        responseString = requestGet.get(new URI(appUrlClient)).asString();
 
         assertTrue(responseString.contains("\"login\":\"michas13\""));
 
@@ -439,10 +439,10 @@ public class UserControllerTests {
     @Test
     void archiveAndActivateClientTest() throws URISyntaxException {
         RequestSpecification requestGet = RestAssured.given();
-        String responseString = requestGet.get(new URI("http://localhost:8080/CourtRent-1.0-SNAPSHOT/api/users")).asString();
+        String responseString = requestGet.get(new URI(appUrlClient)).asString();
 
         //Retrieve UUID
-        String responseLogin = requestGet.get(new URI("http://localhost:8080/CourtRent-1.0-SNAPSHOT/api/users/get?login=loginek")).asString();
+        String responseLogin = requestGet.get(new URI(appUrlClient + "/get?login=loginek")).asString();
         int index = responseLogin.indexOf("\"id\":\"") + 6;
         String clientId = responseLogin.substring(index, index + 36);
 
@@ -455,11 +455,11 @@ public class UserControllerTests {
                 "\"id\":\"" + clientId + "\""));
 
         RequestSpecification requestPost = RestAssured.given();
-        Response responsePost = requestPost.post("http://localhost:8080/CourtRent-1.0-SNAPSHOT/api/users/deactivate/" + clientId);
+        Response responsePost = requestPost.post(appUrlClient + "/deactivate/" + clientId);
 
         assertEquals(204, responsePost.getStatusCode());
 
-        responseString = requestGet.get(new URI("http://localhost:8080/CourtRent-1.0-SNAPSHOT/api/users")).asString();
+        responseString = requestGet.get(new URI(appUrlClient)).asString();
 
         assertFalse(responseString.contains(
                 "\"archive\":false," +
@@ -470,11 +470,11 @@ public class UserControllerTests {
 
         /*Activate test*/
         RequestSpecification requestPost2 = RestAssured.given();
-        Response responsePost2 = requestPost2.post("http://localhost:8080/CourtRent-1.0-SNAPSHOT/api/users/activate/" + clientId);
+        Response responsePost2 = requestPost2.post(appUrlClient + "/activate/" + clientId);
 
         assertEquals(204, responsePost2.getStatusCode());
 
-        responseString = requestGet.get(new URI("http://localhost:8080/CourtRent-1.0-SNAPSHOT/api/users")).asString();
+        responseString = requestGet.get(new URI(appUrlClient)).asString();
 
         assertTrue(responseString.contains(
                 "\"archive\":false," +
