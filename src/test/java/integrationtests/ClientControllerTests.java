@@ -337,18 +337,18 @@ public class ClientControllerTests {
 
         assertTrue(responseString.contains(
                 "\"archive\":false," +
-                        "\"id\":\"" + clientId + "\"," +
-                        "\"login\":\"loginek\"," +
-                        "\"clientTypeName\":\"normal\"," +
-                        "\"firstName\":\"Adam\"," +
-                        "\"lastName\":\"Smith\""));
+                "\"id\":\"" + clientId + "\"," +
+                "\"login\":\"loginek\"," +
+                "\"clientTypeName\":\"normal\"," +
+                "\"firstName\":\"Adam\"," +
+                "\"lastName\":\"Smith\""));
         assertFalse(responseString.contains(
                 "\"archive\":true," +
-                        "\"id\":\"" + clientId + "\"," +
-                        "\"login\":\"loginek\"," +
-                        "\"clientTypeName\":\"coach\"," +
-                        "\"firstName\":\"John\"," +
-                        "\"lastName\":\"Smith\""));
+                "\"id\":\"" + clientId + "\"," +
+                "\"login\":\"loginek\"," +
+                "\"clientTypeName\":\"coach\"," +
+                "\"firstName\":\"John\"," +
+                "\"lastName\":\"Smith\""));
 
         Response responsePut = requestPut.put(appUrlClient + "/modifyClient/" + clientId);
 

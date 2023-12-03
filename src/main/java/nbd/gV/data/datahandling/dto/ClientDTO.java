@@ -16,8 +16,6 @@ public class ClientDTO extends UserDTO{
     private String firstName;
     @BsonProperty("lastname")
     private String lastName;
-    @BsonProperty("archive")
-    private boolean archive;
     @BsonProperty("clienttype")
     private String clientType;
 
@@ -28,10 +26,9 @@ public class ClientDTO extends UserDTO{
                      @BsonProperty("login") String login,
                      @BsonProperty("archive") boolean archive,
                      @BsonProperty("clienttype") String clientType) {
-        super(id, login);
+        super(id, login, archive);
         this.firstName = firstName;
         this.lastName = lastName;
-        this.archive = archive;
         this.clientType = clientType;
     }
 
@@ -40,7 +37,7 @@ public class ClientDTO extends UserDTO{
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         ClientDTO that = (ClientDTO) o;
-        return archive == that.archive && Objects.equals(getId(), that.getId()) && Objects.equals(firstName,
+        return isArchive() == that.isArchive() && Objects.equals(getId(), that.getId()) && Objects.equals(firstName,
                 that.firstName) && Objects.equals(lastName, that.lastName)
                 && Objects.equals(getLogin(), that.getLogin()) && Objects.equals(clientType, that.clientType);
     }

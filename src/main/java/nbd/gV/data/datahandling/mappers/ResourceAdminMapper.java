@@ -8,7 +8,7 @@ import java.util.UUID;
 public class ResourceAdminMapper {
 
     public static ResourceAdminDTO toMongoUser(ResourceAdmin resourceAdmin) {
-        return new ResourceAdminDTO(resourceAdmin.getId().toString(), resourceAdmin.getLogin());
+        return new ResourceAdminDTO(resourceAdmin.getId().toString(), resourceAdmin.getLogin(), resourceAdmin.isArchive());
     }
 
     public static ResourceAdmin fromMongoUser(ResourceAdminDTO resourceAdminDTO) {

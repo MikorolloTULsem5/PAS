@@ -12,14 +12,18 @@ import java.util.Objects;
 public class UserDTO {
     @BsonProperty("_id")
     private String id;
-    @BsonProperty
+    @BsonProperty("login")
     private String login;
+    @BsonProperty("archive")
+    private boolean archive;
 
     @BsonCreator
     public UserDTO(@BsonProperty("_id") String id,
-                   @BsonProperty("login") String login) {
+                   @BsonProperty("login") String login,
+                   @BsonProperty("archive") boolean archive) {
         this.id = id;
         this.login = login;
+        this.archive = archive;
     }
 
     @Override

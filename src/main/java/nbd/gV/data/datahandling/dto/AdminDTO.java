@@ -14,7 +14,8 @@ public class AdminDTO extends UserDTO {
 
     @BsonCreator
     public AdminDTO(@BsonProperty("_id") String id,
-                    @BsonProperty("login") String login) {
-        super(id, login);
+                    @BsonProperty("login") String login,
+                    @BsonProperty("archive") boolean archive) {
+        super(id, login, archive);
     }
 }

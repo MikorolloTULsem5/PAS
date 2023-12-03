@@ -14,7 +14,8 @@ public class ResourceAdminDTO extends UserDTO {
 
     @BsonCreator
     public ResourceAdminDTO(@BsonProperty("_id") String id,
-                            @BsonProperty("login") String login) {
-        super(id, login);
+                            @BsonProperty("login") String login,
+                            @BsonProperty("archive") boolean archive) {
+        super(id, login, archive);
     }
 }

@@ -8,7 +8,7 @@ import java.util.UUID;
 public class AdminMapper {
 
     public static AdminDTO toMongoUser(Admin admin) {
-        return new AdminDTO(admin.getId().toString(), admin.getLogin());
+        return new AdminDTO(admin.getId().toString(), admin.getLogin(), admin.isArchive());
     }
 
     public static Admin fromMongoUser(AdminDTO adminDTO) {
