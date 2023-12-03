@@ -10,10 +10,12 @@ import nbd.gV.data.repositories.CourtMongoRepository;
 import nbd.gV.data.repositories.ReservationMongoRepository;
 import nbd.gV.data.repositories.UserMongoRepository;
 import nbd.gV.model.courts.Court;
+import nbd.gV.model.users.Admin;
 import nbd.gV.model.users.Client;
 import nbd.gV.model.reservations.Reservation;
 import nbd.gV.restapi.services.CourtService;
 import nbd.gV.restapi.services.ReservationService;
+import nbd.gV.restapi.services.userservice.AdminService;
 import nbd.gV.restapi.services.userservice.ClientService;
 import org.bson.UuidRepresentation;
 import org.bson.codecs.configuration.CodecRegistries;
@@ -25,6 +27,7 @@ import org.junit.jupiter.api.Test;
 import java.time.LocalDateTime;
 import java.time.Month;
 import java.util.List;
+import java.util.UUID;
 
 public class NewCleaningClassForTests {
     private static final CodecRegistry pojoCodecRegistry = CodecRegistries.fromProviders(PojoCodecProvider.builder()
@@ -118,6 +121,19 @@ public class NewCleaningClassForTests {
         reservationServiceTest.returnCourt(court4.getId(), LocalDateTime.of(2023, Month.DECEMBER, 1, 14, 20));
         reservation6 = reservationServiceTest.makeReservation(client1.getId(), court3.getId(), LocalDateTime.of(2023, Month.DECEMBER, 15, 10,0));
         reservation7 = reservationServiceTest.makeReservation(client3.getId(), court5.getId(),  LocalDateTime.of(2023, Month.DECEMBER, 16, 10,0));
+    }
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    static Admin admin1;
+    static Admin admin2;
+
+    ///TODO mozna rozdzielic dropowanie na osobne klasy
+    static void initAdmins() {
+        AdminService adminServiceServiceTest = new AdminService(new UserMongoRepository());
+        cleanUsers();
+        admin1 = adminServiceServiceTest.registerAdmin("adminek1@1234");
+        admin2 = adminServiceServiceTest.registerAdmin("adminek2@9876");
     }
 
     @Test
