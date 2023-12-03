@@ -13,10 +13,12 @@ import nbd.gV.model.courts.Court;
 import nbd.gV.model.users.Admin;
 import nbd.gV.model.users.Client;
 import nbd.gV.model.reservations.Reservation;
+import nbd.gV.model.users.ResourceAdmin;
 import nbd.gV.restapi.services.CourtService;
 import nbd.gV.restapi.services.ReservationService;
 import nbd.gV.restapi.services.userservice.AdminService;
 import nbd.gV.restapi.services.userservice.ClientService;
+import nbd.gV.restapi.services.userservice.ResourceAdminService;
 import org.bson.UuidRepresentation;
 import org.bson.codecs.configuration.CodecRegistries;
 import org.bson.codecs.configuration.CodecRegistry;
@@ -136,8 +138,20 @@ public class NewCleaningClassForTests {
         admin2 = adminServiceServiceTest.registerAdmin("adminek2@9876");
     }
 
+
+    static ResourceAdmin adminRes1;
+    static ResourceAdmin adminRes2;
+
+    static void initResAdmins() {
+        ResourceAdminService resourceAdminServiceTest = new ResourceAdminService(new UserMongoRepository());
+        cleanUsers();
+        adminRes1 = resourceAdminServiceTest.registerResourceAdmin("adminekRes1@1234");
+        adminRes2 = resourceAdminServiceTest.registerResourceAdmin("adminekRes2@9876");
+    }
+
     @Test
     void test() {
         cleanAll();
+        initResAdmins();
     }
 }
