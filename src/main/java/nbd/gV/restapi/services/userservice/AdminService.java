@@ -32,15 +32,15 @@ public class AdminService extends UserService {
         Admin newAdmin = new Admin(UUID.randomUUID(), login);
         try {
             if (!userRepository.read(Filters.eq("login", login), AdminDTO.class).isEmpty()) {
-                throw new UserLoginException("Nie udalo sie zarejestrowac admina w bazie! - admin o tym loginie " +
+                throw new UserLoginException("Nie udalo sie zarejestrowac administratora w bazie! - admin o tym loginie " +
                         "znajduje sie juz w bazie");
             }
 
             if (!userRepository.create(AdminMapper.toMongoUser(newAdmin))) {
-                throw new UserException("Nie udalo sie zarejestrowac admina w bazie! - brak odpowiedzi");
+                throw new UserException("Nie udalo sie zarejestrowac administratora w bazie! - brak odpowiedzi");
             }
         } catch (MyMongoException exception) {
-            throw new UserException("Nie udalo sie zarejestrowac admina w bazie!");
+            throw new UserException("Nie udalo sie zarejestrowac administratora w bazie!");
         }
         return newAdmin;
     }
@@ -77,12 +77,12 @@ public class AdminService extends UserService {
                 Filters.eq("login", modifiedAdmin.getLogin()),
                 Filters.ne("_id", modifiedAdmin.getId().toString())), AdminDTO.class);
         if (!list.isEmpty()) {
-            throw new UserLoginException("Nie udalo sie zmodyfikowac podanego admina - " +
-                    "proba zmiany loginu na login wystepujacy juz u innego admina");
+            throw new UserLoginException("Nie udalo sie zmodyfikowac podanego administratora - " +
+                    "proba zmiany loginu na login wystepujacy juz u innego administratora");
         }
 
         if (!userRepository.updateByReplace(modifiedAdmin.getId(), AdminMapper.toMongoUser(modifiedAdmin))) {
-            throw new UserException("Nie udalo sie zmodyfikowac podanego admina.");
+            throw new UserException("Nie udalo sie zmodyfikowac podanego administratora.");
         }
     }
 
