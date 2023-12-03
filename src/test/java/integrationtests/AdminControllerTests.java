@@ -188,11 +188,11 @@ public class AdminControllerTests {
         assertTrue(responseString.isEmpty());
         assertEquals(204, response.getStatusCode());
     }
-/*
+
     @Test
     void getAdminByLoginMatchingPos() throws URISyntaxException {
         RequestSpecification request = RestAssured.given();
-        Response response = request.get(new URI(appUrlAdmins + "/match?login=login"));
+        Response response = request.get(new URI(appUrlAdmins + "/match?login=admin"));
         String responseString = response.asString();
 
         String[] splitedRespStr = responseString.split("},");
@@ -200,18 +200,10 @@ public class AdminControllerTests {
         assertEquals(2, splitedRespStr.length);
 
         //First Admin
-        assertTrue(splitedRespStr[0].contains(
-                "\"login\":\"loginek\"," +
-                "\"AdminTypeName\":\"normal\"," +
-                "\"firstName\":\"Adam\"," +
-                "\"lastName\":\"Smith\""));
+        assertTrue(splitedRespStr[0].contains("\"id\":\"%s\",\"login\":\"adminek1@1234\"".formatted(admin1.getId())));
 
         //Second Admin
-        assertTrue(splitedRespStr[1].contains(
-                "\"login\":\"loginek13\"," +
-                "\"AdminTypeName\":\"athlete\"," +
-                "\"firstName\":\"Eva\"," +
-                "\"lastName\":\"Braun\""));
+        assertTrue(splitedRespStr[1].contains("\"id\":\"%s\",\"login\":\"adminek2@9876\"".formatted(admin2.getId())));
 
         assertEquals(200, response.getStatusCode());
     }
@@ -226,7 +218,7 @@ public class AdminControllerTests {
 
         assertEquals(204, response.getStatusCode());
     }
-
+/*
     @Test
     void modifyAdminTest() throws URISyntaxException {
         String JSON = """
