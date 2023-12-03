@@ -218,16 +218,13 @@ public class AdminControllerTests {
 
         assertEquals(204, response.getStatusCode());
     }
-/*
+
     @Test
     void modifyAdminTest() throws URISyntaxException {
         String JSON = """
                 {
                   "archive": true,
-                  "firstName": "John",
-                  "lastName": "Smith",
-                  "login": "loginek",
-                  "AdminTypeName": "coach"
+                  "login": "loginekAdm"
                 }
                 """;
         RequestSpecification requestPut = RestAssured.given();
@@ -237,27 +234,16 @@ public class AdminControllerTests {
         RequestSpecification requestGet = RestAssured.given();
         String responseString = requestGet.get(new URI(appUrlAdmins)).asString();
 
-        //Retrieve UUID
-        String responseLogin = requestGet.get(new URI(appUrlAdmins + "/get?login=loginek")).asString();
-        int index = responseLogin.indexOf("\"id\":\"") + 6;
-        String AdminId = responseLogin.substring(index, index + 36);
-
         assertTrue(responseString.contains(
                 "\"archive\":false," +
-                "\"id\":\"" + AdminId + "\"," +
-                "\"login\":\"loginek\"," +
-                "\"AdminTypeName\":\"normal\"," +
-                "\"firstName\":\"Adam\"," +
-                "\"lastName\":\"Smith\""));
+                "\"id\":\"" + admin1.getId() + "\"," +
+                "\"login\":\"adminek1@1234\""));
         assertFalse(responseString.contains(
                 "\"archive\":true," +
-                "\"id\":\"" + AdminId + "\"," +
-                "\"login\":\"loginek\"," +
-                "\"AdminTypeName\":\"coach\"," +
-                "\"firstName\":\"John\"," +
-                "\"lastName\":\"Smith\""));
+                "\"id\":\"" + admin1.getId() + "\"," +
+                "\"login\":\"loginekAdm\""));
 
-        Response responsePut = requestPut.put(appUrlAdmins + "/modifyAdmin/" + AdminId);
+        Response responsePut = requestPut.put(appUrlAdmins + "/modifyAdmin/" + admin1.getId());
 
         assertEquals(204, responsePut.getStatusCode());
 
@@ -265,20 +251,14 @@ public class AdminControllerTests {
 
         assertFalse(responseString.contains(
                 "\"archive\":false," +
-                "\"id\":\"" + AdminId + "\"," +
-                "\"login\":\"loginek\"," +
-                "\"AdminTypeName\":\"normal\"," +
-                "\"firstName\":\"Adam\"," +
-                "\"lastName\":\"Smith\""));
+                "\"id\":\"" + admin1.getId() + "\"," +
+                "\"login\":\"adminek1@1234\""));
         assertTrue(responseString.contains(
                 "\"archive\":true," +
-                "\"id\":\"" + AdminId + "\"," +
-                "\"login\":\"loginek\"," +
-                "\"AdminTypeName\":\"coach\"," +
-                "\"firstName\":\"John\"," +
-                "\"lastName\":\"Smith\""));
+                "\"id\":\"" + admin1.getId() + "\"," +
+                "\"login\":\"loginekAdm\""));
     }
-
+/*
     @Test
     void modifyAdminTestNegInvalidData() throws URISyntaxException {
         String JSON = """
