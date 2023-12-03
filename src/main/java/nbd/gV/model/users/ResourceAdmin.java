@@ -1,7 +1,9 @@
 package nbd.gV.model.users;
 
-import java.util.UUID;
+import lombok.NoArgsConstructor;
 
+import java.util.UUID;
+@NoArgsConstructor
 public class ResourceAdmin extends User {
 
     public ResourceAdmin(UUID id, String login) {

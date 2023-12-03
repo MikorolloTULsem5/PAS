@@ -152,7 +152,7 @@ public class AdminControllerTests {
         Response response = request.get(new URI(appUrlAdmins + "/get?login=adminek1@1234"));
         String responseString = response.asString();
 
-        assertTrue(responseString.contains("\"login\":\"adminek1@1234\",\"id\":\"%s\"".formatted(admin1.getId())));
+        assertTrue(responseString.contains("\"id\":\"%s\",\"login\":\"adminek1@1234\"".formatted(admin1.getId())));
 
         assertEquals(200, response.getStatusCode());
     }
@@ -174,7 +174,7 @@ public class AdminControllerTests {
         Response responseById = request.get(new URI(appUrlAdmins + "/" + admin1.getId()));
         String responseByIdString = responseById.asString();
 
-        assertTrue(responseByIdString.contains("\"login\":\"adminek1@1234\",\"id\":\"%s\"".formatted(admin1.getId())));
+        assertTrue(responseByIdString.contains("\"id\":\"%s\",\"login\":\"adminek1@1234\"".formatted(admin1.getId())));
 
         assertEquals(200, responseById.getStatusCode());
     }
