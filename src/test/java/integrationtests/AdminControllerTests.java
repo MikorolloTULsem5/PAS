@@ -258,16 +258,13 @@ public class AdminControllerTests {
                 "\"id\":\"" + admin1.getId() + "\"," +
                 "\"login\":\"loginekAdm\""));
     }
-/*
+
     @Test
     void modifyAdminTestNegInvalidData() throws URISyntaxException {
         String JSON = """
                 {
                   "archive": true,
-                  "firstName": "   ",
-                  "lastName": "Smith",
-                  "login": "loginek",
-                  "AdminTypeName": "coach"
+                  "login": " ",
                 }
                 """;
         RequestSpecification requestPut = RestAssured.given();
@@ -277,27 +274,16 @@ public class AdminControllerTests {
         RequestSpecification requestGet = RestAssured.given();
         String responseString = requestGet.get(new URI(appUrlAdmins)).asString();
 
-        //Retrieve UUID
-        String responseLogin = requestGet.get(new URI(appUrlAdmins + "/get?login=loginek")).asString();
-        int index = responseLogin.indexOf("\"id\":\"") + 6;
-        String AdminId = responseLogin.substring(index, index + 36);
-
         assertTrue(responseString.contains(
                 "\"archive\":false," +
-                        "\"id\":\"" + AdminId + "\"," +
-                        "\"login\":\"loginek\"," +
-                        "\"AdminTypeName\":\"normal\"," +
-                        "\"firstName\":\"Adam\"," +
-                        "\"lastName\":\"Smith\""));
+                "\"id\":\"" + admin1.getId() + "\"," +
+                "\"login\":\"adminek1@1234\""));
         assertFalse(responseString.contains(
                 "\"archive\":true," +
-                        "\"id\":\"" + AdminId + "\"," +
-                        "\"login\":\"loginek\"," +
-                        "\"AdminTypeName\":\"coach\"," +
-                        "\"firstName\":\"John\"," +
-                        "\"lastName\":\"Smith\""));
+                "\"id\":\"" + admin1.getId() + "\"," +
+                "\"login\":\" \""));
 
-        Response responsePut = requestPut.put(appUrlAdmins + "/modifyAdmin/" + AdminId);
+        Response responsePut = requestPut.put(appUrlAdmins + "/modifyAdmin/" + admin1.getId());
 
         assertEquals(400, responsePut.getStatusCode());
 
@@ -305,18 +291,12 @@ public class AdminControllerTests {
 
         assertTrue(responseString.contains(
                 "\"archive\":false," +
-                "\"id\":\"" + AdminId + "\"," +
-                "\"login\":\"loginek\"," +
-                "\"AdminTypeName\":\"normal\"," +
-                "\"firstName\":\"Adam\"," +
-                "\"lastName\":\"Smith\""));
+                "\"id\":\"" + admin1.getId() + "\"," +
+                "\"login\":\"adminek1@1234\""));
         assertFalse(responseString.contains(
                 "\"archive\":true," +
-                "\"id\":\"" + AdminId + "\"," +
-                "\"login\":\"loginek\"," +
-                "\"AdminTypeName\":\"coach\"," +
-                "\"firstName\":\"John\"," +
-                "\"lastName\":\"Smith\""));
+                "\"id\":\"" + admin1.getId() + "\"," +
+                "\"login\":\" \""));
     }
 
     @Test
@@ -324,10 +304,7 @@ public class AdminControllerTests {
         String JSON = """
                 {
                   "archive": true,
-                  "firstName": "John",
-                  "lastName": "Smith",
-                  "login": "michas13",
-                  "AdminTypeName": "coach"
+                  "login": "adminek2@9876",
                 }
                 """;
         RequestSpecification requestPut = RestAssured.given();
@@ -337,52 +314,35 @@ public class AdminControllerTests {
         RequestSpecification requestGet = RestAssured.given();
         String responseString = requestGet.get(new URI(appUrlAdmins)).asString();
 
-        //Retrieve UUID
-        String responseLogin = requestGet.get(new URI(appUrlAdmins + "/get?login=loginek")).asString();
-        int index = responseLogin.indexOf("\"id\":\"") + 6;
-        String AdminId = responseLogin.substring(index, index + 36);
-
-        assertTrue(responseString.contains("\"login\":\"michas13\""));
+        assertTrue(responseString.contains("\"login\":\"adminek2@9876\""));
 
         assertTrue(responseString.contains(
                 "\"archive\":false," +
-                "\"id\":\"" + AdminId + "\"," +
-                "\"login\":\"loginek\"," +
-                "\"AdminTypeName\":\"normal\"," +
-                "\"firstName\":\"Adam\"," +
-                "\"lastName\":\"Smith\""));
+                "\"id\":\"" + admin1.getId() + "\"," +
+                "\"login\":\"adminek1@1234\""));
         assertFalse(responseString.contains(
                 "\"archive\":true," +
-                "\"id\":\"" + AdminId + "\"," +
-                "\"login\":\"michas13\"," +
-                "\"AdminTypeName\":\"coach\"," +
-                "\"firstName\":\"John\"," +
-                "\"lastName\":\"Smith\""));
+                "\"id\":\"" + admin1.getId() + "\"," +
+                "\"login\":\"adminek2@9876\""));
 
-        Response responsePut = requestPut.put(appUrlAdmins + "/modifyAdmin/" + AdminId);
+        Response responsePut = requestPut.put(appUrlAdmins + "/modifyAdmin/" + admin1.getId());
 
         assertEquals(409, responsePut.getStatusCode());
 
         responseString = requestGet.get(new URI(appUrlAdmins)).asString();
 
-        assertTrue(responseString.contains("\"login\":\"michas13\""));
+        assertTrue(responseString.contains("\"login\":\"adminek2@9876\""));
 
         assertTrue(responseString.contains(
                 "\"archive\":false," +
-                "\"id\":\"" + AdminId + "\"," +
-                "\"login\":\"loginek\"," +
-                "\"AdminTypeName\":\"normal\"," +
-                "\"firstName\":\"Adam\"," +
-                "\"lastName\":\"Smith\""));
+                "\"id\":\"" + admin1.getId() + "\"," +
+                "\"login\":\"adminek1@1234\""));
         assertFalse(responseString.contains(
                 "\"archive\":true," +
-                "\"id\":\"" + AdminId + "\"," +
-                "\"login\":\"michas13\"," +
-                "\"AdminTypeName\":\"coach\"," +
-                "\"firstName\":\"John\"," +
-                "\"lastName\":\"Smith\""));
+                "\"id\":\"" + admin1.getId() + "\"," +
+                "\"login\":\"adminek2@9876\""));
     }
-*/
+
 //    @Test
 //    void archiveAndActivateAdminTest() throws URISyntaxException {
 //        RequestSpecification requestGet = RestAssured.given();
