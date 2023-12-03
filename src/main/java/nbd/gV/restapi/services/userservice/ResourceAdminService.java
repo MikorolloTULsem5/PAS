@@ -3,6 +3,7 @@ package nbd.gV.restapi.services.userservice;
 import com.mongodb.client.model.Filters;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
+import jakarta.validation.UnexpectedTypeException;
 import lombok.NoArgsConstructor;
 import nbd.gV.data.datahandling.dto.AdminDTO;
 import nbd.gV.data.datahandling.dto.ResourceAdminDTO;
@@ -32,19 +33,9 @@ public class ResourceAdminService extends UserService {
 
     public ResourceAdmin registerResourceAdmin(String login) {
         try {
-//            ResourceAdmin newResourceAdmin = new ResourceAdmin(UUID.randomUUID(), login);
-//            if (!userRepository.read(Filters.eq("login", login), ResourceAdminDTO.class).isEmpty()) {
-//                throw new UserLoginException("Nie udalo sie zarejestrowac administratora w bazie! - admin o tym loginie " +
-//                        "znajduje sie juz w bazie");
-//            }
-//
-//            if (!userRepository.create(ResourceAdminMapper.toMongoUser(newResourceAdmin))) {
-//                throw new UserException("Nie udalo sie zarejestrowac administratora w bazie! - brak odpowiedzi");
-//            }
-
             return (ResourceAdmin) userRepository.createNew(new ResourceAdminDTO(null, login, false));
-        } catch (MyMongoException exception) {
-            throw new UserException("Nie udalo sie zarejestrowac administratora danych w bazie!");
+        } catch (MyMongoException | UnexpectedTypeException exception) {
+            throw new UserException("Nie udalo sie zarejestrowac administratora danych w bazie! - " + exception.getMessage());
         }
     }
 

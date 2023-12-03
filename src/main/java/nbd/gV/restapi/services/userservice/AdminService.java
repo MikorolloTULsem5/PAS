@@ -3,6 +3,7 @@ package nbd.gV.restapi.services.userservice;
 import com.mongodb.client.model.Filters;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
+import jakarta.validation.UnexpectedTypeException;
 import lombok.NoArgsConstructor;
 import nbd.gV.data.datahandling.dto.AdminDTO;
 import nbd.gV.data.datahandling.dto.UserDTO;
@@ -30,19 +31,9 @@ public class AdminService extends UserService {
 
     public Admin registerAdmin(String login) {
         try {
-//            Admin newAdmin = new Admin(UUID.randomUUID(), login);
-//            if (!userRepository.read(Filters.eq("login", login), AdminDTO.class).isEmpty()) {
-//                throw new UserLoginException("Nie udalo sie zarejestrowac administratora w bazie! - admin o tym loginie " +
-//                        "znajduje sie juz w bazie");
-//            }
-//
-//            if (!userRepository.create(AdminMapper.toMongoUser(newAdmin))) {
-//                throw new UserException("Nie udalo sie zarejestrowac administratora w bazie! - brak odpowiedzi");
-//            }
-
             return (Admin) userRepository.createNew(new AdminDTO(null, login, false));
-        } catch (MyMongoException exception) {
-            throw new UserException("Nie udalo sie zarejestrowac administratora w bazie!");
+        } catch (MyMongoException | UnexpectedTypeException exception) {
+            throw new UserException("Nie udalo sie zarejestrowac administratora w bazie! - " + exception.getMessage());
         }
     }
 

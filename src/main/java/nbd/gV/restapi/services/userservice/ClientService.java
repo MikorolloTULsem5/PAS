@@ -3,6 +3,7 @@ package nbd.gV.restapi.services.userservice;
 import com.mongodb.client.model.Filters;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
+import jakarta.validation.UnexpectedTypeException;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import nbd.gV.data.datahandling.dto.UserDTO;
@@ -33,18 +34,9 @@ public class ClientService extends UserService {
 
     public Client registerClient(String firstName, String lastName, String login, String clientType) {
         try {
-//            Client newClient = new Client(UUID.randomUUID(), firstName, lastName, login, clientType);
-//            if (!userRepository.read(Filters.eq("login", login), ClientDTO.class).isEmpty()) {
-//                throw new UserLoginException("Nie udalo sie zarejestrowac klienta w bazie! - klient o tym loginie " +
-//                        "znajduje sie juz w bazie");
-//            }
-//
-//            if (!userRepository.create(ClientMapper.toMongoUser(newClient))) {
-//                throw new UserException("Nie udalo sie zarejestrowac klienta w bazie! - brak odpowiedzi");
-//            }
             return (Client) userRepository.createNew(new ClientDTO(null, firstName, lastName, login, false, clientType));
-        } catch (MyMongoException exception) {
-            throw new UserException("Nie udalo sie zarejestrowac klienta w bazie!");
+        } catch (MyMongoException | UnexpectedTypeException exception) {
+            throw new UserException("Nie udalo sie zarejestrowac klienta w bazie! - " + exception.getMessage());
         }
     }
 

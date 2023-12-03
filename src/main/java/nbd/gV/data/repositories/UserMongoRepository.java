@@ -7,7 +7,10 @@ import com.mongodb.client.model.ValidationOptions;
 import jakarta.annotation.PostConstruct;
 import jakarta.annotation.PreDestroy;
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.validation.UnexpectedTypeException;
+import nbd.gV.data.datahandling.dto.AdminDTO;
 import nbd.gV.data.datahandling.dto.ClientDTO;
+import nbd.gV.data.datahandling.dto.ResourceAdminDTO;
 import nbd.gV.data.datahandling.dto.UserDTO;
 import nbd.gV.data.datahandling.mappers.AdminMapper;
 import nbd.gV.data.datahandling.mappers.ClientMapper;
@@ -78,18 +81,44 @@ public class UserMongoRepository extends AbstractMongoRepository<UserDTO> {
     }
 
     public User createNew(UserDTO userDTO) {
-        ClientDTO clientDTO = (ClientDTO) userDTO;
-        Client newClient = new Client(UUID.randomUUID(), clientDTO.getFirstName(), clientDTO.getLastName(),
-                clientDTO.getLogin(), clientDTO.getClientType());
-        if (!read(Filters.eq("login", clientDTO.getLogin()), ClientDTO.class).isEmpty()) {
-            throw new UserLoginException("Nie udalo sie zarejestrowac klienta w bazie! - klient o tym loginie " +
-                    "znajduje sie juz w bazie");
+        User newUser;
+
+        if (userDTO instanceof ClientDTO clientDTO) {
+            newUser = new Client(UUID.randomUUID(), clientDTO.getFirstName(), clientDTO.getLastName(),
+                    clientDTO.getLogin(), clientDTO.getClientType());
+            if (!read(Filters.eq("login", clientDTO.getLogin()), ClientDTO.class).isEmpty()) {
+                throw new UserLoginException("Nie udalo sie zarejestrowac klienta w bazie! - klient o tym loginie " +
+                        "znajduje sie juz w bazie");
+            }
+
+            if (!super.create(ClientMapper.toMongoUser((Client) newUser))) {
+                throw new UserException("Nie udalo sie zarejestrowac klienta w bazie! - brak odpowiedzi");
+            }
+        } else if (userDTO instanceof AdminDTO adminDTO) {
+            newUser = new Admin(UUID.randomUUID(), adminDTO.getLogin());
+            if (!read(Filters.eq("login", adminDTO.getLogin()), AdminDTO.class).isEmpty()) {
+                throw new UserLoginException("Nie udalo sie zarejestrowac administratora w bazie! - admin o tym loginie " +
+                        "znajduje sie juz w bazie");
+            }
+
+            if (!super.create(AdminMapper.toMongoUser((Admin) newUser))) {
+                throw new UserException("Nie udalo sie zarejestrowac administratora w bazie! - brak odpowiedzi");
+            }
+        } else if (userDTO instanceof ResourceAdminDTO resourceAdminDTO) {
+            newUser = new ResourceAdmin(UUID.randomUUID(), resourceAdminDTO.getLogin());
+            if (!read(Filters.eq("login", resourceAdminDTO.getLogin()), ResourceAdminDTO.class).isEmpty()) {
+                throw new UserLoginException("Nie udalo sie zarejestrowac administratora w bazie! - admin o tym loginie " +
+                        "znajduje sie juz w bazie");
+            }
+
+            if (!super.create(ResourceAdminMapper.toMongoUser((ResourceAdmin) newUser))) {
+                throw new UserException("Nie udalo sie zarejestrowac administratora w bazie! - brak odpowiedzi");
+            }
+        } else {
+            throw new UnexpectedTypeException("Typ danego uzytkownika nie pasuje do zadnego z obslugiwanych!");
         }
 
-        if (!super.create(ClientMapper.toMongoUser(newClient))) {
-            throw new UserException("Nie udalo sie zarejestrowac klienta w bazie! - brak odpowiedzi");
-        }
-        return newClient;
+        return newUser;
     }
 
     @Override
