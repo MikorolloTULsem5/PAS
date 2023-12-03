@@ -29,20 +29,21 @@ public class AdminService extends UserService {
     }
 
     public Admin registerAdmin(String login) {
-        Admin newAdmin = new Admin(UUID.randomUUID(), login);
         try {
-            if (!userRepository.read(Filters.eq("login", login), AdminDTO.class).isEmpty()) {
-                throw new UserLoginException("Nie udalo sie zarejestrowac administratora w bazie! - admin o tym loginie " +
-                        "znajduje sie juz w bazie");
-            }
+//            Admin newAdmin = new Admin(UUID.randomUUID(), login);
+//            if (!userRepository.read(Filters.eq("login", login), AdminDTO.class).isEmpty()) {
+//                throw new UserLoginException("Nie udalo sie zarejestrowac administratora w bazie! - admin o tym loginie " +
+//                        "znajduje sie juz w bazie");
+//            }
+//
+//            if (!userRepository.create(AdminMapper.toMongoUser(newAdmin))) {
+//                throw new UserException("Nie udalo sie zarejestrowac administratora w bazie! - brak odpowiedzi");
+//            }
 
-            if (!userRepository.create(AdminMapper.toMongoUser(newAdmin))) {
-                throw new UserException("Nie udalo sie zarejestrowac administratora w bazie! - brak odpowiedzi");
-            }
+            return (Admin) userRepository.createNew(new AdminDTO(null, login, false));
         } catch (MyMongoException exception) {
             throw new UserException("Nie udalo sie zarejestrowac administratora w bazie!");
         }
-        return newAdmin;
     }
 
     public Admin getAdminById(UUID adminId) {

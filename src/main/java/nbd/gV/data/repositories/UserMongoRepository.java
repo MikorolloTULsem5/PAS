@@ -7,13 +7,17 @@ import com.mongodb.client.model.ValidationOptions;
 import jakarta.annotation.PostConstruct;
 import jakarta.annotation.PreDestroy;
 import jakarta.enterprise.context.ApplicationScoped;
+import nbd.gV.data.datahandling.dto.ClientDTO;
 import nbd.gV.data.datahandling.dto.UserDTO;
 import nbd.gV.data.datahandling.mappers.AdminMapper;
 import nbd.gV.data.datahandling.mappers.ClientMapper;
 import nbd.gV.data.datahandling.mappers.ResourceAdminMapper;
+import nbd.gV.exceptions.UserException;
+import nbd.gV.exceptions.UserLoginException;
 import nbd.gV.model.users.Admin;
 import nbd.gV.model.users.Client;
 import nbd.gV.model.users.ResourceAdmin;
+import nbd.gV.model.users.User;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 
@@ -73,6 +77,20 @@ public class UserMongoRepository extends AbstractMongoRepository<UserDTO> {
         return !list.isEmpty() ? list.get(0) : null;
     }
 
+    public User createNew(UserDTO userDTO) {
+        ClientDTO clientDTO = (ClientDTO) userDTO;
+        Client newClient = new Client(UUID.randomUUID(), clientDTO.getFirstName(), clientDTO.getLastName(),
+                clientDTO.getLogin(), clientDTO.getClientType());
+        if (!read(Filters.eq("login", clientDTO.getLogin()), ClientDTO.class).isEmpty()) {
+            throw new UserLoginException("Nie udalo sie zarejestrowac klienta w bazie! - klient o tym loginie " +
+                    "znajduje sie juz w bazie");
+        }
+
+        if (!super.create(ClientMapper.toMongoUser(newClient))) {
+            throw new UserException("Nie udalo sie zarejestrowac klienta w bazie! - brak odpowiedzi");
+        }
+        return newClient;
+    }
 
     @Override
     public List<UserDTO> read(Bson filter) {

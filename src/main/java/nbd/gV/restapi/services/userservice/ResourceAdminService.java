@@ -4,6 +4,7 @@ import com.mongodb.client.model.Filters;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import lombok.NoArgsConstructor;
+import nbd.gV.data.datahandling.dto.AdminDTO;
 import nbd.gV.data.datahandling.dto.ResourceAdminDTO;
 import nbd.gV.data.datahandling.dto.UserDTO;
 import nbd.gV.data.datahandling.mappers.ResourceAdminMapper;
@@ -11,6 +12,7 @@ import nbd.gV.data.repositories.UserMongoRepository;
 import nbd.gV.exceptions.MyMongoException;
 import nbd.gV.exceptions.UserException;
 import nbd.gV.exceptions.UserLoginException;
+import nbd.gV.model.users.Admin;
 import nbd.gV.model.users.ResourceAdmin;
 
 import java.util.ArrayList;
@@ -29,20 +31,21 @@ public class ResourceAdminService extends UserService {
     }
 
     public ResourceAdmin registerResourceAdmin(String login) {
-       ResourceAdmin newResourceAdmin = new ResourceAdmin(UUID.randomUUID(), login);
         try {
-            if (!userRepository.read(Filters.eq("login", login), ResourceAdminDTO.class).isEmpty()) {
-                throw new UserLoginException("Nie udalo sie zarejestrowac administratora w bazie! - admin o tym loginie " +
-                        "znajduje sie juz w bazie");
-            }
+//            ResourceAdmin newResourceAdmin = new ResourceAdmin(UUID.randomUUID(), login);
+//            if (!userRepository.read(Filters.eq("login", login), ResourceAdminDTO.class).isEmpty()) {
+//                throw new UserLoginException("Nie udalo sie zarejestrowac administratora w bazie! - admin o tym loginie " +
+//                        "znajduje sie juz w bazie");
+//            }
+//
+//            if (!userRepository.create(ResourceAdminMapper.toMongoUser(newResourceAdmin))) {
+//                throw new UserException("Nie udalo sie zarejestrowac administratora w bazie! - brak odpowiedzi");
+//            }
 
-            if (!userRepository.create(ResourceAdminMapper.toMongoUser(newResourceAdmin))) {
-                throw new UserException("Nie udalo sie zarejestrowac administratora w bazie! - brak odpowiedzi");
-            }
+            return (ResourceAdmin) userRepository.createNew(new ResourceAdminDTO(null, login, false));
         } catch (MyMongoException exception) {
-            throw new UserException("Nie udalo sie zarejestrowac administratora w bazie!");
+            throw new UserException("Nie udalo sie zarejestrowac administratora danych w bazie!");
         }
-        return newResourceAdmin;
     }
 
     public ResourceAdmin getResourceAdminById(UUID resourceAdminId) {

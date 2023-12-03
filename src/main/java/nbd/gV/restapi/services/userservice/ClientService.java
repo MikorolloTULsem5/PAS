@@ -32,20 +32,20 @@ public class ClientService extends UserService {
     }
 
     public Client registerClient(String firstName, String lastName, String login, String clientType) {
-        Client newClient = new Client(UUID.randomUUID(), firstName, lastName, login, clientType);
         try {
-            if (!userRepository.read(Filters.eq("login", login), ClientDTO.class).isEmpty()) {
-                throw new UserLoginException("Nie udalo sie zarejestrowac klienta w bazie! - klient o tym loginie " +
-                        "znajduje sie juz w bazie");
-            }
-
-            if (!userRepository.create(ClientMapper.toMongoUser(newClient))) {
-                throw new UserException("Nie udalo sie zarejestrowac klienta w bazie! - brak odpowiedzi");
-            }
+//            Client newClient = new Client(UUID.randomUUID(), firstName, lastName, login, clientType);
+//            if (!userRepository.read(Filters.eq("login", login), ClientDTO.class).isEmpty()) {
+//                throw new UserLoginException("Nie udalo sie zarejestrowac klienta w bazie! - klient o tym loginie " +
+//                        "znajduje sie juz w bazie");
+//            }
+//
+//            if (!userRepository.create(ClientMapper.toMongoUser(newClient))) {
+//                throw new UserException("Nie udalo sie zarejestrowac klienta w bazie! - brak odpowiedzi");
+//            }
+            return (Client) userRepository.createNew(new ClientDTO(null, firstName, lastName, login, false, clientType));
         } catch (MyMongoException exception) {
             throw new UserException("Nie udalo sie zarejestrowac klienta w bazie!");
         }
-        return newClient;
     }
 
     public Client getClientById(UUID clientID) {
