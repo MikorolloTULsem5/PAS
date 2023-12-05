@@ -13,7 +13,6 @@ import nbd.gV.data.datahandling.dto.CourtDTO;
 import nbd.gV.data.datahandling.mappers.CourtMapper;
 import nbd.gV.data.repositories.CourtMongoRepository;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -46,28 +45,23 @@ public class CourtService {
 //        return court;
 
         try {
-            return courtRepository.create(area, baseCost, courtNumber);
+            return courtRepository.create(new Court(area, baseCost, courtNumber));
         } catch (MyMongoException exception) {
             throw new CourtException("Nie udalo sie dodac boiska.");
         }
     }
 
     public Court getCourtById(UUID courtID) {
-        CourtDTO courtMapper = courtRepository.readByUUID(courtID);
-        return courtMapper != null ? CourtMapper.fromMongoCourt(courtMapper) : null;
+        return courtRepository.readByUUID(courtID);
     }
 
     public List<Court> getAllCourts() {
-        List<Court> courtsList = new ArrayList<>();
-        for (var el : courtRepository.readAll()) {
-            courtsList.add(CourtMapper.fromMongoCourt(el));
-        }
-        return courtsList;
+        return courtRepository.readAll();
     }
 
     public Court getCourtByCourtNumber(int courtNumber) {
         var list = courtRepository.read(Filters.eq("courtnumber", courtNumber));
-        return !list.isEmpty() ? CourtMapper.fromMongoCourt(list.get(0)) : null;
+        return !list.isEmpty() ? list.get(0) : null;
     }
 
     public void modifyCourt(Court modifiedCourt) {
@@ -78,7 +72,7 @@ public class CourtService {
             throw new CourtNumberException("Nie udalo sie zmodyfikowac podanego boiska - " +
                     "proba zmiany numeru boiska na numer wystepujacy juz u innego boiska");
         }
-        if (!courtRepository.updateByReplace(modifiedCourt.getId(), CourtMapper.toMongoCourt(modifiedCourt))) {
+        if (!courtRepository.updateByReplace(modifiedCourt.getId(), modifiedCourt)) {
             throw new CourtException("Nie udalo się zmodyfikowac podanego boiska");
         }
     }

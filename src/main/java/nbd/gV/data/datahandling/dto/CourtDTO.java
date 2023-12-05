@@ -9,7 +9,7 @@ import java.util.Objects;
 
 @Getter
 @FieldDefaults(makeFinal = true)
-public class CourtDTO {
+public class CourtDTO implements DTO {
     @BsonProperty("_id")
     private String id;
     @BsonProperty("area")

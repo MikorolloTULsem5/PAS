@@ -1,10 +1,13 @@
 package nbd.gV.data.repositories;
 
+import com.mongodb.MongoWriteException;
 import com.mongodb.client.ClientSession;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.model.CreateCollectionOptions;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.ValidationOptions;
+import com.mongodb.client.result.InsertOneResult;
+import com.mongodb.client.result.UpdateResult;
 import jakarta.annotation.PostConstruct;
 import jakarta.annotation.PreDestroy;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -19,10 +22,11 @@ import org.bson.Document;
 import org.bson.conversions.Bson;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @ApplicationScoped
-public class CourtMongoRepository extends AbstractMongoRepository<CourtDTO> {
+public class CourtMongoRepository extends AbstractMongoRepositoryNew<Court> {
 
     static final String COLLECTION_NAME = "courts";
 
@@ -67,17 +71,44 @@ public class CourtMongoRepository extends AbstractMongoRepository<CourtDTO> {
         return COLLECTION_NAME;
     }
 
-    ///TODO Obj var args
-    public Court create(double area, int baseCost, int courtNumber) {
-        Court court = new Court(UUID.randomUUID(), area, baseCost, courtNumber);
-        if (!read(Filters.eq("courtnumber", courtNumber)).isEmpty()) {
+    private boolean createNew(CourtDTO dto) {
+        InsertOneResult result;
+        try {
+            result = this.getCollection().insertOne(dto);
+        } catch (MongoWriteException e) {
+            throw new MyMongoException(e.getMessage());
+        }
+        return result.wasAcknowledged();
+    }
+
+    @Override
+    public Court create(Court initCourt) {
+        Court court = new Court(UUID.randomUUID(), initCourt.getArea(), initCourt.getBaseCost(), initCourt.getCourtNumber());
+        if (!read(Filters.eq("courtnumber", initCourt.getCourtNumber())).isEmpty()) {
             throw new CourtNumberException("Nie udalo sie zarejestrowac boiska w bazie! - boisko o tym numerze " +
                     "znajduje sie juz w bazie");
         }
-        if (!super.create(CourtMapper.toMongoCourt(court))) {
+        if (!createNew(CourtMapper.toMongoCourt(court))) {
             throw new CourtException("Nie udalo sie zarejestrowac boiska w bazie! - brak odpowiedzi");
         }
         return court;
+    }
+
+    @Override
+    public List<Court> read(Bson filter) {
+        var list = new ArrayList<Court>();
+        ///TODO a wez se zwroc to jako metode
+        for (var el : this.getCollection().find(filter).into(new ArrayList<>())) {
+            list.add(CourtMapper.fromMongoCourt(el));
+        }
+        return list;
+    }
+
+    @Override
+    public boolean updateByReplace(UUID uuid, Court court) {
+        Bson filter = Filters.eq("_id", uuid.toString());
+        UpdateResult result = getCollection().replaceOne(filter, CourtMapper.toMongoCourt(court));
+        return result.getModifiedCount() != 0;
     }
 
     @Override
@@ -114,11 +145,11 @@ public class CourtMongoRepository extends AbstractMongoRepository<CourtDTO> {
     private void init() {
         destroy();
 
-        create(CourtMapper.toMongoCourt(new Court(UUID.fromString("634d9130-0015-42bb-a70a-543dee846760"), 100, 100, 991)));
-        create(CourtMapper.toMongoCourt(new Court(UUID.fromString("fe6a35bb-7535-4c23-a259-a14ac0ccedba"),100, 200, 992)));
-        create(CourtMapper.toMongoCourt(new Court(UUID.fromString("30ac2027-dcc8-4af7-920f-831b51023bc9"),300, 200, 993)));
-        create(CourtMapper.toMongoCourt(new Court(UUID.fromString("d820d682-0f5d-46b7-9963-66291e5f64b0"),350, 100, 994)));
-        create(CourtMapper.toMongoCourt(new Court(UUID.fromString("2e9258b2-98dd-4f9a-8f73-6f4f56c2e618"),150, 200, 995)));
+        createNew(CourtMapper.toMongoCourt(new Court(UUID.fromString("634d9130-0015-42bb-a70a-543dee846760"), 100, 100, 991)));
+        createNew(CourtMapper.toMongoCourt(new Court(UUID.fromString("fe6a35bb-7535-4c23-a259-a14ac0ccedba"),100, 200, 992)));
+        createNew(CourtMapper.toMongoCourt(new Court(UUID.fromString("30ac2027-dcc8-4af7-920f-831b51023bc9"),300, 200, 993)));
+        createNew(CourtMapper.toMongoCourt(new Court(UUID.fromString("d820d682-0f5d-46b7-9963-66291e5f64b0"),350, 100, 994)));
+        createNew(CourtMapper.toMongoCourt(new Court(UUID.fromString("2e9258b2-98dd-4f9a-8f73-6f4f56c2e618"),150, 200, 995)));
     }
 
     @PreDestroy

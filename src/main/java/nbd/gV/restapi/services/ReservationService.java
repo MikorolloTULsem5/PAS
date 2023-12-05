@@ -80,7 +80,7 @@ public class ReservationService {
         }
         return ReservationMapper.fromMongoReservation(reservationMapper,
                 (ClientDTO) clientsRepository.readByUUID(UUID.fromString(reservationMapper.getClientId()), ClientDTO.class),
-                courtRepository.readByUUID(UUID.fromString(reservationMapper.getCourtId())));
+                CourtMapper.toMongoCourt(courtRepository.readByUUID(UUID.fromString(reservationMapper.getCourtId()))));
     }
 
     public List<Reservation> getAllCurrentReservations() {
@@ -147,7 +147,7 @@ public class ReservationService {
         for (var r : reservationRepository.read(filter)) {
             reservations.add(ReservationMapper.fromMongoReservation(r,
                     (ClientDTO) clientsRepo.readByUUID(UUID.fromString(r.getClientId()), ClientDTO.class),
-                    courtsRepo.readByUUID(UUID.fromString(r.getCourtId()))));
+                    CourtMapper.toMongoCourt(courtsRepo.readByUUID(UUID.fromString(r.getCourtId())))));
         }
         return reservations;
     }

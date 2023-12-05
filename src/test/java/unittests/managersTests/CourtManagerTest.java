@@ -37,7 +37,7 @@ public class CourtManagerTest {
     @BeforeAll
     @AfterAll
     static void cleanDatabaseFirstAndLastTime() {
-        courtRepository.readAll().forEach((mapper) -> courtRepository.delete(UUID.fromString(mapper.getId())));
+        courtRepository.readAll().forEach((mapper) -> courtRepository.delete(UUID.fromString(mapper.getId().toString())));
     }
 
     @BeforeEach
@@ -124,7 +124,7 @@ public class CourtManagerTest {
         assertEquals(0, collection.find().into(new ArrayList<>()).size());
         Court testCourt1 = new Court(1000, 100, 1);
 
-        assertTrue(courtRepository.create(CourtMapper.toMongoCourt(testCourt1)));
+        assertNotNull(courtRepository.create(testCourt1));
         assertEquals(1, collection.find().into(new ArrayList<>()).size());
 
         cm.deleteCourt(testCourt1.getId());
@@ -140,7 +140,7 @@ public class CourtManagerTest {
         LocalDateTime testTimeStart = LocalDateTime.of(2023, Month.JUNE, 4, 12, 0);
         Reservation testReservation1 = new Reservation(testClient1, testCourt1, testTimeStart);
 
-        assertTrue(courtRepository.create(CourtMapper.toMongoCourt(testCourt1)));
+        assertNotNull(courtRepository.create(testCourt1));
 
         assertEquals(1, collection.find().into(new ArrayList<>()).size());
 
