@@ -3,9 +3,6 @@ package unittests.managersTests;
 import nbd.gV.exceptions.CourtNumberException;
 import nbd.gV.model.courts.Court;
 import nbd.gV.data.datahandling.dto.CourtDTO;
-import nbd.gV.data.datahandling.mappers.ClientMapper;
-import nbd.gV.data.datahandling.mappers.CourtMapper;
-import nbd.gV.data.datahandling.mappers.ReservationMapper;
 import nbd.gV.restapi.services.CourtService;
 import nbd.gV.exceptions.CourtException;
 import nbd.gV.data.repositories.CourtMongoRepository;
@@ -122,7 +119,7 @@ public class CourtManagerTest {
     void testDeletingCourtSuccess() {
         var collection = courtRepository.getDatabase().getCollection(courtRepository.getCollectionName(), CourtDTO.class);
         assertEquals(0, collection.find().into(new ArrayList<>()).size());
-        Court testCourt1 = new Court(1000, 100, 1);
+        Court testCourt1 = new Court(null,1000, 100, 1);
 
         assertNotNull(courtRepository.create(testCourt1));
         assertEquals(1, collection.find().into(new ArrayList<>()).size());
@@ -136,7 +133,7 @@ public class CourtManagerTest {
         var collection = courtRepository.getDatabase().getCollection(courtRepository.getCollectionName(), CourtDTO.class);
         assertEquals(0, collection.find().into(new ArrayList<>()).size());
         Client testClient1 = new Client(UUID.randomUUID(), "John", "Smith", "12345678901", "normal");
-        Court testCourt1 = new Court(1000, 100, 1);
+        Court testCourt1 = new Court(null,1000, 100, 1);
         LocalDateTime testTimeStart = LocalDateTime.of(2023, Month.JUNE, 4, 12, 0);
         Reservation testReservation1 = new Reservation(testClient1, testCourt1, testTimeStart);
 

@@ -9,8 +9,6 @@ import nbd.gV.exceptions.CourtNumberException;
 import nbd.gV.model.courts.Court;
 import nbd.gV.exceptions.CourtException;
 import nbd.gV.exceptions.MyMongoException;
-import nbd.gV.data.datahandling.dto.CourtDTO;
-import nbd.gV.data.datahandling.mappers.CourtMapper;
 import nbd.gV.data.repositories.CourtMongoRepository;
 
 import java.util.List;
@@ -45,7 +43,7 @@ public class CourtService {
 //        return court;
 
         try {
-            return courtRepository.create(new Court(area, baseCost, courtNumber));
+            return courtRepository.create(new Court(null, area, baseCost, courtNumber));
         } catch (MyMongoException exception) {
             throw new CourtException("Nie udalo sie dodac boiska.");
         }

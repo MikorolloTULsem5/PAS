@@ -3,8 +3,6 @@ package unittests.repositoryTests;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.model.Filters;
 import nbd.gV.model.courts.Court;
-import nbd.gV.data.datahandling.mappers.ClientMapper;
-import nbd.gV.data.datahandling.mappers.ReservationMapper;
 import nbd.gV.exceptions.MyMongoException;
 import nbd.gV.data.datahandling.dto.CourtDTO;
 import nbd.gV.data.repositories.CourtMongoRepository;
@@ -51,9 +49,9 @@ public class CourtMongoRepositoryTest {
     @BeforeEach
     void initData() {
         cleanFirstAndLastTimeDB();
-        court1 = new Court(100, 200, 1);
-        court2 = new Court(200, 200, 2);
-        court3 = new Court(300, 300, 3);
+        court1 = new Court(null,100, 200, 1);
+        court2 = new Court(null,200, 200, 2);
+        court3 = new Court(null,300, 300, 3);
 
     }
 
@@ -179,7 +177,7 @@ public class CourtMongoRepositoryTest {
     void testDeletingDocumentsInDBExistingAllocation() {
         assertEquals(0, getTestCollection().find().into(new ArrayList<>()).size());
         Client testClient1 = new Client(UUID.randomUUID(), "John", "Smith", "12345678901", "normal");
-        Court testCourt1 = new Court(1000, 100, 1);
+        Court testCourt1 = new Court(null,1000, 100, 1);
         LocalDateTime testTimeStart = LocalDateTime.of(2023, Month.JUNE, 4, 12, 0);
         Reservation testReservation1 = new Reservation(testClient1, testCourt1, testTimeStart);
 

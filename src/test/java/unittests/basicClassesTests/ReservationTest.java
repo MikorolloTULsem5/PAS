@@ -29,7 +29,7 @@ public class ReservationTest {
     void setUp() {
         testClientType = "normal";
         testClient = new Client(UUID.randomUUID(), "John", "Smith", "123456789", testClientType);
-        testCourt = new Court(1, 100, 1);
+        testCourt = new Court(null, 1, 100, 1);
         testUUID = UUID.randomUUID();
     }
 
@@ -101,7 +101,7 @@ public class ReservationTest {
         assertThrows(ReservationException.class, () ->
                 reservation.endReservation(LocalDateTime.of(2023, Month.JUNE, 3, 20, 8)));
 
-        Court testCourt1 = new Court(1, 100, 2);
+        Court testCourt1 = new Court(null, 1, 100, 2);
         LocalDateTime earlier = LocalDateTime.of(2023, Month.JUNE, 2, 21, 10);
         Reservation reservation2 = new Reservation(UUID.randomUUID(), testClient, testCourt1, then);
         assertNotNull(reservation2);
@@ -117,10 +117,10 @@ public class ReservationTest {
         LocalDateTime endTimeOneMinute = LocalDateTime.of(2023, Month.JUNE, 3, 20, 8);
         LocalDateTime endTimeFullHours = LocalDateTime.of(2023, Month.JUNE, 3, 22, 7);
         LocalDateTime endTimeMixHoursMinutes = LocalDateTime.of(2023, Month.JUNE, 3, 22, 8);
-        Court testCourt1 = new Court(1, 100, 2);
-        Court testCourt2 = new Court(1, 100, 3);
-        Court testCourt3 = new Court(1, 100, 4);
-        Court testCourt4 = new Court(1, 100, 4);
+        Court testCourt1 = new Court(null, 1, 100, 2);
+        Court testCourt2 = new Court(null, 1, 100, 3);
+        Court testCourt3 = new Court(null, 1, 100, 4);
+        Court testCourt4 = new Court(null, 1, 100, 4);
         Reservation reservation1 = new Reservation(UUID.randomUUID(), testClient, testCourt, beginTime);
         assertNotNull(reservation1);
         Reservation reservation2 = new Reservation(UUID.randomUUID(), testClient, testCourt1, beginTime);

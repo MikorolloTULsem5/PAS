@@ -28,20 +28,11 @@ public class Court {
     private boolean archive = false;
     private boolean rented = false;
 
-    ///TODO raczej wywalic
-    public Court(double area, int baseCost, int courtNumber) {
-        if (area <= 0.0 || baseCost < 0 || courtNumber < 1) {
-            throw new ConstructorParameterException("Niepoprawny parametr przy tworzeniu obiektu boiska!");
-        }
-        this.id = UUID.randomUUID();
+    public Court(UUID id, double area, int baseCost, int courtNumber) {
+        this.id = id;
         this.area = area;
         this.baseCost = baseCost;
         this.courtNumber = courtNumber;
-    }
-
-    public Court(UUID id, double area, int baseCost, int courtNumber) {
-        this(area, baseCost, courtNumber);
-        this.id = id;
     }
 
     @Override

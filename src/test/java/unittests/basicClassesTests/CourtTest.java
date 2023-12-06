@@ -14,7 +14,7 @@ public class CourtTest {
 
     @Test
     void testCreatingCourt() {
-        Court newCourt1 = new Court(300, 100, 1);
+        Court newCourt1 = new Court(null,300, 100, 1);
         assertNotNull(newCourt1);
 
         assertEquals(300, newCourt1.getArea());
@@ -23,14 +23,14 @@ public class CourtTest {
         assertFalse(newCourt1.isArchive());
         assertFalse(newCourt1.isRented());
 
-        assertThrows(ConstructorParameterException.class, () -> new Court(0, 100, 99));
-        assertThrows(ConstructorParameterException.class, () -> new Court(1, -100, 99));
-        assertThrows(ConstructorParameterException.class, () -> new Court(1, 100, 0));
+        assertThrows(ConstructorParameterException.class, () -> new Court(null,0, 100, 99));
+        assertThrows(ConstructorParameterException.class, () -> new Court(null,1, -100, 99));
+        assertThrows(ConstructorParameterException.class, () -> new Court(null,1, 100, 0));
     }
 
     @Test
     void testSetters() {
-        Court newCourt = new Court(300, 100, 1);
+        Court newCourt = new Court(null,300, 100, 1);
         assertNotNull(newCourt);
 
         assertEquals(300, newCourt.getArea());

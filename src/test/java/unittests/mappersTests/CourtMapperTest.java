@@ -30,7 +30,7 @@ public class CourtMapperTest {
 
     @Test
     void testToMongoClientMethod() {
-        Court court = new Court(300, 100, 1);
+        Court court = new Court(null,300, 100, 1);
         assertNotNull(court);
 
         CourtDTO courtMapper = CourtMapper.toMongoCourt(court);

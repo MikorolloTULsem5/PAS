@@ -10,8 +10,6 @@ import nbd.gV.model.reservations.Reservation;
 import nbd.gV.model.users.Client;
 import nbd.gV.exceptions.MyMongoException;
 import nbd.gV.exceptions.ReservationException;
-import nbd.gV.data.repositories.UserMongoRepository;
-import nbd.gV.data.repositories.CourtMongoRepository;
 import nbd.gV.data.repositories.ReservationMongoRepository;
 
 import java.time.LocalDateTime;
@@ -23,26 +21,16 @@ import java.util.UUID;
 public class ReservationService {
     @Inject
     private ReservationMongoRepository reservationRepository;
-    @Inject
-    private UserMongoRepository clientsRepository;
-    @Inject
-    private CourtMongoRepository courtRepository;
 
     public ReservationService(ReservationMongoRepository reservationRepository) {
         this.reservationRepository = reservationRepository;
-
-        clientsRepository = new UserMongoRepository();
-        courtRepository = new CourtMongoRepository();
     }
 
     public Reservation makeReservation(UUID clientId, UUID courtId, LocalDateTime beginTime) {
         try {
-//            Reservation reservation = new ReservationDTO(null, clientId.toString(), courtId.toString(),
-//                    beginTime, null, 0);
-
             Reservation newReservation = reservationRepository.create(
                     new Reservation(new Client(clientId, "", "", "", ""),
-                                    new Court(courtId, 10, 10 ,10),
+                                    new Court(courtId, 0, 0,0),
                                     beginTime));
             if (newReservation == null) {
                 throw new ReservationException("Nie udalo sie utworzyc rezerwacji! - brak odpowiedzi");
@@ -61,7 +49,7 @@ public class ReservationService {
         try {
             reservationRepository.update(courtId, endTime);
         } catch (MyMongoException exception) {
-            throw new ReservationException("Blad transakcji.");
+            throw new ReservationException("Blad transakcji. - " + exception.getMessage());
         }
     }
 
