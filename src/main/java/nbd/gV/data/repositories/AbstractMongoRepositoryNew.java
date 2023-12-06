@@ -3,14 +3,12 @@ package nbd.gV.data.repositories;
 import com.mongodb.ConnectionString;
 import com.mongodb.MongoClientSettings;
 import com.mongodb.MongoCredential;
-import com.mongodb.MongoWriteException;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Updates;
-import com.mongodb.client.result.InsertOneResult;
 import com.mongodb.client.result.UpdateResult;
 import nbd.gV.data.datahandling.dto.DTO;
 import nbd.gV.exceptions.MyMongoException;
@@ -71,6 +69,16 @@ public abstract class AbstractMongoRepositoryNew<T> implements AutoCloseable {
         mongoClient.close();
     }
 
+    /*--------------------------------------------Additional----------------------------------------------------*/
+
+    protected MongoCollection<? extends DTO> getCollection() {
+        return null;
+    }
+
+    public String getCollectionName() {
+        return null;
+    }
+
     /*----------------------------------------------CRUD-------------------------------------------------------*/
 
     public abstract T create(T initObj);
@@ -122,13 +130,5 @@ public abstract class AbstractMongoRepositoryNew<T> implements AutoCloseable {
         Bson filter = Filters.eq("_id", uuid.toString());
         var deletedObj = this.getCollection().findOneAndDelete(filter);
         return deletedObj != null;
-    }
-
-    protected MongoCollection<? extends DTO> getCollection() {
-        return null;
-    }
-
-    public String getCollectionName() {
-        return null;
     }
 }
