@@ -5,14 +5,10 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.validation.UnexpectedTypeException;
 import lombok.NoArgsConstructor;
-import nbd.gV.data.datahandling.dto.ClientDTO;
-import nbd.gV.data.datahandling.dto.ResourceAdminDTO;
-import nbd.gV.data.datahandling.dto.UserDTO;
 import nbd.gV.data.repositories.UserMongoRepository;
 import nbd.gV.exceptions.MyMongoException;
 import nbd.gV.exceptions.UserException;
 import nbd.gV.exceptions.UserLoginException;
-import nbd.gV.model.users.Client;
 import nbd.gV.model.users.ResourceAdmin;
 import nbd.gV.model.users.User;
 
