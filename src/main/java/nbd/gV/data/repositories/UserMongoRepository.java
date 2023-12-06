@@ -135,7 +135,6 @@ public class UserMongoRepository extends AbstractMongoRepositoryNew<User> {
     }
 
     public List<User> readAll(Class<? extends UserDTO> clazz) {
-//        return this.read(Filters.empty(), clazz);
         String name = clazz.getSimpleName().toLowerCase();
         return this.read(Filters.eq("_clazz", name.substring(0, name.length() - 3)), clazz);
     }

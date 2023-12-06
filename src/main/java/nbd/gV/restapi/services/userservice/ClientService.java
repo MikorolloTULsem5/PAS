@@ -15,6 +15,7 @@ import nbd.gV.data.datahandling.dto.ClientDTO;
 import nbd.gV.data.repositories.UserMongoRepository;
 import nbd.gV.model.users.User;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -43,8 +44,12 @@ public class ClientService extends UserService {
     }
 
     ///TODO nope
-    public List<User> getAllClients() {
-        return userRepository.readAll(ClientDTO.class);
+    public List<Client> getAllClients() {
+        List<Client> list = new ArrayList<>();
+        for (var user : userRepository.readAll(ClientDTO.class)) {
+            list.add((Client) user);
+        }
+        return list;
     }
 
     public Client getClientByLogin(String login) {
@@ -52,9 +57,13 @@ public class ClientService extends UserService {
         return !list.isEmpty() ? (Client) list.get(0) : null;
     }
 
-    public List<User> getClientByLoginMatching(String login) {
-        return userRepository.read(Filters.and(Filters.regex("login", ".*%s.*".formatted(login)),
-                Filters.eq("_clazz", "client")), ClientDTO.class);
+    public List<Client> getClientByLoginMatching(String login) {
+        List<Client> list = new ArrayList<>();
+        for (var user : userRepository.read(Filters.and(Filters.regex("login", ".*%s.*".formatted(login)),
+                Filters.eq("_clazz", "client")), ClientDTO.class)) {
+            list.add((Client) user);
+        }
+        return list;
     }
 
     public void modifyClient(Client modifiedClient) {
