@@ -120,21 +120,27 @@ public class ReservationMongoRepository extends AbstractMongoRepositoryNew<Reser
         }
     }
 
-    ///TODO poprawka
-//    @Override
-//    public boolean createa(ReservationDTO dto) {
-//        return create(dto) != null;
-//    }
-
-
     @Override
     public List<Reservation> read(Bson filter) {
-//        var list = new ArrayList<Reservation>();
-//        for (var el : this.getCollection().find(filter).into(new ArrayList<>())) {
-//            list.add(ReservationMapper.fromMongoReservation(el));
-//        }
-//        return list;
-        return null;
+        var list = new ArrayList<Reservation>();
+        for (var el : this.getCollection().find(filter).into(new ArrayList<>())) {
+            var list1 = getDatabase().getCollection(UserMongoRepository.COLLECTION_NAME, ClientDTO.class)
+                    .find(Filters.eq("_id", el.getClientId())).into(new ArrayList<>());
+            if (list1.isEmpty()) {
+                throw new ReservationException("Brak podanego klienta w bazie!");
+            }
+            ClientDTO clientFound = list1.get(0);
+
+            //Check court
+            var list2 = getDatabase().getCollection(CourtMongoRepository.COLLECTION_NAME, CourtDTO.class)
+                    .find(Filters.eq("_id", el.getCourtId())).into(new ArrayList<>());
+            if (list2.isEmpty()) {
+                throw new ReservationException("Brak podanego boiska w bazie!");
+            }
+            CourtDTO courtFound = list2.get(0);
+            list.add(ReservationMapper.fromMongoReservation(el, clientFound, courtFound));
+        }
+        return list;
     }
 
     public void update(UUID courtId, LocalDateTime endTime) {
