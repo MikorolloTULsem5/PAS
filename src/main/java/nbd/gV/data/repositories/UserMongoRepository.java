@@ -144,8 +144,7 @@ public class UserMongoRepository extends AbstractMongoRepositoryNew<User> {
     }
 
     public List<User> readAll(Class<? extends User> clazz) {
-        String name = clazz.getSimpleName().toLowerCase();
-        return this.read(Filters.eq("_clazz", name.substring(0, name.length() - 3)), clazz);
+        return this.read(Filters.empty(), clazz);
     }
 
     public User readByUUID(UUID uuid, Class<? extends User> clazz) {
