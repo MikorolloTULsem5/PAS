@@ -3,15 +3,14 @@ package nbd.gV.data.repositories;
 import com.mongodb.ConnectionString;
 import com.mongodb.MongoClientSettings;
 import com.mongodb.MongoCredential;
-import com.mongodb.MongoWriteException;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Updates;
-import com.mongodb.client.result.InsertOneResult;
 import com.mongodb.client.result.UpdateResult;
+import nbd.gV.data.datahandling.dto.DTO;
 import nbd.gV.exceptions.MyMongoException;
 import org.bson.UuidRepresentation;
 import org.bson.codecs.configuration.CodecRegistries;
@@ -20,7 +19,6 @@ import org.bson.codecs.pojo.Conventions;
 import org.bson.codecs.pojo.PojoCodecProvider;
 import org.bson.conversions.Bson;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -70,21 +68,35 @@ public abstract class AbstractMongoRepository<T> implements AutoCloseable {
         mongoClient.close();
     }
 
+    /*--------------------------------------------Additional----------------------------------------------------*/
+
+    protected MongoCollection<? extends DTO> getCollection() {
+        return null;
+    }
+
+    public String getCollectionName() {
+        return null;
+    }
+
     /*----------------------------------------------CRUD-------------------------------------------------------*/
 
-    public boolean create(T dto) {
-        InsertOneResult result;
-        try {
-            result = this.getCollection().insertOne(dto);
-        } catch (MongoWriteException e) {
-            throw new MyMongoException(e.getMessage());
-        }
-        return result.wasAcknowledged();
-    }
+    public abstract T create(T initObj);
 
-    public List<T> read(Bson filter) {
-        return this.getCollection().find(filter).into(new ArrayList<>());
-    }
+//    public boolean create(T dto) {
+//        InsertOneResult result;
+//        try {
+//            result = this.getCollection().insertOne(dto);
+//        } catch (MongoWriteException e) {
+//            throw new MyMongoException(e.getMessage());
+//        }
+//        return result.wasAcknowledged();
+//    }
+
+    public abstract List<T> read(Bson filter);
+
+//    public List<T> read(Bson filter) {
+//        return this.getCollection().find(filter).into(new ArrayList<>());
+//    }
 
     public List<T> readAll() {
         return this.read(Filters.empty());
@@ -106,23 +118,16 @@ public abstract class AbstractMongoRepository<T> implements AutoCloseable {
         return result.getModifiedCount() != 0;
     }
 
-    public boolean updateByReplace(UUID uuid, T dto) {
-        Bson filter = Filters.eq("_id", uuid.toString());
-        UpdateResult result = getCollection().replaceOne(filter, dto);
-        return result.getModifiedCount() != 0;
-    }
+    public abstract boolean updateByReplace(UUID uuid, T dto);
+//    {
+//        Bson filter = Filters.eq("_id", uuid.toString());
+//        UpdateResult result = getCollection().replaceOne(filter, dto);
+//        return result.getModifiedCount() != 0;
+//    }
 
     public boolean delete(UUID uuid) {
         Bson filter = Filters.eq("_id", uuid.toString());
         var deletedObj = this.getCollection().findOneAndDelete(filter);
         return deletedObj != null;
-    }
-
-    protected MongoCollection<T> getCollection() {
-        return null;
-    }
-
-    public String getCollectionName() {
-        return null;
     }
 }

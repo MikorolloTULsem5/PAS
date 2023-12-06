@@ -13,7 +13,6 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.validation.UnexpectedTypeException;
 import nbd.gV.data.datahandling.dto.AdminDTO;
 import nbd.gV.data.datahandling.dto.ClientDTO;
-import nbd.gV.data.datahandling.dto.DTO;
 import nbd.gV.data.datahandling.dto.ResourceAdminDTO;
 import nbd.gV.data.datahandling.dto.UserDTO;
 import nbd.gV.data.datahandling.mappers.AdminMapper;
@@ -34,7 +33,7 @@ import java.util.List;
 import java.util.UUID;
 
 @ApplicationScoped
-public class UserMongoRepository extends AbstractMongoRepositoryNew<User> {
+public class UserMongoRepository extends AbstractMongoRepository<User> {
 
     static final String COLLECTION_NAME = "users";
 

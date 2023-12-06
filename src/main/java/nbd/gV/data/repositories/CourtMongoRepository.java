@@ -26,7 +26,7 @@ import java.util.List;
 import java.util.UUID;
 
 @ApplicationScoped
-public class CourtMongoRepository extends AbstractMongoRepositoryNew<Court> {
+public class CourtMongoRepository extends AbstractMongoRepository<Court> {
 
     static final String COLLECTION_NAME = "courts";
 
