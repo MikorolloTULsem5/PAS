@@ -42,7 +42,7 @@ public class ReservationService {
 
             Reservation newReservation = reservationRepository.create(
                     new Reservation(new Client(clientId, "", "", "", ""),
-                                    new Court(clientId, 10, 10 ,10),
+                                    new Court(courtId, 10, 10 ,10),
                                     beginTime));
             if (newReservation == null) {
                 throw new ReservationException("Nie udalo sie utworzyc rezerwacji! - brak odpowiedzi");

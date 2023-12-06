@@ -69,7 +69,7 @@ public class ReservationMongoRepository extends AbstractMongoRepositoryNew<Reser
         try {
             //Check client
             var list1 = getDatabase().getCollection(UserMongoRepository.COLLECTION_NAME, ClientDTO.class)
-                    .find(Filters.eq("_id", initReservation.getClient().getId())).into(new ArrayList<>());
+                    .find(Filters.eq("_id", initReservation.getClient().getId().toString())).into(new ArrayList<>());
             if (list1.isEmpty()) {
                 throw new ReservationException("Brak podanego klienta w bazie!");
             }
@@ -77,7 +77,7 @@ public class ReservationMongoRepository extends AbstractMongoRepositoryNew<Reser
 
             //Check court
             var list2 = getDatabase().getCollection(CourtMongoRepository.COLLECTION_NAME, CourtDTO.class)
-                    .find(Filters.eq("_id", initReservation.getCourt().getId())).into(new ArrayList<>());
+                    .find(Filters.eq("_id", initReservation.getCourt().getId().toString())).into(new ArrayList<>());
             if (list2.isEmpty()) {
                 throw new ReservationException("Brak podanego boiska w bazie!");
             }
