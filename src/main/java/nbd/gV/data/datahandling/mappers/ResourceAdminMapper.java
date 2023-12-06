@@ -1,7 +1,6 @@
 package nbd.gV.data.datahandling.mappers;
 
 import nbd.gV.data.datahandling.dto.ResourceAdminDTO;
-import nbd.gV.model.users.Admin;
 import nbd.gV.model.users.ResourceAdmin;
 
 import java.util.UUID;
