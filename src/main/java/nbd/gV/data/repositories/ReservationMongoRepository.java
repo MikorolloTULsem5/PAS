@@ -9,6 +9,7 @@ import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Updates;
 import com.mongodb.client.model.ValidationOptions;
 import com.mongodb.client.result.InsertOneResult;
+import com.mongodb.client.result.UpdateResult;
 import jakarta.annotation.PostConstruct;
 import jakarta.annotation.PreDestroy;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -32,10 +33,11 @@ import org.bson.conversions.Bson;
 import java.time.LocalDateTime;
 import java.time.Month;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @ApplicationScoped
-public class ReservationMongoRepository extends AbstractMongoRepository<ReservationDTO> {
+public class ReservationMongoRepository extends AbstractMongoRepositoryNew<Reservation> {
 
     static final String COLLECTION_NAME = "reservations";
 
@@ -62,11 +64,12 @@ public class ReservationMongoRepository extends AbstractMongoRepository<Reservat
     }
 
     //Checking database consistency
-    public Reservation createNew(ReservationDTO reservationMapper) {
+    @Override
+    public Reservation create(Reservation initReservation) {
         try {
             //Check client
             var list1 = getDatabase().getCollection(UserMongoRepository.COLLECTION_NAME, ClientDTO.class)
-                    .find(Filters.eq("_id", reservationMapper.getClientId())).into(new ArrayList<>());
+                    .find(Filters.eq("_id", initReservation.getClient().getId())).into(new ArrayList<>());
             if (list1.isEmpty()) {
                 throw new ReservationException("Brak podanego klienta w bazie!");
             }
@@ -74,7 +77,7 @@ public class ReservationMongoRepository extends AbstractMongoRepository<Reservat
 
             //Check court
             var list2 = getDatabase().getCollection(CourtMongoRepository.COLLECTION_NAME, CourtDTO.class)
-                    .find(Filters.eq("_id", reservationMapper.getCourtId())).into(new ArrayList<>());
+                    .find(Filters.eq("_id", initReservation.getCourt().getId())).into(new ArrayList<>());
             if (list2.isEmpty()) {
                 throw new ReservationException("Brak podanego boiska w bazie!");
             }
@@ -82,7 +85,7 @@ public class ReservationMongoRepository extends AbstractMongoRepository<Reservat
 
             if (!courtFound.isRented() && !clientFound.isArchive() && !courtFound.isArchive()) {
                 Reservation newReservation = new Reservation(UUID.randomUUID(),
-                        clientFound, courtFound, reservationMapper.getBeginTime());
+                        clientFound, courtFound, initReservation.getBeginTime());
 
                 InsertOneResult result;
                 ClientSession clientSession = getMongoClient().startSession();
@@ -118,9 +121,20 @@ public class ReservationMongoRepository extends AbstractMongoRepository<Reservat
     }
 
     ///TODO poprawka
+//    @Override
+//    public boolean createa(ReservationDTO dto) {
+//        return create(dto) != null;
+//    }
+
+
     @Override
-    public boolean create(ReservationDTO dto) {
-        return createNew(dto) != null;
+    public List<Reservation> read(Bson filter) {
+//        var list = new ArrayList<Reservation>();
+//        for (var el : this.getCollection().find(filter).into(new ArrayList<>())) {
+//            list.add(ReservationMapper.fromMongoReservation(el));
+//        }
+//        return list;
+        return null;
     }
 
     public void update(UUID courtId, LocalDateTime endTime) {
@@ -181,6 +195,13 @@ public class ReservationMongoRepository extends AbstractMongoRepository<Reservat
     }
 
     @Override
+    public boolean updateByReplace(UUID uuid, Reservation reservation) {
+        Bson filter = Filters.eq("_id", uuid.toString());
+        UpdateResult result = getCollection().replaceOne(filter, ReservationMapper.toMongoReservation(reservation));
+        return result.getModifiedCount() != 0;
+    }
+
+    @Override
     public boolean delete(UUID uuid) {
         var res = readByUUID(uuid);
         if (res == null) {
@@ -209,9 +230,9 @@ public class ReservationMongoRepository extends AbstractMongoRepository<Reservat
         LocalDateTime dataStart = LocalDateTime.of(2023, Month.NOVEMBER, 30, 14, 20);
         LocalDateTime secondDate = LocalDateTime.of(2023, Month.NOVEMBER, 28, 14, 20);
 
-        super.create(new ReservationDTO(UUID.randomUUID().toString(), UUID.fromString("80e62401-6517-4392-856c-e22ef5f3d6a2").toString(), UUID.fromString("634d9130-0015-42bb-a70a-543dee846760").toString(), dataStart , null, 0));
-        super.create(new ReservationDTO(UUID.randomUUID().toString(), UUID.fromString("b6f5bcb8-7f01-4470-8238-cc3320326157").toString(), UUID.fromString("fe6a35bb-7535-4c23-a259-a14ac0ccedba").toString(), dataStart , null, 0));
-        super.create(new ReservationDTO(UUID.randomUUID().toString(), UUID.fromString("6dc63417-0a21-462c-a97a-e0bf6055a3ea").toString(), UUID.fromString("30ac2027-dcc8-4af7-920f-831b51023bc9").toString(), secondDate, null, 0));
+//        create(new ReservationDTO(UUID.randomUUID().toString(), UUID.fromString("80e62401-6517-4392-856c-e22ef5f3d6a2").toString(), UUID.fromString("634d9130-0015-42bb-a70a-543dee846760").toString(), dataStart , null, 0));
+//        create(new ReservationDTO(UUID.randomUUID().toString(), UUID.fromString("b6f5bcb8-7f01-4470-8238-cc3320326157").toString(), UUID.fromString("fe6a35bb-7535-4c23-a259-a14ac0ccedba").toString(), dataStart , null, 0));
+//        create(new ReservationDTO(UUID.randomUUID().toString(), UUID.fromString("6dc63417-0a21-462c-a97a-e0bf6055a3ea").toString(), UUID.fromString("30ac2027-dcc8-4af7-920f-831b51023bc9").toString(), secondDate, null, 0));
     }
 
     @PreDestroy

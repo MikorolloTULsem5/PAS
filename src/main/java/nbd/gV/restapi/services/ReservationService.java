@@ -5,23 +5,16 @@ import com.mongodb.client.model.Filters;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import lombok.NoArgsConstructor;
-import nbd.gV.data.datahandling.dto.ClientDTO;
-import nbd.gV.data.datahandling.mappers.ClientMapper;
-import nbd.gV.data.datahandling.mappers.CourtMapper;
+import nbd.gV.model.courts.Court;
 import nbd.gV.model.reservations.Reservation;
 import nbd.gV.model.users.Client;
-import nbd.gV.model.courts.Court;
 import nbd.gV.exceptions.MyMongoException;
 import nbd.gV.exceptions.ReservationException;
-import nbd.gV.data.datahandling.dto.ReservationDTO;
-import nbd.gV.data.datahandling.mappers.ReservationMapper;
 import nbd.gV.data.repositories.UserMongoRepository;
 import nbd.gV.data.repositories.CourtMongoRepository;
 import nbd.gV.data.repositories.ReservationMongoRepository;
-import org.bson.conversions.Bson;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -44,10 +37,13 @@ public class ReservationService {
 
     public Reservation makeReservation(UUID clientId, UUID courtId, LocalDateTime beginTime) {
         try {
-            ReservationDTO reservationDTO = new ReservationDTO(null, clientId.toString(), courtId.toString(),
-                    beginTime, null, 0);
+//            Reservation reservation = new ReservationDTO(null, clientId.toString(), courtId.toString(),
+//                    beginTime, null, 0);
 
-            Reservation newReservation = reservationRepository.createNew(reservationDTO);
+            Reservation newReservation = reservationRepository.create(
+                    new Reservation(new Client(clientId, "", "", "", ""),
+                                    new Court(clientId, 0, 0 ,0),
+                                    beginTime));
             if (newReservation == null) {
                 throw new ReservationException("Nie udalo sie utworzyc rezerwacji! - brak odpowiedzi");
             }
@@ -74,49 +70,44 @@ public class ReservationService {
     }
 
     public Reservation getReservationById(UUID uuid) {
-        ReservationDTO reservationMapper = reservationRepository.readByUUID(uuid);
-        if (reservationMapper == null) {
-            return null;
-        }
-        return ReservationMapper.fromMongoReservation(reservationMapper,
-                ClientMapper.toMongoUser((Client) clientsRepository.readByUUID(UUID.fromString(reservationMapper.getClientId()), Client.class)),
-                CourtMapper.toMongoCourt(courtRepository.readByUUID(UUID.fromString(reservationMapper.getCourtId()))));
+        return reservationRepository.readByUUID(uuid);
     }
 
     public List<Reservation> getAllCurrentReservations() {
-        return getReservationsWithBsonFilter(Filters.eq("endtime", null));
+        return reservationRepository.read(Filters.eq("endtime", null));
     }
 
+    ///TODO
     public List<Reservation> getAllArchiveReservations() {
-        return getReservationsWithBsonFilter(Filters.not(Filters.eq("endtime", null)));
+        return reservationRepository.read(Filters.not(Filters.eq("endtime", null)));
     }
 
     public List<Reservation> getAllClientReservations(UUID clientId) {
-        return getReservationsWithBsonFilter(Filters.eq("clientid", clientId.toString()));
+        return reservationRepository.read(Filters.eq("clientid", clientId.toString()));
     }
 
     public List<Reservation> getClientCurrentReservations(UUID clientId) {
-        return getReservationsWithBsonFilter(Filters.and(
+        return reservationRepository.read(Filters.and(
                 Filters.eq("clientid", clientId.toString()),
                 Filters.eq("endtime", null)));
     }
 
+    ///TODO
     public List<Reservation> getClientEndedReservations(UUID clientId) {
-        return getReservationsWithBsonFilter(Filters.and(
+        return reservationRepository.read(Filters.and(
                 Filters.eq("clientid", clientId.toString()),
                 Filters.not(Filters.eq("endtime", null))));
     }
 
     public Reservation getCourtCurrentReservation(UUID courtId) {
-        var list = getReservationsWithBsonFilter(
-                Filters.and(
-                        Filters.eq("courtid", courtId.toString()),
-                        Filters.eq("endtime", null)));
+        var list = reservationRepository.read(
+                Filters.and(Filters.eq("courtid", courtId.toString()),
+                            Filters.eq("endtime", null)));
         return !list.isEmpty() ? list.get(0) : null;
     }
 
     public List<Reservation> getCourtEndedReservation(UUID courtId) {
-        return getReservationsWithBsonFilter(Filters.and(
+        return reservationRepository.read(Filters.and(
                 Filters.eq("courtid", courtId.toString()),
                 Filters.ne("endtime", null)));
     }
@@ -138,18 +129,5 @@ public class ReservationService {
             sum += reservation.getReservationCost();
         }
         return sum;
-    }
-
-    ///TODO popraw
-    private List<Reservation> getReservationsWithBsonFilter(Bson filter) {
-        List<Reservation> reservations = new ArrayList<>();
-        var clientsRepo = clientsRepository;
-        var courtsRepo = courtRepository;
-        for (var r : reservationRepository.read(filter)) {
-            reservations.add(ReservationMapper.fromMongoReservation(r,
-                    ClientMapper.toMongoUser((Client) clientsRepo.readByUUID(UUID.fromString(r.getClientId()), Client.class)),
-                    CourtMapper.toMongoCourt(courtsRepo.readByUUID(UUID.fromString(r.getCourtId())))));
-        }
-        return reservations;
     }
 }

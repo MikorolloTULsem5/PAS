@@ -10,7 +10,7 @@ import java.util.Objects;
 
 @Getter
 @FieldDefaults(makeFinal = true)
-public class ReservationDTO {
+public class ReservationDTO implements DTO {
     @BsonProperty("_id")
     private String id;
     @BsonProperty("clientid")
