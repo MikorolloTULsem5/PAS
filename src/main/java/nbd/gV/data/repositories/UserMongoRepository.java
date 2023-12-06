@@ -13,6 +13,7 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.validation.UnexpectedTypeException;
 import nbd.gV.data.datahandling.dto.AdminDTO;
 import nbd.gV.data.datahandling.dto.ClientDTO;
+import nbd.gV.data.datahandling.dto.DTO;
 import nbd.gV.data.datahandling.dto.ResourceAdminDTO;
 import nbd.gV.data.datahandling.dto.UserDTO;
 import nbd.gV.data.datahandling.mappers.AdminMapper;
@@ -84,7 +85,7 @@ public class UserMongoRepository extends AbstractMongoRepositoryNew<User> {
         if (initUser instanceof Client client) {
             newUser = new Client(UUID.randomUUID(), client.getFirstName(), client.getLastName(),
                     client.getLogin(), client.getClientTypeName());
-            if (!read(Filters.eq("login", client.getLogin()), ClientDTO.class).isEmpty()) {
+            if (!read(Filters.eq("login", client.getLogin()), Client.class).isEmpty()) {
                 throw new UserLoginException("Nie udalo sie zarejestrowac klienta w bazie! - klient o tym loginie " +
                         "znajduje sie juz w bazie");
             }
@@ -94,7 +95,7 @@ public class UserMongoRepository extends AbstractMongoRepositoryNew<User> {
             }
         } else if (initUser instanceof Admin admin) {
             newUser = new Admin(UUID.randomUUID(), admin.getLogin());
-            if (!read(Filters.eq("login", admin.getLogin()), AdminDTO.class).isEmpty()) {
+            if (!read(Filters.eq("login", admin.getLogin()), Admin.class).isEmpty()) {
                 throw new UserLoginException("Nie udalo sie zarejestrowac administratora w bazie! - admin o tym loginie " +
                         "znajduje sie juz w bazie");
             }
@@ -104,7 +105,7 @@ public class UserMongoRepository extends AbstractMongoRepositoryNew<User> {
             }
         } else if (initUser instanceof ResourceAdmin resourceAdmin) {
             newUser = new ResourceAdmin(UUID.randomUUID(), resourceAdmin.getLogin());
-            if (!read(Filters.eq("login", resourceAdmin.getLogin()), ResourceAdminDTO.class).isEmpty()) {
+            if (!read(Filters.eq("login", resourceAdmin.getLogin()), ResourceAdmin.class).isEmpty()) {
                 throw new UserLoginException("Nie udalo sie zarejestrowac administratora w bazie! - admin o tym loginie " +
                         "znajduje sie juz w bazie");
             }
@@ -119,10 +120,18 @@ public class UserMongoRepository extends AbstractMongoRepositoryNew<User> {
         return newUser;
     }
 
-    //TODO popraw ready
-    public List<User> read(Bson filter, Class<? extends UserDTO> clazz) {
+    public List<User> read(Bson filter, Class<? extends User> clazz) {
+        Class<? extends UserDTO> clazzDTO = switch (clazz.getSimpleName().toLowerCase()) {
+            case "client" -> ClientDTO.class;
+            case "admin" -> AdminDTO.class;
+            case "resourceadmin" -> ResourceAdminDTO.class;
+            default -> {
+                throw new UnexpectedTypeException("Typ danego uzytkownika nie pasuje do zadnego z obslugiwanych!");
+            }
+        };
+
         List<User> list = new ArrayList<>();
-        for (var userDTO : this.getDatabase().getCollection(COLLECTION_NAME, clazz).find(filter).into(new ArrayList<>())) {
+        for (var userDTO : this.getDatabase().getCollection(COLLECTION_NAME, clazzDTO).find(filter).into(new ArrayList<>())) {
             if (userDTO instanceof ClientDTO clientDTO) {
                 list.add(ClientMapper.fromMongoUser(clientDTO));
             } else if (userDTO instanceof AdminDTO adminDTO) {
@@ -134,17 +143,16 @@ public class UserMongoRepository extends AbstractMongoRepositoryNew<User> {
         return list;
     }
 
-    public List<User> readAll(Class<? extends UserDTO> clazz) {
+    public List<User> readAll(Class<? extends User> clazz) {
         String name = clazz.getSimpleName().toLowerCase();
         return this.read(Filters.eq("_clazz", name.substring(0, name.length() - 3)), clazz);
     }
 
-    public User readByUUID(UUID uuid, Class<? extends UserDTO> clazz) {
+    public User readByUUID(UUID uuid, Class<? extends User> clazz) {
         Bson filter = Filters.eq("_id", uuid.toString());
         var list = this.read(filter, clazz);
         return !list.isEmpty() ? list.get(0) : null;
     }
-
 
     @Override
     public boolean updateByReplace(UUID uuid, User user) {

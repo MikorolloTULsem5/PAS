@@ -39,27 +39,27 @@ public class ClientService extends UserService {
     }
 
     public Client getClientById(UUID clientID) {
-        User client = userRepository.readByUUID(clientID, ClientDTO.class);
+        User client = userRepository.readByUUID(clientID, Client.class);
         return client != null ? (Client) client : null;
     }
 
     public List<Client> getAllClients() {
         List<Client> list = new ArrayList<>();
-        for (var user : userRepository.readAll(ClientDTO.class)) {
+        for (var user : userRepository.readAll(Client.class)) {
             list.add((Client) user);
         }
         return list;
     }
 
     public Client getClientByLogin(String login) {
-        var list = userRepository.read(Filters.eq("login", login), ClientDTO.class);
+        var list = userRepository.read(Filters.eq("login", login), Client.class);
         return !list.isEmpty() ? (Client) list.get(0) : null;
     }
 
     public List<Client> getClientByLoginMatching(String login) {
         List<Client> list = new ArrayList<>();
         for (var user : userRepository.read(Filters.and(Filters.regex("login", ".*%s.*".formatted(login)),
-                Filters.eq("_clazz", "client")), ClientDTO.class)) {
+                Filters.eq("_clazz", "client")), Client.class)) {
             list.add((Client) user);
         }
         return list;
@@ -68,7 +68,7 @@ public class ClientService extends UserService {
     public void modifyClient(Client modifiedClient) {
         var list = userRepository.read(Filters.and(
                 Filters.eq("login", modifiedClient.getLogin()),
-                Filters.ne("_id", modifiedClient.getId().toString())), ClientDTO.class);
+                Filters.ne("_id", modifiedClient.getId().toString())), Client.class);
         if (!list.isEmpty()) {
             throw new UserLoginException("Nie udalo sie zmodyfikowac podanego klienta - " +
                     "proba zmiany loginu na login wystepujacy juz u innego klienta");
@@ -89,7 +89,7 @@ public class ClientService extends UserService {
 
     @Override
     public int usersSize() {
-        return userRepository.readAll(UserDTO.class).size();
+        return userRepository.readAll(User.class).size();
     }
 
 }

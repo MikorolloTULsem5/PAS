@@ -40,23 +40,23 @@ public class ResourceAdminService extends UserService {
     }
 
     public ResourceAdmin getResourceAdminById(UUID resourceAdminId) {
-        User resourceAdmin = userRepository.readByUUID(resourceAdminId, ResourceAdminDTO.class);
+        User resourceAdmin = userRepository.readByUUID(resourceAdminId, ResourceAdmin.class);
         return resourceAdmin != null ? (ResourceAdmin) resourceAdmin : null;
     }
 
     public List<User> getAllResourceAdmins() {
-        return userRepository.readAll(ResourceAdminDTO.class);
+        return userRepository.readAll(ResourceAdmin.class);
     }
 
     public ResourceAdmin getResourceAdminByLogin(String login) {
-        var list = userRepository.read(Filters.eq("login", login), ResourceAdminDTO.class);
+        var list = userRepository.read(Filters.eq("login", login), ResourceAdmin.class);
         return !list.isEmpty() ? (ResourceAdmin) list.get(0) : null;
     }
 
     public List<ResourceAdmin> getResourceAdminByLoginMatching(String login) {
         List<ResourceAdmin> list = new ArrayList<>();
         for (var user : userRepository.read(Filters.and(Filters.regex("login", ".*%s.*".formatted(login)),
-                Filters.eq("_clazz", "resourceadmin")), ResourceAdminDTO.class)) {
+                Filters.eq("_clazz", "resourceadmin")), ResourceAdmin.class)) {
             list.add((ResourceAdmin) user);
         }
         return list;
@@ -65,7 +65,7 @@ public class ResourceAdminService extends UserService {
     public void modifyResourceAdmin(ResourceAdmin modifiedResourceAdmin) {
         var list = userRepository.read(Filters.and(
                 Filters.eq("login", modifiedResourceAdmin.getLogin()),
-                Filters.ne("_id", modifiedResourceAdmin.getId().toString())), ResourceAdminDTO.class);
+                Filters.ne("_id", modifiedResourceAdmin.getId().toString())), ResourceAdmin.class);
         if (!list.isEmpty()) {
             throw new UserLoginException("Nie udalo sie zmodyfikowac podanego administratora - " +
                     "proba zmiany loginu na login wystepujacy juz u innego administratora");
@@ -86,7 +86,7 @@ public class ResourceAdminService extends UserService {
 
     @Override
     public int usersSize() {
-        return userRepository.readAll(UserDTO.class).size();
+        return userRepository.readAll(User.class).size();
     }
 
 }

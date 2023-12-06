@@ -39,7 +39,7 @@ public class ClientMongoRepositoryTest {
     @AfterAll
     static void cleanFirstAndLastTimeDB() {
         clientRepository.getDatabase()
-                .getCollection(clientRepository.getCollectionName(), ClientDTO.class).deleteMany(Filters.empty());
+                .getCollection(clientRepository.getCollectionName(), Client.class).deleteMany(Filters.empty());
     }
 
     @BeforeEach
@@ -84,11 +84,11 @@ public class ClientMongoRepositoryTest {
         assertNull(clientRepository.create(client3));
         assertEquals(3, getTestCollection().find().into(new ArrayList<>()).size());
 
-        var clientsList1 = clientRepository.read(Filters.eq("firstname", "John"), ClientDTO.class);
+        var clientsList1 = clientRepository.read(Filters.eq("firstname", "John"), Client.class);
         assertEquals(1, clientsList1.size());
         assertEquals(client3, clientsList1.get(0));
 
-        var clientsList2 = clientRepository.read(Filters.eq("lastname", "Smith"), ClientDTO.class);
+        var clientsList2 = clientRepository.read(Filters.eq("lastname", "Smith"), Client.class);
         assertEquals(2, clientsList2.size());
         assertEquals(client1, clientsList2.get(0));
         assertEquals(client2, clientsList2.get(1));
@@ -100,7 +100,7 @@ public class ClientMongoRepositoryTest {
         assertNull(clientRepository.create(client1));
         assertEquals(1, getTestCollection().find().into(new ArrayList<>()).size());
 
-        var clientsList = clientRepository.read(Filters.eq("firstname", "John"), ClientDTO.class);
+        var clientsList = clientRepository.read(Filters.eq("firstname", "John"), Client.class);
         assertEquals(0, clientsList.size());
     }
 
@@ -112,7 +112,7 @@ public class ClientMongoRepositoryTest {
         assertNull(clientRepository.create(client3));
         assertEquals(3, getTestCollection().find().into(new ArrayList<>()).size());
 
-        var clientsList = clientRepository.readAll(ClientDTO.class);
+        var clientsList = clientRepository.readAll(Client.class);
         assertEquals(3, clientsList.size());
         assertEquals(client1, clientsList.get(0));
         assertEquals(client2, clientsList.get(1));
@@ -127,11 +127,11 @@ public class ClientMongoRepositoryTest {
         assertNull(clientRepository.create(client3));
         assertEquals(3, getTestCollection().find().into(new ArrayList<>()).size());
 
-        User clMapper1 = clientRepository.readByUUID(UUID.fromString(client1.getId().toString()), ClientDTO.class);
+        User clMapper1 = clientRepository.readByUUID(UUID.fromString(client1.getId().toString()), Client.class);
         assertNotNull(clMapper1);
         assertEquals(client1, clMapper1);
 
-        User clMapper3 = clientRepository.readByUUID(UUID.fromString(client3.getId().toString()), ClientDTO.class);
+        User clMapper3 = clientRepository.readByUUID(UUID.fromString(client3.getId().toString()), Client.class);
         assertNotNull(clMapper3);
         assertEquals(client3, clMapper3);
     }
@@ -148,7 +148,7 @@ public class ClientMongoRepositoryTest {
         assertEquals(2, getTestCollection().find().into(new ArrayList<>()).size());
 
         //Check the rest
-        var clientMappersList = clientRepository.readAll(ClientDTO.class);
+        var clientMappersList = clientRepository.readAll(Client.class);
         assertEquals(2, clientMappersList.size());
         assertEquals(client1, clientMappersList.get(0));
         assertEquals(client3, clientMappersList.get(1));
@@ -178,11 +178,11 @@ public class ClientMongoRepositoryTest {
         assertEquals(3, getTestCollection().find().into(new ArrayList<>()).size());
 
         assertEquals("Adam",
-                ((Client) clientRepository.readByUUID(UUID.fromString(client1.getId().toString()), ClientDTO.class)).getFirstName());
+                ((Client) clientRepository.readByUUID(UUID.fromString(client1.getId().toString()), Client.class)).getFirstName());
         assertTrue(clientRepository.update(UUID.fromString(client1.getId().toString()),
                 "firstname", "Chris"));
         assertEquals("Chris",
-                ((Client) clientRepository.readByUUID(UUID.fromString(client1.getId().toString()), ClientDTO.class)).getFirstName());
+                ((Client) clientRepository.readByUUID(UUID.fromString(client1.getId().toString()), Client.class)).getFirstName());
 
         //Test adding new value to document
         assertFalse(clientRepository.getDatabase().getCollection(clientRepository.getCollectionName(), Document.class)

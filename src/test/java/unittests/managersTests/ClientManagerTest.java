@@ -28,7 +28,7 @@ public class ClientManagerTest {
     @BeforeAll
     @AfterAll
     static void cleanDatabaseFirstAndLastTime() {
-        clientRepository.readAll(ClientDTO.class).forEach((mapper) -> clientRepository.delete(UUID.fromString(mapper.getId().toString())));
+        clientRepository.readAll(Client.class).forEach((mapper) -> clientRepository.delete(UUID.fromString(mapper.getId().toString())));
     }
 
     @BeforeEach

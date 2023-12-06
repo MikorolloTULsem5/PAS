@@ -79,7 +79,7 @@ public class ReservationService {
             return null;
         }
         return ReservationMapper.fromMongoReservation(reservationMapper,
-                ClientMapper.toMongoUser((Client) clientsRepository.readByUUID(UUID.fromString(reservationMapper.getClientId()), ClientDTO.class)),
+                ClientMapper.toMongoUser((Client) clientsRepository.readByUUID(UUID.fromString(reservationMapper.getClientId()), Client.class)),
                 CourtMapper.toMongoCourt(courtRepository.readByUUID(UUID.fromString(reservationMapper.getCourtId()))));
     }
 
@@ -147,7 +147,7 @@ public class ReservationService {
         var courtsRepo = courtRepository;
         for (var r : reservationRepository.read(filter)) {
             reservations.add(ReservationMapper.fromMongoReservation(r,
-                    ClientMapper.toMongoUser((Client) clientsRepo.readByUUID(UUID.fromString(r.getClientId()), ClientDTO.class)),
+                    ClientMapper.toMongoUser((Client) clientsRepo.readByUUID(UUID.fromString(r.getClientId()), Client.class)),
                     CourtMapper.toMongoCourt(courtsRepo.readByUUID(UUID.fromString(r.getCourtId())))));
         }
         return reservations;
