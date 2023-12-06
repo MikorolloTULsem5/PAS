@@ -13,6 +13,7 @@ import nbd.gV.exceptions.MyMongoException;
 import nbd.gV.exceptions.UserException;
 import nbd.gV.exceptions.UserLoginException;
 import nbd.gV.model.users.Admin;
+import nbd.gV.model.users.User;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,37 +32,29 @@ public class AdminService extends UserService {
 
     public Admin registerAdmin(String login) {
         try {
-            return (Admin) userRepository.createNew(new AdminDTO(null, login, false));
+            return (Admin) userRepository.create(new Admin(null, login));
         } catch (MyMongoException | UnexpectedTypeException exception) {
             throw new UserException("Nie udalo sie zarejestrowac administratora w bazie! - " + exception.getMessage());
         }
     }
 
     public Admin getAdminById(UUID adminId) {
-        UserDTO adminDTO = userRepository.readByUUID(adminId, AdminDTO.class);
-        return adminDTO != null ? AdminMapper.fromMongoUser((AdminDTO) adminDTO) : null;
+        User admin = userRepository.readByUUID(adminId, AdminDTO.class);
+        return admin != null ? (Admin) admin : null;
     }
 
-    public List<Admin> getAllAdmins() {
-        List<Admin> adminsList = new ArrayList<>();
-        for (var el : userRepository.readAll(AdminDTO.class)) {
-            adminsList.add(AdminMapper.fromMongoUser((AdminDTO) el));
-        }
-        return adminsList;
+    public List<User> getAllAdmins() {
+        return userRepository.readAll(AdminDTO.class);
     }
 
     public Admin getAdminByLogin(String login) {
         var list = userRepository.read(Filters.eq("login", login), AdminDTO.class);
-        return !list.isEmpty() ? AdminMapper.fromMongoUser((AdminDTO) list.get(0)) : null;
+        return !list.isEmpty() ? (Admin) list.get(0) : null;
     }
 
-    public List<Admin> getAdminByLoginMatching(String login) {
-        List<Admin> adminsList = new ArrayList<>();
-        for (var el : userRepository.read(Filters.and(Filters.regex("login", ".*%s.*".formatted(login)),
-                Filters.eq("_clazz", "admin")), AdminDTO.class)) {
-            adminsList.add(AdminMapper.fromMongoUser((AdminDTO) el));
-        }
-        return adminsList;
+    public List<User> getAdminByLoginMatching(String login) {
+        return userRepository.read(Filters.and(Filters.regex("login", ".*%s.*".formatted(login)),
+                Filters.eq("_clazz", "admin")), AdminDTO.class);
     }
 
     public void modifyAdmin(Admin modifiedAdmin) {
@@ -73,7 +66,7 @@ public class AdminService extends UserService {
                     "proba zmiany loginu na login wystepujacy juz u innego administratora");
         }
 
-        if (!userRepository.updateByReplace(modifiedAdmin.getId(), AdminMapper.toMongoUser(modifiedAdmin))) {
+        if (!userRepository.updateByReplace(modifiedAdmin.getId(), modifiedAdmin)) {
             throw new UserException("Nie udalo sie zmodyfikowac podanego administratora.");
         }
     }

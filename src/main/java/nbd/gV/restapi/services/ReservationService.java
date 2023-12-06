@@ -79,7 +79,7 @@ public class ReservationService {
             return null;
         }
         return ReservationMapper.fromMongoReservation(reservationMapper,
-                (ClientDTO) clientsRepository.readByUUID(UUID.fromString(reservationMapper.getClientId()), ClientDTO.class),
+                ClientMapper.toMongoUser((Client) clientsRepository.readByUUID(UUID.fromString(reservationMapper.getClientId()), ClientDTO.class)),
                 CourtMapper.toMongoCourt(courtRepository.readByUUID(UUID.fromString(reservationMapper.getCourtId()))));
     }
 
@@ -140,13 +140,14 @@ public class ReservationService {
         return sum;
     }
 
+    ///TODO popraw
     private List<Reservation> getReservationsWithBsonFilter(Bson filter) {
         List<Reservation> reservations = new ArrayList<>();
         var clientsRepo = clientsRepository;
         var courtsRepo = courtRepository;
         for (var r : reservationRepository.read(filter)) {
             reservations.add(ReservationMapper.fromMongoReservation(r,
-                    (ClientDTO) clientsRepo.readByUUID(UUID.fromString(r.getClientId()), ClientDTO.class),
+                    ClientMapper.toMongoUser((Client) clientsRepo.readByUUID(UUID.fromString(r.getClientId()), ClientDTO.class)),
                     CourtMapper.toMongoCourt(courtsRepo.readByUUID(UUID.fromString(r.getCourtId())))));
         }
         return reservations;

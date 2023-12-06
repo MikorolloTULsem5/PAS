@@ -12,10 +12,9 @@ import nbd.gV.model.users.Client;
 import nbd.gV.exceptions.UserException;
 import nbd.gV.exceptions.MyMongoException;
 import nbd.gV.data.datahandling.dto.ClientDTO;
-import nbd.gV.data.datahandling.mappers.ClientMapper;
 import nbd.gV.data.repositories.UserMongoRepository;
+import nbd.gV.model.users.User;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -32,37 +31,29 @@ public class ClientService extends UserService {
 
     public Client registerClient(String firstName, String lastName, String login, String clientType) {
         try {
-            return (Client) userRepository.createNew(new ClientDTO(null, firstName, lastName, login, false, clientType));
+            return (Client) userRepository.create(new Client(null, firstName, lastName, login, clientType));
         } catch (MyMongoException | UnexpectedTypeException exception) {
             throw new UserException("Nie udalo sie zarejestrowac klienta w bazie! - " + exception.getMessage());
         }
     }
 
     public Client getClientById(UUID clientID) {
-        UserDTO clientDTO = userRepository.readByUUID(clientID, ClientDTO.class);
-        return clientDTO != null ? ClientMapper.fromMongoUser((ClientDTO) clientDTO) : null;
+        User client = userRepository.readByUUID(clientID, ClientDTO.class);
+        return client != null ? (Client) client : null;
     }
 
-    public List<Client> getAllClients() {
-        List<Client> clientsList = new ArrayList<>();
-        for (var el : userRepository.readAll(ClientDTO.class)) {
-            clientsList.add(ClientMapper.fromMongoUser((ClientDTO) el));
-        }
-        return clientsList;
+    public List<User> getAllClients() {
+        return userRepository.readAll(ClientDTO.class);
     }
 
     public Client getClientByLogin(String login) {
         var list = userRepository.read(Filters.eq("login", login), ClientDTO.class);
-        return !list.isEmpty() ? ClientMapper.fromMongoUser((ClientDTO) list.get(0)) : null;
+        return !list.isEmpty() ? (Client) list.get(0) : null;
     }
 
-    public List<Client> getClientByLoginMatching(String login) {
-        List<Client> clientsList = new ArrayList<>();
-        for (var el : userRepository.read(Filters.and(Filters.regex("login", ".*%s.*".formatted(login)),
-                Filters.eq("_clazz", "client")), ClientDTO.class)) {
-            clientsList.add(ClientMapper.fromMongoUser((ClientDTO) el));
-        }
-        return clientsList;
+    public List<User> getClientByLoginMatching(String login) {
+        return userRepository.read(Filters.and(Filters.regex("login", ".*%s.*".formatted(login)),
+                Filters.eq("_clazz", "client")), ClientDTO.class);
     }
 
     public void modifyClient(Client modifiedClient) {
@@ -74,7 +65,7 @@ public class ClientService extends UserService {
                     "proba zmiany loginu na login wystepujacy juz u innego klienta");
         }
 
-        if (!userRepository.updateByReplace(modifiedClient.getId(), ClientMapper.toMongoUser(modifiedClient))) {
+        if (!userRepository.updateByReplace(modifiedClient.getId(), modifiedClient)) {
             throw new UserException("Nie udalo sie zmodyfikowac podanego klienta.");
         }
     }

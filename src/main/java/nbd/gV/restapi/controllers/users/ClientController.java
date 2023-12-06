@@ -11,6 +11,7 @@ import jakarta.ws.rs.core.Response;
 import nbd.gV.exceptions.UserException;
 import nbd.gV.exceptions.UserLoginException;
 import nbd.gV.model.users.Client;
+import nbd.gV.model.users.User;
 import nbd.gV.restapi.services.userservice.ClientService;
 
 import java.util.List;
@@ -50,8 +51,8 @@ public class ClientController {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public List<Client> getAllClients() {
-        List<Client> resultList = clientService.getAllClients();
+    public List<User> getAllClients() {
+        List<User> resultList = clientService.getAllClients();
         if (resultList.isEmpty()) {
             resultList = null;
         }
@@ -78,8 +79,8 @@ public class ClientController {
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.TEXT_PLAIN)
     @Path("/match")
-    public List<Client> getClientByLoginMatching(@QueryParam("login") String login) {
-        List<Client> resultList = clientService.getClientByLoginMatching(login);
+    public List<User> getClientByLoginMatching(@QueryParam("login") String login) {
+        List<User> resultList = clientService.getClientByLoginMatching(login);
         if (resultList.isEmpty()) {
             resultList = null;
         }

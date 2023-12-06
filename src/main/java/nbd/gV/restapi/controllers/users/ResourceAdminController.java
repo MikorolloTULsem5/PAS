@@ -18,6 +18,7 @@ import jakarta.ws.rs.core.Response;
 import nbd.gV.exceptions.UserException;
 import nbd.gV.exceptions.UserLoginException;
 import nbd.gV.model.users.ResourceAdmin;
+import nbd.gV.model.users.User;
 import nbd.gV.restapi.services.userservice.ResourceAdminService;
 
 import java.util.List;
@@ -56,8 +57,8 @@ public class ResourceAdminController {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public List<ResourceAdmin> getAllResAdmins() {
-        List<ResourceAdmin> resultList = resourceAdminService.getAllResourceAdmins();
+    public List<User> getAllResAdmins() {
+        List<User> resultList = resourceAdminService.getAllResourceAdmins();
         if (resultList.isEmpty()) {
             resultList = null;
         }
@@ -84,8 +85,8 @@ public class ResourceAdminController {
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.TEXT_PLAIN)
     @Path("/match")
-    public List<ResourceAdmin> getResAdminByLoginMatching(@QueryParam("login") String login) {
-        List<ResourceAdmin> resultList = resourceAdminService.getResourceAdminByLoginMatching(login);
+    public List<User> getResAdminByLoginMatching(@QueryParam("login") String login) {
+        List<User> resultList = resourceAdminService.getResourceAdminByLoginMatching(login);
         if (resultList.isEmpty()) {
             resultList = null;
         }

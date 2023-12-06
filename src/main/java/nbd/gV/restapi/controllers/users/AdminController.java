@@ -18,6 +18,7 @@ import jakarta.ws.rs.core.Response;
 import nbd.gV.exceptions.UserException;
 import nbd.gV.exceptions.UserLoginException;
 import nbd.gV.model.users.Admin;
+import nbd.gV.model.users.User;
 import nbd.gV.restapi.services.userservice.AdminService;
 
 import java.util.List;
@@ -56,8 +57,8 @@ public class AdminController {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public List<Admin> getAllAdmins() {
-        List<Admin> resultList = adminService.getAllAdmins();
+    public List<User> getAllAdmins() {
+        List<User> resultList = adminService.getAllAdmins();
         if (resultList.isEmpty()) {
             resultList = null;
         }
@@ -84,8 +85,8 @@ public class AdminController {
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.TEXT_PLAIN)
     @Path("/match")
-    public List<Admin> getAdminByLoginMatching(@QueryParam("login") String login) {
-        List<Admin> resultList = adminService.getAdminByLoginMatching(login);
+    public List<User> getAdminByLoginMatching(@QueryParam("login") String login) {
+        List<User> resultList = adminService.getAdminByLoginMatching(login);
         if (resultList.isEmpty()) {
             resultList = null;
         }

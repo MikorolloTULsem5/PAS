@@ -28,7 +28,7 @@ public class ClientManagerTest {
     @BeforeAll
     @AfterAll
     static void cleanDatabaseFirstAndLastTime() {
-        clientRepository.readAll(ClientDTO.class).forEach((mapper) -> clientRepository.delete(UUID.fromString(mapper.getId())));
+        clientRepository.readAll(ClientDTO.class).forEach((mapper) -> clientRepository.delete(UUID.fromString(mapper.getId().toString())));
     }
 
     @BeforeEach
@@ -157,8 +157,8 @@ public class ClientManagerTest {
         assertNotNull(testClient2);
         assertEquals(2, cm.getAllClients().size());
 
-        assertEquals("Eva", cm.getAllClients().get(1).getFirstName());
-        assertEquals("Brown", cm.getAllClients().get(1).getLastName());
+        assertEquals("Eva", ((Client) cm.getAllClients().get(1)).getFirstName());
+        assertEquals("Brown", ((Client) cm.getAllClients().get(1)).getLastName());
         assertEquals("eva123bro", cm.getAllClients().get(1).getLogin());
 
         testClient2.setFirstName("Vanessa");
@@ -166,8 +166,8 @@ public class ClientManagerTest {
 
         cm.modifyClient(testClient2);
 
-        assertEquals("Vanessa", cm.getAllClients().get(1).getFirstName());
-        assertEquals("Lock", cm.getAllClients().get(1).getLastName());
+        assertEquals("Vanessa", ((Client) cm.getAllClients().get(1)).getFirstName());
+        assertEquals("Lock", ((Client) cm.getAllClients().get(1)).getLastName());
         assertEquals("eva123bro", cm.getAllClients().get(1).getLogin());
     }
 }

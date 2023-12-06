@@ -146,7 +146,7 @@ public class CourtManagerTest {
 
         try (ReservationMongoRepository reservationMongoRepository = new ReservationMongoRepository();
              UserMongoRepository userMongoRepository = new UserMongoRepository()) {
-            userMongoRepository.create(ClientMapper.toMongoUser(testClient1));
+            userMongoRepository.create(testClient1);
             reservationMongoRepository.create(ReservationMapper.toMongoReservation(testReservation1));
             assertThrows(CourtException.class, () -> cm.deleteCourt(testCourt1.getId()));
             assertEquals(1, collection.find().into(new ArrayList<>()).size());
