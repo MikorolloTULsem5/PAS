@@ -5,15 +5,18 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.validation.UnexpectedTypeException;
 import lombok.NoArgsConstructor;
+import nbd.gV.data.datahandling.dto.ClientDTO;
 import nbd.gV.data.datahandling.dto.ResourceAdminDTO;
 import nbd.gV.data.datahandling.dto.UserDTO;
 import nbd.gV.data.repositories.UserMongoRepository;
 import nbd.gV.exceptions.MyMongoException;
 import nbd.gV.exceptions.UserException;
 import nbd.gV.exceptions.UserLoginException;
+import nbd.gV.model.users.Client;
 import nbd.gV.model.users.ResourceAdmin;
 import nbd.gV.model.users.User;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -50,9 +53,13 @@ public class ResourceAdminService extends UserService {
         return !list.isEmpty() ? (ResourceAdmin) list.get(0) : null;
     }
 
-    public List<User> getResourceAdminByLoginMatching(String login) {
-        return userRepository.read(Filters.and(Filters.regex("login", ".*%s.*".formatted(login)),
-                Filters.eq("_clazz", "resourceadmin")), ResourceAdminDTO.class);
+    public List<ResourceAdmin> getResourceAdminByLoginMatching(String login) {
+        List<ResourceAdmin> list = new ArrayList<>();
+        for (var user : userRepository.read(Filters.and(Filters.regex("login", ".*%s.*".formatted(login)),
+                Filters.eq("_clazz", "resourceadmin")), ResourceAdminDTO.class)) {
+            list.add((ResourceAdmin) user);
+        }
+        return list;
     }
 
     public void modifyResourceAdmin(ResourceAdmin modifiedResourceAdmin) {

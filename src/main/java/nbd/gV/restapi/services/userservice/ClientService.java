@@ -43,7 +43,6 @@ public class ClientService extends UserService {
         return client != null ? (Client) client : null;
     }
 
-    ///TODO nope
     public List<Client> getAllClients() {
         List<Client> list = new ArrayList<>();
         for (var user : userRepository.readAll(ClientDTO.class)) {

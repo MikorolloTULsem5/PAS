@@ -6,6 +6,7 @@ import jakarta.inject.Inject;
 import jakarta.validation.UnexpectedTypeException;
 import lombok.NoArgsConstructor;
 import nbd.gV.data.datahandling.dto.AdminDTO;
+import nbd.gV.data.datahandling.dto.ClientDTO;
 import nbd.gV.data.datahandling.dto.UserDTO;
 import nbd.gV.data.datahandling.mappers.AdminMapper;
 import nbd.gV.data.repositories.UserMongoRepository;
@@ -43,8 +44,12 @@ public class AdminService extends UserService {
         return admin != null ? (Admin) admin : null;
     }
 
-    public List<User> getAllAdmins() {
-        return userRepository.readAll(AdminDTO.class);
+    public List<Admin> getAllAdmins() {
+        List<Admin> list = new ArrayList<>();
+        for (var user : userRepository.readAll(AdminDTO.class)) {
+            list.add((Admin) user);
+        }
+        return list;
     }
 
     public Admin getAdminByLogin(String login) {
@@ -52,9 +57,13 @@ public class AdminService extends UserService {
         return !list.isEmpty() ? (Admin) list.get(0) : null;
     }
 
-    public List<User> getAdminByLoginMatching(String login) {
-        return userRepository.read(Filters.and(Filters.regex("login", ".*%s.*".formatted(login)),
-                Filters.eq("_clazz", "admin")), AdminDTO.class);
+    public List<Admin> getAdminByLoginMatching(String login) {
+        List<Admin> list = new ArrayList<>();
+        for (var user : userRepository.read(Filters.and(Filters.regex("login", ".*%s.*".formatted(login)),
+                Filters.eq("_clazz", "admin")), AdminDTO.class)) {
+            list.add((Admin) user);
+        }
+        return list;
     }
 
     public void modifyAdmin(Admin modifiedAdmin) {

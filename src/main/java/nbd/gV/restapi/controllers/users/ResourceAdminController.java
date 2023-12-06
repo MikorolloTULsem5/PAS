@@ -85,8 +85,8 @@ public class ResourceAdminController {
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.TEXT_PLAIN)
     @Path("/match")
-    public List<User> getResAdminByLoginMatching(@QueryParam("login") String login) {
-        List<User> resultList = resourceAdminService.getResourceAdminByLoginMatching(login);
+    public List<ResourceAdmin> getResAdminByLoginMatching(@QueryParam("login") String login) {
+        List<ResourceAdmin> resultList = resourceAdminService.getResourceAdminByLoginMatching(login);
         if (resultList.isEmpty()) {
             resultList = null;
         }
