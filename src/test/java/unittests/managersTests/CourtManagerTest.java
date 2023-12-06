@@ -135,7 +135,7 @@ public class CourtManagerTest {
         Client testClient1 = new Client(UUID.randomUUID(), "John", "Smith", "12345678901", "normal");
         Court testCourt1 = new Court(null,1000, 100, 1);
         LocalDateTime testTimeStart = LocalDateTime.of(2023, Month.JUNE, 4, 12, 0);
-        Reservation testReservation1 = new Reservation(testClient1, testCourt1, testTimeStart);
+        Reservation testReservation1 = new Reservation(UUID.randomUUID(), testClient1, testCourt1, testTimeStart);
 
         assertNotNull(courtRepository.create(testCourt1));
 

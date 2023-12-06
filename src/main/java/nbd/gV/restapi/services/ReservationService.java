@@ -29,7 +29,8 @@ public class ReservationService {
     public Reservation makeReservation(UUID clientId, UUID courtId, LocalDateTime beginTime) {
         try {
             Reservation newReservation = reservationRepository.create(
-                    new Reservation(new Client(clientId, "", "", "", ""),
+                    new Reservation(null,
+                                    new Client(clientId, "", "", "", ""),
                                     new Court(courtId, 0, 0,0),
                                     beginTime));
             if (newReservation == null) {

@@ -14,7 +14,7 @@ import java.util.UUID;
 
 @Getter
 public class Reservation {
-    private UUID id;
+    private final UUID id;
 
     @NotNull
     private final Client client;
@@ -25,16 +25,11 @@ public class Reservation {
     private LocalDateTime endTime = null;
     private double reservationCost;
 
-    public Reservation(Client client, Court court, LocalDateTime beginTime) {
-        this.id = UUID.randomUUID();
+    public Reservation(UUID id, Client client, Court court, LocalDateTime beginTime) {
+        this.id = id;
         this.client = client;
         this.court = court;
         this.beginTime = (beginTime == null) ? LocalDateTime.now() : beginTime;
-    }
-
-    public Reservation(UUID id, Client client, Court court, LocalDateTime beginTime) {
-        this(client, court, beginTime);
-        this.id = id;
     }
 
     public int getReservationHours() {

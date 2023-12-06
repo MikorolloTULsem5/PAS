@@ -59,7 +59,7 @@ public class ReservationMapperTest {
 
     @Test
     void testToMongoClientMethod() {
-        Reservation reservation = new Reservation(testClient, testCourt, testTimeStart);
+        Reservation reservation = new Reservation(UUID.randomUUID(), testClient, testCourt, testTimeStart);
         assertNotNull(reservation);
 
         ReservationDTO reservationMapper = ReservationMapper.toMongoReservation(reservation);
@@ -72,7 +72,7 @@ public class ReservationMapperTest {
         assertNull(reservationMapper.getEndTime());
         assertEquals(0, reservationMapper.getReservationCost());
 
-        Reservation reservationEnded = new Reservation(testClient, testCourt, testTimeStart);
+        Reservation reservationEnded = new Reservation(UUID.randomUUID(), testClient, testCourt, testTimeStart);
         assertNotNull(reservationEnded);
         reservationEnded.endReservation(testTimeEnd);
 
