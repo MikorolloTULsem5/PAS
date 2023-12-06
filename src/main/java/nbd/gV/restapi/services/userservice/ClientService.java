@@ -42,6 +42,7 @@ public class ClientService extends UserService {
         return client != null ? (Client) client : null;
     }
 
+    ///TODO nope
     public List<User> getAllClients() {
         return userRepository.readAll(ClientDTO.class);
     }
@@ -71,10 +72,7 @@ public class ClientService extends UserService {
     }
 
     public void activateClient(UUID clientId) {
-        ///TODO logi albo wywalic albo obsluzyc
-        if (!userRepository.update(clientId, "archive", false)) {
-            log.info("Nie udalo sie aktywowac podanego klienta.");
-        }
+        userRepository.update(clientId, "archive", false);
     }
 
     public void deactivateClient(UUID clientId) {
