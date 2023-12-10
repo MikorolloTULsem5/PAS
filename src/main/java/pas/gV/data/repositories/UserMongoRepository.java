@@ -124,9 +124,7 @@ public class UserMongoRepository extends AbstractMongoRepository<User> {
             case "client" -> ClientDTO.class;
             case "admin" -> AdminDTO.class;
             case "resourceadmin" -> ResourceAdminDTO.class;
-            default -> {
-                throw new UnexpectedTypeException("Typ danego uzytkownika nie pasuje do zadnego z obslugiwanych!");
-            }
+            default -> throw new UnexpectedTypeException("Typ danego uzytkownika nie pasuje do zadnego z obslugiwanych!");
         };
 
         List<User> list = new ArrayList<>();
@@ -158,11 +156,11 @@ public class UserMongoRepository extends AbstractMongoRepository<User> {
         UpdateResult result;
 
         if (user instanceof Client client) {
-            result = getCollection().replaceOne(filter, ClientMapper.toMongoUser(client));;
+            result = getCollection().replaceOne(filter, ClientMapper.toMongoUser(client));
         } else if (user instanceof Admin admin) {
-            result = getCollection().replaceOne(filter, AdminMapper.toMongoUser(admin));;
+            result = getCollection().replaceOne(filter, AdminMapper.toMongoUser(admin));
         } else if (user instanceof ResourceAdmin resourceAdmin) {
-            result = getCollection().replaceOne(filter, ResourceAdminMapper.toMongoUser(resourceAdmin));;
+            result = getCollection().replaceOne(filter, ResourceAdminMapper.toMongoUser(resourceAdmin));
         } else {
             throw new UnexpectedTypeException("Typ danego uzytkownika nie pasuje do zadnego z obslugiwanych!");
         }
@@ -185,11 +183,6 @@ public class UserMongoRepository extends AbstractMongoRepository<User> {
     public User readByUUID(UUID uuid) {
         throw new UnsupportedOperationException();
     }
-
-//    @Override
-//    public boolean delete(UUID uuid) {
-//        throw new UnsupportedOperationException();
-//    }
 
     @PostConstruct
     private void init() {
