@@ -115,7 +115,6 @@ public class CourtMongoRepository extends AbstractMongoRepository<Court> {
         Bson filter = Filters.eq("courtid", uuid.toString());
         ClientSession clientSession = getMongoClient().startSession();
         try {
-            ///TODO ty no nwm xdd
             clientSession.startTransaction();
             var reservation = this.getDatabase().getCollection(ReservationMongoRepository.COLLECTION_NAME, ReservationDTO.class).find(filter).first();
             if (reservation != null) {
