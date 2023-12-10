@@ -1,7 +1,7 @@
 package unittests.basicClassesTests;
 
-import nbd.gV.exceptions.ConstructorParameterException;
-import nbd.gV.model.courts.Court;
+import pas.gV.exceptions.ConstructorParameterException;
+import pas.gV.model.courts.Court;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;

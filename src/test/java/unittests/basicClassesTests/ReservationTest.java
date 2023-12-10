@@ -1,10 +1,9 @@
 package unittests.basicClassesTests;
 
-import nbd.gV.model.users.Client;
-import nbd.gV.model.courts.Court;
-import nbd.gV.model.reservations.Reservation;
-import nbd.gV.exceptions.MainException;
-import nbd.gV.exceptions.ReservationException;
+import pas.gV.model.users.Client;
+import pas.gV.model.courts.Court;
+import pas.gV.model.reservations.Reservation;
+import pas.gV.exceptions.ReservationException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

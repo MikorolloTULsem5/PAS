@@ -1,10 +1,9 @@
 package unittests.managersTests;
 
-import nbd.gV.data.datahandling.dto.ClientDTO;
-import nbd.gV.exceptions.UserLoginException;
-import nbd.gV.model.users.Client;
-import nbd.gV.restapi.services.userservice.ClientService;
-import nbd.gV.data.repositories.UserMongoRepository;
+import pas.gV.exceptions.UserLoginException;
+import pas.gV.model.users.Client;
+import pas.gV.restapi.services.userservice.ClientService;
+import pas.gV.data.repositories.UserMongoRepository;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;

@@ -1,14 +1,14 @@
 package unittests.mappersTests;
 
-import nbd.gV.model.users.Client;
-import nbd.gV.model.courts.Court;
-import nbd.gV.data.datahandling.dto.ClientDTO;
-import nbd.gV.data.datahandling.mappers.ClientMapper;
-import nbd.gV.data.datahandling.dto.CourtDTO;
-import nbd.gV.data.datahandling.dto.ReservationDTO;
-import nbd.gV.data.datahandling.mappers.CourtMapper;
-import nbd.gV.data.datahandling.mappers.ReservationMapper;
-import nbd.gV.model.reservations.Reservation;
+import pas.gV.model.users.Client;
+import pas.gV.model.courts.Court;
+import pas.gV.data.datahandling.dto.ClientDTO;
+import pas.gV.data.datahandling.mappers.ClientMapper;
+import pas.gV.data.datahandling.dto.CourtDTO;
+import pas.gV.data.datahandling.dto.ReservationDTO;
+import pas.gV.data.datahandling.mappers.CourtMapper;
+import pas.gV.data.datahandling.mappers.ReservationMapper;
+import pas.gV.model.reservations.Reservation;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

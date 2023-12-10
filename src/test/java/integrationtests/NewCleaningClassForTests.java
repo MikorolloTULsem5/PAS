@@ -6,19 +6,19 @@ import com.mongodb.MongoCredential;
 import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Filters;
-import nbd.gV.data.repositories.CourtMongoRepository;
-import nbd.gV.data.repositories.ReservationMongoRepository;
-import nbd.gV.data.repositories.UserMongoRepository;
-import nbd.gV.model.courts.Court;
-import nbd.gV.model.users.Admin;
-import nbd.gV.model.users.Client;
-import nbd.gV.model.reservations.Reservation;
-import nbd.gV.model.users.ResourceAdmin;
-import nbd.gV.restapi.services.CourtService;
-import nbd.gV.restapi.services.ReservationService;
-import nbd.gV.restapi.services.userservice.AdminService;
-import nbd.gV.restapi.services.userservice.ClientService;
-import nbd.gV.restapi.services.userservice.ResourceAdminService;
+import pas.gV.data.repositories.CourtMongoRepository;
+import pas.gV.data.repositories.ReservationMongoRepository;
+import pas.gV.data.repositories.UserMongoRepository;
+import pas.gV.model.courts.Court;
+import pas.gV.model.users.Admin;
+import pas.gV.model.users.Client;
+import pas.gV.model.reservations.Reservation;
+import pas.gV.model.users.ResourceAdmin;
+import pas.gV.restapi.services.CourtService;
+import pas.gV.restapi.services.ReservationService;
+import pas.gV.restapi.services.userservice.AdminService;
+import pas.gV.restapi.services.userservice.ClientService;
+import pas.gV.restapi.services.userservice.ResourceAdminService;
 import org.bson.UuidRepresentation;
 import org.bson.codecs.configuration.CodecRegistries;
 import org.bson.codecs.configuration.CodecRegistry;
@@ -29,7 +29,6 @@ import org.junit.jupiter.api.Test;
 import java.time.LocalDateTime;
 import java.time.Month;
 import java.util.List;
-import java.util.UUID;
 
 public class NewCleaningClassForTests {
     private static final CodecRegistry pojoCodecRegistry = CodecRegistries.fromProviders(PojoCodecProvider.builder()
@@ -39,8 +38,8 @@ public class NewCleaningClassForTests {
 
     private static final MongoClientSettings settings = MongoClientSettings.builder()
             .credential(MongoCredential.createCredential("admin", "admin", "adminpassword".toCharArray()))
-//            .applyConnectionString(new ConnectionString("mongodb://localhost:27017,localhost:27018,localhost:27019/?replicaSet=replica_set_single"))
-            .applyConnectionString(new ConnectionString("mongodb+srv://Michal:ZvDI3RNUGeTKjHTU@atlascluster.pweqkng.mongodb.net/"))
+            .applyConnectionString(new ConnectionString("mongodb://localhost:27017,localhost:27018,localhost:27019/?replicaSet=replica_set_single"))
+//            .applyConnectionString(new ConnectionString("mongodb+srv://Michal:ZvDI3RNUGeTKjHTU@atlascluster.pweqkng.mongodb.net/"))
             .uuidRepresentation(UuidRepresentation.STANDARD)
             .codecRegistry(CodecRegistries.fromRegistries(
                     MongoClientSettings.getDefaultCodecRegistry(),

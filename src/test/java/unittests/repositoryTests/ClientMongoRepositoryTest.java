@@ -2,11 +2,11 @@ package unittests.repositoryTests;
 
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.model.Filters;
-import nbd.gV.data.datahandling.dto.ClientDTO;
-import nbd.gV.data.repositories.UserMongoRepository;
-import nbd.gV.model.users.Client;
-import nbd.gV.exceptions.MyMongoException;
-import nbd.gV.model.users.User;
+import pas.gV.data.datahandling.dto.ClientDTO;
+import pas.gV.data.repositories.UserMongoRepository;
+import pas.gV.model.users.Client;
+import pas.gV.exceptions.MyMongoException;
+import pas.gV.model.users.User;
 import org.bson.Document;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;

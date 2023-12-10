@@ -1,8 +1,8 @@
 package unittests.mappersTests;
 
-import nbd.gV.data.datahandling.dto.ClientDTO;
-import nbd.gV.model.users.Client;
-import nbd.gV.data.datahandling.mappers.ClientMapper;
+import pas.gV.data.datahandling.dto.ClientDTO;
+import pas.gV.model.users.Client;
+import pas.gV.data.datahandling.mappers.ClientMapper;
 import org.junit.jupiter.api.Test;
 
 import java.util.UUID;

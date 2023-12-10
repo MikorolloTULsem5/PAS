@@ -1,15 +1,15 @@
 package unittests.managersTests;
 
-import nbd.gV.exceptions.CourtNumberException;
-import nbd.gV.model.courts.Court;
-import nbd.gV.data.datahandling.dto.CourtDTO;
-import nbd.gV.restapi.services.CourtService;
-import nbd.gV.exceptions.CourtException;
-import nbd.gV.data.repositories.CourtMongoRepository;
-import nbd.gV.data.repositories.ReservationMongoRepository;
-import nbd.gV.data.repositories.UserMongoRepository;
-import nbd.gV.model.reservations.Reservation;
-import nbd.gV.model.users.Client;
+import pas.gV.exceptions.CourtNumberException;
+import pas.gV.model.courts.Court;
+import pas.gV.data.datahandling.dto.CourtDTO;
+import pas.gV.restapi.services.CourtService;
+import pas.gV.exceptions.CourtException;
+import pas.gV.data.repositories.CourtMongoRepository;
+import pas.gV.data.repositories.ReservationMongoRepository;
+import pas.gV.data.repositories.UserMongoRepository;
+import pas.gV.model.reservations.Reservation;
+import pas.gV.model.users.Client;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
