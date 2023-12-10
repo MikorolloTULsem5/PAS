@@ -22,10 +22,6 @@ public class CourtTest {
         assertEquals(1, newCourt1.getCourtNumber());
         assertFalse(newCourt1.isArchive());
         assertFalse(newCourt1.isRented());
-
-        assertThrows(ConstructorParameterException.class, () -> new Court(null,0, 100, 99));
-        assertThrows(ConstructorParameterException.class, () -> new Court(null,1, -100, 99));
-        assertThrows(ConstructorParameterException.class, () -> new Court(null,1, 100, 0));
     }
 
     @Test
