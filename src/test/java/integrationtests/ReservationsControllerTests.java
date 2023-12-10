@@ -34,7 +34,7 @@ public class ReservationsControllerTests {
     @BeforeEach
     void cleanAndInitDatabase() {
         cleanAll();
-        initReservations();
+//        initReservations();
     }
 
     @Test
@@ -111,7 +111,7 @@ public class ReservationsControllerTests {
     void createReservationTestPos() throws URISyntaxException {
         cleanReservations();
         initClients();
-        initCourts();
+//        initCourts();
         RequestSpecification requestPost = RestAssured.given();
 
         RequestSpecification requestGet = RestAssured.given();
@@ -138,7 +138,7 @@ public class ReservationsControllerTests {
     void createReservationTestNegInvalidData() throws URISyntaxException {
         cleanReservations();
         initClients();
-        initCourts();
+//        initCourts();
         RequestSpecification requestPost = RestAssured.given();
 
         RequestSpecification requestGet = RestAssured.given();

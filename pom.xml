@@ -4,6 +4,13 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>3.1.5</version>
+        <relativePath/> <!-- lookup parent from repository -->
+    </parent>
+
     <groupId>pas.gV</groupId>
     <artifactId>CourtRent</artifactId>
     <version>1.0-SNAPSHOT</version>
@@ -86,6 +93,19 @@
                 <artifactId>maven-war-plugin</artifactId>
                 <version>3.3.2</version>
             </plugin>
+            <!--Spring-->
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <excludes>
+                        <exclude>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok</artifactId>
+                        </exclude>
+                    </excludes>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
 
@@ -121,32 +141,51 @@
     </reporting>
 
     <dependencies>
-
+        <!--Spring-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>org.springframework.boot</groupId>-->
+<!--            <artifactId>spring-boot-devtools</artifactId>-->
+<!--            <scope>runtime</scope>-->
+<!--            <optional>true</optional>-->
+<!--        </dependency>-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-validation</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
         <!--Jakarta basic dependencies-->
-        <dependency>
-            <groupId>jakarta.enterprise</groupId>
-            <artifactId>jakarta.enterprise.cdi-api</artifactId>
-            <version>3.0.0</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>jakarta.ws.rs</groupId>
-            <artifactId>jakarta.ws.rs-api</artifactId>
-            <version>3.0.0</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>jakarta.servlet</groupId>
-            <artifactId>jakarta.servlet-api</artifactId>
-            <version>5.0.0</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>jakarta.validation</groupId>
-            <artifactId>jakarta.validation-api</artifactId>
-            <version>3.0.2</version>
-            <scope>provided</scope>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>jakarta.enterprise</groupId>-->
+<!--            <artifactId>jakarta.enterprise.cdi-api</artifactId>-->
+<!--            <version>3.0.0</version>-->
+<!--            <scope>provided</scope>-->
+<!--        </dependency>-->
+<!--        <dependency>-->
+<!--            <groupId>jakarta.ws.rs</groupId>-->
+<!--            <artifactId>jakarta.ws.rs-api</artifactId>-->
+<!--            <version>3.0.0</version>-->
+<!--            <scope>provided</scope>-->
+<!--        </dependency>-->
+<!--        <dependency>-->
+<!--            <groupId>jakarta.servlet</groupId>-->
+<!--            <artifactId>jakarta.servlet-api</artifactId>-->
+<!--            <version>5.0.0</version>-->
+<!--            <scope>provided</scope>-->
+<!--        </dependency>-->
+<!--        <dependency>-->
+<!--            <groupId>jakarta.validation</groupId>-->
+<!--            <artifactId>jakarta.validation-api</artifactId>-->
+<!--            <version>3.0.2</version>-->
+<!--            <scope>provided</scope>-->
+<!--        </dependency>-->
 
         <!--Testing dependencies-->
         <dependency>
@@ -162,38 +201,12 @@
             <scope>test</scope>
         </dependency>
 
-                <!--        <dependency>-->
-                <!--            <groupId>jakarta.persistence</groupId>-->
-                <!--            <artifactId>jakarta.persistence-api</artifactId>-->
-                <!--            <version>3.1.0</version>-->
-                <!--        </dependency>-->
-                <!--        <dependency>-->
-                <!--            <groupId>org.hibernate</groupId>-->
-                <!--            <artifactId>hibernate-core-jakarta</artifactId>-->
-                <!--            <version>5.6.11.Final</version>-->
-                <!--        </dependency>-->
-                <!--        <dependency>-->
-                <!--            <groupId>org.hibernate</groupId>-->
-                <!--            <artifactId>hibernate-jpamodelgen-jakarta</artifactId>-->
-                <!--            <version>5.6.11.Final</version>-->
-                <!--        </dependency>-->
-                <!--        <dependency>-->
-                <!--            <groupId>org.glassfish.jaxb</groupId>-->
-                <!--            <artifactId>jaxb-runtime</artifactId>-->
-                <!--            <version>3.0.0</version>-->
-                <!--        </dependency>-->
-                <!--        <dependency>-->
-                <!--            <groupId>org.hibernate.validator</groupId>-->
-                <!--            <artifactId>hibernate-validator</artifactId>-->
-                <!--            <version>8.0.0.Final</version>-->
-                <!--        </dependency>-->
-                <!--        <dependency>-->
-                <!--            <groupId>org.glassfish</groupId>-->
-                <!--            <artifactId>jakarta.el</artifactId>-->
-                <!--            <version>4.0.2</version>-->
-                <!--        </dependency>-->
-
         <!--MongoDB-->
+        <dependency>
+            <groupId>org.springframework.data</groupId>
+            <artifactId>spring-data-mongodb</artifactId>
+            <version>4.2.0</version>
+        </dependency>
         <dependency>
             <groupId>org.mongodb</groupId>
             <artifactId>mongodb-driver-sync</artifactId>

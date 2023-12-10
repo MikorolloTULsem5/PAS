@@ -1,9 +1,13 @@
 package pas.gV;
 
-import jakarta.ws.rs.ApplicationPath;
-import jakarta.ws.rs.core.Application;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.mongo.MongoAutoConfiguration;
 
-@ApplicationPath("/api")
-public class App extends Application {
+@SpringBootApplication(exclude = {MongoAutoConfiguration.class})
+public class App {
 
+    public static void main(String[] args) {
+        SpringApplication.run(App.class, args);
+    }
 }

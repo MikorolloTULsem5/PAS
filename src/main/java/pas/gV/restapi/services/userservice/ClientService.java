@@ -1,11 +1,10 @@
 package pas.gV.restapi.services.userservice;
 
 import com.mongodb.client.model.Filters;
-import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.inject.Inject;
 import jakarta.validation.UnexpectedTypeException;
 import lombok.NoArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import pas.gV.exceptions.UserLoginException;
 import pas.gV.model.users.Client;
 import pas.gV.exceptions.UserException;
@@ -17,13 +16,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-@ApplicationScoped
+@Service
 @NoArgsConstructor
-@Slf4j
 public class ClientService extends UserService {
 
-    @Inject
     private UserMongoRepository userRepository;
+    @Autowired
     public ClientService(UserMongoRepository userRepository) {
         this.userRepository = userRepository;
     }

@@ -14,8 +14,8 @@ import java.util.UUID;
 
 import static integrationtests.NewCleaningClassForTests.cleanCourts;
 import static integrationtests.NewCleaningClassForTests.initClients;
-import static integrationtests.NewCleaningClassForTests.initCourts;
-import static integrationtests.NewCleaningClassForTests.initReservations;
+//import static integrationtests.NewCleaningClassForTests.initCourts;
+//import static integrationtests.NewCleaningClassForTests.initReservations;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -37,7 +37,7 @@ public class CourtControllerTests {
     @BeforeEach
     void cleanAndInitDatabase() {
         cleanCourts();
-        initCourts();
+//        initCourts();
     }
 
     @Test
@@ -526,7 +526,7 @@ cleanCourts();
     void deleteCourtTestNeg() throws URISyntaxException {
         //Additional preparing
         initClients();
-        initReservations();
+//        initReservations();
 
         RequestSpecification requestGet = RestAssured.given();
         String responseString = requestGet.get(new URI(appUrlCourt)).asString();

@@ -1,10 +1,10 @@
 package pas.gV.restapi.services.userservice;
 
 import com.mongodb.client.model.Filters;
-import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.inject.Inject;
 import jakarta.validation.UnexpectedTypeException;
 import lombok.NoArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import pas.gV.data.repositories.UserMongoRepository;
 import pas.gV.exceptions.MyMongoException;
 import pas.gV.exceptions.UserException;
@@ -16,13 +16,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-@ApplicationScoped
+@Service
 @NoArgsConstructor
 public class ResourceAdminService extends UserService {
 
-    @Inject
     private UserMongoRepository userRepository;
-
+    @Autowired
     public ResourceAdminService(UserMongoRepository userRepository) {
         this.userRepository = userRepository;
     }

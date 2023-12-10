@@ -9,8 +9,9 @@ import com.mongodb.client.result.InsertOneResult;
 import com.mongodb.client.result.UpdateResult;
 import jakarta.annotation.PostConstruct;
 import jakarta.annotation.PreDestroy;
-import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.validation.UnexpectedTypeException;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import pas.gV.data.datahandling.dto.AdminDTO;
 import pas.gV.data.datahandling.dto.ClientDTO;
 import pas.gV.data.datahandling.dto.ResourceAdminDTO;
@@ -32,7 +33,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-@ApplicationScoped
+@Component
 public class UserMongoRepository extends AbstractMongoRepository<User> {
 
     static final String COLLECTION_NAME = "users";
