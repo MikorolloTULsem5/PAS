@@ -19,7 +19,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class ReservationsControllerTests {
 
-    static final String appUrlReservation = "http://localhost:8080/CourtRent-1.0-SNAPSHOT/api/reservations";
+    static final String appUrlReservation = "http://localhost:8080/api/reservations";
 
     @BeforeAll
     static void init() throws URISyntaxException  {

@@ -22,7 +22,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class ResourceAdminControllerTests {
 
-    static final String appUrlResAdmins = "http://localhost:8080/CourtRent-1.0-SNAPSHOT/api/resAdmins";
+    static final String appUrlResAdmins = "http://localhost:8080/api/resAdmins";
 
     @BeforeAll
     static void init() throws URISyntaxException  {

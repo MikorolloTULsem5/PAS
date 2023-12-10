@@ -39,7 +39,8 @@ public class NewCleaningClassForTests {
 
     private static final MongoClientSettings settings = MongoClientSettings.builder()
             .credential(MongoCredential.createCredential("admin", "admin", "adminpassword".toCharArray()))
-            .applyConnectionString(new ConnectionString("mongodb+srv://Michal:ZvDI3RNUGeTKjHTU@atlascluster.pweqkng.mongodb.net/"))
+            .applyConnectionString(new ConnectionString("mongodb://localhost:27017,localhost:27018,localhost:27019/?replicaSet=replica_set_single"))
+//            .applyConnectionString(new ConnectionString("mongodb+srv://Michal:ZvDI3RNUGeTKjHTU@atlascluster.pweqkng.mongodb.net/"))
             .uuidRepresentation(UuidRepresentation.STANDARD)
             .codecRegistry(CodecRegistries.fromRegistries(
                     MongoClientSettings.getDefaultCodecRegistry(),
