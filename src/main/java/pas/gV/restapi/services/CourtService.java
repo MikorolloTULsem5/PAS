@@ -27,21 +27,6 @@ public class CourtService {
     }
 
     public Court registerCourt(double area, int baseCost, int courtNumber) {
-//        Court court = new Court(UUID.randomUUID(), area, baseCost, courtNumber);
-//        try {
-//            if (!courtRepository.read(Filters.eq("courtnumber", courtNumber)).isEmpty()) {
-//                throw new CourtNumberException("Nie udalo sie zarejestrowac boiska w bazie! - boisko o tym numerze " +
-//                        "znajduje sie juz w bazie");
-//            }
-//
-//            if (!courtRepository.create(CourtMapper.toMongoCourt(court))) {
-//                throw new CourtException("Nie udalo sie zarejestrowac boiska w bazie! - brak odpowiedzi");
-//            }
-//        } catch (MyMongoException exception) {
-//            throw new CourtException("Nie udalo sie dodac boiska.");
-//        }
-//        return court;
-
         try {
             return courtRepository.create(new Court(null, area, baseCost, courtNumber));
         } catch (MyMongoException exception) {

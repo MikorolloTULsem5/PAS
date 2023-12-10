@@ -1,5 +1,6 @@
 package unittests.managersTests;
 
+import com.mongodb.client.model.Filters;
 import pas.gV.exceptions.UserLoginException;
 import pas.gV.model.users.Client;
 import pas.gV.restapi.services.userservice.ClientService;
@@ -27,7 +28,7 @@ public class ClientManagerTest {
     @BeforeAll
     @AfterAll
     static void cleanDatabaseFirstAndLastTime() {
-        clientRepository.readAll(Client.class).forEach((mapper) -> clientRepository.delete(UUID.fromString(mapper.getId().toString())));
+        clientRepository.getDatabase().getCollection("users").deleteMany(Filters.empty());
     }
 
     @BeforeEach

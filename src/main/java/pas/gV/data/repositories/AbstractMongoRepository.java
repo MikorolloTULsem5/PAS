@@ -82,21 +82,7 @@ public abstract class AbstractMongoRepository<T> implements AutoCloseable {
 
     public abstract T create(T initObj);
 
-//    public boolean create(T dto) {
-//        InsertOneResult result;
-//        try {
-//            result = this.getCollection().insertOne(dto);
-//        } catch (MongoWriteException e) {
-//            throw new MyMongoException(e.getMessage());
-//        }
-//        return result.wasAcknowledged();
-//    }
-
     public abstract List<T> read(Bson filter);
-
-//    public List<T> read(Bson filter) {
-//        return this.getCollection().find(filter).into(new ArrayList<>());
-//    }
 
     public List<T> readAll() {
         return this.read(Filters.empty());
@@ -119,11 +105,6 @@ public abstract class AbstractMongoRepository<T> implements AutoCloseable {
     }
 
     public abstract boolean updateByReplace(UUID uuid, T dto);
-//    {
-//        Bson filter = Filters.eq("_id", uuid.toString());
-//        UpdateResult result = getCollection().replaceOne(filter, dto);
-//        return result.getModifiedCount() != 0;
-//    }
 
     public boolean delete(UUID uuid) {
         Bson filter = Filters.eq("_id", uuid.toString());

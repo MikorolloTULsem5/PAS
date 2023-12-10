@@ -2,6 +2,7 @@ package unittests.repositoryTests;
 
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.model.Filters;
+import pas.gV.exceptions.CourtNumberException;
 import pas.gV.model.courts.Court;
 import pas.gV.exceptions.MyMongoException;
 import pas.gV.data.datahandling.dto.CourtDTO;
@@ -42,17 +43,17 @@ public class CourtMongoRepositoryTest {
     @BeforeAll
     @AfterAll
     static void cleanFirstAndLastTimeDB() {
-        courtRepository.getDatabase()
-                .getCollection(courtRepository.getCollectionName(), CourtDTO.class).deleteMany(Filters.empty());
+        courtRepository.getDatabase().getCollection("users").deleteMany(Filters.empty());
+        courtRepository.getDatabase().getCollection("courts").deleteMany(Filters.empty());
+        courtRepository.getDatabase().getCollection("reservations").deleteMany(Filters.empty());
     }
 
     @BeforeEach
     void initData() {
         cleanFirstAndLastTimeDB();
-        court1 = new Court(null,100, 200, 1);
-        court2 = new Court(null,200, 200, 2);
-        court3 = new Court(null,300, 300, 3);
-
+        court1 = new Court(UUID.randomUUID(), 100, 200, 1);
+        court2 = new Court(UUID.randomUUID(), 200, 200, 2);
+        court3 = new Court(UUID.randomUUID(), 300, 300, 3);
     }
 
 
@@ -76,16 +77,16 @@ public class CourtMongoRepositoryTest {
         assertEquals(0, getTestCollection().find().into(new ArrayList<>()).size());
         assertNotNull(courtRepository.create(court1));
         assertEquals(1, getTestCollection().find().into(new ArrayList<>()).size());
-        assertThrows(MyMongoException.class, () -> courtRepository.create(court1));
+        assertThrows(CourtNumberException.class, () -> courtRepository.create(court1));
         assertEquals(1, getTestCollection().find().into(new ArrayList<>()).size());
     }
 
     @Test
     void testFindingDocumentsInDBPositive() {
         assertEquals(0, getTestCollection().find().into(new ArrayList<>()).size());
-        assertNotNull(courtRepository.create(court1));
-        assertNotNull(courtRepository.create(court2));
-        assertNotNull(courtRepository.create(court3));
+        Court court1 = courtRepository.create(this.court1);
+        Court court2 = courtRepository.create(this.court2);
+        Court court3 = courtRepository.create(this.court3);
         assertEquals(3, getTestCollection().find().into(new ArrayList<>()).size());
 
         var courtsList1 = courtRepository.read(Filters.eq("area", 300));
@@ -111,9 +112,9 @@ public class CourtMongoRepositoryTest {
     @Test
     void testFindingAllDocumentsInDB() {
         assertEquals(0, getTestCollection().find().into(new ArrayList<>()).size());
-        assertNotNull(courtRepository.create(court1));
-        assertNotNull(courtRepository.create(court2));
-        assertNotNull(courtRepository.create(court3));
+        Court court1 = courtRepository.create(this.court1);
+        Court court2 = courtRepository.create(this.court2);
+        Court court3 = courtRepository.create(this.court3);
         assertEquals(3, getTestCollection().find().into(new ArrayList<>()).size());
 
         var clientsList = courtRepository.readAll();
@@ -126,9 +127,9 @@ public class CourtMongoRepositoryTest {
     @Test
     void testFindingByUUID() {
         assertEquals(0, getTestCollection().find().into(new ArrayList<>()).size());
-        assertNotNull(courtRepository.create(court1));
-        assertNotNull(courtRepository.create(court2));
-        assertNotNull(courtRepository.create(court3));
+        Court court1 = courtRepository.create(this.court1);
+        assertNotNull(courtRepository.create(this.court2));
+        Court court3 = courtRepository.create(this.court3);
         assertEquals(3, getTestCollection().find().into(new ArrayList<>()).size());
 
         Court couMapper1 = courtRepository.readByUUID(UUID.fromString(court1.getId().toString()));
@@ -143,9 +144,9 @@ public class CourtMongoRepositoryTest {
     @Test
     void testDeletingDocumentsInDBPositive() {
         assertEquals(0, getTestCollection().find().into(new ArrayList<>()).size());
-        assertNotNull(courtRepository.create(court1));
-        assertNotNull(courtRepository.create(court2));
-        assertNotNull(courtRepository.create(court3));
+        Court court1 = courtRepository.create(this.court1);
+        Court court2 = courtRepository.create(this.court2);
+        Court court3 = courtRepository.create(this.court3);
         assertEquals(3, getTestCollection().find().into(new ArrayList<>()).size());
 
         assertTrue(courtRepository.delete(UUID.fromString(court2.getId().toString())));
@@ -161,9 +162,9 @@ public class CourtMongoRepositoryTest {
     @Test
     void testDeletingDocumentsInDBNegative() {
         assertEquals(0, getTestCollection().find().into(new ArrayList<>()).size());
-        assertNotNull(courtRepository.create(court1));
-        assertNotNull(courtRepository.create(court2));
-        assertNotNull(courtRepository.create(court3));
+        assertNotNull(courtRepository.create(this.court1));
+        assertNotNull(courtRepository.create(this.court2));
+        Court court3 = courtRepository.create(this.court3);
         assertEquals(3, getTestCollection().find().into(new ArrayList<>()).size());
 
         assertTrue(courtRepository.delete(UUID.fromString(court3.getId().toString())));
@@ -176,37 +177,33 @@ public class CourtMongoRepositoryTest {
     @Test
     void testDeletingDocumentsInDBExistingAllocation() {
         assertEquals(0, getTestCollection().find().into(new ArrayList<>()).size());
-        Client testClient1 = new Client(UUID.randomUUID(), "John", "Smith", "12345678901", "normal");
-        Court testCourt1 = new Court(null,1000, 100, 1);
         LocalDateTime testTimeStart = LocalDateTime.of(2023, Month.JUNE, 4, 12, 0);
-        Reservation testReservation1 = new Reservation(UUID.randomUUID(), testClient1, testCourt1, testTimeStart);
 
-        assertNotNull(courtRepository.create(testCourt1));
-        assertNotNull(courtRepository.create(court2));
-        assertNotNull(courtRepository.create(court3));
+        Court testCourt1 = courtRepository.create(new Court(UUID.randomUUID(), 1000, 100, 1));
+        assertNotNull(courtRepository.create(this.court2));
+        assertNotNull(courtRepository.create(this.court3));
+
         assertEquals(3, getTestCollection().find().into(new ArrayList<>()).size());
 
         try (ReservationMongoRepository reservationMongoRepository = new ReservationMongoRepository();
              UserMongoRepository userMongoRepository = new UserMongoRepository()) {
-            userMongoRepository.create(testClient1);
+            Client testClient1 = (Client) userMongoRepository.create(new Client(UUID.randomUUID(), "John",
+                    "Smith", "999999999999", "normal"));
+            Reservation testReservation1 = new Reservation(UUID.randomUUID(), testClient1, testCourt1, testTimeStart);
             reservationMongoRepository.create(testReservation1);
             assertThrows(IllegalStateException.class, () -> courtRepository.delete(testCourt1.getId()));
             assertEquals(3, getTestCollection().find().into(new ArrayList<>()).size());
 
             reservationMongoRepository.delete(testReservation1.getId());
-            userMongoRepository.delete(testCourt1.getId());
         }
-
-        assertTrue(courtRepository.delete(testCourt1.getId()));
-        assertEquals(2, getTestCollection().find().into(new ArrayList<>()).size());
     }
 
     @Test
     void testUpdatingRecordsInDBPositive() {
         assertEquals(0, getTestCollection().find().into(new ArrayList<>()).size());
-        assertNotNull(courtRepository.create(court1));
-        assertNotNull(courtRepository.create(court2));
-        assertNotNull(courtRepository.create(court3));
+        Court court1 = courtRepository.create(this.court1);
+        Court court2 = courtRepository.create(this.court2);
+        assertNotNull(courtRepository.create(this.court3));
         assertEquals(3, getTestCollection().find().into(new ArrayList<>()).size());
 
         assertEquals(200,
@@ -237,9 +234,9 @@ public class CourtMongoRepositoryTest {
     @Test
     void testUpdatingRecordsInDBNegative() {
         assertEquals(0, getTestCollection().find().into(new ArrayList<>()).size());
-        assertNotNull(courtRepository.create(court1).toString());
-        assertNotNull(courtRepository.create(court2).toString());
-        assertNotNull(courtRepository.create(court3).toString());
+        assertNotNull(courtRepository.create(this.court1));
+        assertNotNull(courtRepository.create(this.court2));
+        Court court3 = courtRepository.create(this.court3);
         assertEquals(3, getTestCollection().find().into(new ArrayList<>()).size());
 
         assertThrows(MyMongoException.class,
@@ -252,9 +249,9 @@ public class CourtMongoRepositoryTest {
     @Test
     void testUpdatingWholeRecordsInDBPositive() {
         assertEquals(0, getTestCollection().find().into(new ArrayList<>()).size());
-        assertNotNull(courtRepository.create(court1));
-        assertNotNull(courtRepository.create(court2));
-        assertNotNull(courtRepository.create(court3));
+        Court court1 = courtRepository.create(this.court1);
+        assertNotNull(courtRepository.create(this.court2));
+        assertNotNull(courtRepository.create(this.court3));
         assertEquals(3, getTestCollection().find().into(new ArrayList<>()).size());
 
         court1.setArea(111);
@@ -267,8 +264,10 @@ public class CourtMongoRepositoryTest {
     @Test
     void testUpdatingWholeRecordsInDBNegative() {
         assertEquals(0, getTestCollection().find().into(new ArrayList<>()).size());
-        assertNotNull(courtRepository.create(court2));
-        assertNotNull(courtRepository.create(court3));
+
+        assertNotNull(courtRepository.create(this.court2));
+        assertNotNull(courtRepository.create(this.court3));
+
         assertEquals(2, getTestCollection().find().into(new ArrayList<>()).size());
 
         court1.setArea(111);

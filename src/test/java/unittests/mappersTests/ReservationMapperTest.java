@@ -35,7 +35,7 @@ public class ReservationMapperTest {
         testClient = new Client(UUID.randomUUID(), "John", "Smith", "12345678901", "normal");
         testClientMapper = ClientMapper.toMongoUser(testClient);
 
-        testCourt = new Court(null, 1000, 100, 1);
+        testCourt = new Court(UUID.randomUUID(), 1000, 100, 1);
         testCourtMapper = CourtMapper.toMongoCourt(testCourt);
 
         testTimeStart = LocalDateTime.of(2023, Month.JUNE, 4, 12, 0);

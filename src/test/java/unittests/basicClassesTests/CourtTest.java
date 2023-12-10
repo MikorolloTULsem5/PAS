@@ -1,6 +1,5 @@
 package unittests.basicClassesTests;
 
-import pas.gV.exceptions.ConstructorParameterException;
 import pas.gV.model.courts.Court;
 import org.junit.jupiter.api.Test;
 
@@ -8,7 +7,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class CourtTest {
 

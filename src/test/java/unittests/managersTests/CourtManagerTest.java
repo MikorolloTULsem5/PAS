@@ -1,5 +1,6 @@
 package unittests.managersTests;
 
+import com.mongodb.client.model.Filters;
 import pas.gV.exceptions.CourtNumberException;
 import pas.gV.model.courts.Court;
 import pas.gV.data.datahandling.dto.CourtDTO;
@@ -20,11 +21,12 @@ import java.time.Month;
 import java.util.ArrayList;
 import java.util.UUID;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class CourtManagerTest {
 
@@ -34,7 +36,9 @@ public class CourtManagerTest {
     @BeforeAll
     @AfterAll
     static void cleanDatabaseFirstAndLastTime() {
-        courtRepository.readAll().forEach((mapper) -> courtRepository.delete(UUID.fromString(mapper.getId().toString())));
+        courtRepository.getDatabase().getCollection("users").deleteMany(Filters.empty());
+        courtRepository.getDatabase().getCollection("courts").deleteMany(Filters.empty());
+        courtRepository.getDatabase().getCollection("reservations").deleteMany(Filters.empty());
     }
 
     @BeforeEach
@@ -81,47 +85,33 @@ public class CourtManagerTest {
         assertNull(cm.getCourtById(UUID.randomUUID()));
     }
 
-//    @Test
-//    void testUnregisteringCourt() {
-//        Court testCourt1 = cm.registerCourt(10, 50, 1);
-//        assertNotNull(testCourt1);
-//        assertEquals(1, cm.getAllCourts().size());
-//        Court testCourt2 = cm.registerCourt(14, 67, 2);
-//        assertNotNull(testCourt2);
-//        assertEquals(2, cm.getAllCourts().size());
-//
-//        assertEquals(2, cm.getAllCourts().size());
-//        assertEquals(testCourt1, cm.getCourt(testCourt1.getId()));
-//        assertFalse(testCourt1.isArchive());
-//
-//        cm.unregisterCourt(testCourt1);
-//
-//        assertEquals(2, cm.getAllCourts().size());
-//        Court dbCourt = cm.getCourt(testCourt1.getId());
-//        assertNotNull(dbCourt);
-//        assertTrue(dbCourt.isArchive());
-//
-//        // Testujemy wyrejestrowanie boiska ktore nie nalezy do repozytorium
-//        Court testCourt3 = new Court(41, 11, 3);
-//        assertNotNull(testCourt3);
-//        assertFalse(testCourt3.isArchive());
-//
-//        assertThrows(CourtException.class, () -> cm.unregisterCourt(testCourt3));
-//        assertFalse(testCourt3.isArchive());
-//        assertEquals(2, cm.getAllCourts().size());
-//
-//        // Testujemy wyrejestrowanie null'a
-//        assertThrows(MainException.class, () -> cm.unregisterCourt(null));
-//        assertEquals(2, cm.getAllCourts().size());
-//    }
+    @Test
+    void testDeactivateCourt() {
+        Court testCourt1 = cm.registerCourt(10, 50, 1);
+        assertNotNull(testCourt1);
+        assertEquals(1, cm.getAllCourts().size());
+        Court testCourt2 = cm.registerCourt(14, 67, 2);
+        assertNotNull(testCourt2);
+        assertEquals(2, cm.getAllCourts().size());
+
+        assertEquals(2, cm.getAllCourts().size());
+        assertEquals(testCourt1, cm.getCourtById(testCourt1.getId()));
+        assertFalse(testCourt1.isArchive());
+
+        cm.deactivateCourt(testCourt1.getId());
+
+        assertEquals(2, cm.getAllCourts().size());
+        Court dbCourt = cm.getCourtById(testCourt1.getId());
+        assertNotNull(dbCourt);
+        assertTrue(dbCourt.isArchive());
+    }
 
     @Test
     void testDeletingCourtSuccess() {
         var collection = courtRepository.getDatabase().getCollection(courtRepository.getCollectionName(), CourtDTO.class);
         assertEquals(0, collection.find().into(new ArrayList<>()).size());
-        Court testCourt1 = new Court(null,1000, 100, 1);
+        Court testCourt1 = courtRepository.create(new Court(null,1000, 100, 1));
 
-        assertNotNull(courtRepository.create(testCourt1));
         assertEquals(1, collection.find().into(new ArrayList<>()).size());
 
         cm.deleteCourt(testCourt1.getId());
@@ -132,28 +122,20 @@ public class CourtManagerTest {
     void testDeletingCourtFailure() {
         var collection = courtRepository.getDatabase().getCollection(courtRepository.getCollectionName(), CourtDTO.class);
         assertEquals(0, collection.find().into(new ArrayList<>()).size());
-        Client testClient1 = new Client(UUID.randomUUID(), "John", "Smith", "12345678901", "normal");
-        Court testCourt1 = new Court(null,1000, 100, 1);
+        Court testCourt1 = courtRepository.create(new Court(null,1000, 100, 1));
         LocalDateTime testTimeStart = LocalDateTime.of(2023, Month.JUNE, 4, 12, 0);
-        Reservation testReservation1 = new Reservation(UUID.randomUUID(), testClient1, testCourt1, testTimeStart);
-
-        assertNotNull(courtRepository.create(testCourt1));
 
         assertEquals(1, collection.find().into(new ArrayList<>()).size());
 
         try (ReservationMongoRepository reservationMongoRepository = new ReservationMongoRepository();
              UserMongoRepository userMongoRepository = new UserMongoRepository()) {
-            userMongoRepository.create(testClient1);
+            Client testClient1 = (Client) userMongoRepository.create(new Client(UUID.randomUUID(), "John", "Smith", "12345678901", "normal"));
+            Reservation testReservation1 = new Reservation(UUID.randomUUID(), testClient1, testCourt1, testTimeStart);
+
             reservationMongoRepository.create(testReservation1);
             assertThrows(CourtException.class, () -> cm.deleteCourt(testCourt1.getId()));
             assertEquals(1, collection.find().into(new ArrayList<>()).size());
-
-            reservationMongoRepository.delete(testReservation1.getId());
-            userMongoRepository.delete(testCourt1.getId());
         }
-
-        assertTrue(courtRepository.delete(testCourt1.getId()));
-        assertEquals(0, collection.find().into(new ArrayList<>()).size());
     }
 
     @Test
