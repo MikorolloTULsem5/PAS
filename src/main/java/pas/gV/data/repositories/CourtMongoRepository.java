@@ -97,7 +97,6 @@ public class CourtMongoRepository extends AbstractMongoRepository<Court> {
     @Override
     public List<Court> read(Bson filter) {
         var list = new ArrayList<Court>();
-        ///TODO a wez se zwroc to jako metode
         for (var el : this.getCollection().find(filter).into(new ArrayList<>())) {
             list.add(CourtMapper.fromMongoCourt(el));
         }

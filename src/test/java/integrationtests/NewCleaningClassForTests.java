@@ -130,7 +130,6 @@ public class NewCleaningClassForTests {
     static Admin admin1;
     static Admin admin2;
 
-    ///TODO mozna rozdzielic dropowanie na osobne klasy
     static void initAdmins() {
         AdminService adminServiceServiceTest = new AdminService(new UserMongoRepository());
         cleanUsers();

@@ -66,9 +66,8 @@ public class ReservationService {
         return reservationRepository.read(Filters.eq("endtime", null));
     }
 
-    ///TODO
     public List<Reservation> getAllArchiveReservations() {
-        return reservationRepository.read(Filters.not(Filters.eq("endtime", null)));
+        return reservationRepository.read(Filters.ne("endtime", null));
     }
 
     public List<Reservation> getAllClientReservations(UUID clientId) {
@@ -81,11 +80,10 @@ public class ReservationService {
                 Filters.eq("endtime", null)));
     }
 
-    ///TODO
     public List<Reservation> getClientEndedReservations(UUID clientId) {
         return reservationRepository.read(Filters.and(
                 Filters.eq("clientid", clientId.toString()),
-                Filters.not(Filters.eq("endtime", null))));
+                Filters.ne("endtime", null)));
     }
 
     public Reservation getCourtCurrentReservation(UUID courtId) {

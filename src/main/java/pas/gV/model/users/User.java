@@ -13,7 +13,6 @@ import java.util.UUID;
 public abstract class User {
 
     private UUID id;
-    //TODO sprawdzic przy modyfikacji
     @Setter
     @NotBlank
     private String login;
