@@ -11,9 +11,11 @@ import jakarta.websocket.server.PathParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -38,27 +40,27 @@ public class ClientController {
         this.clientService = clientService;
     }
 
-//    @PostMapping(path = "/addClient", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-//    public Response addClient(Client client) {
-//        Set<ConstraintViolation<Client>> violations = validator.validate(client);
-//        List<String> errors = violations.stream().map(ConstraintViolation::getMessage).collect(Collectors.toList());
-//        if (!violations.isEmpty()) {
-//            return Response.status(Response.Status.BAD_REQUEST).entity(errors).build();
-//        }
-//
-//        try {
-//            clientService.registerClient(client.getFirstName(), client.getLastName(),
-//                    client.getLogin(), client.getClientTypeName());
-//        } catch (UserLoginException ule) {
-//            return Response.status(Response.Status.CONFLICT).entity(ule.getMessage()).build();
-//        } catch (UserException ue) {
-//            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ue.getMessage()).build();
-//        }
-//
-//        return Response.status(Response.Status.CREATED).build();
-//    }
+    @PostMapping(path = "/addClient")
+    public ResponseEntity<String> addClient(@RequestBody Client client) {
+        Set<ConstraintViolation<Client>> violations = validator.validate(client);
+        List<String> errors = violations.stream().map(ConstraintViolation::getMessage).collect(Collectors.toList());
+        if (!violations.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errors.toString());
+        }
 
-    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+        try {
+            clientService.registerClient(client.getFirstName(), client.getLastName(),
+                    client.getLogin(), client.getClientTypeName());
+        } catch (UserLoginException ule) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(ule.getMessage());
+        } catch (UserException ue) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ue.getMessage());
+        }
+
+        return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
+
+    @GetMapping
     public List<Client> getAllClients(HttpServletResponse response) {
         List<Client> resultList = clientService.getAllClients();
         if (resultList.isEmpty()) {
@@ -68,7 +70,7 @@ public class ClientController {
         return resultList;
     }
 
-    @GetMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(path = "/{id}")
     public Client getClientById(@PathVariable("id") String id, HttpServletResponse response) {
         Client client = clientService.getClientById(UUID.fromString(id));
         if (client == null) {
@@ -77,7 +79,7 @@ public class ClientController {
         return client;
     }
 
-    @GetMapping(path = "/get", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(path = "/get")
     public Client getClientByLogin(@RequestParam("login") String login, HttpServletResponse response) {
         Client client = clientService.getClientByLogin(login);
         if (client == null) {
@@ -85,19 +87,17 @@ public class ClientController {
         }
         return client;
     }
-//
-//    @GET
-//    @Produces(MediaType.APPLICATION_JSON)
-//    @Consumes(MediaType.TEXT_PLAIN)
-//    @Path("/match")
-//    public List<Client> getClientByLoginMatching(@QueryParam("login") String login) {
-//        List<Client> resultList = clientService.getClientByLoginMatching(login);
-//        if (resultList.isEmpty()) {
-//            resultList = null;
-//        }
-//        return resultList;
-//    }
-//
+
+    @GetMapping(path = "/match")
+    public List<Client> getClientByLoginMatching(@RequestParam("login") String login, HttpServletResponse response) {
+        List<Client> resultList = clientService.getClientByLoginMatching(login);
+        if (resultList.isEmpty()) {
+            resultList = null;
+            response.setStatus(HttpStatus.NO_CONTENT.value());
+        }
+        return resultList;
+    }
+
 //    @PUT
 //    @Produces(MediaType.APPLICATION_JSON)
 //    @Consumes(MediaType.APPLICATION_JSON)

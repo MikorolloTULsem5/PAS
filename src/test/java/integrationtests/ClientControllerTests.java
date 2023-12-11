@@ -72,99 +72,100 @@ public class ClientControllerTests {
         assertEquals(204, response.getStatusCode());
     }
 
-//    @Test
-//    void createClientTestPos() throws URISyntaxException {
-//        cleanUsers();
-//        String JSON = """
-//                {
-//                  "firstName": "John",
-//                  "lastName": "Bravo",
-//                  "login": "johnBravo",
-//                  "clientTypeName": "normal"
-//                }
-//                """;
-//        RequestSpecification requestPost = RestAssured.given();
-//        requestPost.contentType("application/json");
-//        requestPost.body(JSON);
-//
-//        RequestSpecification requestGet = RestAssured.given();
-//        String responseString = requestGet.get(new URI(appUrlClient)).asString();
-//
-//        assertTrue(responseString.isEmpty());
-//
-//        Response responsePost = requestPost.post(appUrlClient + "/addClient");
-//
-//        assertEquals(201, responsePost.getStatusCode());
-//
-//        responseString = requestGet.get(new URI(appUrlClient)).asString();
-//
-//        assertTrue(responseString.contains("\"login\":\"johnBravo\""));
-//        assertTrue(responseString.contains("\"clientTypeName\":\"normal\""));
-//        assertTrue(responseString.contains("\"firstName\":\"John\""));
-//        assertTrue(responseString.contains("\"lastName\":\"Bravo\""));
-//    }
-//
-//    @Test
-//    void createClientTestNegInvalidData() throws URISyntaxException {
-//        String json = """
-//                {
-//                  "firstName": "John",
-//                  "lastName": "  ",
-//                  "login": "johnBravo",
-//                  "clientTypeName": "normal"
-//                }
-//                """;
-//        RequestSpecification requestPost = RestAssured.given();
-//        requestPost.contentType("application/json");
-//        requestPost.body(json);
-//
-//        RequestSpecification requestGet = RestAssured.given();
-//        String responseString = requestGet.get(new URI(appUrlClient)).asString();
-//
-//        assertFalse(responseString.contains("\"login\":\"johnBravo\""));
-//        assertFalse(responseString.contains("\"lastName\":\"  \""));
-//
-//        Response responsePost = requestPost.post(appUrlClient + "/addClient");
-//
-//        assertEquals(400, responsePost.getStatusCode());
-//
-//        responseString = requestGet.get(new URI(appUrlClient)).asString();
-//
-//        assertFalse(responseString.contains("\"login\":\"johnBravo\""));
-//        assertFalse(responseString.contains("\"lastName\":\"  \""));
-//    }
-//
-//    @Test
-//    void createClientTestNegSameLogin() throws URISyntaxException {
-//        String json = """
-//                {
-//                  "firstName": "John",
-//                  "lastName": "Bravo",
-//                  "login": "michas13",
-//                  "clientTypeName": "normal"
-//                }
-//                """;
-//        RequestSpecification requestPost = RestAssured.given();
-//        requestPost.contentType("application/json");
-//        requestPost.body(json);
-//
-//        RequestSpecification requestGet = RestAssured.given();
-//        String responseString = requestGet.get(new URI(appUrlClient)).asString();
-//
-//        assertTrue(responseString.contains("\"login\":\"michas13\""));
-//
-//        assertFalse(responseString.contains("\"firstName\":\"John\""));
-//        assertFalse(responseString.contains("\"lastName\":\"Bravo\""));
-//
-//        Response responsePost = requestPost.post(appUrlClient + "/addClient");
-//
-//        assertEquals(409, responsePost.getStatusCode());
-//
-//        responseString = requestGet.get(new URI(appUrlClient)).asString();
-//
-//        assertFalse(responseString.contains("\"firstName\":\"John\""));
-//        assertFalse(responseString.contains("\"lastName\":\"Bravo\""));
-//    }
+    @Test
+    void createClientTestPos() throws URISyntaxException {
+        cleanUsers();
+        String JSON = """
+                {
+                  "firstName": "John",
+                  "lastName": "Bravo",
+                  "login": "johnBravo",
+                  "clientTypeName": "normal"
+                }
+                """;
+        RequestSpecification requestPost = RestAssured.given();
+        requestPost.contentType("application/json");
+        requestPost.body(JSON);
+
+        RequestSpecification requestGet = RestAssured.given();
+        String responseString = requestGet.get(new URI(appUrlClient)).asString();
+
+        assertTrue(responseString.isEmpty());
+
+        Response responsePost = requestPost.post(appUrlClient + "/addClient");
+
+        System.out.println(responsePost.asString());
+        assertEquals(201, responsePost.getStatusCode());
+
+        responseString = requestGet.get(new URI(appUrlClient)).asString();
+
+        assertTrue(responseString.contains("\"login\":\"johnBravo\""));
+        assertTrue(responseString.contains("\"clientTypeName\":\"normal\""));
+        assertTrue(responseString.contains("\"firstName\":\"John\""));
+        assertTrue(responseString.contains("\"lastName\":\"Bravo\""));
+    }
+
+    @Test
+    void createClientTestNegInvalidData() throws URISyntaxException {
+        String json = """
+                {
+                  "firstName": "John",
+                  "lastName": "  ",
+                  "login": "johnBravo",
+                  "clientTypeName": "normal"
+                }
+                """;
+        RequestSpecification requestPost = RestAssured.given();
+        requestPost.contentType("application/json");
+        requestPost.body(json);
+
+        RequestSpecification requestGet = RestAssured.given();
+        String responseString = requestGet.get(new URI(appUrlClient)).asString();
+
+        assertFalse(responseString.contains("\"login\":\"johnBravo\""));
+        assertFalse(responseString.contains("\"lastName\":\"  \""));
+
+        Response responsePost = requestPost.post(appUrlClient + "/addClient");
+
+        assertEquals(400, responsePost.getStatusCode());
+
+        responseString = requestGet.get(new URI(appUrlClient)).asString();
+
+        assertFalse(responseString.contains("\"login\":\"johnBravo\""));
+        assertFalse(responseString.contains("\"lastName\":\"  \""));
+    }
+
+    @Test
+    void createClientTestNegSameLogin() throws URISyntaxException {
+        String json = """
+                {
+                  "firstName": "John",
+                  "lastName": "Bravo",
+                  "login": "michas13",
+                  "clientTypeName": "normal"
+                }
+                """;
+        RequestSpecification requestPost = RestAssured.given();
+        requestPost.contentType("application/json");
+        requestPost.body(json);
+
+        RequestSpecification requestGet = RestAssured.given();
+        String responseString = requestGet.get(new URI(appUrlClient)).asString();
+
+        assertTrue(responseString.contains("\"login\":\"michas13\""));
+
+        assertFalse(responseString.contains("\"firstName\":\"John\""));
+        assertFalse(responseString.contains("\"lastName\":\"Bravo\""));
+
+        Response responsePost = requestPost.post(appUrlClient + "/addClient");
+
+        assertEquals(409, responsePost.getStatusCode());
+
+        responseString = requestGet.get(new URI(appUrlClient)).asString();
+
+        assertFalse(responseString.contains("\"firstName\":\"John\""));
+        assertFalse(responseString.contains("\"lastName\":\"Bravo\""));
+    }
 
     @Test
     void getClientByLoginTest() throws URISyntaxException {
@@ -215,44 +216,44 @@ public class ClientControllerTests {
         assertEquals(204, response.getStatusCode());
     }
 
-//    @Test
-//    void getClientByLoginMatchingPos() throws URISyntaxException {
-//        RequestSpecification request = RestAssured.given();
-//        Response response = request.get(new URI(appUrlClient + "/match?login=login"));
-//        String responseString = response.asString();
-//
-//        String[] splitedRespStr = responseString.split("},");
-//
-//        assertEquals(2, splitedRespStr.length);
-//
-//        //First Client
-//        assertTrue(splitedRespStr[0].contains(
-//                "\"login\":\"loginek\"," +
-//                "\"clientTypeName\":\"normal\"," +
-//                "\"firstName\":\"Adam\"," +
-//                "\"lastName\":\"Smith\""));
-//
-//        //Second Client
-//        assertTrue(splitedRespStr[1].contains(
-//                "\"login\":\"loginek13\"," +
-//                "\"clientTypeName\":\"athlete\"," +
-//                "\"firstName\":\"Eva\"," +
-//                "\"lastName\":\"Braun\""));
-//
-//        assertEquals(200, response.getStatusCode());
-//    }
-//
-//    @Test
-//    void getClientByLoginMatchingNoCont() throws URISyntaxException {
-//        RequestSpecification request = RestAssured.given();
-//        Response response = request.get(new URI(appUrlClient + "/match?login=uwuwuuwuwu"));
-//        String responseString = response.asString();
-//
-//        assertTrue(responseString.isEmpty());
-//
-//        assertEquals(204, response.getStatusCode());
-//    }
-//
+    @Test
+    void getClientByLoginMatchingPos() throws URISyntaxException {
+        RequestSpecification request = RestAssured.given();
+        Response response = request.get(new URI(appUrlClient + "/match?login=login"));
+        String responseString = response.asString();
+
+        String[] splitedRespStr = responseString.split("},");
+
+        assertEquals(2, splitedRespStr.length);
+
+        //First Client
+        assertTrue(splitedRespStr[0].contains(
+                "\"login\":\"loginek\"," +
+                "\"clientTypeName\":\"normal\"," +
+                "\"firstName\":\"Adam\"," +
+                "\"lastName\":\"Smith\""));
+
+        //Second Client
+        assertTrue(splitedRespStr[1].contains(
+                "\"login\":\"loginek13\"," +
+                "\"clientTypeName\":\"athlete\"," +
+                "\"firstName\":\"Eva\"," +
+                "\"lastName\":\"Braun\""));
+
+        assertEquals(200, response.getStatusCode());
+    }
+
+    @Test
+    void getClientByLoginMatchingNoCont() throws URISyntaxException {
+        RequestSpecification request = RestAssured.given();
+        Response response = request.get(new URI(appUrlClient + "/match?login=uwuwuuwuwu"));
+        String responseString = response.asString();
+
+        assertTrue(responseString.isEmpty());
+
+        assertEquals(204, response.getStatusCode());
+    }
+
 //    @Test
 //    void modifyClientTest() throws URISyntaxException {
 //        String JSON = """
