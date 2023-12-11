@@ -1,5 +1,6 @@
 package pas.gV.model.users;
 
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
@@ -10,6 +11,7 @@ import java.util.Objects;
 import java.util.UUID;
 
 @NoArgsConstructor
+@JsonPropertyOrder({"archive", "id", "login", "clientTypeName", "firstName", "lastName"})
 public class Client extends User {
 
     private enum ClientType {

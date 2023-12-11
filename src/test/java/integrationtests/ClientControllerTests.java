@@ -61,17 +61,17 @@ public class ClientControllerTests {
         assertEquals(200, response.getStatusCode());
     }
 
-//    @Test
-//    void getAllClientsTestNoCont() throws URISyntaxException {
-//        cleanUsers();
-//        RequestSpecification request = RestAssured.given();
-//        Response response = request.get(new URI(appUrlClient));
-//        String responseString = response.asString();
-//
-//        assertTrue(responseString.isEmpty());
-//        assertEquals(204, response.getStatusCode());
-//    }
-//
+    @Test
+    void getAllClientsTestNoCont() throws URISyntaxException {
+        cleanUsers();
+        RequestSpecification request = RestAssured.given();
+        Response response = request.get(new URI(appUrlClient));
+        String responseString = response.asString();
+
+        assertTrue(responseString.isEmpty());
+        assertEquals(204, response.getStatusCode());
+    }
+
 //    @Test
 //    void createClientTestPos() throws URISyntaxException {
 //        cleanUsers();
@@ -165,55 +165,56 @@ public class ClientControllerTests {
 //        assertFalse(responseString.contains("\"firstName\":\"John\""));
 //        assertFalse(responseString.contains("\"lastName\":\"Bravo\""));
 //    }
-//
-//    @Test
-//    void getClientByLoginTest() throws URISyntaxException {
-//        RequestSpecification request = RestAssured.given();
-//        Response response = request.get(new URI(appUrlClient + "/get?login=michas13"));
-//        String responseString = response.asString();
-//
-//        assertTrue(responseString.contains("\"login\":\"michas13\",\"clientTypeName\":\"coach\",\"firstName\":\"Michal\",\"lastName\":\"Pi\""));
-//
-//        assertEquals(200, response.getStatusCode());
-//    }
-//
-//    @Test
-//    void getClientByLoginTestNoCont() throws URISyntaxException {
-//        RequestSpecification request = RestAssured.given();
-//        Response response = request.get(new URI(appUrlClient + "/get?login=564545415612121121"));
-//        String responseString = response.asString();
-//
-//        assertTrue(responseString.isEmpty());
-//        assertEquals(204, response.getStatusCode());
-//    }
-//
-//    @Test
-//    void getClientByIdTest() throws URISyntaxException {
-//        RequestSpecification request = RestAssured.given();
-//
-//        //Retrieve UUID
-//        String responseLogin = request.get(new URI(appUrlClient + "/get?login=michas13")).asString();
-//        int index = responseLogin.indexOf("\"id\":\"") + 6;
-//        String clientId = responseLogin.substring(index, index + 36);
-//
-//        Response responseById = request.get(new URI(appUrlClient + "/" + clientId));
-//        String responseByIdString = responseById.asString();
-//
-//        assertTrue(responseByIdString.contains("\"login\":\"michas13\",\"clientTypeName\":\"coach\",\"firstName\":\"Michal\",\"lastName\":\"Pi\""));
-//
-//        assertEquals(200, responseById.getStatusCode());
-//    }
-//
-//    @Test
-//    void getClientByIdTestNoCont() throws URISyntaxException {
-//        RequestSpecification request = RestAssured.given();
-//        Response response = request.get(new URI(appUrlClient + "/" + UUID.randomUUID()));
-//        String responseString = response.asString();
-//
-//        assertTrue(responseString.isEmpty());
-//        assertEquals(204, response.getStatusCode());
-//    }
-//
+
+    @Test
+    void getClientByLoginTest() throws URISyntaxException {
+        RequestSpecification request = RestAssured.given();
+        Response response = request.get(new URI(appUrlClient + "/get?login=michas13"));
+        String responseString = response.asString();
+
+        assertTrue(responseString.contains("\"login\":\"michas13\",\"clientTypeName\":\"coach\",\"firstName\":\"Michal\",\"lastName\":\"Pi\""));
+
+        assertEquals(200, response.getStatusCode());
+    }
+
+    @Test
+    void getClientByLoginTestNoCont() throws URISyntaxException {
+        RequestSpecification request = RestAssured.given();
+        Response response = request.get(new URI(appUrlClient + "/get?login=564545415612121121"));
+        String responseString = response.asString();
+
+        assertTrue(responseString.isEmpty());
+        assertEquals(204, response.getStatusCode());
+    }
+
+    @Test
+    void getClientByIdTest() throws URISyntaxException {
+        RequestSpecification request = RestAssured.given();
+
+        //Retrieve UUID
+        String responseLogin = request.get(new URI(appUrlClient + "/get?login=michas13")).asString();
+        int index = responseLogin.indexOf("\"id\":\"") + 6;
+        String clientId = responseLogin.substring(index, index + 36);
+
+        Response responseById = request.get(new URI(appUrlClient + "/" + clientId));
+        String responseByIdString = responseById.asString();
+
+        System.out.println(responseByIdString);
+        assertTrue(responseByIdString.contains("\"login\":\"michas13\",\"clientTypeName\":\"coach\",\"firstName\":\"Michal\",\"lastName\":\"Pi\""));
+
+        assertEquals(200, responseById.getStatusCode());
+    }
+
+    @Test
+    void getClientByIdTestNoCont() throws URISyntaxException {
+        RequestSpecification request = RestAssured.given();
+        Response response = request.get(new URI(appUrlClient + "/" + UUID.randomUUID()));
+        String responseString = response.asString();
+
+        assertTrue(responseString.isEmpty());
+        assertEquals(204, response.getStatusCode());
+    }
+
 //    @Test
 //    void getClientByLoginMatchingPos() throws URISyntaxException {
 //        RequestSpecification request = RestAssured.given();

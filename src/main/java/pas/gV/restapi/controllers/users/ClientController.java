@@ -1,15 +1,21 @@
 package pas.gV.restapi.controllers.users;
 
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validation;
 import jakarta.validation.Validator;
 //import jakarta.ws.rs.*;
 //import jakarta.ws.rs.core.Response;
+import jakarta.websocket.server.PathParam;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import pas.gV.exceptions.UserException;
 import pas.gV.exceptions.UserLoginException;
@@ -53,29 +59,32 @@ public class ClientController {
 //    }
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<Client> getAllClients() {
+    public List<Client> getAllClients(HttpServletResponse response) {
         List<Client> resultList = clientService.getAllClients();
         if (resultList.isEmpty()) {
             resultList = null;
+            response.setStatus(HttpStatus.NO_CONTENT.value());
         }
         return resultList;
     }
 
-//    @GET
-//    @Produces(MediaType.APPLICATION_JSON)
-//    @Consumes(MediaType.TEXT_PLAIN)
-//    @Path("/{id}")
-//    public Client getClientById(@PathParam("id") String id) {
-//        return clientService.getClientById(UUID.fromString(id));
-//    }
-//
-//    @GET
-//    @Produces(MediaType.APPLICATION_JSON)
-//    @Consumes(MediaType.TEXT_PLAIN)
-//    @Path("/get")
-//    public Client getClientByLogin(@QueryParam("login") String login) {
-//        return clientService.getClientByLogin(login);
-//    }
+    @GetMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public Client getClientById(@PathVariable("id") String id, HttpServletResponse response) {
+        Client client = clientService.getClientById(UUID.fromString(id));
+        if (client == null) {
+            response.setStatus(HttpStatus.NO_CONTENT.value());
+        }
+        return client;
+    }
+
+    @GetMapping(path = "/get", produces = MediaType.APPLICATION_JSON_VALUE)
+    public Client getClientByLogin(@RequestParam("login") String login, HttpServletResponse response) {
+        Client client = clientService.getClientByLogin(login);
+        if (client == null) {
+            response.setStatus(HttpStatus.NO_CONTENT.value());
+        }
+        return client;
+    }
 //
 //    @GET
 //    @Produces(MediaType.APPLICATION_JSON)
