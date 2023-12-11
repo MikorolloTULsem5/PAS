@@ -254,235 +254,236 @@ public class ClientControllerTests {
         assertEquals(204, response.getStatusCode());
     }
 
-//    @Test
-//    void modifyClientTest() throws URISyntaxException {
-//        String JSON = """
-//                {
-//                  "archive": true,
-//                  "firstName": "John",
-//                  "lastName": "Smith",
-//                  "login": "loginek",
-//                  "clientTypeName": "coach"
-//                }
-//                """;
-//        RequestSpecification requestPut = RestAssured.given();
-//        requestPut.contentType("application/json");
-//        requestPut.body(JSON);
-//
-//        RequestSpecification requestGet = RestAssured.given();
-//        String responseString = requestGet.get(new URI(appUrlClient)).asString();
-//
-//        //Retrieve UUID
-//        String responseLogin = requestGet.get(new URI(appUrlClient + "/get?login=loginek")).asString();
-//        int index = responseLogin.indexOf("\"id\":\"") + 6;
-//        String clientId = responseLogin.substring(index, index + 36);
-//
-//        assertTrue(responseString.contains(
-//                "\"archive\":false," +
-//                "\"id\":\"" + clientId + "\"," +
-//                "\"login\":\"loginek\"," +
-//                "\"clientTypeName\":\"normal\"," +
-//                "\"firstName\":\"Adam\"," +
-//                "\"lastName\":\"Smith\""));
-//        assertFalse(responseString.contains(
-//                "\"archive\":true," +
-//                "\"id\":\"" + clientId + "\"," +
-//                "\"login\":\"loginek\"," +
-//                "\"clientTypeName\":\"coach\"," +
-//                "\"firstName\":\"John\"," +
-//                "\"lastName\":\"Smith\""));
-//
-//        Response responsePut = requestPut.put(appUrlClient + "/modifyClient/" + clientId);
-//
-//        assertEquals(204, responsePut.getStatusCode());
-//
-//        responseString = requestGet.get(new URI(appUrlClient)).asString();
-//
-//        assertFalse(responseString.contains(
-//                "\"archive\":false," +
-//                "\"id\":\"" + clientId + "\"," +
-//                "\"login\":\"loginek\"," +
-//                "\"clientTypeName\":\"normal\"," +
-//                "\"firstName\":\"Adam\"," +
-//                "\"lastName\":\"Smith\""));
-//        assertTrue(responseString.contains(
-//                "\"archive\":true," +
-//                "\"id\":\"" + clientId + "\"," +
-//                "\"login\":\"loginek\"," +
-//                "\"clientTypeName\":\"coach\"," +
-//                "\"firstName\":\"John\"," +
-//                "\"lastName\":\"Smith\""));
-//    }
-//
-//    @Test
-//    void modifyClientTestNegInvalidData() throws URISyntaxException {
-//        String JSON = """
-//                {
-//                  "archive": true,
-//                  "firstName": "   ",
-//                  "lastName": "Smith",
-//                  "login": "loginek",
-//                  "clientTypeName": "coach"
-//                }
-//                """;
-//        RequestSpecification requestPut = RestAssured.given();
-//        requestPut.contentType("application/json");
-//        requestPut.body(JSON);
-//
-//        RequestSpecification requestGet = RestAssured.given();
-//        String responseString = requestGet.get(new URI(appUrlClient)).asString();
-//
-//        //Retrieve UUID
-//        String responseLogin = requestGet.get(new URI(appUrlClient + "/get?login=loginek")).asString();
-//        int index = responseLogin.indexOf("\"id\":\"") + 6;
-//        String clientId = responseLogin.substring(index, index + 36);
-//
-//        assertTrue(responseString.contains(
-//                "\"archive\":false," +
-//                "\"id\":\"" + clientId + "\"," +
-//                "\"login\":\"loginek\"," +
-//                "\"clientTypeName\":\"normal\"," +
-//                "\"firstName\":\"Adam\"," +
-//                "\"lastName\":\"Smith\""));
-//        assertFalse(responseString.contains(
-//                "\"archive\":true," +
-//                "\"id\":\"" + clientId + "\"," +
-//                "\"login\":\"loginek\"," +
-//                "\"clientTypeName\":\"coach\"," +
-//                "\"firstName\":\"John\"," +
-//                "\"lastName\":\"Smith\""));
-//
-//        Response responsePut = requestPut.put(appUrlClient + "/modifyClient/" + clientId);
-//
-//        assertEquals(400, responsePut.getStatusCode());
-//
-//        responseString = requestGet.get(new URI(appUrlClient)).asString();
-//
-//        assertTrue(responseString.contains(
-//                "\"archive\":false," +
-//                "\"id\":\"" + clientId + "\"," +
-//                "\"login\":\"loginek\"," +
-//                "\"clientTypeName\":\"normal\"," +
-//                "\"firstName\":\"Adam\"," +
-//                "\"lastName\":\"Smith\""));
-//        assertFalse(responseString.contains(
-//                "\"archive\":true," +
-//                "\"id\":\"" + clientId + "\"," +
-//                "\"login\":\"loginek\"," +
-//                "\"clientTypeName\":\"coach\"," +
-//                "\"firstName\":\"John\"," +
-//                "\"lastName\":\"Smith\""));
-//    }
-//
-//    @Test
-//    void modifyClientTestNegRepeatLoginOfAnotherClient() throws URISyntaxException {
-//        String JSON = """
-//                {
-//                  "archive": true,
-//                  "firstName": "John",
-//                  "lastName": "Smith",
-//                  "login": "michas13",
-//                  "clientTypeName": "coach"
-//                }
-//                """;
-//        RequestSpecification requestPut = RestAssured.given();
-//        requestPut.contentType("application/json");
-//        requestPut.body(JSON);
-//
-//        RequestSpecification requestGet = RestAssured.given();
-//        String responseString = requestGet.get(new URI(appUrlClient)).asString();
-//
-//        //Retrieve UUID
-//        String responseLogin = requestGet.get(new URI(appUrlClient + "/get?login=loginek")).asString();
-//        int index = responseLogin.indexOf("\"id\":\"") + 6;
-//        String clientId = responseLogin.substring(index, index + 36);
-//
-//        assertTrue(responseString.contains("\"login\":\"michas13\""));
-//
-//        assertTrue(responseString.contains(
-//                "\"archive\":false," +
-//                "\"id\":\"" + clientId + "\"," +
-//                "\"login\":\"loginek\"," +
-//                "\"clientTypeName\":\"normal\"," +
-//                "\"firstName\":\"Adam\"," +
-//                "\"lastName\":\"Smith\""));
-//        assertFalse(responseString.contains(
-//                "\"archive\":true," +
-//                "\"id\":\"" + clientId + "\"," +
-//                "\"login\":\"michas13\"," +
-//                "\"clientTypeName\":\"coach\"," +
-//                "\"firstName\":\"John\"," +
-//                "\"lastName\":\"Smith\""));
-//
-//        Response responsePut = requestPut.put(appUrlClient + "/modifyClient/" + clientId);
-//
-//        assertEquals(409, responsePut.getStatusCode());
-//
-//        responseString = requestGet.get(new URI(appUrlClient)).asString();
-//
-//        assertTrue(responseString.contains("\"login\":\"michas13\""));
-//
-//        assertTrue(responseString.contains(
-//                "\"archive\":false," +
-//                "\"id\":\"" + clientId + "\"," +
-//                "\"login\":\"loginek\"," +
-//                "\"clientTypeName\":\"normal\"," +
-//                "\"firstName\":\"Adam\"," +
-//                "\"lastName\":\"Smith\""));
-//        assertFalse(responseString.contains(
-//                "\"archive\":true," +
-//                "\"id\":\"" + clientId + "\"," +
-//                "\"login\":\"michas13\"," +
-//                "\"clientTypeName\":\"coach\"," +
-//                "\"firstName\":\"John\"," +
-//                "\"lastName\":\"Smith\""));
-//    }
-//
-//    @Test
-//    void archiveAndActivateClientTest() throws URISyntaxException {
-//        RequestSpecification requestGet = RestAssured.given();
-//        String responseString = requestGet.get(new URI(appUrlClient)).asString();
-//
-//        //Retrieve UUID
-//        String responseLogin = requestGet.get(new URI(appUrlClient + "/get?login=loginek")).asString();
-//        int index = responseLogin.indexOf("\"id\":\"") + 6;
-//        String clientId = responseLogin.substring(index, index + 36);
-//
-//        /*Archive test*/
-//        assertTrue(responseString.contains(
-//                "\"archive\":false," +
-//                "\"id\":\"" + clientId + "\""));
-//        assertFalse(responseString.contains(
-//                "\"archive\":true," +
-//                "\"id\":\"" + clientId + "\""));
-//
-//        RequestSpecification requestPost = RestAssured.given();
-//        Response responsePost = requestPost.post(appUrlClient + "/deactivate/" + clientId);
-//
-//        assertEquals(204, responsePost.getStatusCode());
-//
-//        responseString = requestGet.get(new URI(appUrlClient)).asString();
-//
-//        assertFalse(responseString.contains(
-//                "\"archive\":false," +
-//                "\"id\":\"" + clientId + "\""));
-//        assertTrue(responseString.contains(
-//                "\"archive\":true," +
-//                "\"id\":\"" + clientId + "\""));
-//
-//        /*Activate test*/
-//        RequestSpecification requestPost2 = RestAssured.given();
-//        Response responsePost2 = requestPost2.post(appUrlClient + "/activate/" + clientId);
-//
-//        assertEquals(204, responsePost2.getStatusCode());
-//
-//        responseString = requestGet.get(new URI(appUrlClient)).asString();
-//
-//        assertTrue(responseString.contains(
-//                "\"archive\":false," +
-//                "\"id\":\"" + clientId + "\""));
-//        assertFalse(responseString.contains(
-//                "\"archive\":true," +
-//                "\"id\":\"" + clientId + "\""));
-//    }
+    @Test
+    void modifyClientTest() throws URISyntaxException {
+        String JSON = """
+                {
+                  "archive": true,
+                  "firstName": "John",
+                  "lastName": "Smith",
+                  "login": "loginek",
+                  "clientTypeName": "coach"
+                }
+                """;
+        RequestSpecification requestPut = RestAssured.given();
+        requestPut.contentType("application/json");
+        requestPut.body(JSON);
+
+        RequestSpecification requestGet = RestAssured.given();
+        String responseString = requestGet.get(new URI(appUrlClient)).asString();
+
+        //Retrieve UUID
+        String responseLogin = requestGet.get(new URI(appUrlClient + "/get?login=loginek")).asString();
+        int index = responseLogin.indexOf("\"id\":\"") + 6;
+        String clientId = responseLogin.substring(index, index + 36);
+
+        assertTrue(responseString.contains(
+                "\"archive\":false," +
+                "\"id\":\"" + clientId + "\"," +
+                "\"login\":\"loginek\"," +
+                "\"clientTypeName\":\"normal\"," +
+                "\"firstName\":\"Adam\"," +
+                "\"lastName\":\"Smith\""));
+        assertFalse(responseString.contains(
+                "\"archive\":true," +
+                "\"id\":\"" + clientId + "\"," +
+                "\"login\":\"loginek\"," +
+                "\"clientTypeName\":\"coach\"," +
+                "\"firstName\":\"John\"," +
+                "\"lastName\":\"Smith\""));
+
+        Response responsePut = requestPut.put(appUrlClient + "/modifyClient/" + clientId);
+
+        System.out.println(responsePut.asString());
+        assertEquals(204, responsePut.getStatusCode());
+
+        responseString = requestGet.get(new URI(appUrlClient)).asString();
+
+        assertFalse(responseString.contains(
+                "\"archive\":false," +
+                "\"id\":\"" + clientId + "\"," +
+                "\"login\":\"loginek\"," +
+                "\"clientTypeName\":\"normal\"," +
+                "\"firstName\":\"Adam\"," +
+                "\"lastName\":\"Smith\""));
+        assertTrue(responseString.contains(
+                "\"archive\":true," +
+                "\"id\":\"" + clientId + "\"," +
+                "\"login\":\"loginek\"," +
+                "\"clientTypeName\":\"coach\"," +
+                "\"firstName\":\"John\"," +
+                "\"lastName\":\"Smith\""));
+    }
+
+    @Test
+    void modifyClientTestNegInvalidData() throws URISyntaxException {
+        String JSON = """
+                {
+                  "archive": true,
+                  "firstName": "   ",
+                  "lastName": "Smith",
+                  "login": "loginek",
+                  "clientTypeName": "coach"
+                }
+                """;
+        RequestSpecification requestPut = RestAssured.given();
+        requestPut.contentType("application/json");
+        requestPut.body(JSON);
+
+        RequestSpecification requestGet = RestAssured.given();
+        String responseString = requestGet.get(new URI(appUrlClient)).asString();
+
+        //Retrieve UUID
+        String responseLogin = requestGet.get(new URI(appUrlClient + "/get?login=loginek")).asString();
+        int index = responseLogin.indexOf("\"id\":\"") + 6;
+        String clientId = responseLogin.substring(index, index + 36);
+
+        assertTrue(responseString.contains(
+                "\"archive\":false," +
+                "\"id\":\"" + clientId + "\"," +
+                "\"login\":\"loginek\"," +
+                "\"clientTypeName\":\"normal\"," +
+                "\"firstName\":\"Adam\"," +
+                "\"lastName\":\"Smith\""));
+        assertFalse(responseString.contains(
+                "\"archive\":true," +
+                "\"id\":\"" + clientId + "\"," +
+                "\"login\":\"loginek\"," +
+                "\"clientTypeName\":\"coach\"," +
+                "\"firstName\":\"John\"," +
+                "\"lastName\":\"Smith\""));
+
+        Response responsePut = requestPut.put(appUrlClient + "/modifyClient/" + clientId);
+
+        assertEquals(400, responsePut.getStatusCode());
+
+        responseString = requestGet.get(new URI(appUrlClient)).asString();
+
+        assertTrue(responseString.contains(
+                "\"archive\":false," +
+                "\"id\":\"" + clientId + "\"," +
+                "\"login\":\"loginek\"," +
+                "\"clientTypeName\":\"normal\"," +
+                "\"firstName\":\"Adam\"," +
+                "\"lastName\":\"Smith\""));
+        assertFalse(responseString.contains(
+                "\"archive\":true," +
+                "\"id\":\"" + clientId + "\"," +
+                "\"login\":\"loginek\"," +
+                "\"clientTypeName\":\"coach\"," +
+                "\"firstName\":\"John\"," +
+                "\"lastName\":\"Smith\""));
+    }
+
+    @Test
+    void modifyClientTestNegRepeatLoginOfAnotherClient() throws URISyntaxException {
+        String JSON = """
+                {
+                  "archive": true,
+                  "firstName": "John",
+                  "lastName": "Smith",
+                  "login": "michas13",
+                  "clientTypeName": "coach"
+                }
+                """;
+        RequestSpecification requestPut = RestAssured.given();
+        requestPut.contentType("application/json");
+        requestPut.body(JSON);
+
+        RequestSpecification requestGet = RestAssured.given();
+        String responseString = requestGet.get(new URI(appUrlClient)).asString();
+
+        //Retrieve UUID
+        String responseLogin = requestGet.get(new URI(appUrlClient + "/get?login=loginek")).asString();
+        int index = responseLogin.indexOf("\"id\":\"") + 6;
+        String clientId = responseLogin.substring(index, index + 36);
+
+        assertTrue(responseString.contains("\"login\":\"michas13\""));
+
+        assertTrue(responseString.contains(
+                "\"archive\":false," +
+                "\"id\":\"" + clientId + "\"," +
+                "\"login\":\"loginek\"," +
+                "\"clientTypeName\":\"normal\"," +
+                "\"firstName\":\"Adam\"," +
+                "\"lastName\":\"Smith\""));
+        assertFalse(responseString.contains(
+                "\"archive\":true," +
+                "\"id\":\"" + clientId + "\"," +
+                "\"login\":\"michas13\"," +
+                "\"clientTypeName\":\"coach\"," +
+                "\"firstName\":\"John\"," +
+                "\"lastName\":\"Smith\""));
+
+        Response responsePut = requestPut.put(appUrlClient + "/modifyClient/" + clientId);
+
+        assertEquals(409, responsePut.getStatusCode());
+
+        responseString = requestGet.get(new URI(appUrlClient)).asString();
+
+        assertTrue(responseString.contains("\"login\":\"michas13\""));
+
+        assertTrue(responseString.contains(
+                "\"archive\":false," +
+                "\"id\":\"" + clientId + "\"," +
+                "\"login\":\"loginek\"," +
+                "\"clientTypeName\":\"normal\"," +
+                "\"firstName\":\"Adam\"," +
+                "\"lastName\":\"Smith\""));
+        assertFalse(responseString.contains(
+                "\"archive\":true," +
+                "\"id\":\"" + clientId + "\"," +
+                "\"login\":\"michas13\"," +
+                "\"clientTypeName\":\"coach\"," +
+                "\"firstName\":\"John\"," +
+                "\"lastName\":\"Smith\""));
+    }
+
+    @Test
+    void archiveAndActivateClientTest() throws URISyntaxException {
+        RequestSpecification requestGet = RestAssured.given();
+        String responseString = requestGet.get(new URI(appUrlClient)).asString();
+
+        //Retrieve UUID
+        String responseLogin = requestGet.get(new URI(appUrlClient + "/get?login=loginek")).asString();
+        int index = responseLogin.indexOf("\"id\":\"") + 6;
+        String clientId = responseLogin.substring(index, index + 36);
+
+        /*Archive test*/
+        assertTrue(responseString.contains(
+                "\"archive\":false," +
+                "\"id\":\"" + clientId + "\""));
+        assertFalse(responseString.contains(
+                "\"archive\":true," +
+                "\"id\":\"" + clientId + "\""));
+
+        RequestSpecification requestPost = RestAssured.given();
+        Response responsePost = requestPost.post(appUrlClient + "/deactivate/" + clientId);
+
+        assertEquals(204, responsePost.getStatusCode());
+
+        responseString = requestGet.get(new URI(appUrlClient)).asString();
+
+        assertFalse(responseString.contains(
+                "\"archive\":false," +
+                "\"id\":\"" + clientId + "\""));
+        assertTrue(responseString.contains(
+                "\"archive\":true," +
+                "\"id\":\"" + clientId + "\""));
+
+        /*Activate test*/
+        RequestSpecification requestPost2 = RestAssured.given();
+        Response responsePost2 = requestPost2.post(appUrlClient + "/activate/" + clientId);
+
+        assertEquals(204, responsePost2.getStatusCode());
+
+        responseString = requestGet.get(new URI(appUrlClient)).asString();
+
+        assertTrue(responseString.contains(
+                "\"archive\":false," +
+                "\"id\":\"" + clientId + "\""));
+        assertFalse(responseString.contains(
+                "\"archive\":true," +
+                "\"id\":\"" + clientId + "\""));
+    }
 }

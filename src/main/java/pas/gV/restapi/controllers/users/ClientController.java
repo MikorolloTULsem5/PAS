@@ -7,14 +7,13 @@ import jakarta.validation.Validation;
 import jakarta.validation.Validator;
 //import jakarta.ws.rs.*;
 //import jakarta.ws.rs.core.Response;
-import jakarta.websocket.server.PathParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -32,6 +31,7 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/clients")
 public class ClientController {
+    ////TODO zmiana walidatora????
     private final Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
     private final ClientService clientService;
 
@@ -98,43 +98,38 @@ public class ClientController {
         return resultList;
     }
 
-//    @PUT
-//    @Produces(MediaType.APPLICATION_JSON)
-//    @Consumes(MediaType.APPLICATION_JSON)
-//    @Path("/modifyClient/{id}")
-//    public Response modifyClient(@PathParam("id") String id, Client modifiedClient) {
-//        Set<ConstraintViolation<Client>> violations = validator.validate(modifiedClient);
-//        List<String> errors = violations.stream().map(ConstraintViolation::getMessage).collect(Collectors.toList());
-//        if (!violations.isEmpty()) {
-//            return Response.status(Response.Status.BAD_REQUEST).entity(errors).build();
-//        }
-//
-//        try {
-//            Client finalModifyClient = new Client(UUID.fromString(id), modifiedClient.getFirstName(),
-//                    modifiedClient.getLastName(), modifiedClient.getLogin(), modifiedClient.getClientTypeName());
-//            finalModifyClient.setArchive(modifiedClient.isArchive());
-//            clientService.modifyClient(finalModifyClient);
-//        } catch (UserLoginException ule) {
-//            return Response.status(Response.Status.CONFLICT).entity(ule.getMessage()).build();
-//        } catch (UserException ue) {
-//            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ue.getMessage()).build();
-//        }
-//
-//        return Response.status(Response.Status.NO_CONTENT).build();
-//    }
-//
-//    @POST
-//    @Produces(MediaType.APPLICATION_JSON)
-//    @Path("/activate/{id}")
-//    public void activateClient(@PathParam("id") String id) {
-//        clientService.activateClient(UUID.fromString(id));
-//    }
-//
-//    @POST
-//    @Produces(MediaType.APPLICATION_JSON)
-//    @Path("/deactivate/{id}")
-//    public void archiveClient(@PathParam("id") String id) {
-//        clientService.deactivateClient(UUID.fromString(id));
-//    }
+    @PutMapping(path = "/modifyClient/{id}")
+    public ResponseEntity<String> modifyClient(@PathVariable("id") String id, @RequestBody Client modifiedClient) {
+        Set<ConstraintViolation<Client>> violations = validator.validate(modifiedClient);
+        List<String> errors = violations.stream().map(ConstraintViolation::getMessage).collect(Collectors.toList());
+        if (!violations.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errors.toString());
+        }
+
+        try {
+            Client finalModifyClient = new Client(UUID.fromString(id), modifiedClient.getFirstName(),
+                    modifiedClient.getLastName(), modifiedClient.getLogin(), modifiedClient.getClientTypeName());
+            finalModifyClient.setArchive(modifiedClient.isArchive());
+            clientService.modifyClient(finalModifyClient);
+        } catch (UserLoginException ule) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(ule.getMessage());
+        } catch (UserException ue) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ue.getMessage());
+        }
+
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
+
+    @PostMapping(path ="/activate/{id}")
+    public void activateClient(@PathVariable("id") String id, HttpServletResponse response) {
+        clientService.activateClient(UUID.fromString(id));
+        response.setStatus(HttpStatus.NO_CONTENT.value());
+    }
+
+    @PostMapping(path ="/deactivate/{id}")
+    public void archiveClient(@PathVariable("id") String id, HttpServletResponse response) {
+        clientService.deactivateClient(UUID.fromString(id));
+        response.setStatus(HttpStatus.NO_CONTENT.value());
+    }
 }
 
