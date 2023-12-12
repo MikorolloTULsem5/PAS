@@ -24,7 +24,6 @@ import pas.gV.restapi.services.userservice.ClientService;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/clients")
@@ -41,7 +40,7 @@ public class ClientController {
     @PostMapping(path = "/addClient")
     public ResponseEntity<String> addClient(@RequestBody Client client) {
         Set<ConstraintViolation<Client>> violations = validator.validate(client);
-        List<String> errors = violations.stream().map(ConstraintViolation::getMessage).collect(Collectors.toList());
+        List<String> errors = violations.stream().map(ConstraintViolation::getMessage).toList();
         if (!violations.isEmpty()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errors.toString());
         }
@@ -99,7 +98,7 @@ public class ClientController {
     @PutMapping(path = "/modifyClient/{id}")
     public ResponseEntity<String> modifyClient(@PathVariable("id") String id, @RequestBody Client modifiedClient) {
         Set<ConstraintViolation<Client>> violations = validator.validate(modifiedClient);
-        List<String> errors = violations.stream().map(ConstraintViolation::getMessage).collect(Collectors.toList());
+        List<String> errors = violations.stream().map(ConstraintViolation::getMessage).toList();
         if (!violations.isEmpty()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errors.toString());
         }
