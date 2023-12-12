@@ -1,5 +1,6 @@
 package pas.gV.model.reservations;
 
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import pas.gV.model.users.Client;
@@ -12,6 +13,7 @@ import java.util.Objects;
 import java.util.UUID;
 
 @Getter
+@JsonPropertyOrder({"beginTime", "client", "court", "endTime", "id", "reservationCost", "reservationHours"})
 public class Reservation {
     private final UUID id;
 
