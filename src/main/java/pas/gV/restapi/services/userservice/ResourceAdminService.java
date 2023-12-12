@@ -39,8 +39,14 @@ public class ResourceAdminService extends UserService {
         return resourceAdmin != null ? (ResourceAdmin) resourceAdmin : null;
     }
 
-    public List<User> getAllResourceAdmins() {
-        return userRepository.readAll(ResourceAdmin.class);
+    public List<ResourceAdmin> getAllResourceAdmins() {
+        List<ResourceAdmin> list = new ArrayList<>();
+        for (var user : userRepository.readAll(ResourceAdmin.class)) {
+            if (user instanceof ResourceAdmin resAdmin) {
+                list.add(resAdmin);
+            }
+        }
+        return list;
     }
 
     public ResourceAdmin getResourceAdminByLogin(String login) {

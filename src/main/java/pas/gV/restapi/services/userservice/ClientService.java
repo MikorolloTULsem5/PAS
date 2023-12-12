@@ -42,7 +42,9 @@ public class ClientService extends UserService {
     public List<Client> getAllClients() {
         List<Client> list = new ArrayList<>();
         for (var user : userRepository.readAll(Client.class)) {
-            list.add((Client) user);
+            if (user instanceof Client client) {
+                list.add(client);
+            }
         }
         return list;
     }

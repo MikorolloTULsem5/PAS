@@ -43,7 +43,9 @@ public class AdminService extends UserService {
     public List<Admin> getAllAdmins() {
         List<Admin> list = new ArrayList<>();
         for (var user : userRepository.readAll(Admin.class)) {
-            list.add((Admin) user);
+            if (user instanceof Admin admin) {
+                list.add(admin);
+            }
         }
         return list;
     }
