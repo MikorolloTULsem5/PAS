@@ -1,5 +1,6 @@
 package pas.gV.model.courts;
 
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.PositiveOrZero;
 import lombok.AccessLevel;
@@ -13,6 +14,7 @@ import java.util.UUID;
 @Getter
 @Setter
 @NoArgsConstructor
+@JsonPropertyOrder({"archive", "area", "baseCost", "courtNumber", "id", "rented"})
 public class Court {
     @Setter(AccessLevel.NONE)
     private UUID id;

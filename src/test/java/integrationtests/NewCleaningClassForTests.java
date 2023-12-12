@@ -6,19 +6,21 @@ import com.mongodb.MongoCredential;
 import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Filters;
-//import pas.gV.data.repositories.CourtMongoRepository;
-//import pas.gV.data.repositories.ReservationMongoRepository;
+
+import pas.gV.data.repositories.CourtMongoRepository;
+import pas.gV.data.repositories.ReservationMongoRepository;
 import pas.gV.data.repositories.UserMongoRepository;
 import pas.gV.model.courts.Court;
 import pas.gV.model.users.Admin;
 import pas.gV.model.users.Client;
 import pas.gV.model.reservations.Reservation;
 import pas.gV.model.users.ResourceAdmin;
-//import pas.gV.restapi.services.CourtService;
-//import pas.gV.restapi.services.ReservationService;
+import pas.gV.restapi.services.CourtService;
+import pas.gV.restapi.services.ReservationService;
 import pas.gV.restapi.services.userservice.AdminService;
 import pas.gV.restapi.services.userservice.ClientService;
 import pas.gV.restapi.services.userservice.ResourceAdminService;
+
 import org.bson.UuidRepresentation;
 import org.bson.codecs.configuration.CodecRegistries;
 import org.bson.codecs.configuration.CodecRegistry;
@@ -96,34 +98,34 @@ public class NewCleaningClassForTests {
         client4 = clientServiceTest.registerClient("Peter", "Grif", "griffPet", "normal");
     }
 
-//    static void initCourts() {
-//        CourtService courtServiceTest = new CourtService(new CourtMongoRepository());
-//        cleanCourts();
-//        court1 = courtServiceTest.registerCourt(100, 100, 1);
-//        court2 = courtServiceTest.registerCourt(100, 200, 2);
-//        court3 = courtServiceTest.registerCourt(300, 200, 3);
-//        court4 = courtServiceTest.registerCourt(300, 200, 4);
-//        court5 = courtServiceTest.registerCourt(300, 200, 6);
-//    }
-//
-//    static void initReservations() {
-//        ReservationService reservationServiceTest = new ReservationService(new ReservationMongoRepository());
-//        cleanAll();
-//        initClients();
-//        initCourts();
-//        reservation1 = reservationServiceTest.makeReservation(client1.getId(), court1.getId(), dataStart);
-//        reservation2 = reservationServiceTest.makeReservation(client2.getId(), court2.getId(), dataStart);
-//        reservation3 = reservationServiceTest.makeReservation(client3.getId(), court3.getId(), LocalDateTime.of(2023, Month.NOVEMBER, 28, 14, 20));
-//        reservationServiceTest.returnCourt(court3.getId(), dataStart);
-//
-//        //Extra for getters
-//        reservation4 = reservationServiceTest.makeReservation(client2.getId(), court3.getId(), LocalDateTime.of(2023, Month.NOVEMBER, 28, 15, 0));
-//        reservationServiceTest.returnCourt(court3.getId(), LocalDateTime.of(2023, Month.DECEMBER, 2, 12, 20));
-//        reservation5 = reservationServiceTest.makeReservation(client3.getId(), court4.getId(), dataStart);
-//        reservationServiceTest.returnCourt(court4.getId(), LocalDateTime.of(2023, Month.DECEMBER, 1, 14, 20));
-//        reservation6 = reservationServiceTest.makeReservation(client1.getId(), court3.getId(), LocalDateTime.of(2023, Month.DECEMBER, 15, 10,0));
-//        reservation7 = reservationServiceTest.makeReservation(client3.getId(), court5.getId(),  LocalDateTime.of(2023, Month.DECEMBER, 16, 10,0));
-//    }
+    static void initCourts() {
+        CourtService courtServiceTest = new CourtService(new CourtMongoRepository());
+        cleanCourts();
+        court1 = courtServiceTest.registerCourt(100, 100, 1);
+        court2 = courtServiceTest.registerCourt(100, 200, 2);
+        court3 = courtServiceTest.registerCourt(300, 200, 3);
+        court4 = courtServiceTest.registerCourt(300, 200, 4);
+        court5 = courtServiceTest.registerCourt(300, 200, 6);
+    }
+
+    static void initReservations() {
+        ReservationService reservationServiceTest = new ReservationService(new ReservationMongoRepository());
+        cleanAll();
+        initClients();
+        initCourts();
+        reservation1 = reservationServiceTest.makeReservation(client1.getId(), court1.getId(), dataStart);
+        reservation2 = reservationServiceTest.makeReservation(client2.getId(), court2.getId(), dataStart);
+        reservation3 = reservationServiceTest.makeReservation(client3.getId(), court3.getId(), LocalDateTime.of(2023, Month.NOVEMBER, 28, 14, 20));
+        reservationServiceTest.returnCourt(court3.getId(), dataStart);
+
+        //Extra for getters
+        reservation4 = reservationServiceTest.makeReservation(client2.getId(), court3.getId(), LocalDateTime.of(2023, Month.NOVEMBER, 28, 15, 0));
+        reservationServiceTest.returnCourt(court3.getId(), LocalDateTime.of(2023, Month.DECEMBER, 2, 12, 20));
+        reservation5 = reservationServiceTest.makeReservation(client3.getId(), court4.getId(), dataStart);
+        reservationServiceTest.returnCourt(court4.getId(), LocalDateTime.of(2023, Month.DECEMBER, 1, 14, 20));
+        reservation6 = reservationServiceTest.makeReservation(client1.getId(), court3.getId(), LocalDateTime.of(2023, Month.DECEMBER, 15, 10,0));
+        reservation7 = reservationServiceTest.makeReservation(client3.getId(), court5.getId(),  LocalDateTime.of(2023, Month.DECEMBER, 16, 10,0));
+    }
 
     /*----------------------------------------------------------------------------------------------------------------*/
 

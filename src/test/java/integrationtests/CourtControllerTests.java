@@ -14,8 +14,8 @@ import java.util.UUID;
 
 import static integrationtests.NewCleaningClassForTests.cleanCourts;
 import static integrationtests.NewCleaningClassForTests.initClients;
-//import static integrationtests.NewCleaningClassForTests.initCourts;
-//import static integrationtests.NewCleaningClassForTests.initReservations;
+import static integrationtests.NewCleaningClassForTests.initCourts;
+import static integrationtests.NewCleaningClassForTests.initReservations;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -25,7 +25,7 @@ public class CourtControllerTests {
     static final String appUrlCourt = "http://localhost:8080/api/courts";
 
     @BeforeAll
-    static void init() throws URISyntaxException  {
+    static void init() throws URISyntaxException {
         RestAssured.given().get(new URI(appUrlCourt));
     }
 
@@ -37,7 +37,7 @@ public class CourtControllerTests {
     @BeforeEach
     void cleanAndInitDatabase() {
         cleanCourts();
-//        initCourts();
+        initCourts();
     }
 
     @Test
@@ -70,7 +70,7 @@ public class CourtControllerTests {
 
     @Test
     void getAllCourtsTestNoCont() throws URISyntaxException {
-cleanCourts();
+        cleanCourts();
         RequestSpecification request = RestAssured.given();
         Response response = request.get(new URI(appUrlCourt));
         String responseString = response.asString();
@@ -81,7 +81,7 @@ cleanCourts();
 
     @Test
     void createCourtTestPos() throws URISyntaxException {
-cleanCourts();
+        cleanCourts();
         String JSON = """
                 {
                   "area": 120.0,
@@ -100,6 +100,7 @@ cleanCourts();
 
         Response responsePost = requestPost.post(appUrlCourt + "/addCourt");
 
+        System.out.println(responsePost.asString());
         assertEquals(201, responsePost.getStatusCode());
 
         responseString = requestGet.get(new URI(appUrlCourt)).asString();
@@ -526,7 +527,7 @@ cleanCourts();
     void deleteCourtTestNeg() throws URISyntaxException {
         //Additional preparing
         initClients();
-//        initReservations();
+        initReservations();
 
         RequestSpecification requestGet = RestAssured.given();
         String responseString = requestGet.get(new URI(appUrlCourt)).asString();
@@ -538,11 +539,11 @@ cleanCourts();
 
         assertTrue(responseString.contains(
                 "\"archive\":false," +
-                "\"area\":100.0," +
-                "\"baseCost\":100," +
-                "\"courtNumber\":1," +
-                "\"id\":\"" + courtId + "\"," +
-                "\"rented\":true"));
+                        "\"area\":100.0," +
+                        "\"baseCost\":100," +
+                        "\"courtNumber\":1," +
+                        "\"id\":\"" + courtId + "\"," +
+                        "\"rented\":true"));
 
         RequestSpecification requestDelete = RestAssured.given();
         Response responseDelete = requestDelete.delete(appUrlCourt + "/delete/" + courtId);
@@ -553,10 +554,10 @@ cleanCourts();
 
         assertTrue(responseString.contains(
                 "\"archive\":false," +
-                "\"area\":100.0," +
-                "\"baseCost\":100," +
-                "\"courtNumber\":1," +
-                "\"id\":\"" + courtId + "\"," +
-                "\"rented\":true"));
+                        "\"area\":100.0," +
+                        "\"baseCost\":100," +
+                        "\"courtNumber\":1," +
+                        "\"id\":\"" + courtId + "\"," +
+                        "\"rented\":true"));
     }
 }
