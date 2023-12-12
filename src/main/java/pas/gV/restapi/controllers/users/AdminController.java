@@ -31,14 +31,14 @@ import java.util.UUID;
 public class AdminController {
 
     private final Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
-    private AdminService adminService;
+    private final AdminService adminService;
 
     @Autowired
     public AdminController(AdminService adminService) {
         this.adminService = adminService;
     }
 
-    @PostMapping(path = "/addAdmin")
+    @PostMapping("/addAdmin")
     public ResponseEntity<String> addAdmin(@RequestBody Admin admin) {
         Set<ConstraintViolation<Admin>> violations = validator.validate(admin);
         List<String> errors = violations.stream().map(ConstraintViolation::getMessage).toList();
@@ -67,7 +67,7 @@ public class AdminController {
         return resultList;
     }
 
-    @GetMapping(path = "/{id}")
+    @GetMapping("/{id}")
     public Admin getAdminById(@PathVariable("id") String id, HttpServletResponse response) {
         Admin admin = adminService.getAdminById(UUID.fromString(id));
         if (admin == null) {
@@ -76,7 +76,7 @@ public class AdminController {
         return admin;
     }
 
-    @GetMapping(path = "/get")
+    @GetMapping("/get")
     public Admin getAdminByLogin(@RequestParam("login") String login, HttpServletResponse response) {
         Admin admin = adminService.getAdminByLogin(login);
         if (admin == null) {
@@ -85,7 +85,7 @@ public class AdminController {
         return admin;
     }
 
-    @GetMapping(path = "/match")
+    @GetMapping("/match")
     public List<Admin> getAdminByLoginMatching(@RequestParam("login") String login, HttpServletResponse response) {
         List<Admin> resultList = adminService.getAdminByLoginMatching(login);
         if (resultList.isEmpty()) {
@@ -95,7 +95,7 @@ public class AdminController {
         return resultList;
     }
 
-    @PutMapping(path = "/modifyAdmin/{id}")
+    @PutMapping("/modifyAdmin/{id}")
     public ResponseEntity<String> modifyAdmin(@PathVariable("id") String id, @RequestBody Admin modifiedAdmin) {
         Set<ConstraintViolation<Admin>> violations = validator.validate(modifiedAdmin);
         List<String> errors = violations.stream().map(ConstraintViolation::getMessage).toList();
@@ -116,13 +116,13 @@ public class AdminController {
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
-    @PostMapping(path ="/activate/{id}")
+    @PostMapping("/activate/{id}")
     public void activateAdmin(@PathVariable("id") String id, HttpServletResponse response) {
         adminService.activateAdmin(UUID.fromString(id));
         response.setStatus(HttpStatus.NO_CONTENT.value());
     }
 
-    @PostMapping(path ="/deactivate/{id}")
+    @PostMapping("/deactivate/{id}")
     public void archiveAdmin(@PathVariable("id") String id, HttpServletResponse response) {
         adminService.deactivateAdmin(UUID.fromString(id));
         response.setStatus(HttpStatus.NO_CONTENT.value());

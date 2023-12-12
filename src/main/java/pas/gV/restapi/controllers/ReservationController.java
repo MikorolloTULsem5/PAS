@@ -33,7 +33,7 @@ public class ReservationController {
         this.reservationService = reservationService;
     }
 
-    @PostMapping(path = "/addReservation")
+    @PostMapping("/addReservation")
     public ResponseEntity<String> addReseravtion(@RequestParam("clientId") String clientId, @RequestParam("courtId") String courtId,
                                                  @RequestParam("date") String date) {
         try {

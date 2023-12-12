@@ -40,7 +40,7 @@ public class CourtController {
         this.courtService = courtService;
     }
 
-    @PostMapping(path = "/addCourt")
+    @PostMapping( "/addCourt")
     public ResponseEntity<String> addCourt(@RequestBody Court court) {
         Set<ConstraintViolation<Court>> violations = validator.validate(court);
         List<String> errors = violations.stream().map(ConstraintViolation::getMessage).toList();
@@ -69,7 +69,7 @@ public class CourtController {
         return resultList;
     }
 
-    @GetMapping(path = "/{id}")
+    @GetMapping( "/{id}")
     public Court getCourtById(@PathVariable("id") String id, HttpServletResponse response) {
         Court court = courtService.getCourtById(UUID.fromString(id));
         if (court == null) {
@@ -78,7 +78,7 @@ public class CourtController {
         return court;
     }
 
-    @GetMapping(path = "/get")
+    @GetMapping( "/get")
     public Court getCourtByCourtNumber(@RequestParam("number") String number, HttpServletResponse response) {
         Court court = courtService.getCourtByCourtNumber(Integer.parseInt(number));
         if (court == null) {
@@ -87,7 +87,7 @@ public class CourtController {
         return court;
     }
 
-    @PutMapping(path = "/modifyCourt/{id}")
+    @PutMapping( "/modifyCourt/{id}")
     public ResponseEntity<String> modifyCourt(@PathVariable("id") String id, @RequestBody Court modifiedCourt) {
         Set<ConstraintViolation<Court>> violations = validator.validate(modifiedCourt);
         List<String> errors = violations.stream().map(ConstraintViolation::getMessage).toList();
@@ -110,19 +110,19 @@ public class CourtController {
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
-    @PostMapping(path = "/activate/{id}")
+    @PostMapping( "/activate/{id}")
     public void activateCourt(@PathVariable("id") String id, HttpServletResponse response) {
         courtService.activateCourt(UUID.fromString(id));
         response.setStatus(HttpStatus.NO_CONTENT.value());
     }
 
-    @PostMapping(path = "/deactivate/{id}")
+    @PostMapping( "/deactivate/{id}")
     public void archiveCourt(@PathVariable("id") String id, HttpServletResponse response) {
         courtService.deactivateCourt(UUID.fromString(id));
         response.setStatus(HttpStatus.NO_CONTENT.value());
     }
 
-    @DeleteMapping(path = "/delete/{id}")
+    @DeleteMapping( "/delete/{id}")
     public ResponseEntity<String> deleteCourt(@PathVariable("id") String id) {
         try {
             courtService.deleteCourt(UUID.fromString(id));

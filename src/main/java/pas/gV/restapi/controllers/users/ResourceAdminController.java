@@ -1,133 +1,128 @@
-//package pas.gV.restapi.controllers.users;
-//
-//import jakarta.enterprise.context.ApplicationScoped;
-//import jakarta.inject.Inject;
-//import jakarta.validation.ConstraintViolation;
-//import jakarta.validation.Validation;
-//import jakarta.validation.Validator;
-//import jakarta.ws.rs.Consumes;
-//import jakarta.ws.rs.GET;
-//import jakarta.ws.rs.POST;
-//import jakarta.ws.rs.PUT;
-//import jakarta.ws.rs.Path;
-//import jakarta.ws.rs.PathParam;
-//import jakarta.ws.rs.Produces;
-//import jakarta.ws.rs.QueryParam;
-//import jakarta.ws.rs.core.MediaType;
-//import jakarta.ws.rs.core.Response;
-//import pas.gV.exceptions.UserException;
-//import pas.gV.exceptions.UserLoginException;
-//import pas.gV.model.users.ResourceAdmin;
-//import pas.gV.model.users.User;
-//import pas.gV.restapi.services.userservice.ResourceAdminService;
-//
-//import java.util.List;
-//import java.util.Set;
-//import java.util.UUID;
-//import java.util.stream.Collectors;
-//
-//@Path("/resAdmins")
-//@ApplicationScoped
-//public class ResourceAdminController {
-//    @Inject
-//    private ResourceAdminService resourceAdminService;
-//    private final Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
-//
-//    @POST
-//    @Consumes(MediaType.APPLICATION_JSON)
-//    @Produces(MediaType.APPLICATION_JSON)
-//    @Path("/addResAdmin")
-//    public Response addResAdmin(ResourceAdmin resourceAdmin) {
-//        Set<ConstraintViolation<ResourceAdmin>> violations = validator.validate(resourceAdmin);
-//        List<String> errors = violations.stream().map(ConstraintViolation::getMessage).collect(Collectors.toList());
-//        if (!violations.isEmpty()) {
-//            return Response.status(Response.Status.BAD_REQUEST).entity(errors).build();
-//        }
-//
-//        try {
-//            resourceAdminService.registerResourceAdmin(resourceAdmin.getLogin());
-//        } catch (UserLoginException ule) {
-//            return Response.status(Response.Status.CONFLICT).entity(ule.getMessage()).build();
-//        } catch (UserException ue) {
-//            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ue.getMessage()).build();
-//        }
-//
-//        return Response.status(Response.Status.CREATED).build();
-//    }
-//
-//    @GET
-//    @Produces(MediaType.APPLICATION_JSON)
-//    public List<ResourceAdmin> getAllResAdmins() {
-//        List<ResourceAdmin> resultList = resourceAdminService.getAllResourceAdmins();
-//        if (resultList.isEmpty()) {
-//            resultList = null;
-//        }
-//        return resultList;
-//    }
-//
-//    @GET
-//    @Produces(MediaType.APPLICATION_JSON)
-//    @Consumes(MediaType.TEXT_PLAIN)
-//    @Path("/{id}")
-//    public ResourceAdmin getResAdminById(@PathParam("id") String id) {
-//        return resourceAdminService.getResourceAdminById(UUID.fromString(id));
-//    }
-//
-//    @GET
-//    @Produces(MediaType.APPLICATION_JSON)
-//    @Consumes(MediaType.TEXT_PLAIN)
-//    @Path("/get")
-//    public ResourceAdmin getResAdminByLogin(@QueryParam("login") String login) {
-//        return resourceAdminService.getResourceAdminByLogin(login);
-//    }
-//
-//    @GET
-//    @Produces(MediaType.APPLICATION_JSON)
-//    @Consumes(MediaType.TEXT_PLAIN)
-//    @Path("/match")
-//    public List<ResourceAdmin> getResAdminByLoginMatching(@QueryParam("login") String login) {
-//        List<ResourceAdmin> resultList = resourceAdminService.getResourceAdminByLoginMatching(login);
-//        if (resultList.isEmpty()) {
-//            resultList = null;
-//        }
-//        return resultList;
-//    }
-//
-//    @PUT
-//    @Produces(MediaType.APPLICATION_JSON)
-//    @Consumes(MediaType.APPLICATION_JSON)
-//    @Path("/modifyResAdmin/{id}")
-//    public Response modifyResAdmin(@PathParam("id") String id, ResourceAdmin modifyResourceAdmin) {
-//        Set<ConstraintViolation<ResourceAdmin>> violations = validator.validate(modifyResourceAdmin);
-//        List<String> errors = violations.stream().map(ConstraintViolation::getMessage).collect(Collectors.toList());
-//        if (!violations.isEmpty()) {
-//            return Response.status(Response.Status.BAD_REQUEST).entity(errors).build();
-//        }
-//
-//        try {
-//            ResourceAdmin finalModifyResourceAdmin = new ResourceAdmin(UUID.fromString(id), modifyResourceAdmin.getLogin());
-//            finalModifyResourceAdmin.setArchive(modifyResourceAdmin.isArchive());
-//            resourceAdminService.modifyResourceAdmin(finalModifyResourceAdmin);
-//        } catch (UserLoginException ule) {
-//            return Response.status(Response.Status.CONFLICT).entity(ule.getMessage()).build();
-//        } catch (UserException ue) {
-//            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ue.getMessage()).build();
-//        }
-//
-//        return Response.status(Response.Status.NO_CONTENT).build();
-//    }
-//
-//    @POST
-//    @Produces(MediaType.APPLICATION_JSON)
-//    @Path("/activate/{id}")
-//    public void activateResAdmin(@PathParam("id") String id) {
-//        resourceAdminService.activateResourceAdmin(UUID.fromString(id));
-//    }
-//
-//    @POST
-//    @Produces(MediaType.APPLICATION_JSON)
-//    @Path("/deactivate/{id}")
-//    public void archiveResAdmin(@PathParam("id") String id) {
-//        resourceAdminService.deactivateResourceAdmin(UUID.fromString(id));
-//    }
-//}
+package pas.gV.restapi.controllers.users;
+
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.Validation;
+import jakarta.validation.Validator;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+import pas.gV.exceptions.UserException;
+import pas.gV.exceptions.UserLoginException;
+import pas.gV.model.users.ResourceAdmin;
+import pas.gV.restapi.services.userservice.ResourceAdminService;
+
+import java.util.List;
+import java.util.Set;
+import java.util.UUID;
+
+@RestController
+@RequestMapping("/resAdmins")
+public class ResourceAdminController {
+    private final Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
+    private final ResourceAdminService resourceAdminService;
+
+    @Autowired
+    public ResourceAdminController(ResourceAdminService resourceAdminService) {
+        this.resourceAdminService = resourceAdminService;
+    }
+
+    @PostMapping("/addResAdmin")
+    public ResponseEntity<String> addResAdmin(@RequestBody ResourceAdmin resourceAdmin) {
+        Set<ConstraintViolation<ResourceAdmin>> violations = validator.validate(resourceAdmin);
+        List<String> errors = violations.stream().map(ConstraintViolation::getMessage).toList();
+        if (!violations.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errors.toString());
+        }
+
+        try {
+            resourceAdminService.registerResourceAdmin(resourceAdmin.getLogin());
+        } catch (UserLoginException ule) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(ule.getMessage());
+        } catch (UserException ue) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ue.getMessage());
+        }
+
+        return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
+
+    @GetMapping
+    public List<ResourceAdmin> getAllResAdmins(HttpServletResponse response) {
+        List<ResourceAdmin> resultList = resourceAdminService.getAllResourceAdmins();
+        if (resultList.isEmpty()) {
+            resultList = null;
+            response.setStatus(HttpStatus.NO_CONTENT.value());
+        }
+        return resultList;
+    }
+
+    @GetMapping("/{id}")
+    public ResourceAdmin getResAdminById(@PathVariable("id") String id, HttpServletResponse response) {
+        ResourceAdmin resourceAdmin = resourceAdminService.getResourceAdminById(UUID.fromString(id));
+        if (resourceAdmin == null) {
+            response.setStatus(HttpStatus.NO_CONTENT.value());
+        }
+        return resourceAdmin;
+    }
+
+    @GetMapping("/get")
+    public ResourceAdmin getResAdminByLogin(@RequestParam("login") String login, HttpServletResponse response) {
+        ResourceAdmin resourceAdmin = resourceAdminService.getResourceAdminByLogin(login);
+        if (resourceAdmin == null) {
+            response.setStatus(HttpStatus.NO_CONTENT.value());
+        }
+        return resourceAdmin;
+    }
+
+    @GetMapping("/match")
+    public List<ResourceAdmin> getResAdminByLoginMatching(@RequestParam("login") String login, HttpServletResponse response) {
+        List<ResourceAdmin> resultList = resourceAdminService.getResourceAdminByLoginMatching(login);
+        if (resultList.isEmpty()) {
+            resultList = null;
+            response.setStatus(HttpStatus.NO_CONTENT.value());
+        }
+        return resultList;
+    }
+
+    @PutMapping("/modifyResAdmin/{id}")
+    public ResponseEntity<String> modifyResAdmin(@PathVariable("id") String id, @RequestBody ResourceAdmin modifyResourceAdmin) {
+        Set<ConstraintViolation<ResourceAdmin>> violations = validator.validate(modifyResourceAdmin);
+        List<String> errors = violations.stream().map(ConstraintViolation::getMessage).toList();
+        if (!violations.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errors.toString());
+        }
+
+        try {
+            ResourceAdmin finalModifyResourceAdmin = new ResourceAdmin(UUID.fromString(id), modifyResourceAdmin.getLogin());
+            finalModifyResourceAdmin.setArchive(modifyResourceAdmin.isArchive());
+            resourceAdminService.modifyResourceAdmin(finalModifyResourceAdmin);
+        } catch (UserLoginException ule) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(ule.getMessage());
+        } catch (UserException ue) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ue.getMessage());
+        }
+
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
+
+    @PostMapping("/activate/{id}")
+    public void activateResAdmin(@PathVariable("id") String id, HttpServletResponse response) {
+        resourceAdminService.activateResourceAdmin(UUID.fromString(id));
+        response.setStatus(HttpStatus.NO_CONTENT.value());
+    }
+
+    @PostMapping("/deactivate/{id}")
+    public void archiveResAdmin(@PathVariable("id") String id, HttpServletResponse response) {
+        resourceAdminService.deactivateResourceAdmin(UUID.fromString(id));
+        response.setStatus(HttpStatus.NO_CONTENT.value());
+    }
+}

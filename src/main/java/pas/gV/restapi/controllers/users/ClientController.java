@@ -39,7 +39,7 @@ public class ClientController {
         this.clientService = clientService;
     }
 
-    @PostMapping(path = "/addClient")
+    @PostMapping("/addClient")
     public ResponseEntity<String> addClient(@RequestBody Client client) {
         Set<ConstraintViolation<Client>> violations = validator.validate(client);
         List<String> errors = violations.stream().map(ConstraintViolation::getMessage).toList();
@@ -69,7 +69,7 @@ public class ClientController {
         return resultList;
     }
 
-    @GetMapping(path = "/{id}")
+    @GetMapping("/{id}")
     public Client getClientById(@PathVariable("id") String id, HttpServletResponse response) {
         Client client = clientService.getClientById(UUID.fromString(id));
         if (client == null) {
@@ -78,7 +78,7 @@ public class ClientController {
         return client;
     }
 
-    @GetMapping(path = "/get")
+    @GetMapping("/get")
     public Client getClientByLogin(@RequestParam("login") String login, HttpServletResponse response) {
         Client client = clientService.getClientByLogin(login);
         if (client == null) {
@@ -87,7 +87,7 @@ public class ClientController {
         return client;
     }
 
-    @GetMapping(path = "/match")
+    @GetMapping("/match")
     public List<Client> getClientByLoginMatching(@RequestParam("login") String login, HttpServletResponse response) {
         List<Client> resultList = clientService.getClientByLoginMatching(login);
         if (resultList.isEmpty()) {
@@ -97,7 +97,7 @@ public class ClientController {
         return resultList;
     }
 
-    @PutMapping(path = "/modifyClient/{id}")
+    @PutMapping("/modifyClient/{id}")
     public ResponseEntity<String> modifyClient(@PathVariable("id") String id, @RequestBody Client modifiedClient) {
         Set<ConstraintViolation<Client>> violations = validator.validate(modifiedClient);
         List<String> errors = violations.stream().map(ConstraintViolation::getMessage).toList();
@@ -119,13 +119,13 @@ public class ClientController {
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
-    @PostMapping(path ="/activate/{id}")
+    @PostMapping("/activate/{id}")
     public void activateClient(@PathVariable("id") String id, HttpServletResponse response) {
         clientService.activateClient(UUID.fromString(id));
         response.setStatus(HttpStatus.NO_CONTENT.value());
     }
 
-    @PostMapping(path ="/deactivate/{id}")
+    @PostMapping("/deactivate/{id}")
     public void archiveClient(@PathVariable("id") String id, HttpServletResponse response) {
         clientService.deactivateClient(UUID.fromString(id));
         response.setStatus(HttpStatus.NO_CONTENT.value());
