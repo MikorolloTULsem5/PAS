@@ -28,6 +28,7 @@ import pas.gV.model.users.Admin;
 import pas.gV.model.users.Client;
 import pas.gV.model.users.ResourceAdmin;
 import pas.gV.model.users.User;
+
 import org.bson.Document;
 import org.bson.conversions.Bson;
 
@@ -35,7 +36,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-///TODO sprawdz co sie stanie jak zmienimy na @Repository xd
 @Component
 public class UserMongoRepository extends AbstractMongoRepository<User> {
 
