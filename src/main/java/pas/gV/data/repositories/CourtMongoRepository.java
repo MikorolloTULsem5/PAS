@@ -8,8 +8,10 @@ import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.ValidationOptions;
 import com.mongodb.client.result.InsertOneResult;
 import com.mongodb.client.result.UpdateResult;
-import jakarta.annotation.PostConstruct;
-import jakarta.annotation.PreDestroy;
+
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
+
 import org.springframework.stereotype.Component;
 import pas.gV.data.datahandling.dto.CourtDTO;
 import pas.gV.data.datahandling.dto.ReservationDTO;
@@ -18,6 +20,7 @@ import pas.gV.exceptions.CourtException;
 import pas.gV.exceptions.CourtNumberException;
 import pas.gV.exceptions.MyMongoException;
 import pas.gV.model.courts.Court;
+
 import org.bson.Document;
 import org.bson.conversions.Bson;
 

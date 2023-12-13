@@ -7,11 +7,13 @@ import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.ValidationOptions;
 import com.mongodb.client.result.InsertOneResult;
 import com.mongodb.client.result.UpdateResult;
-import jakarta.annotation.PostConstruct;
-import jakarta.annotation.PreDestroy;
+
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 import jakarta.validation.UnexpectedTypeException;
+
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
+
 import pas.gV.data.datahandling.dto.AdminDTO;
 import pas.gV.data.datahandling.dto.ClientDTO;
 import pas.gV.data.datahandling.dto.ResourceAdminDTO;

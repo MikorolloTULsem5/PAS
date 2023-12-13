@@ -10,9 +10,12 @@ import com.mongodb.client.model.Updates;
 import com.mongodb.client.model.ValidationOptions;
 import com.mongodb.client.result.InsertOneResult;
 import com.mongodb.client.result.UpdateResult;
-import jakarta.annotation.PostConstruct;
-import jakarta.annotation.PreDestroy;
+
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
+
 import org.springframework.stereotype.Component;
+
 import pas.gV.data.datahandling.mappers.CourtMapper;
 import pas.gV.exceptions.MultiReservationException;
 import pas.gV.model.users.Client;
@@ -27,6 +30,7 @@ import pas.gV.data.datahandling.dto.CourtDTO;
 import pas.gV.data.datahandling.dto.ReservationDTO;
 import pas.gV.data.datahandling.mappers.ReservationMapper;
 import pas.gV.model.reservations.Reservation;
+
 import org.bson.Document;
 import org.bson.conversions.Bson;
 

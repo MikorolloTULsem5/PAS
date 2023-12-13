@@ -26,6 +26,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
+///TODO moze zmiana jakarta na javax dla adnotacji?
+
 ///TODO sprawdz zasiegi
 @RestController
 @RequestMapping("/clients")
