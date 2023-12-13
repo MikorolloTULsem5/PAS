@@ -35,6 +35,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+///TODO sprawdz co sie stanie jak zmienimy na @Repository xd
 @Component
 public class UserMongoRepository extends AbstractMongoRepository<User> {
 

@@ -26,13 +26,10 @@ import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
-///TODO moze zmiana jakarta na javax dla adnotacji?
-
 ///TODO sprawdz zasiegi
 @RestController
 @RequestMapping("/clients")
 public class ClientController {
-    ////TODO zmiana walidatora????
     private final Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
     private final ClientService clientService;
 
