@@ -90,10 +90,10 @@ public class NewCleaningClassForTests {
     static void initClients() {
         ClientService clientServiceTest = new ClientService(new UserMongoRepository());
         cleanUsers();
-        client1 = clientServiceTest.registerClient("Adam", "Smith", "loginek", "normal");
-        client2 = clientServiceTest.registerClient("Eva", "Braun", "loginek13", "athlete");
-        client3 = clientServiceTest.registerClient("Michal", "Pi", "michas13", "coach");
-        client4 = clientServiceTest.registerClient("Peter", "Grif", "griffPet", "normal");
+        client1 = clientServiceTest.registerClient("Adam", "Smith", "normal", "loginek");
+        client2 = clientServiceTest.registerClient("Eva", "Braun", "athlete", "loginek13");
+        client3 = clientServiceTest.registerClient("Michal", "Pi", "coach", "michas13");
+        client4 = clientServiceTest.registerClient("Peter", "Grif", "normal", "griffPet");
     }
 
     static void initCourts() {
@@ -121,8 +121,8 @@ public class NewCleaningClassForTests {
         reservationServiceTest.returnCourt(court3.getId(), LocalDateTime.of(2023, Month.DECEMBER, 2, 12, 20));
         reservation5 = reservationServiceTest.makeReservation(client3.getId(), court4.getId(), dataStart);
         reservationServiceTest.returnCourt(court4.getId(), LocalDateTime.of(2023, Month.DECEMBER, 1, 14, 20));
-        reservation6 = reservationServiceTest.makeReservation(client1.getId(), court3.getId(), LocalDateTime.of(2023, Month.DECEMBER, 15, 10,0));
-        reservation7 = reservationServiceTest.makeReservation(client3.getId(), court5.getId(),  LocalDateTime.of(2023, Month.DECEMBER, 16, 10,0));
+        reservation6 = reservationServiceTest.makeReservation(client1.getId(), court3.getId(), LocalDateTime.of(2023, Month.DECEMBER, 15, 10, 0));
+        reservation7 = reservationServiceTest.makeReservation(client3.getId(), court5.getId(), LocalDateTime.of(2023, Month.DECEMBER, 16, 10, 0));
     }
 
     /*----------------------------------------------------------------------------------------------------------------*/

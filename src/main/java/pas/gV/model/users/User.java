@@ -16,11 +16,13 @@ public abstract class User {
     @Setter
     @NotBlank
     private String login;
+    private String password;
     @Setter
     private boolean archive = false;
 
-    public User(UUID id, String login) {
+    public User(UUID id, String login, String password) {
         this.id = id;
         this.login = login;
+        this.password = password;
     }
 }

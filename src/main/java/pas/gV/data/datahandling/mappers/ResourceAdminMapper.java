@@ -12,7 +12,8 @@ public class ResourceAdminMapper {
     }
 
     public static ResourceAdmin fromMongoUser(ResourceAdminDTO resourceAdminDTO) {
-        ResourceAdmin newResourceAdmin = new ResourceAdmin(UUID.fromString(resourceAdminDTO.getId()), resourceAdminDTO.getLogin());
+        ResourceAdmin newResourceAdmin = new ResourceAdmin(UUID.fromString(resourceAdminDTO.getId()),
+                resourceAdminDTO.getLogin(), "");
         newResourceAdmin.setArchive(resourceAdminDTO.isArchive());
         return newResourceAdmin;
     }

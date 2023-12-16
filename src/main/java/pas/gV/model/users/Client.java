@@ -46,8 +46,8 @@ public class Client extends User {
     @Getter
     private String clientTypeName;
 
-    public Client(UUID id, String firstName, String lastName, String login, String clientType) {
-        super(id, login);
+    public Client(UUID id, String firstName, String lastName, String clientType, String login, String password) {
+        super(id, login, password);
 
         this.firstName = firstName;
         this.lastName = lastName;

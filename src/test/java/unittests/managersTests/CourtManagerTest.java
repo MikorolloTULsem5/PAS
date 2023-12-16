@@ -129,7 +129,7 @@ public class CourtManagerTest {
 
         try (ReservationMongoRepository reservationMongoRepository = new ReservationMongoRepository();
              UserMongoRepository userMongoRepository = new UserMongoRepository()) {
-            Client testClient1 = (Client) userMongoRepository.create(new Client(UUID.randomUUID(), "John", "Smith", "12345678901", "normal"));
+            Client testClient1 = (Client) userMongoRepository.create(new Client(UUID.randomUUID(), "John", "Smith", "normal", "12345678901", ""));
             Reservation testReservation1 = new Reservation(UUID.randomUUID(), testClient1, testCourt1, testTimeStart);
 
             reservationMongoRepository.create(testReservation1);

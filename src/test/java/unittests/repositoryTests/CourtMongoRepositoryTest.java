@@ -188,7 +188,7 @@ public class CourtMongoRepositoryTest {
         try (ReservationMongoRepository reservationMongoRepository = new ReservationMongoRepository();
              UserMongoRepository userMongoRepository = new UserMongoRepository()) {
             Client testClient1 = (Client) userMongoRepository.create(new Client(UUID.randomUUID(), "John",
-                    "Smith", "999999999999", "normal"));
+                    "Smith", "normal", "999999999999", ""));
             Reservation testReservation1 = new Reservation(UUID.randomUUID(), testClient1, testCourt1, testTimeStart);
             reservationMongoRepository.create(testReservation1);
             assertThrows(IllegalStateException.class, () -> courtRepository.delete(testCourt1.getId()));

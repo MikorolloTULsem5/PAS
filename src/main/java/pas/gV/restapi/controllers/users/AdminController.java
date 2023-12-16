@@ -104,7 +104,7 @@ public class AdminController {
         }
 
         try {
-            Admin finalModifyAdmin = new Admin(UUID.fromString(id), modifiedAdmin.getLogin());
+            Admin finalModifyAdmin = new Admin(UUID.fromString(id), modifiedAdmin.getLogin(), "");
             finalModifyAdmin.setArchive(modifiedAdmin.isArchive());
             adminService.modifyAdmin(finalModifyAdmin);
         } catch (UserLoginException ule) {

@@ -59,9 +59,9 @@ public class ReservationManagerTest {
         cleanDB();
         testClientType = "normal";
 
-        testClient1 = (Client) clientRepository.create(new Client(UUID.randomUUID(), "John", "Smith", "12345678901", testClientType));
-        testClient2 = (Client) clientRepository.create(new Client(UUID.randomUUID(), "Eva", "Brown", "12345678902", testClientType));
-        testClient3 = (Client) clientRepository.create(new Client(UUID.randomUUID(), "Adam", "Long", "12345678903", testClientType));
+        testClient1 = (Client) clientRepository.create(new Client(UUID.randomUUID(), "John", "Smith", testClientType, "12345678901", ""));
+        testClient2 = (Client) clientRepository.create(new Client(UUID.randomUUID(), "Eva", "Brown", testClientType, "12345678902", ""));
+        testClient3 = (Client) clientRepository.create(new Client(UUID.randomUUID(), "Adam", "Long", testClientType, "12345678903", ""));
 
         testCourt1 = courtRepository.create(new Court(UUID.randomUUID(), 1000, 100, 1));
         testCourt2 = courtRepository.create(new Court(UUID.randomUUID(), 1000, 100, 2));

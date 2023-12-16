@@ -12,7 +12,7 @@ public class AdminMapper {
     }
 
     public static Admin fromMongoUser(AdminDTO adminDTO) {
-        Admin newAdmin = new Admin(UUID.fromString(adminDTO.getId()), adminDTO.getLogin());
+        Admin newAdmin = new Admin(UUID.fromString(adminDTO.getId()), adminDTO.getLogin(), "");
         newAdmin.setArchive(adminDTO.isArchive());
         return newAdmin;
     }

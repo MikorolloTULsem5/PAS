@@ -105,7 +105,7 @@ public class ResourceAdminController {
         }
 
         try {
-            ResourceAdmin finalModifyResourceAdmin = new ResourceAdmin(UUID.fromString(id), modifyResourceAdmin.getLogin());
+            ResourceAdmin finalModifyResourceAdmin = new ResourceAdmin(UUID.fromString(id), modifyResourceAdmin.getLogin(), "");
             finalModifyResourceAdmin.setArchive(modifyResourceAdmin.isArchive());
             resourceAdminService.modifyResourceAdmin(finalModifyResourceAdmin);
         } catch (UserLoginException ule) {

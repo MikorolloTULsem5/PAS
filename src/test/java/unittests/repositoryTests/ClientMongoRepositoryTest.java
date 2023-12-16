@@ -44,11 +44,9 @@ public class ClientMongoRepositoryTest {
     @BeforeEach
     void initData() {
         cleanFirstAndLastTimeDB();
-        client1 = new Client(UUID.randomUUID(), "Adam", "Smith", "12345678901", testClientType);
-
-        client2 = new Client(UUID.randomUUID(), "Eva", "Smith", "12345678902", testClientType);
-
-        client3 = new Client(UUID.randomUUID(), "John", "Lenon", "12345678903", testClientType);
+        client1 = new Client(UUID.randomUUID(), "Adam", "Smith", testClientType, "12345678901", "");
+        client2 = new Client(UUID.randomUUID(), "Eva", "Smith", testClientType, "12345678902", "");
+        client3 = new Client(UUID.randomUUID(), "John", "Lenon", testClientType, "12345678903", "");
     }
 
     @Test

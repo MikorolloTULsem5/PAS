@@ -21,7 +21,7 @@ public class ClientTest {
 
     @Test
     void testCreatingClient() {
-        Client client = new Client(UUID.randomUUID(), testFirstName, testLastName, testLogin, testTypeNormal);
+        Client client = new Client(UUID.randomUUID(), testFirstName, testLastName, testTypeNormal, testLogin, "");
         assertNotNull(client);
 
         assertEquals(testFirstName, client.getFirstName());
@@ -33,7 +33,7 @@ public class ClientTest {
 
     @Test
     void testSetters() {
-        Client client = new Client(UUID.randomUUID(), testFirstName, testLastName, testLogin, testTypeNormal);
+        Client client = new Client(UUID.randomUUID(), testFirstName, testLastName, testTypeNormal, testLogin, "");
         assertNotNull(client);
 
         assertEquals(testFirstName, client.getFirstName());
@@ -59,11 +59,11 @@ public class ClientTest {
 
     @Test
     void testGettingClientMaxHoursAndApplyingDiscount() {
-        Client client = new Client(UUID.randomUUID(), testFirstName, testLastName, testLogin, testTypeNormal);
+        Client client = new Client(UUID.randomUUID(), testFirstName, testLastName, testTypeNormal, testLogin, "");
         assertNotNull(client);
-        Client client1 = new Client(UUID.randomUUID(), testFirstName, testLastName, testLogin, testTypeAthlete);
+        Client client1 = new Client(UUID.randomUUID(), testFirstName, testLastName, testTypeAthlete, testLogin, "");
         assertNotNull(client1);
-        Client client2 = new Client(UUID.randomUUID(), testFirstName, testLastName, testLogin, testTypeCoach);
+        Client client2 = new Client(UUID.randomUUID(), testFirstName, testLastName, testTypeCoach, testLogin, "");
         assertNotNull(client2);
 
         assertEquals(0, client.applyDiscount());

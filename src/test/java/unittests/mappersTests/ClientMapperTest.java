@@ -49,7 +49,7 @@ public class ClientMapperTest {
 
     @Test
     void testToMongoClientMethod() {
-        Client client = new Client(UUID.randomUUID(), testFirstName, testLastName, testLogin, testTypeNormal);
+        Client client = new Client(UUID.randomUUID(), testFirstName, testLastName, testTypeNormal, testLogin, "");
         assertNotNull(client);
 
         ClientDTO clientDTO = ClientMapper.toMongoUser(client);

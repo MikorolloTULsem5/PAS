@@ -15,7 +15,7 @@ public class ClientMapper {
 
     public static Client fromMongoUser(ClientDTO clientDTO) {
         Client clientModel = new Client(UUID.fromString(clientDTO.getId()), clientDTO.getFirstName(),
-                clientDTO.getLastName(), clientDTO.getLogin(), clientDTO.getClientType());
+                clientDTO.getLastName(), clientDTO.getClientType(), clientDTO.getLogin(), "");
         clientModel.setArchive(clientDTO.isArchive());
         return clientModel;
     }

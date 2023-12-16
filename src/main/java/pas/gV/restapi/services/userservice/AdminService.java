@@ -29,7 +29,7 @@ public class AdminService extends UserService {
 
     public Admin registerAdmin(String login) {
         try {
-            return (Admin) userRepository.create(new Admin(null, login));
+            return (Admin) userRepository.create(new Admin(null, login, ""));
         } catch (MyMongoException | UnexpectedTypeException exception) {
             throw new UserException("Nie udalo sie zarejestrowac administratora w bazie! - " + exception.getMessage());
         }
