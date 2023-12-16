@@ -57,8 +57,8 @@ public class ResourceAdminController {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public List<User> getAllResAdmins() {
-        List<User> resultList = resourceAdminService.getAllResourceAdmins();
+    public List<ResourceAdmin> getAllResAdmins() {
+        List<ResourceAdmin> resultList = resourceAdminService.getAllResourceAdmins();
         if (resultList.isEmpty()) {
             resultList = null;
         }
