@@ -20,6 +20,8 @@ import org.springframework.web.bind.annotation.RestController;
 import pas.gV.model.exceptions.UserException;
 import pas.gV.model.exceptions.UserLoginException;
 import pas.gV.model.logic.users.Client;
+import pas.gV.restapi.data.dto.ClientDTO;
+import pas.gV.restapi.data.mappers.ClientMapper;
 import pas.gV.restapi.services.userservice.ClientService;
 
 import java.util.List;
@@ -38,8 +40,9 @@ public class ClientController {
     }
 
     @PostMapping("/addClient")
-    public ResponseEntity<String> addClient(@RequestBody Client client) {
-        Set<ConstraintViolation<Client>> violations = validator.validate(client);
+    public ResponseEntity<String> addClient(@RequestBody ClientDTO client) {
+        ///TODO
+        Set<ConstraintViolation<Client>> violations = validator.validate(ClientMapper.fromJsonUser(client));
         List<String> errors = violations.stream().map(ConstraintViolation::getMessage).toList();
         if (!violations.isEmpty()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errors.toString());
@@ -47,7 +50,7 @@ public class ClientController {
 
         try {
             clientService.registerClient(client.getFirstName(), client.getLastName(),
-                    client.getLogin(), "password", client.getClientTypeName());
+                    client.getLogin(), client.getPassword(), client.getClientType());
         } catch (UserLoginException ule) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(ule.getMessage());
         } catch (UserException ue) {
@@ -58,8 +61,8 @@ public class ClientController {
     }
 
     @GetMapping
-    public List<Client> getAllClients(HttpServletResponse response) {
-        List<Client> resultList = clientService.getAllClients();
+    public List<ClientDTO> getAllClients(HttpServletResponse response) {
+        List<ClientDTO> resultList = clientService.getAllClients();
         if (resultList.isEmpty()) {
             resultList = null;
             response.setStatus(HttpStatus.NO_CONTENT.value());
@@ -68,8 +71,8 @@ public class ClientController {
     }
 
     @GetMapping("/{id}")
-    public Client getClientById(@PathVariable("id") String id, HttpServletResponse response) {
-        Client client = clientService.getClientById(UUID.fromString(id));
+    public ClientDTO getClientById(@PathVariable("id") String id, HttpServletResponse response) {
+        ClientDTO client = clientService.getClientById(id);
         if (client == null) {
             response.setStatus(HttpStatus.NO_CONTENT.value());
         }
@@ -77,8 +80,8 @@ public class ClientController {
     }
 
     @GetMapping("/get")
-    public Client getClientByLogin(@RequestParam("login") String login, HttpServletResponse response) {
-        Client client = clientService.getClientByLogin(login);
+    public ClientDTO getClientByLogin(@RequestParam("login") String login, HttpServletResponse response) {
+        ClientDTO client = clientService.getClientByLogin(login);
         if (client == null) {
             response.setStatus(HttpStatus.NO_CONTENT.value());
         }
@@ -86,8 +89,8 @@ public class ClientController {
     }
 
     @GetMapping("/match")
-    public List<Client> getClientByLoginMatching(@RequestParam("login") String login, HttpServletResponse response) {
-        List<Client> resultList = clientService.getClientByLoginMatching(login);
+    public List<ClientDTO> getClientByLoginMatching(@RequestParam("login") String login, HttpServletResponse response) {
+        List<ClientDTO> resultList = clientService.getClientByLoginMatching(login);
         if (resultList.isEmpty()) {
             resultList = null;
             response.setStatus(HttpStatus.NO_CONTENT.value());
@@ -96,18 +99,18 @@ public class ClientController {
     }
 
     @PutMapping("/modifyClient/{id}")
-    public ResponseEntity<String> modifyClient(@PathVariable("id") String id, @RequestBody Client modifiedClient) {
-        Set<ConstraintViolation<Client>> violations = validator.validate(modifiedClient);
+    public ResponseEntity<String> modifyClient(@PathVariable("id") String id, @RequestBody ClientDTO modifiedClient) {
+        ///TODO
+        Set<ConstraintViolation<Client>> violations = validator.validate(ClientMapper.fromJsonUser(modifiedClient));
         List<String> errors = violations.stream().map(ConstraintViolation::getMessage).toList();
         if (!violations.isEmpty()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errors.toString());
         }
 
         try {
-            Client finalModifyClient = new Client(UUID.fromString(id), modifiedClient.getFirstName(),
-                    modifiedClient.getLastName(), modifiedClient.getLogin(), "password",
-                    modifiedClient.getClientTypeName());
-            finalModifyClient.setArchive(modifiedClient.isArchive());
+            ClientDTO finalModifyClient = new ClientDTO(id, modifiedClient.getFirstName(),
+                    modifiedClient.getLastName(), modifiedClient.getLogin(), "password", modifiedClient.isArchive(),
+                    modifiedClient.getClientType());
             clientService.modifyClient(finalModifyClient);
         } catch (UserLoginException ule) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(ule.getMessage());
@@ -120,13 +123,13 @@ public class ClientController {
 
     @PostMapping("/activate/{id}")
     public void activateClient(@PathVariable("id") String id, HttpServletResponse response) {
-        clientService.activateClient(UUID.fromString(id));
+        clientService.activateClient(id);
         response.setStatus(HttpStatus.NO_CONTENT.value());
     }
 
     @PostMapping("/deactivate/{id}")
     public void archiveClient(@PathVariable("id") String id, HttpServletResponse response) {
-        clientService.deactivateClient(UUID.fromString(id));
+        clientService.deactivateClient(id);
         response.setStatus(HttpStatus.NO_CONTENT.value());
     }
 }

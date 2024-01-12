@@ -1,8 +1,8 @@
 package pas.gV.restapi.data.dto;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import lombok.Getter;
 import lombok.experimental.FieldDefaults;
 
@@ -10,18 +10,18 @@ import java.util.Objects;
 
 @Getter
 @FieldDefaults(makeFinal = true)
-public class UserDTO implements DTO_Json {
-    @JsonProperty("_id")
+@JsonPropertyOrder({"archive", "id", "login"})
+public class UserDTO implements DTO {
+    @JsonProperty("id")
     private String id;
     @JsonProperty("login")
     private String login;
     @JsonProperty("archive")
     private boolean archive;
-    @JsonProperty("password")
-    @JsonIgnore
+    @JsonProperty(value = "password", access = JsonProperty.Access.WRITE_ONLY)
     private String password;
     @JsonCreator
-    public UserDTO(@JsonProperty("_id") String id,
+    public UserDTO(@JsonProperty("id") String id,
                    @JsonProperty("login") String login,
                    @JsonProperty("password") String password,
                    @JsonProperty("archive") boolean archive) {

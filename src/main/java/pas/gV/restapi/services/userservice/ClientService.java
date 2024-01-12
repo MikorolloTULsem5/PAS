@@ -11,6 +11,8 @@ import pas.gV.model.exceptions.UserException;
 import pas.gV.model.exceptions.MyMongoException;
 import pas.gV.model.data.repositories.UserMongoRepository;
 import pas.gV.model.logic.users.User;
+import pas.gV.restapi.data.dto.ClientDTO;
+import pas.gV.restapi.data.mappers.ClientMapper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,63 +28,65 @@ public class ClientService extends UserService {
         this.userRepository = userRepository;
     }
 
-    public Client registerClient(String firstName, String lastName, String login, String password, String clientType) {
+    public ClientDTO registerClient(String firstName, String lastName, String login, String password, String clientType) {
         try {
-            return (Client) userRepository.create(new Client(null, firstName, lastName, login, password, clientType));
+            return ClientMapper.toJsonUser(
+                    (Client) userRepository.create(new Client(null, firstName, lastName, login, password, clientType)));
         } catch (MyMongoException | UnexpectedTypeException exception) {
             throw new UserException("Nie udalo sie zarejestrowac klienta w bazie! - " + exception.getMessage());
         }
     }
 
-    public Client getClientById(UUID clientID) {
-        User client = userRepository.readByUUID(clientID, Client.class);
-        return client != null ? (Client) client : null;
+    public ClientDTO getClientById(String clientID) {
+        User client = userRepository.readByUUID(UUID.fromString(clientID), Client.class);
+        return client != null ? ClientMapper.toJsonUser((Client) client) : null;
     }
 
-    public List<Client> getAllClients() {
-        List<Client> list = new ArrayList<>();
+    public List<ClientDTO> getAllClients() {
+        List<ClientDTO> list = new ArrayList<>();
         for (var user : userRepository.readAll(Client.class)) {
             if (user instanceof Client client) {
-                list.add(client);
+                list.add(ClientMapper.toJsonUser(client));
             }
         }
         return list;
     }
 
-    public Client getClientByLogin(String login) {
+    public ClientDTO getClientByLogin(String login) {
         var list = userRepository.read(Filters.eq("login", login), Client.class);
-        return !list.isEmpty() ? (Client) list.get(0) : null;
+        return !list.isEmpty() ? ClientMapper.toJsonUser((Client) list.get(0)) : null;
     }
 
-    public List<Client> getClientByLoginMatching(String login) {
-        List<Client> list = new ArrayList<>();
+    public List<ClientDTO> getClientByLoginMatching(String login) {
+        List<ClientDTO> list = new ArrayList<>();
         for (var user : userRepository.read(Filters.and(Filters.regex("login", ".*%s.*".formatted(login)),
                 Filters.eq("_clazz", "client")), Client.class)) {
-            list.add((Client) user);
+            list.add(ClientMapper.toJsonUser((Client) user));
         }
         return list;
     }
 
-    public void modifyClient(Client modifiedClient) {
+    public void modifyClient(ClientDTO modifiedClient) {
         var list = userRepository.read(Filters.and(
                 Filters.eq("login", modifiedClient.getLogin()),
-                Filters.ne("_id", modifiedClient.getId().toString())), Client.class);
+                Filters.ne("_id", modifiedClient.getId())), Client.class);
         if (!list.isEmpty()) {
             throw new UserLoginException("Nie udalo sie zmodyfikowac podanego klienta - " +
                     "proba zmiany loginu na login wystepujacy juz u innego klienta");
         }
 
-        if (!userRepository.updateByReplace(modifiedClient.getId(), modifiedClient)) {
+        if (!userRepository.updateByReplace(UUID.fromString(modifiedClient.getId()),
+                ClientMapper.fromJsonUser(modifiedClient))) {
             throw new UserException("Nie udalo sie zmodyfikowac podanego klienta.");
         }
     }
 
-    public void activateClient(UUID clientId) {
-        userRepository.update(clientId, "archive", false);
+    public void activateClient(String clientId) {
+        userRepository.update(UUID.fromString(clientId), "archive", false);
     }
 
-    public void deactivateClient(UUID clientId) {
-        userRepository.update(clientId, "archive", true);
+    public void deactivateClient(String clientId) {
+        userRepository.update(UUID.fromString(clientId), "archive", true);
     }
 
     @Override

@@ -1,6 +1,5 @@
 package pas.gV.model.logic.users;
 
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import jakarta.validation.constraints.NotBlank;
 
 import lombok.Getter;
@@ -11,14 +10,13 @@ import java.util.UUID;
 
 @Getter
 @NoArgsConstructor
-@JsonPropertyOrder({"archive", "id", "login"})
 public abstract class User {
 
     private UUID id;
     @Setter
     @NotBlank
     private String login;
-//    @NotBlank
+    @NotBlank
     private String password;
 
     @Setter

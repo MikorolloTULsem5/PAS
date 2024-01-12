@@ -1,7 +1,7 @@
 package unittests.mappersTests;
 
 import pas.gV.model.logic.courts.Court;
-import pas.gV.model.data.datahandling.dto.CourtDTO;
+import pas.gV.model.data.datahandling.entities.CourtEntity;
 import pas.gV.model.data.datahandling.mappers.CourtMapper;
 import org.junit.jupiter.api.Test;
 
@@ -16,7 +16,7 @@ public class CourtMapperTest {
     UUID uuid = UUID.randomUUID();
     @Test
     void testCreatingMapper() {
-        CourtDTO courtMapper = new CourtDTO(uuid.toString(), 300, 200, 1,
+        CourtEntity courtMapper = new CourtEntity(uuid.toString(), 300, 200, 1,
                 false, 1);
         assertNotNull(courtMapper);
 
@@ -33,7 +33,7 @@ public class CourtMapperTest {
         Court court = new Court(UUID.randomUUID(),300, 100, 1);
         assertNotNull(court);
 
-        CourtDTO courtMapper = CourtMapper.toMongoCourt(court);
+        CourtEntity courtMapper = CourtMapper.toMongoCourt(court);
         assertNotNull(courtMapper);
 
         assertEquals(court.getId(), UUID.fromString(courtMapper.getId()));
@@ -46,7 +46,7 @@ public class CourtMapperTest {
 
     @Test
     void testFromMongoClientMethod() {
-        CourtDTO courtMapper = new CourtDTO(uuid.toString(), 300, 200, 1,
+        CourtEntity courtMapper = new CourtEntity(uuid.toString(), 300, 200, 1,
                 true, 0);
         assertNotNull(courtMapper);
 

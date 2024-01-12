@@ -2,7 +2,7 @@ package unittests.repositoryTests;
 
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.model.Filters;
-import pas.gV.model.data.datahandling.dto.ClientDTO;
+import pas.gV.model.data.datahandling.entities.ClientEntity;
 import pas.gV.model.data.repositories.UserMongoRepository;
 import pas.gV.model.exceptions.UserLoginException;
 import pas.gV.model.logic.users.Client;
@@ -30,9 +30,9 @@ public class ClientMongoRepositoryTest {
     Client client3;
     final String testClientType = "normal";
 
-    private MongoCollection<ClientDTO> getTestCollection() {
+    private MongoCollection<ClientEntity> getTestCollection() {
         return clientRepository.getDatabase()
-                .getCollection(clientRepository.getCollectionName(), ClientDTO.class);
+                .getCollection(clientRepository.getCollectionName(), ClientEntity.class);
     }
 
     @BeforeAll

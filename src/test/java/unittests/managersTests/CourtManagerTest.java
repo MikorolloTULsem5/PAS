@@ -3,7 +3,7 @@ package unittests.managersTests;
 import com.mongodb.client.model.Filters;
 import pas.gV.model.exceptions.CourtNumberException;
 import pas.gV.model.logic.courts.Court;
-import pas.gV.model.data.datahandling.dto.CourtDTO;
+import pas.gV.model.data.datahandling.entities.CourtEntity;
 import pas.gV.restapi.services.CourtService;
 import pas.gV.model.exceptions.CourtException;
 import pas.gV.model.data.repositories.CourtMongoRepository;
@@ -108,7 +108,7 @@ public class CourtManagerTest {
 
     @Test
     void testDeletingCourtSuccess() {
-        var collection = courtRepository.getDatabase().getCollection(courtRepository.getCollectionName(), CourtDTO.class);
+        var collection = courtRepository.getDatabase().getCollection(courtRepository.getCollectionName(), CourtEntity.class);
         assertEquals(0, collection.find().into(new ArrayList<>()).size());
         Court testCourt1 = courtRepository.create(new Court(null, 1000, 100, 1));
 
@@ -120,7 +120,7 @@ public class CourtManagerTest {
 
     @Test
     void testDeletingCourtFailure() {
-        var collection = courtRepository.getDatabase().getCollection(courtRepository.getCollectionName(), CourtDTO.class);
+        var collection = courtRepository.getDatabase().getCollection(courtRepository.getCollectionName(), CourtEntity.class);
         assertEquals(0, collection.find().into(new ArrayList<>()).size());
         Court testCourt1 = courtRepository.create(new Court(null, 1000, 100, 1));
         LocalDateTime testTimeStart = LocalDateTime.of(2023, Month.JUNE, 4, 12, 0);

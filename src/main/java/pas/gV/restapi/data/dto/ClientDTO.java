@@ -2,6 +2,8 @@ package pas.gV.restapi.data.dto;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+
 import lombok.Getter;
 import lombok.experimental.FieldDefaults;
 
@@ -10,22 +12,23 @@ import java.util.Objects;
 
 @Getter
 @FieldDefaults(makeFinal = true)
+@JsonPropertyOrder({"archive", "id", "login", "clientTypeName", "firstName", "lastName"})
 public class ClientDTO extends UserDTO {
-    @JsonProperty("firstname")
+    @JsonProperty("firstName")
     private String firstName;
-    @JsonProperty("lastname")
+    @JsonProperty("lastName")
     private String lastName;
-    @JsonProperty("clienttype")
+    @JsonProperty("clientTypeName")
     private String clientType;
 
     @JsonCreator
-    public ClientDTO(@JsonProperty("_id") String id,
-                     @JsonProperty("firstname") String firstName,
-                     @JsonProperty("lastname") String lastName,
+    public ClientDTO(@JsonProperty("id") String id,
+                     @JsonProperty("firstName") String firstName,
+                     @JsonProperty("lastName") String lastName,
                      @JsonProperty("login") String login,
                      @JsonProperty("password") String password,
                      @JsonProperty("archive") boolean archive,
-                     @JsonProperty("clienttype") String clientType) {
+                     @JsonProperty("clientTypeName") String clientType) {
         super(id, login, password, archive);
         this.firstName = firstName;
         this.lastName = lastName;

@@ -80,6 +80,7 @@ public class ClientControllerTests {
                   "firstName": "John",
                   "lastName": "Bravo",
                   "login": "johnBravo",
+                  "password": "johnBravo",
                   "clientTypeName": "normal"
                 }
                 """;
@@ -94,7 +95,6 @@ public class ClientControllerTests {
 
         Response responsePost = requestPost.post(appUrlClient + "/addClient");
 
-        System.out.println(responsePost.asString());
         assertEquals(201, responsePost.getStatusCode());
 
         responseString = requestGet.get(new URI(appUrlClient)).asString();
@@ -112,6 +112,7 @@ public class ClientControllerTests {
                   "firstName": "John",
                   "lastName": "  ",
                   "login": "johnBravo",
+                  "password": "johnBravo",
                   "clientTypeName": "normal"
                 }
                 """;
@@ -142,6 +143,7 @@ public class ClientControllerTests {
                   "firstName": "John",
                   "lastName": "Bravo",
                   "login": "michas13",
+                  "password": "michas13",
                   "clientTypeName": "normal"
                 }
                 """;
@@ -262,6 +264,7 @@ public class ClientControllerTests {
                   "firstName": "John",
                   "lastName": "Smith",
                   "login": "loginek",
+                  "password": "loginek",
                   "clientTypeName": "coach"
                 }
                 """;
@@ -323,6 +326,7 @@ public class ClientControllerTests {
                   "firstName": "   ",
                   "lastName": "Smith",
                   "login": "loginek",
+                  "password": "loginek",
                   "clientTypeName": "coach"
                 }
                 """;
@@ -383,6 +387,7 @@ public class ClientControllerTests {
                   "firstName": "John",
                   "lastName": "Smith",
                   "login": "michas13",
+                  "password": "michas13",
                   "clientTypeName": "coach"
                 }
                 """;

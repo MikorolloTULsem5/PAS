@@ -15,10 +15,10 @@ import jakarta.validation.UnexpectedTypeException;
 
 import org.springframework.stereotype.Component;
 
-import pas.gV.model.data.datahandling.dto.AdminDTO;
-import pas.gV.model.data.datahandling.dto.ClientDTO;
-import pas.gV.model.data.datahandling.dto.ResourceAdminDTO;
-import pas.gV.model.data.datahandling.dto.UserDTO;
+import pas.gV.model.data.datahandling.entities.AdminEntity;
+import pas.gV.model.data.datahandling.entities.ClientEntity;
+import pas.gV.model.data.datahandling.entities.ResourceAdminEntity;
+import pas.gV.model.data.datahandling.entities.UserEntity;
 import pas.gV.model.data.datahandling.mappers.AdminMapper;
 import pas.gV.model.data.datahandling.mappers.ClientMapper;
 import pas.gV.model.data.datahandling.mappers.ResourceAdminMapper;
@@ -63,8 +63,8 @@ public class UserMongoRepository extends AbstractMongoRepository<User> {
     }
 
     @Override
-    protected MongoCollection<UserDTO> getCollection() {
-        return getDatabase().getCollection(COLLECTION_NAME, UserDTO.class);
+    protected MongoCollection<UserEntity> getCollection() {
+        return getDatabase().getCollection(COLLECTION_NAME, UserEntity.class);
     }
 
     @Override
@@ -72,7 +72,7 @@ public class UserMongoRepository extends AbstractMongoRepository<User> {
         return COLLECTION_NAME;
     }
 
-    private boolean createNew(UserDTO dto) {
+    private boolean createNew(UserEntity dto) {
         InsertOneResult result;
         try {
             result = this.getCollection().insertOne(dto);
@@ -125,21 +125,21 @@ public class UserMongoRepository extends AbstractMongoRepository<User> {
     }
 
     public List<User> read(Bson filter, Class<? extends User> clazz) {
-        Class<? extends UserDTO> clazzDTO = switch (clazz.getSimpleName().toLowerCase()) {
-            case "client" -> ClientDTO.class;
-            case "admin" -> AdminDTO.class;
-            case "resourceadmin" -> ResourceAdminDTO.class;
+        Class<? extends UserEntity> clazzDTO = switch (clazz.getSimpleName().toLowerCase()) {
+            case "client" -> ClientEntity.class;
+            case "admin" -> AdminEntity.class;
+            case "resourceadmin" -> ResourceAdminEntity.class;
             default ->
                     throw new UnexpectedTypeException("Typ danego uzytkownika nie pasuje do zadnego z obslugiwanych!");
         };
 
         List<User> list = new ArrayList<>();
         for (var userDTO : this.getDatabase().getCollection(COLLECTION_NAME, clazzDTO).find(filter).into(new ArrayList<>())) {
-            if (userDTO instanceof ClientDTO clientDTO) {
+            if (userDTO instanceof ClientEntity clientDTO) {
                 list.add(ClientMapper.fromMongoUser(clientDTO));
-            } else if (userDTO instanceof AdminDTO adminDTO) {
+            } else if (userDTO instanceof AdminEntity adminDTO) {
                 list.add(AdminMapper.fromMongoUser(adminDTO));
-            } else if (userDTO instanceof ResourceAdminDTO resourceAdminDTO) {
+            } else if (userDTO instanceof ResourceAdminEntity resourceAdminDTO) {
                 list.add(ResourceAdminMapper.fromMongoUser(resourceAdminDTO));
             }
         }

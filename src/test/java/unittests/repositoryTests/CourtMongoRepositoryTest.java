@@ -5,7 +5,7 @@ import com.mongodb.client.model.Filters;
 import pas.gV.model.exceptions.CourtNumberException;
 import pas.gV.model.logic.courts.Court;
 import pas.gV.model.exceptions.MyMongoException;
-import pas.gV.model.data.datahandling.dto.CourtDTO;
+import pas.gV.model.data.datahandling.entities.CourtEntity;
 import pas.gV.model.data.repositories.CourtMongoRepository;
 import pas.gV.model.data.repositories.ReservationMongoRepository;
 import pas.gV.model.data.repositories.UserMongoRepository;
@@ -35,9 +35,9 @@ public class CourtMongoRepositoryTest {
     Court court2;
     Court court3;
 
-    private MongoCollection<CourtDTO> getTestCollection() {
+    private MongoCollection<CourtEntity> getTestCollection() {
         return courtRepository.getDatabase()
-                .getCollection(courtRepository.getCollectionName(), CourtDTO.class);
+                .getCollection(courtRepository.getCollectionName(), CourtEntity.class);
     }
 
     @BeforeAll

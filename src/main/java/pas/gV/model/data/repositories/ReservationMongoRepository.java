@@ -24,10 +24,10 @@ import pas.gV.model.exceptions.UserException;
 import pas.gV.model.exceptions.CourtException;
 import pas.gV.model.exceptions.MyMongoException;
 import pas.gV.model.exceptions.ReservationException;
-import pas.gV.model.data.datahandling.dto.ClientDTO;
+import pas.gV.model.data.datahandling.entities.ClientEntity;
 import pas.gV.model.data.datahandling.mappers.ClientMapper;
-import pas.gV.model.data.datahandling.dto.CourtDTO;
-import pas.gV.model.data.datahandling.dto.ReservationDTO;
+import pas.gV.model.data.datahandling.entities.CourtEntity;
+import pas.gV.model.data.datahandling.entities.ReservationEntity;
 import pas.gV.model.data.datahandling.mappers.ReservationMapper;
 import pas.gV.model.logic.reservations.Reservation;
 
@@ -72,7 +72,7 @@ public class ReservationMongoRepository extends AbstractMongoRepository<Reservat
     public Reservation create(Reservation initReservation) {
         try {
             //Check client
-            var list1 = getDatabase().getCollection(UserMongoRepository.COLLECTION_NAME, ClientDTO.class)
+            var list1 = getDatabase().getCollection(UserMongoRepository.COLLECTION_NAME, ClientEntity.class)
                     .find(Filters.eq("_id", initReservation.getClient().getId().toString())).into(new ArrayList<>());
             if (list1.isEmpty()) {
                 throw new ReservationException("Brak podanego klienta w bazie!");
@@ -80,7 +80,7 @@ public class ReservationMongoRepository extends AbstractMongoRepository<Reservat
             Client clientFound = ClientMapper.fromMongoUser(list1.get(0));
 
             //Check court
-            var list2 = getDatabase().getCollection(CourtMongoRepository.COLLECTION_NAME, CourtDTO.class)
+            var list2 = getDatabase().getCollection(CourtMongoRepository.COLLECTION_NAME, CourtEntity.class)
                     .find(Filters.eq("_id", initReservation.getCourt().getId().toString())).into(new ArrayList<>());
             if (list2.isEmpty()) {
                 throw new ReservationException("Brak podanego boiska w bazie!");
@@ -97,7 +97,7 @@ public class ReservationMongoRepository extends AbstractMongoRepository<Reservat
                     clientSession.startTransaction();
                     result = this.getCollection().insertOne(clientSession, ReservationMapper.toMongoReservation(newReservation));
                     if (result.wasAcknowledged()) {
-                        getDatabase().getCollection(CourtMongoRepository.COLLECTION_NAME, CourtDTO.class).updateOne(
+                        getDatabase().getCollection(CourtMongoRepository.COLLECTION_NAME, CourtEntity.class).updateOne(
                                 clientSession,
                                 Filters.eq("_id", courtFound.getId().toString()),
                                 Updates.inc("rented", 1));
@@ -128,20 +128,20 @@ public class ReservationMongoRepository extends AbstractMongoRepository<Reservat
     public List<Reservation> read(Bson filter) {
         var list = new ArrayList<Reservation>();
         for (var el : this.getCollection().find(filter).into(new ArrayList<>())) {
-            var list1 = getDatabase().getCollection(UserMongoRepository.COLLECTION_NAME, ClientDTO.class)
+            var list1 = getDatabase().getCollection(UserMongoRepository.COLLECTION_NAME, ClientEntity.class)
                     .find(Filters.eq("_id", el.getClientId())).into(new ArrayList<>());
             if (list1.isEmpty()) {
                 throw new ReservationException("Brak podanego klienta w bazie!");
             }
-            ClientDTO clientFound = list1.get(0);
+            ClientEntity clientFound = list1.get(0);
 
             //Check court
-            var list2 = getDatabase().getCollection(CourtMongoRepository.COLLECTION_NAME, CourtDTO.class)
+            var list2 = getDatabase().getCollection(CourtMongoRepository.COLLECTION_NAME, CourtEntity.class)
                     .find(Filters.eq("_id", el.getCourtId())).into(new ArrayList<>());
             if (list2.isEmpty()) {
                 throw new ReservationException("Brak podanego boiska w bazie!");
             }
-            CourtDTO courtFound = list2.get(0);
+            CourtEntity courtFound = list2.get(0);
             list.add(ReservationMapper.fromMongoReservation(el, clientFound, courtFound));
         }
         return list;
@@ -149,7 +149,7 @@ public class ReservationMongoRepository extends AbstractMongoRepository<Reservat
 
     public void update(UUID courtId, LocalDateTime endTime) {
         //Find court
-        var listCourt = getDatabase().getCollection(CourtMongoRepository.COLLECTION_NAME, CourtDTO.class)
+        var listCourt = getDatabase().getCollection(CourtMongoRepository.COLLECTION_NAME, CourtEntity.class)
                 .find(Filters.eq("_id", courtId.toString())).into(new ArrayList<>());
         if (listCourt.isEmpty()) {
             throw new ReservationException("Brak podanego boiska w bazie!");
@@ -160,7 +160,7 @@ public class ReservationMongoRepository extends AbstractMongoRepository<Reservat
 
         //Find reservation
         var listReservation = getDatabase().getCollection(COLLECTION_NAME,
-                        ReservationDTO.class).find(Filters.and(
+                        ReservationEntity.class).find(Filters.and(
                         Filters.eq("courtid", courtId.toString()),
                         Filters.eq("endtime", null)))
                 .into(new ArrayList<>());
@@ -169,7 +169,7 @@ public class ReservationMongoRepository extends AbstractMongoRepository<Reservat
         }
 
         //Find client
-        var listClient = getDatabase().getCollection(UserMongoRepository.COLLECTION_NAME, ClientDTO.class)
+        var listClient = getDatabase().getCollection(UserMongoRepository.COLLECTION_NAME, ClientEntity.class)
                 .find(Filters.eq("_id", listReservation.get(0).getClientId()))
                 .into(new ArrayList<>());
         if (listClient.isEmpty()) {
@@ -189,7 +189,7 @@ public class ReservationMongoRepository extends AbstractMongoRepository<Reservat
             update(reservationFound.getId(), "reservationcost", reservationFound.getReservationCost());
 
             //Update court's "rented" field
-            getDatabase().getCollection(CourtMongoRepository.COLLECTION_NAME, CourtDTO.class).updateOne(
+            getDatabase().getCollection(CourtMongoRepository.COLLECTION_NAME, CourtEntity.class).updateOne(
                     clientSession,
                     Filters.eq("_id", listCourt.get(0).getId()),
                     Updates.inc("rented", -1));
@@ -224,8 +224,8 @@ public class ReservationMongoRepository extends AbstractMongoRepository<Reservat
     }
 
     @Override
-    protected MongoCollection<ReservationDTO> getCollection() {
-        return getDatabase().getCollection(getCollectionName(), ReservationDTO.class);
+    protected MongoCollection<ReservationEntity> getCollection() {
+        return getDatabase().getCollection(getCollectionName(), ReservationEntity.class);
     }
 
     @Override
@@ -234,7 +234,7 @@ public class ReservationMongoRepository extends AbstractMongoRepository<Reservat
     }
 
 
-    private boolean createNew(ReservationDTO dto) {
+    private boolean createNew(ReservationEntity dto) {
         InsertOneResult result;
         try {
             result = this.getCollection().insertOne(dto);
@@ -251,9 +251,9 @@ public class ReservationMongoRepository extends AbstractMongoRepository<Reservat
         LocalDateTime dataStart = LocalDateTime.of(2023, Month.NOVEMBER, 30, 14, 20);
         LocalDateTime secondDate = LocalDateTime.of(2023, Month.NOVEMBER, 28, 14, 20);
 
-       createNew(new ReservationDTO(UUID.randomUUID().toString(), UUID.fromString("b6f5bcb8-7f01-4470-8238-cc3320326157").toString(), UUID.fromString("fe6a35bb-7535-4c23-a259-a14ac0ccedba").toString(), dataStart , null, 0));
-       createNew(new ReservationDTO(UUID.randomUUID().toString(), UUID.fromString("80e62401-6517-4392-856c-e22ef5f3d6a2").toString(), UUID.fromString("634d9130-0015-42bb-a70a-543dee846760").toString(), dataStart , null, 0));
-       createNew(new ReservationDTO(UUID.randomUUID().toString(), UUID.fromString("6dc63417-0a21-462c-a97a-e0bf6055a3ea").toString(), UUID.fromString("30ac2027-dcc8-4af7-920f-831b51023bc9").toString(), secondDate, null, 0));
+       createNew(new ReservationEntity(UUID.randomUUID().toString(), UUID.fromString("b6f5bcb8-7f01-4470-8238-cc3320326157").toString(), UUID.fromString("fe6a35bb-7535-4c23-a259-a14ac0ccedba").toString(), dataStart , null, 0));
+       createNew(new ReservationEntity(UUID.randomUUID().toString(), UUID.fromString("80e62401-6517-4392-856c-e22ef5f3d6a2").toString(), UUID.fromString("634d9130-0015-42bb-a70a-543dee846760").toString(), dataStart , null, 0));
+       createNew(new ReservationEntity(UUID.randomUUID().toString(), UUID.fromString("6dc63417-0a21-462c-a97a-e0bf6055a3ea").toString(), UUID.fromString("30ac2027-dcc8-4af7-920f-831b51023bc9").toString(), secondDate, null, 0));
     }
 
     @PreDestroy

@@ -1,4 +1,4 @@
-package pas.gV.model.data.datahandling.dto;
+package pas.gV.model.data.datahandling.entities;
 
 import lombok.Getter;
 import lombok.experimental.FieldDefaults;
@@ -9,7 +9,7 @@ import java.util.Objects;
 
 @Getter
 @FieldDefaults(makeFinal = true)
-public class UserDTO implements DTO_Bson {
+public class UserEntity implements Entity {
     @BsonProperty("_id")
     private String id;
     @BsonProperty("login")
@@ -19,10 +19,10 @@ public class UserDTO implements DTO_Bson {
     @BsonProperty("password")
     private String password;
     @BsonCreator
-    public UserDTO(@BsonProperty("_id") String id,
-                   @BsonProperty("login") String login,
-                   @BsonProperty("password") String password,
-                   @BsonProperty("archive") boolean archive) {
+    public UserEntity(@BsonProperty("_id") String id,
+                      @BsonProperty("login") String login,
+                      @BsonProperty("password") String password,
+                      @BsonProperty("archive") boolean archive) {
         this.id = id;
         this.login = login;
         this.password = password;
@@ -33,7 +33,7 @@ public class UserDTO implements DTO_Bson {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        UserDTO userDTO = (UserDTO) o;
+        UserEntity userDTO = (UserEntity) o;
         return Objects.equals(id, userDTO.id) && Objects.equals(login, userDTO.login);
     }
 

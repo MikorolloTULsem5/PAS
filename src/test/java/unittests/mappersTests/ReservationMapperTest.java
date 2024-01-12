@@ -2,10 +2,10 @@ package unittests.mappersTests;
 
 import pas.gV.model.logic.users.Client;
 import pas.gV.model.logic.courts.Court;
-import pas.gV.model.data.datahandling.dto.ClientDTO;
+import pas.gV.model.data.datahandling.entities.ClientEntity;
 import pas.gV.model.data.datahandling.mappers.ClientMapper;
-import pas.gV.model.data.datahandling.dto.CourtDTO;
-import pas.gV.model.data.datahandling.dto.ReservationDTO;
+import pas.gV.model.data.datahandling.entities.CourtEntity;
+import pas.gV.model.data.datahandling.entities.ReservationEntity;
 import pas.gV.model.data.datahandling.mappers.CourtMapper;
 import pas.gV.model.data.datahandling.mappers.ReservationMapper;
 import pas.gV.model.logic.reservations.Reservation;
@@ -23,9 +23,9 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 public class ReservationMapperTest {
     UUID uuid = UUID.randomUUID();
     Client testClient;
-    ClientDTO testClientMapper;
+    ClientEntity testClientMapper;
     Court testCourt;
-    CourtDTO testCourtMapper;
+    CourtEntity testCourtMapper;
 
     LocalDateTime testTimeStart;
     LocalDateTime testTimeEnd;
@@ -44,7 +44,7 @@ public class ReservationMapperTest {
 
     @Test
     void testCreatingMapper() {
-        ReservationDTO reservationMapper = new ReservationDTO(uuid.toString(),
+        ReservationEntity reservationMapper = new ReservationEntity(uuid.toString(),
                 testClient.getId().toString(), testCourt.getId().toString(), testTimeStart, testTimeEnd,
                 200);
         assertNotNull(reservationMapper);
@@ -62,7 +62,7 @@ public class ReservationMapperTest {
         Reservation reservation = new Reservation(UUID.randomUUID(), testClient, testCourt, testTimeStart);
         assertNotNull(reservation);
 
-        ReservationDTO reservationMapper = ReservationMapper.toMongoReservation(reservation);
+        ReservationEntity reservationMapper = ReservationMapper.toMongoReservation(reservation);
         assertNotNull(reservationMapper);
 
         assertEquals(reservation.getId(), UUID.fromString(reservationMapper.getId()));
@@ -76,7 +76,7 @@ public class ReservationMapperTest {
         assertNotNull(reservationEnded);
         reservationEnded.endReservation(testTimeEnd);
 
-        ReservationDTO reservationMapperEnded = ReservationMapper.toMongoReservation(reservationEnded);
+        ReservationEntity reservationMapperEnded = ReservationMapper.toMongoReservation(reservationEnded);
         assertNotNull(reservationMapperEnded);
 
         assertEquals(reservationEnded.getId(), UUID.fromString(reservationMapperEnded.getId()));
@@ -89,7 +89,7 @@ public class ReservationMapperTest {
 
     @Test
     void testFromMongoClientMethod() {
-        ReservationDTO reservationMapper = new ReservationDTO(uuid.toString(),
+        ReservationEntity reservationMapper = new ReservationEntity(uuid.toString(),
                 testClient.getId().toString(), testCourt.getId().toString(), testTimeStart, null,
                 0);
         assertNotNull(reservationMapper);
@@ -106,7 +106,7 @@ public class ReservationMapperTest {
         assertEquals(0, reservation.getReservationCost());
 
 
-        ReservationDTO reservationMapperEnded = new ReservationDTO(uuid.toString(),
+        ReservationEntity reservationMapperEnded = new ReservationEntity(uuid.toString(),
                 testClient.getId().toString(), testCourt.getId().toString(), testTimeStart, testTimeEnd,
                 300);
         assertNotNull(reservationMapperEnded);

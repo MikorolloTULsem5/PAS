@@ -1,6 +1,6 @@
 package unittests.mappersTests;
 
-import pas.gV.model.data.datahandling.dto.ClientDTO;
+import pas.gV.model.data.datahandling.entities.ClientEntity;
 import pas.gV.model.logic.users.Client;
 import pas.gV.model.data.datahandling.mappers.ClientMapper;
 import org.junit.jupiter.api.Test;
@@ -25,7 +25,7 @@ public class ClientMapperTest {
 
     @Test
     void testCreatingMapper() {
-        ClientDTO clientDTO1 = new ClientDTO(uuid.toString(), testFirstName, testLastName, testLogin, testPassword,
+        ClientEntity clientDTO1 = new ClientEntity(uuid.toString(), testFirstName, testLastName, testLogin, testPassword,
                 false, testTypeNormal);
         assertNotNull(clientDTO1);
 
@@ -37,12 +37,12 @@ public class ClientMapperTest {
         assertEquals(testTypeNormal, clientDTO1.getClientType());
 
         //Test other clientTypes
-        ClientDTO clientDTO2 = new ClientDTO(UUID.randomUUID().toString(),
+        ClientEntity clientDTO2 = new ClientEntity(UUID.randomUUID().toString(),
                 testFirstName, testLastName, testLogin, testPassword, false, testTypeAthlete);
         assertNotNull(clientDTO2);
         assertEquals(testTypeAthlete, clientDTO2.getClientType());
 
-        ClientDTO clientDTO3 = new ClientDTO(UUID.randomUUID().toString(), testFirstName, testLastName,
+        ClientEntity clientDTO3 = new ClientEntity(UUID.randomUUID().toString(), testFirstName, testLastName,
                 testLogin, "aaa", false, testTypeCoach);
         assertNotNull(clientDTO3);
         assertEquals(testTypeCoach, clientDTO3.getClientType());
@@ -53,7 +53,7 @@ public class ClientMapperTest {
         Client client = new Client(UUID.randomUUID(), testFirstName, testLastName, testLogin, testPassword, testTypeNormal);
         assertNotNull(client);
 
-        ClientDTO clientDTO = ClientMapper.toMongoUser(client);
+        ClientEntity clientDTO = ClientMapper.toMongoUser(client);
         assertNotNull(clientDTO);
 
         assertEquals(client.getId(), UUID.fromString(clientDTO.getId()));
@@ -66,7 +66,7 @@ public class ClientMapperTest {
 
     @Test
     void testFromMongoClientMethod() {
-        ClientDTO clientDTO1 = new ClientDTO(uuid.toString(), testFirstName, testLastName, testLogin, testPassword,
+        ClientEntity clientDTO1 = new ClientEntity(uuid.toString(), testFirstName, testLastName, testLogin, testPassword,
                 true, testTypeNormal);
         assertNotNull(clientDTO1);
 
@@ -81,7 +81,7 @@ public class ClientMapperTest {
         assertEquals(clientDTO1.getClientType(), client1.getClientTypeName());
 
         //Test other clientTypes
-        ClientDTO clientDTO2 = new ClientDTO(UUID.randomUUID().toString(),
+        ClientEntity clientDTO2 = new ClientEntity(UUID.randomUUID().toString(),
                 testFirstName, testLastName, testLogin, testPassword, false, testTypeAthlete);
         assertNotNull(clientDTO2);
 
@@ -89,7 +89,7 @@ public class ClientMapperTest {
         assertNotNull(client2);
         assertEquals(clientDTO2.getClientType(), client2.getClientTypeName());
 
-        ClientDTO clientDTO3 = new ClientDTO(UUID.randomUUID().toString(), testFirstName, testLastName,
+        ClientEntity clientDTO3 = new ClientEntity(UUID.randomUUID().toString(), testFirstName, testLastName,
                 testLogin, testPassword, false, testTypeCoach);
         assertNotNull(clientDTO3);
 

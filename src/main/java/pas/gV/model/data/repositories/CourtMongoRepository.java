@@ -13,8 +13,8 @@ import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 
 import org.springframework.stereotype.Component;
-import pas.gV.model.data.datahandling.dto.CourtDTO;
-import pas.gV.model.data.datahandling.dto.ReservationDTO;
+import pas.gV.model.data.datahandling.entities.CourtEntity;
+import pas.gV.model.data.datahandling.entities.ReservationEntity;
 import pas.gV.model.data.datahandling.mappers.CourtMapper;
 import pas.gV.model.exceptions.CourtException;
 import pas.gV.model.exceptions.CourtNumberException;
@@ -65,8 +65,8 @@ public class CourtMongoRepository extends AbstractMongoRepository<Court> {
     }
 
     @Override
-    protected MongoCollection<CourtDTO> getCollection() {
-        return getDatabase().getCollection(getCollectionName(), CourtDTO.class);
+    protected MongoCollection<CourtEntity> getCollection() {
+        return getDatabase().getCollection(getCollectionName(), CourtEntity.class);
     }
 
     @Override
@@ -74,7 +74,7 @@ public class CourtMongoRepository extends AbstractMongoRepository<Court> {
         return COLLECTION_NAME;
     }
 
-    private boolean createNew(CourtDTO dto) {
+    private boolean createNew(CourtEntity dto) {
         InsertOneResult result;
         try {
             result = this.getCollection().insertOne(dto);
@@ -119,7 +119,7 @@ public class CourtMongoRepository extends AbstractMongoRepository<Court> {
         ClientSession clientSession = getMongoClient().startSession();
         try {
             clientSession.startTransaction();
-            var reservation = this.getDatabase().getCollection(ReservationMongoRepository.COLLECTION_NAME, ReservationDTO.class).find(filter).first();
+            var reservation = this.getDatabase().getCollection(ReservationMongoRepository.COLLECTION_NAME, ReservationEntity.class).find(filter).first();
             if (reservation != null) {
                 throw new IllegalStateException();
             }

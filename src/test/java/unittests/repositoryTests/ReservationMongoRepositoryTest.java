@@ -10,7 +10,7 @@ import pas.gV.model.exceptions.UserException;
 import pas.gV.model.exceptions.CourtException;
 import pas.gV.model.exceptions.MyMongoException;
 import pas.gV.model.exceptions.ReservationException;
-import pas.gV.model.data.datahandling.dto.ReservationDTO;
+import pas.gV.model.data.datahandling.entities.ReservationEntity;
 import pas.gV.model.data.repositories.UserMongoRepository;
 import pas.gV.model.data.repositories.CourtMongoRepository;
 import pas.gV.model.data.repositories.ReservationMongoRepository;
@@ -43,9 +43,9 @@ public class ReservationMongoRepositoryTest {
     LocalDateTime testTimeStart;
     LocalDateTime testTimeEnd;
 
-    private MongoCollection<ReservationDTO> getTestCollection() {
+    private MongoCollection<ReservationEntity> getTestCollection() {
         return reservationRepository.getDatabase()
-                .getCollection(reservationRepository.getCollectionName(), ReservationDTO.class);
+                .getCollection(reservationRepository.getCollectionName(), ReservationEntity.class);
     }
 
     @BeforeAll

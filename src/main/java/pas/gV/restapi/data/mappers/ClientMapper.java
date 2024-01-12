@@ -4,6 +4,7 @@ import pas.gV.model.logic.users.Client;
 
 import pas.gV.restapi.data.dto.ClientDTO;
 
+import java.util.Objects;
 import java.util.UUID;
 
 public class ClientMapper {
@@ -15,7 +16,7 @@ public class ClientMapper {
     }
 
     public static Client fromJsonUser(ClientDTO clientDTO) {
-        Client clientModel = new Client(UUID.fromString(clientDTO.getId()), clientDTO.getFirstName(),
+        Client clientModel = new Client(clientDTO.getId() != null ? UUID.fromString(clientDTO.getId()) : null, clientDTO.getFirstName(),
                 clientDTO.getLastName(), clientDTO.getLogin(), clientDTO.getPassword(), clientDTO.getClientType());
         clientModel.setArchive(clientDTO.isArchive());
         return clientModel;

@@ -10,7 +10,7 @@ import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Updates;
 import com.mongodb.client.result.UpdateResult;
-import pas.gV.model.data.datahandling.dto.DTO_Bson;
+import pas.gV.model.data.datahandling.entities.Entity;
 import pas.gV.model.exceptions.MyMongoException;
 import org.bson.UuidRepresentation;
 import org.bson.codecs.configuration.CodecRegistries;
@@ -70,7 +70,7 @@ public abstract class AbstractMongoRepository<T> implements AutoCloseable {
 
     /*--------------------------------------------Additional----------------------------------------------------*/
 
-    protected MongoCollection<? extends DTO_Bson> getCollection() {
+    protected MongoCollection<? extends Entity> getCollection() {
         return null;
     }
 

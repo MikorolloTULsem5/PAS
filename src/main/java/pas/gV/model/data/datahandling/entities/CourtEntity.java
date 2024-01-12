@@ -1,4 +1,4 @@
-package pas.gV.model.data.datahandling.dto;
+package pas.gV.model.data.datahandling.entities;
 
 import lombok.Getter;
 import lombok.experimental.FieldDefaults;
@@ -9,7 +9,7 @@ import java.util.Objects;
 
 @Getter
 @FieldDefaults(makeFinal = true)
-public class CourtDTO implements DTO_Bson {
+public class CourtEntity implements Entity {
     @BsonProperty("_id")
     private String id;
     @BsonProperty("area")
@@ -24,12 +24,12 @@ public class CourtDTO implements DTO_Bson {
     private int rented;
 
     @BsonCreator
-    public CourtDTO(@BsonProperty("_id") String id,
-                    @BsonProperty("area") double area,
-                    @BsonProperty("basecost") int baseCost,
-                    @BsonProperty("courtnumber") int courtNumber,
-                    @BsonProperty("archive") boolean archive,
-                    @BsonProperty("rented") int rented) {
+    public CourtEntity(@BsonProperty("_id") String id,
+                       @BsonProperty("area") double area,
+                       @BsonProperty("basecost") int baseCost,
+                       @BsonProperty("courtnumber") int courtNumber,
+                       @BsonProperty("archive") boolean archive,
+                       @BsonProperty("rented") int rented) {
         this.id = id;
         this.area = area;
         this.baseCost = baseCost;
@@ -46,7 +46,7 @@ public class CourtDTO implements DTO_Bson {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        CourtDTO that = (CourtDTO) o;
+        CourtEntity that = (CourtEntity) o;
         return Double.compare(area, that.area) == 0 &&
                 baseCost == that.baseCost &&
                 courtNumber == that.courtNumber &&

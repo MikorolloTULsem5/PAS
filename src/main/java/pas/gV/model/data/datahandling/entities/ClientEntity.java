@@ -1,4 +1,4 @@
-package pas.gV.model.data.datahandling.dto;
+package pas.gV.model.data.datahandling.entities;
 
 import lombok.Getter;
 import lombok.experimental.FieldDefaults;
@@ -11,7 +11,7 @@ import java.util.Objects;
 @Getter
 @FieldDefaults(makeFinal = true)
 @BsonDiscriminator(key = "_clazz", value = "client")
-public class ClientDTO extends UserDTO {
+public class ClientEntity extends UserEntity {
     @BsonProperty("firstname")
     private String firstName;
     @BsonProperty("lastname")
@@ -20,13 +20,13 @@ public class ClientDTO extends UserDTO {
     private String clientType;
 
     @BsonCreator
-    public ClientDTO(@BsonProperty("_id") String id,
-                     @BsonProperty("firstname") String firstName,
-                     @BsonProperty("lastname") String lastName,
-                     @BsonProperty("login") String login,
-                     @BsonProperty("password") String password,
-                     @BsonProperty("archive") boolean archive,
-                     @BsonProperty("clienttype") String clientType) {
+    public ClientEntity(@BsonProperty("_id") String id,
+                        @BsonProperty("firstname") String firstName,
+                        @BsonProperty("lastname") String lastName,
+                        @BsonProperty("login") String login,
+                        @BsonProperty("password") String password,
+                        @BsonProperty("archive") boolean archive,
+                        @BsonProperty("clienttype") String clientType) {
         super(id, login, password, archive);
         this.firstName = firstName;
         this.lastName = lastName;
@@ -37,7 +37,7 @@ public class ClientDTO extends UserDTO {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        ClientDTO that = (ClientDTO) o;
+        ClientEntity that = (ClientEntity) o;
         return isArchive() == that.isArchive() && Objects.equals(getId(), that.getId()) && Objects.equals(firstName,
                 that.firstName) && Objects.equals(lastName, that.lastName)
                 && Objects.equals(getLogin(), that.getLogin()) && Objects.equals(clientType, that.clientType);
