@@ -19,9 +19,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import pas.gV.model.exceptions.UserException;
 import pas.gV.model.exceptions.UserLoginException;
-import pas.gV.model.logic.users.Client;
+
 import pas.gV.restapi.data.dto.ClientDTO;
-import pas.gV.restapi.data.mappers.ClientMapper;
 import pas.gV.restapi.services.userservice.ClientService;
 
 import java.util.List;
@@ -40,8 +39,7 @@ public class ClientController {
 
     @PostMapping("/addClient")
     public ResponseEntity<String> addClient(@RequestBody ClientDTO client) {
-        ///TODO
-        Set<ConstraintViolation<Client>> violations = validator.validate(ClientMapper.fromJsonUser(client));
+        Set<ConstraintViolation<ClientDTO>> violations = validator.validate(client);
         List<String> errors = violations.stream().map(ConstraintViolation::getMessage).toList();
         if (!violations.isEmpty()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errors.toString());
@@ -99,8 +97,7 @@ public class ClientController {
 
     @PutMapping("/modifyClient/{id}")
     public ResponseEntity<String> modifyClient(@PathVariable("id") String id, @RequestBody ClientDTO modifiedClient) {
-        ///TODO
-        Set<ConstraintViolation<Client>> violations = validator.validate(ClientMapper.fromJsonUser(modifiedClient));
+        Set<ConstraintViolation<ClientDTO>> violations = validator.validate(modifiedClient);
         List<String> errors = violations.stream().map(ConstraintViolation::getMessage).toList();
         if (!violations.isEmpty()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errors.toString());

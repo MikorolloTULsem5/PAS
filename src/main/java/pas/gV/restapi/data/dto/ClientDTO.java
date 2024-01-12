@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
+import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.experimental.FieldDefaults;
 
@@ -15,8 +16,10 @@ import java.util.Objects;
 @JsonPropertyOrder({"archive", "id", "login", "clientTypeName", "firstName", "lastName"})
 public class ClientDTO extends UserDTO {
     @JsonProperty("firstName")
+    @NotBlank
     private String firstName;
     @JsonProperty("lastName")
+    @NotBlank
     private String lastName;
     @JsonProperty("clientTypeName")
     private String clientType;
