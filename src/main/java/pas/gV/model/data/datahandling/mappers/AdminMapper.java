@@ -1,14 +1,18 @@
 package pas.gV.model.data.datahandling.mappers;
 
+import com.google.common.hash.Hashing;
 import pas.gV.model.data.datahandling.entities.AdminEntity;
 import pas.gV.model.logic.users.Admin;
 
+import java.nio.charset.StandardCharsets;
 import java.util.UUID;
 
 public class AdminMapper {
 
     public static AdminEntity toMongoUser(Admin admin) {
-        return new AdminEntity(admin.getId().toString(), admin.getLogin(), admin.getPassword(), admin.isArchive());
+        return new AdminEntity(admin.getId().toString(), admin.getLogin(),
+                Hashing.sha256().hashString(admin.getPassword(), StandardCharsets.UTF_8).toString(),
+                admin.isArchive());
     }
 
     public static Admin fromMongoUser(AdminEntity adminDTO) {

@@ -1,4 +1,4 @@
-package unittests.managersTests;
+package unittests.servicesTests;
 
 import com.mongodb.client.model.Filters;
 import pas.gV.model.exceptions.MultiReservationException;
@@ -27,7 +27,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class ReservationManagerTest {
+public class ReservationServiceTest {
 
     static final ReservationMongoRepository reservationRepository = new ReservationMongoRepository();
     static final UserMongoRepository clientRepository = new UserMongoRepository();

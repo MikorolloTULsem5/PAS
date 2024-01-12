@@ -26,7 +26,6 @@ import pas.gV.restapi.services.userservice.ClientService;
 
 import java.util.List;
 import java.util.Set;
-import java.util.UUID;
 
 @RestController
 @RequestMapping("/clients")

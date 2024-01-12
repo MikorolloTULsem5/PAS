@@ -1,4 +1,4 @@
-package unittests.managersTests;
+package unittests.servicesTests;
 
 import com.mongodb.client.model.Filters;
 import pas.gV.model.exceptions.UserLoginException;
@@ -21,7 +21,7 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class ClientManagerTest {
+public class ClientServiceTest {
 
     static final UserMongoRepository clientRepository = new UserMongoRepository();
     static final ClientService cm = new ClientService(clientRepository);

@@ -1,4 +1,4 @@
-package unittests.managersTests;
+package unittests.servicesTests;
 
 import com.mongodb.client.model.Filters;
 import pas.gV.model.exceptions.CourtNumberException;
@@ -28,7 +28,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class CourtManagerTest {
+public class CourtServiceTest {
 
     static final CourtMongoRepository courtRepository = new CourtMongoRepository();
     static final CourtService cm = new CourtService(courtRepository);
