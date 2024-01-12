@@ -12,10 +12,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import pas.gV.exceptions.MultiReservationException;
-import pas.gV.exceptions.MyMongoException;
-import pas.gV.exceptions.ReservationException;
-import pas.gV.model.reservations.Reservation;
+import pas.gV.model.exceptions.MultiReservationException;
+import pas.gV.model.exceptions.MyMongoException;
+import pas.gV.model.exceptions.ReservationException;
+import pas.gV.model.logic.reservations.Reservation;
 import pas.gV.restapi.services.ReservationService;
 
 import java.time.LocalDateTime;

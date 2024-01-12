@@ -1,16 +1,16 @@
 package unittests.managersTests;
 
 import com.mongodb.client.model.Filters;
-import pas.gV.exceptions.MultiReservationException;
-import pas.gV.model.users.Client;
-import pas.gV.model.courts.Court;
-import pas.gV.exceptions.UserException;
-import pas.gV.exceptions.CourtException;
-import pas.gV.exceptions.ReservationException;
-import pas.gV.data.repositories.UserMongoRepository;
-import pas.gV.data.repositories.CourtMongoRepository;
-import pas.gV.data.repositories.ReservationMongoRepository;
-import pas.gV.model.reservations.Reservation;
+import pas.gV.model.exceptions.MultiReservationException;
+import pas.gV.model.logic.users.Client;
+import pas.gV.model.logic.courts.Court;
+import pas.gV.model.exceptions.UserException;
+import pas.gV.model.exceptions.CourtException;
+import pas.gV.model.exceptions.ReservationException;
+import pas.gV.model.data.repositories.UserMongoRepository;
+import pas.gV.model.data.repositories.CourtMongoRepository;
+import pas.gV.model.data.repositories.ReservationMongoRepository;
+import pas.gV.model.logic.reservations.Reservation;
 import pas.gV.restapi.services.ReservationService;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;

@@ -1,8 +1,8 @@
 package unittests.mappersTests;
 
-import pas.gV.model.courts.Court;
-import pas.gV.data.datahandling.dto.CourtDTO;
-import pas.gV.data.datahandling.mappers.CourtMapper;
+import pas.gV.model.logic.courts.Court;
+import pas.gV.model.data.datahandling.dto.CourtDTO;
+import pas.gV.model.data.datahandling.mappers.CourtMapper;
 import org.junit.jupiter.api.Test;
 
 import java.util.UUID;

@@ -18,10 +18,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import pas.gV.exceptions.CourtException;
-import pas.gV.exceptions.CourtNumberException;
-import pas.gV.exceptions.MyMongoException;
-import pas.gV.model.courts.Court;
+import pas.gV.model.exceptions.CourtException;
+import pas.gV.model.exceptions.CourtNumberException;
+import pas.gV.model.exceptions.MyMongoException;
+import pas.gV.model.logic.courts.Court;
 import pas.gV.restapi.services.CourtService;
 
 import java.util.List;

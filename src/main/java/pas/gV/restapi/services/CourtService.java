@@ -5,11 +5,11 @@ import com.mongodb.client.model.Filters;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import pas.gV.exceptions.CourtNumberException;
-import pas.gV.model.courts.Court;
-import pas.gV.exceptions.CourtException;
-import pas.gV.exceptions.MyMongoException;
-import pas.gV.data.repositories.CourtMongoRepository;
+import pas.gV.model.exceptions.CourtNumberException;
+import pas.gV.model.logic.courts.Court;
+import pas.gV.model.exceptions.CourtException;
+import pas.gV.model.exceptions.MyMongoException;
+import pas.gV.model.data.repositories.CourtMongoRepository;
 
 import java.util.List;
 import java.util.UUID;

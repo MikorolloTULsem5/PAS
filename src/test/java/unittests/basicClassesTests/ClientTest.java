@@ -1,6 +1,6 @@
 package unittests.basicClassesTests;
 
-import pas.gV.model.users.Client;
+import pas.gV.model.logic.users.Client;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;

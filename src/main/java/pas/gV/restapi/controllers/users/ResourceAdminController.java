@@ -16,10 +16,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import pas.gV.exceptions.UserException;
-import pas.gV.exceptions.UserLoginException;
-import pas.gV.model.users.ResourceAdmin;
-import pas.gV.model.users.User;
+import pas.gV.model.exceptions.UserException;
+import pas.gV.model.exceptions.UserLoginException;
+import pas.gV.model.logic.users.ResourceAdmin;
+import pas.gV.model.logic.users.User;
 import pas.gV.restapi.services.userservice.ResourceAdminService;
 
 import java.util.List;

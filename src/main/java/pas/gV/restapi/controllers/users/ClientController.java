@@ -17,9 +17,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import pas.gV.exceptions.UserException;
-import pas.gV.exceptions.UserLoginException;
-import pas.gV.model.users.Client;
+import pas.gV.model.exceptions.UserException;
+import pas.gV.model.exceptions.UserLoginException;
+import pas.gV.model.logic.users.Client;
 import pas.gV.restapi.services.userservice.ClientService;
 
 import java.util.List;

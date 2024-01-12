@@ -1,6 +1,6 @@
 package unittests.basicClassesTests;
 
-import pas.gV.model.courts.Court;
+import pas.gV.model.logic.courts.Court;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;

@@ -1,12 +1,12 @@
 package unittests.basicClassesTests;
 
-import pas.gV.exceptions.UserException;
-import pas.gV.exceptions.CourtException;
-import pas.gV.exceptions.JakartaException;
-import pas.gV.exceptions.MainException;
-import pas.gV.exceptions.MyMongoException;
-import pas.gV.exceptions.RepositoryException;
-import pas.gV.exceptions.ReservationException;
+import pas.gV.model.exceptions.UserException;
+import pas.gV.model.exceptions.CourtException;
+import pas.gV.model.exceptions.JakartaException;
+import pas.gV.model.exceptions.MainException;
+import pas.gV.model.exceptions.MyMongoException;
+import pas.gV.model.exceptions.RepositoryException;
+import pas.gV.model.exceptions.ReservationException;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;

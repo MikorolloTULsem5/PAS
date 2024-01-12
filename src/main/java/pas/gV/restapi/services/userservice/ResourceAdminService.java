@@ -5,12 +5,12 @@ import jakarta.validation.UnexpectedTypeException;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import pas.gV.data.repositories.UserMongoRepository;
-import pas.gV.exceptions.MyMongoException;
-import pas.gV.exceptions.UserException;
-import pas.gV.exceptions.UserLoginException;
-import pas.gV.model.users.ResourceAdmin;
-import pas.gV.model.users.User;
+import pas.gV.model.data.repositories.UserMongoRepository;
+import pas.gV.model.exceptions.MyMongoException;
+import pas.gV.model.exceptions.UserException;
+import pas.gV.model.exceptions.UserLoginException;
+import pas.gV.model.logic.users.ResourceAdmin;
+import pas.gV.model.logic.users.User;
 
 import java.util.ArrayList;
 import java.util.List;

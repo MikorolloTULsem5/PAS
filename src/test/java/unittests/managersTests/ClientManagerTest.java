@@ -1,10 +1,10 @@
 package unittests.managersTests;
 
 import com.mongodb.client.model.Filters;
-import pas.gV.exceptions.UserLoginException;
-import pas.gV.model.users.Client;
+import pas.gV.model.exceptions.UserLoginException;
+import pas.gV.model.logic.users.Client;
 import pas.gV.restapi.services.userservice.ClientService;
-import pas.gV.data.repositories.UserMongoRepository;
+import pas.gV.model.data.repositories.UserMongoRepository;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;

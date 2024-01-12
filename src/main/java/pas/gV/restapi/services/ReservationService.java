@@ -5,12 +5,12 @@ import com.mongodb.client.model.Filters;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import pas.gV.model.courts.Court;
-import pas.gV.model.reservations.Reservation;
-import pas.gV.model.users.Client;
-import pas.gV.exceptions.MyMongoException;
-import pas.gV.exceptions.ReservationException;
-import pas.gV.data.repositories.ReservationMongoRepository;
+import pas.gV.model.logic.courts.Court;
+import pas.gV.model.logic.reservations.Reservation;
+import pas.gV.model.logic.users.Client;
+import pas.gV.model.exceptions.MyMongoException;
+import pas.gV.model.exceptions.ReservationException;
+import pas.gV.model.data.repositories.ReservationMongoRepository;
 
 import java.time.LocalDateTime;
 import java.util.List;
