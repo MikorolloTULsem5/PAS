@@ -34,7 +34,7 @@ public class ReservationController {
     }
 
     @PostMapping("/addReservation")
-    public ResponseEntity<String> addReseravtion(@RequestParam("clientId") String clientId, @RequestParam("courtId") String courtId,
+    public ResponseEntity<String> addReservation(@RequestParam("clientId") String clientId, @RequestParam("courtId") String courtId,
                                                  @RequestParam("date") String date) {
         try {
             if (date == null) {

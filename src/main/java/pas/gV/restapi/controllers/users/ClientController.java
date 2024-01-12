@@ -26,7 +26,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
-///TODO sprawdz zasiegi
 @RestController
 @RequestMapping("/clients")
 public class ClientController {
