@@ -44,11 +44,11 @@ public class ClientMongoRepositoryTest {
     @BeforeEach
     void initData() {
         cleanFirstAndLastTimeDB();
-        client1 = new Client(UUID.randomUUID(), "Adam", "Smith", "12345678901", testClientType);
+        client1 = new Client(UUID.randomUUID(), "Adam", "Smith", "12345678901", "12345678901", testClientType);
 
-        client2 = new Client(UUID.randomUUID(), "Eva", "Smith", "12345678902", testClientType);
+        client2 = new Client(UUID.randomUUID(), "Eva", "Smith", "12345678902", "12345678902", testClientType);
 
-        client3 = new Client(UUID.randomUUID(), "John", "Lenon", "12345678903", testClientType);
+        client3 = new Client(UUID.randomUUID(), "John", "Lenon", "12345678903", "12345678903", testClientType);
     }
 
     @Test

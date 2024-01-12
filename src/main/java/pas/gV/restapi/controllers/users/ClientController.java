@@ -48,7 +48,7 @@ public class ClientController {
 
         try {
             clientService.registerClient(client.getFirstName(), client.getLastName(),
-                    client.getLogin(), client.getClientTypeName());
+                    client.getLogin(), "password", client.getClientTypeName());
         } catch (UserLoginException ule) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(ule.getMessage());
         } catch (UserException ue) {
@@ -106,7 +106,8 @@ public class ClientController {
 
         try {
             Client finalModifyClient = new Client(UUID.fromString(id), modifiedClient.getFirstName(),
-                    modifiedClient.getLastName(), modifiedClient.getLogin(), modifiedClient.getClientTypeName());
+                    modifiedClient.getLastName(), modifiedClient.getLogin(), "password",
+                    modifiedClient.getClientTypeName());
             finalModifyClient.setArchive(modifiedClient.isArchive());
             clientService.modifyClient(finalModifyClient);
         } catch (UserLoginException ule) {

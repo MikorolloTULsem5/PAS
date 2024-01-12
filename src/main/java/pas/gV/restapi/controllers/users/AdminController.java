@@ -47,7 +47,7 @@ public class AdminController {
         }
 
         try {
-            adminService.registerAdmin(admin.getLogin());
+            adminService.registerAdmin(admin.getLogin(), "password");
         } catch (UserLoginException ule) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(ule.getMessage());
         } catch (UserException ue) {
@@ -104,7 +104,7 @@ public class AdminController {
         }
 
         try {
-            Admin finalModifyAdmin = new Admin(UUID.fromString(id), modifiedAdmin.getLogin());
+            Admin finalModifyAdmin = new Admin(UUID.fromString(id), modifiedAdmin.getLogin(), "password");
             finalModifyAdmin.setArchive(modifiedAdmin.isArchive());
             adminService.modifyAdmin(finalModifyAdmin);
         } catch (UserLoginException ule) {

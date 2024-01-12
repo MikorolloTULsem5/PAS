@@ -26,9 +26,9 @@ public class ClientService extends UserService {
         this.userRepository = userRepository;
     }
 
-    public Client registerClient(String firstName, String lastName, String login, String clientType) {
+    public Client registerClient(String firstName, String lastName, String login, String password, String clientType) {
         try {
-            return (Client) userRepository.create(new Client(null, firstName, lastName, login, clientType));
+            return (Client) userRepository.create(new Client(null, firstName, lastName, login, password, clientType));
         } catch (MyMongoException | UnexpectedTypeException exception) {
             throw new UserException("Nie udalo sie zarejestrowac klienta w bazie! - " + exception.getMessage());
         }

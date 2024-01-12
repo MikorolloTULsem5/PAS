@@ -110,7 +110,7 @@ public class CourtManagerTest {
     void testDeletingCourtSuccess() {
         var collection = courtRepository.getDatabase().getCollection(courtRepository.getCollectionName(), CourtDTO.class);
         assertEquals(0, collection.find().into(new ArrayList<>()).size());
-        Court testCourt1 = courtRepository.create(new Court(null,1000, 100, 1));
+        Court testCourt1 = courtRepository.create(new Court(null, 1000, 100, 1));
 
         assertEquals(1, collection.find().into(new ArrayList<>()).size());
 
@@ -122,14 +122,14 @@ public class CourtManagerTest {
     void testDeletingCourtFailure() {
         var collection = courtRepository.getDatabase().getCollection(courtRepository.getCollectionName(), CourtDTO.class);
         assertEquals(0, collection.find().into(new ArrayList<>()).size());
-        Court testCourt1 = courtRepository.create(new Court(null,1000, 100, 1));
+        Court testCourt1 = courtRepository.create(new Court(null, 1000, 100, 1));
         LocalDateTime testTimeStart = LocalDateTime.of(2023, Month.JUNE, 4, 12, 0);
 
         assertEquals(1, collection.find().into(new ArrayList<>()).size());
 
         try (ReservationMongoRepository reservationMongoRepository = new ReservationMongoRepository();
              UserMongoRepository userMongoRepository = new UserMongoRepository()) {
-            Client testClient1 = (Client) userMongoRepository.create(new Client(UUID.randomUUID(), "John", "Smith", "12345678901", "normal"));
+            Client testClient1 = (Client) userMongoRepository.create(new Client(UUID.randomUUID(), "John", "Smith", "12345678901", "123456789", "normal"));
             Reservation testReservation1 = new Reservation(UUID.randomUUID(), testClient1, testCourt1, testTimeStart);
 
             reservationMongoRepository.create(testReservation1);

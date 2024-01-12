@@ -32,7 +32,7 @@ public class ReservationMapperTest {
 
     @BeforeEach
     void setUp() {
-        testClient = new Client(UUID.randomUUID(), "John", "Smith", "12345678901", "normal");
+        testClient = new Client(UUID.randomUUID(), "John", "Smith", "12345678901", "12345678901","normal");
         testClientMapper = ClientMapper.toMongoUser(testClient);
 
         testCourt = new Court(UUID.randomUUID(), 1000, 100, 1);

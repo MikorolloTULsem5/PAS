@@ -92,10 +92,10 @@ public class NewCleaningClassForTests {
     static void initClients() {
         ClientService clientServiceTest = new ClientService(new UserMongoRepository());
         cleanUsers();
-        client1 = clientServiceTest.registerClient("Adam", "Smith", "loginek", "normal");
-        client2 = clientServiceTest.registerClient("Eva", "Braun", "loginek13", "athlete");
-        client3 = clientServiceTest.registerClient("Michal", "Pi", "michas13", "coach");
-        client4 = clientServiceTest.registerClient("Peter", "Grif", "griffPet", "normal");
+        client1 = clientServiceTest.registerClient("Adam", "Smith", "loginek", "password", "normal");
+        client2 = clientServiceTest.registerClient("Eva", "Braun", "loginek13", "password", "athlete");
+        client3 = clientServiceTest.registerClient("Michal", "Pi", "michas13", "password", "coach");
+        client4 = clientServiceTest.registerClient("Peter", "Grif", "griffPet", "password", "normal");
     }
 
     static void initCourts() {
@@ -123,8 +123,8 @@ public class NewCleaningClassForTests {
         reservationServiceTest.returnCourt(court3.getId(), LocalDateTime.of(2023, Month.DECEMBER, 2, 12, 20));
         reservation5 = reservationServiceTest.makeReservation(client3.getId(), court4.getId(), dataStart);
         reservationServiceTest.returnCourt(court4.getId(), LocalDateTime.of(2023, Month.DECEMBER, 1, 14, 20));
-        reservation6 = reservationServiceTest.makeReservation(client1.getId(), court3.getId(), LocalDateTime.of(2023, Month.DECEMBER, 15, 10,0));
-        reservation7 = reservationServiceTest.makeReservation(client3.getId(), court5.getId(),  LocalDateTime.of(2023, Month.DECEMBER, 16, 10,0));
+        reservation6 = reservationServiceTest.makeReservation(client1.getId(), court3.getId(), LocalDateTime.of(2023, Month.DECEMBER, 15, 10, 0));
+        reservation7 = reservationServiceTest.makeReservation(client3.getId(), court5.getId(), LocalDateTime.of(2023, Month.DECEMBER, 16, 10, 0));
     }
 
     /*----------------------------------------------------------------------------------------------------------------*/
@@ -135,8 +135,8 @@ public class NewCleaningClassForTests {
     static void initAdmins() {
         AdminService adminServiceServiceTest = new AdminService(new UserMongoRepository());
         cleanUsers();
-        admin1 = adminServiceServiceTest.registerAdmin("adminek1@1234");
-        admin2 = adminServiceServiceTest.registerAdmin("adminek2@9876");
+        admin1 = adminServiceServiceTest.registerAdmin("adminek1@1234", "adminek1@1234");
+        admin2 = adminServiceServiceTest.registerAdmin("adminek2@9876", "adminek2@9876");
     }
 
 
@@ -146,8 +146,8 @@ public class NewCleaningClassForTests {
     static void initResAdmins() {
         ResourceAdminService resourceAdminServiceTest = new ResourceAdminService(new UserMongoRepository());
         cleanUsers();
-        adminRes1 = resourceAdminServiceTest.registerResourceAdmin("adminekRes1@1234");
-        adminRes2 = resourceAdminServiceTest.registerResourceAdmin("adminekRes2@9876");
+        adminRes1 = resourceAdminServiceTest.registerResourceAdmin("adminekRes1@1234", "adminekRes1@1234");
+        adminRes2 = resourceAdminServiceTest.registerResourceAdmin("adminekRes2@9876", "adminekRes2@9876");
     }
 
     @Test

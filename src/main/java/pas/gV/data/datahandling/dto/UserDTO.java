@@ -16,13 +16,16 @@ public class UserDTO implements DTO {
     private String login;
     @BsonProperty("archive")
     private boolean archive;
-
+    @BsonProperty("password")
+    private String password;
     @BsonCreator
     public UserDTO(@BsonProperty("_id") String id,
                    @BsonProperty("login") String login,
+                   @BsonProperty("password") String password,
                    @BsonProperty("archive") boolean archive) {
         this.id = id;
         this.login = login;
+        this.password = password;
         this.archive = archive;
     }
 

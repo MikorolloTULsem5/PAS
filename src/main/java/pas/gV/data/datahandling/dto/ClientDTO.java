@@ -24,9 +24,10 @@ public class ClientDTO extends UserDTO{
                      @BsonProperty("firstname") String firstName,
                      @BsonProperty("lastname") String lastName,
                      @BsonProperty("login") String login,
+                     @BsonProperty("password") String password,
                      @BsonProperty("archive") boolean archive,
                      @BsonProperty("clienttype") String clientType) {
-        super(id, login, archive);
+        super(id, login, password, archive);
         this.firstName = firstName;
         this.lastName = lastName;
         this.clientType = clientType;

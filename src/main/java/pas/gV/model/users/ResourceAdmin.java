@@ -8,7 +8,7 @@ import java.util.UUID;
 @JsonPropertyOrder({"archive", "id", "login"})
 public class ResourceAdmin extends User {
 
-    public ResourceAdmin(UUID id, String login) {
-        super(id, login);
+    public ResourceAdmin(UUID id, String login, String password) {
+        super(id, login, password);
     }
 }

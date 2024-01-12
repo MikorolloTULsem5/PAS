@@ -46,7 +46,7 @@ public class ResourceAdminController {
         }
 
         try {
-            resourceAdminService.registerResourceAdmin(resourceAdmin.getLogin());
+            resourceAdminService.registerResourceAdmin(resourceAdmin.getLogin(), "password");
         } catch (UserLoginException ule) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(ule.getMessage());
         } catch (UserException ue) {
@@ -103,7 +103,8 @@ public class ResourceAdminController {
         }
 
         try {
-            ResourceAdmin finalModifyResourceAdmin = new ResourceAdmin(UUID.fromString(id), modifyResourceAdmin.getLogin());
+            ResourceAdmin finalModifyResourceAdmin = new ResourceAdmin(UUID.fromString(id),
+                    modifyResourceAdmin.getLogin(), "password");
             finalModifyResourceAdmin.setArchive(modifyResourceAdmin.isArchive());
             resourceAdminService.modifyResourceAdmin(finalModifyResourceAdmin);
         } catch (UserLoginException ule) {

@@ -17,6 +17,7 @@ public class ClientMapperTest {
     String testFirstName = "John";
     String testLastName = "Smith";
     String testLogin = "12345678";
+    String testPassword = "12345678";
     String testTypeAthlete = "athlete";
     String testTypeCoach = "coach";
     String testTypeNormal = "normal";
@@ -24,7 +25,7 @@ public class ClientMapperTest {
 
     @Test
     void testCreatingMapper() {
-        ClientDTO clientDTO1 = new ClientDTO(uuid.toString(), testFirstName, testLastName, testLogin,
+        ClientDTO clientDTO1 = new ClientDTO(uuid.toString(), testFirstName, testLastName, testLogin, testPassword,
                 false, testTypeNormal);
         assertNotNull(clientDTO1);
 
@@ -37,19 +38,19 @@ public class ClientMapperTest {
 
         //Test other clientTypes
         ClientDTO clientDTO2 = new ClientDTO(UUID.randomUUID().toString(),
-                testFirstName, testLastName, testLogin, false, testTypeAthlete);
+                testFirstName, testLastName, testLogin, testPassword, false, testTypeAthlete);
         assertNotNull(clientDTO2);
         assertEquals(testTypeAthlete, clientDTO2.getClientType());
 
         ClientDTO clientDTO3 = new ClientDTO(UUID.randomUUID().toString(), testFirstName, testLastName,
-                testLogin, false, testTypeCoach);
+                testLogin, "aaa", false, testTypeCoach);
         assertNotNull(clientDTO3);
         assertEquals(testTypeCoach, clientDTO3.getClientType());
     }
 
     @Test
     void testToMongoClientMethod() {
-        Client client = new Client(UUID.randomUUID(), testFirstName, testLastName, testLogin, testTypeNormal);
+        Client client = new Client(UUID.randomUUID(), testFirstName, testLastName, testLogin, testPassword, testTypeNormal);
         assertNotNull(client);
 
         ClientDTO clientDTO = ClientMapper.toMongoUser(client);
@@ -65,7 +66,7 @@ public class ClientMapperTest {
 
     @Test
     void testFromMongoClientMethod() {
-        ClientDTO clientDTO1 = new ClientDTO(uuid.toString(), testFirstName, testLastName, testLogin,
+        ClientDTO clientDTO1 = new ClientDTO(uuid.toString(), testFirstName, testLastName, testLogin, testPassword,
                 true, testTypeNormal);
         assertNotNull(clientDTO1);
 
@@ -81,7 +82,7 @@ public class ClientMapperTest {
 
         //Test other clientTypes
         ClientDTO clientDTO2 = new ClientDTO(UUID.randomUUID().toString(),
-                testFirstName, testLastName, testLogin, false, testTypeAthlete);
+                testFirstName, testLastName, testLogin, testPassword, false, testTypeAthlete);
         assertNotNull(clientDTO2);
 
         Client client2 = ClientMapper.fromMongoUser(clientDTO2);
@@ -89,7 +90,7 @@ public class ClientMapperTest {
         assertEquals(clientDTO2.getClientType(), client2.getClientTypeName());
 
         ClientDTO clientDTO3 = new ClientDTO(UUID.randomUUID().toString(), testFirstName, testLastName,
-                testLogin, false, testTypeCoach);
+                testLogin, testPassword, false, testTypeCoach);
         assertNotNull(clientDTO3);
 
         Client client3 = ClientMapper.fromMongoUser(clientDTO3);

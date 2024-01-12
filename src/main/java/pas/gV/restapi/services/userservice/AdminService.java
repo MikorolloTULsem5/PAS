@@ -27,9 +27,9 @@ public class AdminService extends UserService {
         this.userRepository = userRepository;
     }
 
-    public Admin registerAdmin(String login) {
+    public Admin registerAdmin(String login, String password) {
         try {
-            return (Admin) userRepository.create(new Admin(null, login));
+            return (Admin) userRepository.create(new Admin(null, login, password));
         } catch (MyMongoException | UnexpectedTypeException exception) {
             throw new UserException("Nie udalo sie zarejestrowac administratora w bazie! - " + exception.getMessage());
         }

@@ -15,13 +15,14 @@ public class ClientTest {
     String testFirstName = "John";
     String testLastName = "Smith";
     String testLogin = "12345678";
+    String testPassword = "12345678";
     String testTypeAthlete = "athlete";
     String testTypeCoach = "coach";
     String testTypeNormal = "normal";
 
     @Test
     void testCreatingClient() {
-        Client client = new Client(UUID.randomUUID(), testFirstName, testLastName, testLogin, testTypeNormal);
+        Client client = new Client(UUID.randomUUID(), testFirstName, testLastName, testLogin, testPassword, testTypeNormal);
         assertNotNull(client);
 
         assertEquals(testFirstName, client.getFirstName());
@@ -33,7 +34,7 @@ public class ClientTest {
 
     @Test
     void testSetters() {
-        Client client = new Client(UUID.randomUUID(), testFirstName, testLastName, testLogin, testTypeNormal);
+        Client client = new Client(UUID.randomUUID(), testFirstName, testLastName, testLogin, testPassword, testTypeNormal);
         assertNotNull(client);
 
         assertEquals(testFirstName, client.getFirstName());
@@ -59,11 +60,11 @@ public class ClientTest {
 
     @Test
     void testGettingClientMaxHoursAndApplyingDiscount() {
-        Client client = new Client(UUID.randomUUID(), testFirstName, testLastName, testLogin, testTypeNormal);
+        Client client = new Client(UUID.randomUUID(), testFirstName, testLastName, testLogin, testPassword, testTypeNormal);
         assertNotNull(client);
-        Client client1 = new Client(UUID.randomUUID(), testFirstName, testLastName, testLogin, testTypeAthlete);
+        Client client1 = new Client(UUID.randomUUID(), testFirstName, testLastName, testLogin, testPassword, testTypeAthlete);
         assertNotNull(client1);
-        Client client2 = new Client(UUID.randomUUID(), testFirstName, testLastName, testLogin, testTypeCoach);
+        Client client2 = new Client(UUID.randomUUID(), testFirstName, testLastName, testLogin, testPassword, testTypeCoach);
         assertNotNull(client2);
 
         assertEquals(0, client.applyDiscount());

@@ -30,7 +30,7 @@ public class ReservationService {
         try {
             Reservation newReservation = reservationRepository.create(
                     new Reservation(null,
-                                    new Client(clientId, "", "", "", ""),
+                                    new Client(clientId, "", "", "", "", ""),
                                     new Court(courtId, 0, 0,0),
                                     beginTime));
             if (newReservation == null) {

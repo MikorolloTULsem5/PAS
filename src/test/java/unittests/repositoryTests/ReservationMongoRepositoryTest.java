@@ -61,9 +61,9 @@ public class ReservationMongoRepositoryTest {
         cleanDB();
         testClientType = "normal";
 
-        testClient1 = (Client) clientRepository.create(new Client(UUID.randomUUID(), "John", "Smith", "12345678901", testClientType));
-        testClient2 = (Client) clientRepository.create(new Client(UUID.randomUUID(), "Eva", "Brown", "12345678902", testClientType));
-        testClient3 = (Client) clientRepository.create(new Client(UUID.randomUUID(), "Adam", "Long", "12345678903", testClientType));
+        testClient1 = (Client) clientRepository.create(new Client(UUID.randomUUID(), "John", "Smith", "12345678901", "12345678901", testClientType));
+        testClient2 = (Client) clientRepository.create(new Client(UUID.randomUUID(), "Eva", "Brown", "12345678902", "12345678902", testClientType));
+        testClient3 = (Client) clientRepository.create(new Client(UUID.randomUUID(), "Adam", "Long", "12345678903", "12345678903", testClientType));
 
         testCourt1 = courtRepository.create(new Court(UUID.randomUUID(), 1000, 100, 1));
         testCourt2 = courtRepository.create(new Court(UUID.randomUUID(), 1000, 100, 2));
@@ -108,7 +108,7 @@ public class ReservationMongoRepositoryTest {
         //No client in the database
         assertThrows(ReservationException.class, () -> reservationRepository.create(
                 new Reservation(UUID.randomUUID(), new Client(UUID.randomUUID(), "John", "Blade",
-                        "12345678911", "normal"), testCourt3, testTimeStart)));
+                        "12345678911", "12345678911", "normal"), testCourt3, testTimeStart)));
 
         //No court in the database
         assertThrows(ReservationException.class, () -> reservationRepository.create(
@@ -118,12 +118,12 @@ public class ReservationMongoRepositoryTest {
         //Archive client
         clientRepository.update(testClient3.getId(), "archive", true);
         assertThrows(UserException.class, () -> reservationRepository.create(new Reservation(UUID.randomUUID(),
-                        testClient3, testCourt3, testTimeStart)));
+                testClient3, testCourt3, testTimeStart)));
 
         //Archive court
         courtRepository.update(testCourt4.getId(), "archive", true);
         assertThrows(CourtException.class, () -> reservationRepository.create(new Reservation(UUID.randomUUID(),
-                        testClient2, testCourt4, testTimeStart)));
+                testClient2, testCourt4, testTimeStart)));
     }
 
     @Test

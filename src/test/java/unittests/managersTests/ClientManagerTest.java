@@ -47,30 +47,30 @@ public class ClientManagerTest {
         assertEquals(0, cm.getAllClients().size());
 
         Client newClient =
-                cm.registerClient("Adam", "Smith", "12345678901", testClientType);
+                cm.registerClient("Adam", "Smith", "12345678901", "password", testClientType);
         assertNotNull(newClient);
         assertEquals(1, cm.getAllClients().size());
         assertEquals(newClient, cm.getClientById(newClient.getId()));
 
-        cm.registerClient("Adam", "Long", "12345678902", testClientType);
-        cm.registerClient("Eva", "Brown", "12345678903", testClientType);
-        cm.registerClient("Adam", "Brown", "12345678904", testClientType);
+        cm.registerClient("Adam", "Long", "12345678902", "password", testClientType);
+        cm.registerClient("Eva", "Brown", "12345678903", "password", testClientType);
+        cm.registerClient("Adam", "Brown", "12345678904", "password", testClientType);
         assertEquals(4, cm.getAllClients().size());
 
         assertThrows(UserLoginException.class,
-                () -> cm.registerClient("Eva", "Brown", "12345678901", testClientType));
+                () -> cm.registerClient("Eva", "Brown", "12345678901", "password", testClientType));
         assertEquals(4, cm.getAllClients().size());
     }
 
     @Test
     void testGettingClient() {
         Client testClient1 =
-                cm.registerClient("Adam", "Smith", "12345678901", testClientType);
+                cm.registerClient("Adam", "Smith", "12345678901", "password", testClientType);
         assertNotNull(testClient1);
         assertEquals(1, cm.getAllClients().size());
 
         Client testClient2 =
-                cm.registerClient("Eva", "Brown", "12345678902", testClientType);
+                cm.registerClient("Eva", "Brown", "12345678902", "password", testClientType);
         assertNotNull(testClient2);
         assertEquals(2, cm.getAllClients().size());
 
@@ -82,11 +82,11 @@ public class ClientManagerTest {
     @Test
     void testUnregisteringClient() {
         Client testClient1 =
-                cm.registerClient("Adam", "Smith", "12345678901", testClientType);
+                cm.registerClient("Adam", "Smith", "12345678901", "password", testClientType);
         assertNotNull(testClient1);
         assertEquals(1, cm.getAllClients().size());
         Client testClient2 =
-                cm.registerClient("Eva", "Brown", "12345678902", testClientType);
+                cm.registerClient("Eva", "Brown", "12345678902", "password", testClientType);
         assertNotNull(testClient2);
         assertEquals(2, cm.getAllClients().size());
 
@@ -102,7 +102,7 @@ public class ClientManagerTest {
         assertTrue(dbClient.isArchive());
 
         // Testujemy archiwizajce klienta ktory nie nalezy do repozytorium
-        Client testClient3 = new Client(UUID.randomUUID(), "John", "Lenon", "12345678903", testClientType);
+        Client testClient3 = new Client(UUID.randomUUID(), "John", "Lenon", "12345678903", "123456789", testClientType);
         assertNotNull(testClient3);
         assertFalse(testClient3.isArchive());
     }
@@ -110,11 +110,11 @@ public class ClientManagerTest {
     @Test
     public void testFindClientByLogin() {
         Client testClient1 =
-                cm.registerClient("Adam", "Smith", "12345678901", testClientType);
+                cm.registerClient("Adam", "Smith", "12345678901", "password", testClientType);
         assertNotNull(testClient1);
         assertEquals(1, cm.getAllClients().size());
         Client testClient2 =
-                cm.registerClient("Eva", "Brown", "12345678902", testClientType);
+                cm.registerClient("Eva", "Brown", "12345678902", "password", testClientType);
         assertNotNull(testClient2);
         assertEquals(2, cm.getAllClients().size());
 
@@ -128,15 +128,15 @@ public class ClientManagerTest {
     @Test
     public void testFindClientByLoginFitting() {
         Client testClient1 =
-                cm.registerClient("Adam", "Smith", "adxam@smith", testClientType);
+                cm.registerClient("Adam", "Smith", "adxam@smith", "password", testClientType);
         assertNotNull(testClient1);
         assertEquals(1, cm.getAllClients().size());
         Client testClient2 =
-                cm.registerClient("Eva", "Brown", "eva123bro", testClientType);
+                cm.registerClient("Eva", "Brown", "eva123bro", "password", testClientType);
         assertNotNull(testClient2);
         assertEquals(2, cm.getAllClients().size());
         Client testClient3 =
-                cm.registerClient("Adam", "Tell", "telladxam13", testClientType);
+                cm.registerClient("Adam", "Tell", "telladxam13", "password", testClientType);
         assertNotNull(testClient3);
         assertEquals(3, cm.getAllClients().size());
 
@@ -149,11 +149,11 @@ public class ClientManagerTest {
     @Test
     public void testModifyClient() {
         Client testClient1 =
-                cm.registerClient("Adam", "Smith", "adxam@smith", testClientType);
+                cm.registerClient("Adam", "Smith", "adxam@smith", "password", testClientType);
         assertNotNull(testClient1);
         assertEquals(1, cm.getAllClients().size());
         Client testClient2 =
-                cm.registerClient("Eva", "Brown", "eva123bro", testClientType);
+                cm.registerClient("Eva", "Brown", "eva123bro", "password", testClientType);
         assertNotNull(testClient2);
         assertEquals(2, cm.getAllClients().size());
 

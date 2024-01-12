@@ -26,9 +26,9 @@ public class ResourceAdminService extends UserService {
         this.userRepository = userRepository;
     }
 
-    public ResourceAdmin registerResourceAdmin(String login) {
+    public ResourceAdmin registerResourceAdmin(String login, String password) {
         try {
-            return (ResourceAdmin) userRepository.create(new ResourceAdmin(null, login));
+            return (ResourceAdmin) userRepository.create(new ResourceAdmin(null, login, password));
         } catch (MyMongoException | UnexpectedTypeException exception) {
             throw new UserException("Nie udalo sie zarejestrowac administratora danych w bazie! - " + exception.getMessage());
         }
