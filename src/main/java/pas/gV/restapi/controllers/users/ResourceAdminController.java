@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import pas.gV.exceptions.UserException;
 import pas.gV.exceptions.UserLoginException;
 import pas.gV.model.users.ResourceAdmin;
+import pas.gV.model.users.User;
 import pas.gV.restapi.services.userservice.ResourceAdminService;
 
 import java.util.List;
@@ -56,8 +57,8 @@ public class ResourceAdminController {
     }
 
     @GetMapping
-    public List<ResourceAdmin> getAllResAdmins(HttpServletResponse response) {
-        List<ResourceAdmin> resultList = resourceAdminService.getAllResourceAdmins();
+    public List<User> getAllResAdmins(HttpServletResponse response) {
+        List<User> resultList = resourceAdminService.getAllResourceAdmins();
         if (resultList.isEmpty()) {
             resultList = null;
             response.setStatus(HttpStatus.NO_CONTENT.value());

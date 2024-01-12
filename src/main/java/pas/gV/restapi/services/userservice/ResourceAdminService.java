@@ -39,8 +39,8 @@ public class ResourceAdminService extends UserService {
         return resourceAdmin != null ? (ResourceAdmin) resourceAdmin : null;
     }
 
-    public List<ResourceAdmin> getAllResourceAdmins() {
-        List<ResourceAdmin> list = new ArrayList<>();
+    public List<User> getAllResourceAdmins() {
+        List<User> list = new ArrayList<>();
         for (var user : userRepository.readAll(ResourceAdmin.class)) {
             if (user instanceof ResourceAdmin resAdmin) {
                 list.add(resAdmin);
