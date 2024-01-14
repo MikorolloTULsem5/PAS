@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+
+      xmlns:p="http://primefaces.org/ui">
+
+<f:view>
+
+    <h:head>
+        <meta charset="utf-8"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <title>Court Reservation</title>
+    </h:head>
+
+    <h:body>
+        <div class="ui-g">
+            <div class="ui-g-12">
+                <p:toolbar>
+                    <p:toolbarGroup>
+                        <p:button href="addClient.xhtml" value="New Client"/>
+                        <p:button href="addReservation.xhtml" value="Reserve a court"/>
+                        <p:button href="endReservation.xhtml" value="End court reservation"/>
+                        <p:button href="reservations.xhtml" value="List of reservations"/>
+                        <p:button href="courts.xhtml" value="List of courts"/>
+                    </p:toolbarGroup>
+                </p:toolbar>
+            </div>
+
+            <div class="ui-g-12">
+                <ui:insert name="content"/>
+            </div>
+        </div>
+    </h:body>
+
+</f:view>
+
+</html>

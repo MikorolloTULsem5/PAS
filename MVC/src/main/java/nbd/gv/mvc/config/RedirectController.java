@@ -11,7 +11,7 @@ public class RedirectController implements WebMvcConfigurer {
     @Override
     public void addViewControllers(ViewControllerRegistry registry) {
         registry.addViewController("/")
-                .setViewName("redirect:/layout.xhtml");
+                .setViewName("redirect:/menu.xhtml");
         registry.setOrder(Ordered.HIGHEST_PRECEDENCE);
     }
 }
