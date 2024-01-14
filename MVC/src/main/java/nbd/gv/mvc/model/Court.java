@@ -24,7 +24,7 @@ public class Court {
     private int courtNumber;
     @JsonProperty("archive")
     private boolean archive;
-    @JsonProperty("rentEd")
+    @JsonProperty("rented")
     private boolean rented;
 
     @JsonCreator
