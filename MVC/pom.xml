@@ -17,12 +17,7 @@
     <packaging>war</packaging>
 
     <build>
-        <resources>
-            <resource>
-                <directory>src/main/resources</directory>
-                <filtering>true</filtering>
-            </resource>
-        </resources>
+        <outputDirectory>src/main/webapp/WEB-INF/classes</outputDirectory>
     </build>
 
 
@@ -34,36 +29,42 @@
             <version>5.3.0</version>
         </dependency>
 
-        <!--Jakarta-->
-        <dependency>
-            <groupId>jakarta.validation</groupId>
-            <artifactId>jakarta.validation-api</artifactId>
-            <version>3.0.0</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>jakarta.enterprise</groupId>
-            <artifactId>jakarta.enterprise.cdi-api</artifactId>
-            <version>3.0.0</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>jakarta.mvc</groupId>
-            <artifactId>jakarta.mvc-api</artifactId>
-            <version>2.0.0</version>
-        </dependency>
         <dependency>
             <groupId>jakarta.faces</groupId>
             <artifactId>jakarta.faces-api</artifactId>
-            <version>3.0.0</version>
-            <scope>provided</scope>
+            <version>4.0.1</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.joinfaces</groupId>
+            <artifactId>primefaces-spring-boot-starter</artifactId>
+            <version>5.2.1</version>
         </dependency>
         <dependency>
-            <groupId>jakarta.servlet</groupId>
-            <artifactId>jakarta.servlet-api</artifactId>
-            <version>5.0.0</version>
-            <scope>provided</scope>
+            <groupId>org.primefaces.themes</groupId>
+            <artifactId>all-themes</artifactId>
+            <version>1.0.10</version>
         </dependency>
     </dependencies>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.joinfaces</groupId>
+                <artifactId>joinfaces-dependencies</artifactId>
+                <version>5.2.1</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <repositories>
+        <repository>
+            <id>primefaces-maven-repository</id>
+            <name>PrimeFaces Maven Repository</name>
+            <url>https://repository.primefaces.org</url>
+        </repository>
+    </repositories>
 
 </project>
