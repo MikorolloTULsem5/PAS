@@ -31,6 +31,8 @@ public class ClientController {
     private List<Client> listOfClients = new ArrayList<>();
     @Getter
     private Client client = new Client();
+    @Getter
+    private int statusCode = 0;
     @PostConstruct
     private void init() {
         readAllClients();
@@ -48,7 +50,10 @@ public class ClientController {
         RequestSpecification request = RestAssured.given();
         request.contentType("application/json");
         request.body(JSON);
+
+        statusCode = 0;
         Response response = request.post(appUrlClient + "/addClient");
+        statusCode = response.statusCode();
     }
 
     public void readAllClients() {

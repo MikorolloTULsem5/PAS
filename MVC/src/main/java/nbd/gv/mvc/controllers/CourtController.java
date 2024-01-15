@@ -30,6 +30,8 @@ public class CourtController {
     private static final String appUrlCourt = "http://localhost:8080/api/courts";
     @Getter
     private List<Court> listOfCourts = new ArrayList<>();
+    @Getter
+    private int statusCode = 0;
 
     @PostConstruct
     private void init() {

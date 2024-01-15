@@ -49,6 +49,9 @@
                             <h:commandButton value="End" style="visibility: #{reservation.endTime!=null ? 'hidden' : 'visible'}"/>
                         </p:column>
 
+                        <h:panelGroup rendered="#{clientController.statusCode eq 201}">
+                            <h:outputText value="Client successfully registered" />
+                        </h:panelGroup>
                     </p:dataTable>
                 </p:panel>
             </h:form>

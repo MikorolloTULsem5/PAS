@@ -46,12 +46,16 @@
 
                     <p:column>
                         <f:facet name="header">Action</f:facet>
-                        <h:commandButton value="Reserve" style="visibility: #{court.rented==true ? 'hidden' : 'visible'}"/>
+                        <h:commandButton value="Reserve" action="${reservationController.addReservation(court.id)}"
+                                         style="visibility: #{court.rented==true ? 'hidden' : 'visible'}"/>
                     </p:column>
-
                 </p:dataTable>
             </p:panel>
         </h:form>
+
+        <h:panelGroup rendered="#{reservationController.statusCode eq 201}">
+            <h:outputText value="Court successfully reservated" />
+        </h:panelGroup>
     </ui:define>
 </ui:composition>
 

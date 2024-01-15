@@ -10,11 +10,14 @@ import jakarta.annotation.PostConstruct;
 import lombok.Getter;
 
 import nbd.gv.mvc.model.Reservation;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,25 +30,22 @@ public class ReservationsController {
     private List<Reservation> listOfReservation = new ArrayList<>();
     @Getter
     private Reservation reservation = new Reservation();
+    @Getter
+    private int statusCode = 0;
     @PostConstruct
     private void init() {
         readAllReservations();
     }
 
-//    public void addClient() {
-//        String JSON = """
-//                {
-//                  "firstName": "%s",
-//                  "lastName": "%s",
-//                  "login": "%s",
-//                  "password": "%s"
-//                }
-//                """.formatted(client.getFirstName(), client.getLastName(), client.getLogin(), client.getPassword());
-//        RequestSpecification request = RestAssured.given();
-//        request.contentType("application/json");
-//        request.body(JSON);
-//        Response response = request.post(appUrlClient + "/addClient");
-//    }
+    public void addReservation(String courtId) {
+        RequestSpecification request = RestAssured.given();
+
+        statusCode = 0;
+        Response response = request.post(appUrlReservation +
+                "/addReservation?clientId=%s&courtId=%s&date=%s".formatted("80e62401-6517-4392-856c-e22ef5f3d6a2",
+                        courtId, LocalDateTime.now().toString()));
+        statusCode = response.statusCode();
+    }
 
     public void readAllReservations() {
         RequestSpecification request = RestAssured.given();

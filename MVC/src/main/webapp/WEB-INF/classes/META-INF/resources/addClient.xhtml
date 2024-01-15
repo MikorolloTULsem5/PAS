@@ -34,6 +34,10 @@
                 </h:panelGrid>
             </p:panel>
         </h:form>
+
+        <h:panelGroup rendered="#{clientController.statusCode eq 201}">
+            <h:outputText value="Client successfully registered" />
+        </h:panelGroup>
     </ui:define>
 
 </ui:composition>
