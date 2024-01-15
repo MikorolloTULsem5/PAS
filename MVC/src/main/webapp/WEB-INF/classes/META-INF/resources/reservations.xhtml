@@ -12,23 +12,41 @@
     <ui:composition template="menu.xhtml">
         <ui:define name="content">
             <h:form id="form">
-                <p:panel header="Products List">
-                    <p:dataTable id="table" var="product" value="">
+                <p:panel header="Reservations List">
+                    <p:dataTable id="table" var="reservation" value="#{reservationController.listOfReservation}">
                         <p:column>
                             <f:facet name="header"># Id</f:facet>
-                            <h:outputText value="" />
+                            <h:outputText value="#{reservation.id}" />
                         </p:column>
 
                         <p:column>
-                            <f:facet name="header">Name</f:facet>
-                            <h:outputText value="" />
+                            <f:facet name="header">Client id</f:facet>
+                            <h:outputText value="#{reservation.client.id}" />
                         </p:column>
 
                         <p:column>
-                            <f:facet name="header">Price</f:facet>
-                            <h:outputText value="">
-                                <f:convertNumber type="currency" currencySymbol="$ " />
-                            </h:outputText>
+                            <f:facet name="header">Court id</f:facet>
+                            <h:outputText value="#{reservation.court.id}" />
+                        </p:column>
+
+                        <p:column>
+                            <f:facet name="header">Begin time</f:facet>
+                            <h:outputText value="#{reservation.beginTime}" />
+                        </p:column>
+
+                        <p:column>
+                            <f:facet name="header">End time</f:facet>
+                            <h:outputText value="#{reservation.endTime}" />
+                        </p:column>
+
+                        <p:column>
+                            <f:facet name="header">Reservation cost</f:facet>
+                            <h:outputText value="#{reservation.reservationCost}" />
+                        </p:column>
+
+                        <p:column>
+                            <f:facet name="header">Action</f:facet>
+                            <h:commandButton value="End" style="visibility: #{reservation.endTime!=null ? 'hidden' : 'visible'}"/>
                         </p:column>
 
                     </p:dataTable>

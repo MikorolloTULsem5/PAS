@@ -9,50 +9,50 @@
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:p="http://primefaces.org/ui">
 
-    <ui:composition template="menu.xhtml">
-        <ui:define name="content">
-            <h:form id="form">
-                <p:panel header="Court List">
-                    <p:dataTable id="table" var="court" value="#{courtController.listOfCourts}">
-                        <p:column>
-                            <f:facet name="header"># Id</f:facet>
-                            <h:outputText value="#{court.id}" />
-                        </p:column>
+<ui:composition template="menu.xhtml">
+    <ui:define name="content">
+        <h:form id="form">
+            <p:panel header="Court List">
+                <p:dataTable id="table" var="court" value="#{courtController.listOfCourts}">
+                    <p:column>
+                        <f:facet name="header"># Id</f:facet>
+                        <h:outputText value="#{court.id}"/>
+                    </p:column>
 
-                        <p:column>
-                            <f:facet name="header">Area [m2]</f:facet>
-                            <h:outputText value="#{court.area}" />
-                        </p:column>
+                    <p:column>
+                        <f:facet name="header">Area [m2]</f:facet>
+                        <h:outputText value="#{court.area}"/>
+                    </p:column>
 
-                        <p:column>
-                            <f:facet name="header">Base cost [zł]</f:facet>
-                            <h:outputText value="#{court.baseCost}" />
-                        </p:column>
+                    <p:column>
+                        <f:facet name="header">Base cost [zł]</f:facet>
+                        <h:outputText value="#{court.baseCost}"/>
+                    </p:column>
 
-                        <p:column>
-                            <f:facet name="header">Court number</f:facet>
-                            <h:outputText value="#{court.courtNumber}" />
-                        </p:column>
+                    <p:column>
+                        <f:facet name="header">Court number</f:facet>
+                        <h:outputText value="#{court.courtNumber}"/>
+                    </p:column>
 
-                        <p:column>
-                            <f:facet name="header">Archive</f:facet>
-                            <h:outputText value="#{court.archive}" />
-                        </p:column>
+                    <p:column>
+                        <f:facet name="header">Archive</f:facet>
+                        <h:outputText value="#{court.archive}"/>
+                    </p:column>
 
-                        <p:column>
-                            <f:facet name="header">Rented</f:facet>
-                            <h:outputText value="#{court.rented}" />
-                        </p:column>
+                    <p:column>
+                        <f:facet name="header">Rented</f:facet>
+                        <h:outputText value="#{court.rented}"/>
+                    </p:column>
 
-                        <p:column>
-                            <f:facet name="header">Action</f:facet>
-                            <h:commandButton value="Reserve" />
-                        </p:column>
+                    <p:column>
+                        <f:facet name="header">Action</f:facet>
+                        <h:commandButton value="Reserve" style="visibility: #{court.rented==true ? 'hidden' : 'visible'}"/>
+                    </p:column>
 
-                    </p:dataTable>
-                </p:panel>
-            </h:form>
-        </ui:define>
-    </ui:composition>
+                </p:dataTable>
+            </p:panel>
+        </h:form>
+    </ui:define>
+</ui:composition>
 
 </html>
