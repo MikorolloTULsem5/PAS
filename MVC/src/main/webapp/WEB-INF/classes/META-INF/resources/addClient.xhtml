@@ -13,11 +13,23 @@
         <h:form id="clientForm">
             <p:panel header="Registration">
                 <h:panelGrid columns="1">
-<!--                    <p:outputLabel for="name" value="Name: " />-->
-<!--                    <p:inputText id="name" value="" />-->
-<!--                    <p:outputLabel for="price" value="Price: " />-->
-<!--                    <p:inputNumber id="price" value="" />-->
-<!--                    <h:commandButton value="Save" action="" />-->
+                    <p:outputLabel for="firstName" value="First name: " />
+                    <p:inputText id="firstName" value="#{clientController.client.firstName}">
+                        <p:message for="firstName" />
+                    </p:inputText>
+                    <p:outputLabel for="lastName" value="Last name: "/>
+                    <p:inputText id="lastName" value="#{clientController.client.lastName}">
+                        <p:message for="lastName" />
+                    </p:inputText>
+                    <p:outputLabel for="login" value="Login: "/>
+                    <p:inputText id="login" value="#{clientController.client.login}">
+                        <p:message for="login" />
+                    </p:inputText>
+                    <p:outputLabel for="password" value="Password: "/>
+                    <p:inputText id="password" value="#{clientController.client.password}">
+                        <p:message for="password" />
+                    </p:inputText>
+                    <h:commandButton value="Register" action="#{clientController.addClient}" />
                 </h:panelGrid>
             </p:panel>
         </h:form>

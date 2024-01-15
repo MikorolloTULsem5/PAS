@@ -6,10 +6,13 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.context.annotation.Bean;
 
+import java.util.Locale;
+
 @SpringBootApplication
 public class AppMVC {
 
     public static void main(String[] args) {
+        Locale.setDefault(Locale.ENGLISH);
         SpringApplication.run(AppMVC.class, args);
     }
 

@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.PositiveOrZero;
 import lombok.Getter;
 
 import lombok.NoArgsConstructor;
@@ -17,10 +19,13 @@ public class Court {
     @JsonProperty("id")
     private String id;
     @JsonProperty("area")
+    @PositiveOrZero
     private double area;
     @JsonProperty("baseCost")
+    @PositiveOrZero
     private int baseCost;
     @JsonProperty("courtNumber")
+    @Min(value = 1)
     private int courtNumber;
     @JsonProperty("archive")
     private boolean archive;
