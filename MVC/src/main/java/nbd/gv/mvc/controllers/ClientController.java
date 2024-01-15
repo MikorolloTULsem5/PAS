@@ -47,7 +47,7 @@ public class ClientController {
                 """.formatted(client.getFirstName(), client.getLastName(), client.getLogin(), client.getPassword());
         RequestSpecification request = RestAssured.given();
         request.contentType("application/json");
-        System.out.println(JSON);
+        request.body(JSON);
         Response response = request.post(appUrlClient + "/addClient");
     }
 

@@ -12,41 +12,36 @@
     <ui:composition template="menu.xhtml">
         <ui:define name="content">
             <h:form id="form">
-                <p:panel header="Court List">
-                    <p:dataTable id="table" var="court" value="#{courtController.listOfCourts}">
+                <p:panel header="Clients List">
+                    <p:dataTable id="table" var="client" value="#{clientController.listOfClients}">
                         <p:column>
                             <f:facet name="header"># Id</f:facet>
-                            <h:outputText value="#{court.id}" />
+                            <h:outputText value="#{client.id}" />
                         </p:column>
 
                         <p:column>
-                            <f:facet name="header">Area [m2]</f:facet>
-                            <h:outputText value="#{court.area}" />
+                            <f:facet name="header">Login</f:facet>
+                            <h:outputText value="#{client.login}" />
                         </p:column>
 
                         <p:column>
-                            <f:facet name="header">Base cost [zł]</f:facet>
-                            <h:outputText value="#{court.baseCost}" />
+                            <f:facet name="header">First name</f:facet>
+                            <h:outputText value="#{client.firstName}" />
                         </p:column>
 
                         <p:column>
-                            <f:facet name="header">Court number</f:facet>
-                            <h:outputText value="#{court.courtNumber}" />
+                            <f:facet name="header">Last name</f:facet>
+                            <h:outputText value="#{client.lastName}" />
                         </p:column>
 
                         <p:column>
                             <f:facet name="header">Archive</f:facet>
-                            <h:outputText value="#{court.archive}" />
+                            <h:outputText value="#{client.archive}" />
                         </p:column>
 
                         <p:column>
-                            <f:facet name="header">Rented</f:facet>
-                            <h:outputText value="#{court.rented}" />
-                        </p:column>
-
-                        <p:column>
-                            <f:facet name="header">Action</f:facet>
-                            <h:commandButton value="Reserve" />
+                            <f:facet name="header">Client type</f:facet>
+                            <h:outputText value="#{client.clientType}" />
                         </p:column>
 
                     </p:dataTable>
