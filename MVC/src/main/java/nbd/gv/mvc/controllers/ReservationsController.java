@@ -32,19 +32,46 @@ public class ReservationsController {
     private Reservation reservation = new Reservation();
     @Getter
     private int statusCode = 0;
+
     @PostConstruct
     private void init() {
         readAllReservations();
     }
 
-    public void addReservation(String courtId) {
+    public void test() {
+        logger.warn(reservation.getCourt() == null ? null : reservation.getCourt().getId());
+    }
+
+    public void addReservation() {
         RequestSpecification request = RestAssured.given();
 
         statusCode = 0;
         Response response = request.post(appUrlReservation +
                 "/addReservation?clientId=%s&courtId=%s&date=%s".formatted("80e62401-6517-4392-856c-e22ef5f3d6a2",
-                        courtId, LocalDateTime.now().toString()));
+                        reservation.getCourt().getId(), LocalDateTime.now().toString()));
         statusCode = response.statusCode();
+
+        if (response.statusCode() == 500) {
+            logger.error("Error occurred: " + response.asString());
+        } else if (response.statusCode() == 201) {
+            logger.info("Court (%s) reserved".formatted(reservation.getCourt().getId()));
+        } else {
+            logger.warn("Cannot to reserved a court; Returned HTTP code: " + response.statusCode());
+        }
+    }
+
+    public void endReservation() {
+        RequestSpecification requestReturn = RestAssured.given();
+        Response responseReturn = requestReturn.post(appUrlReservation +
+                "/returnCourt?courtId=%s&date=%s".formatted(reservation.getCourt().getId(), LocalDateTime.now().toString()));
+
+        if (responseReturn.statusCode() == 500) {
+            logger.error("Error occurred: " + responseReturn.asString());
+        } else if (responseReturn.statusCode() == 204) {
+            logger.info("Court (%s) returned".formatted(reservation.getCourt().getId()));
+        } else {
+            logger.warn("Cannot to return a court; Returned HTTP code: " + responseReturn.statusCode());
+        }
     }
 
     public void readAllReservations() {
@@ -56,7 +83,8 @@ public class ReservationsController {
 
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.registerModule(new JavaTimeModule());
-        TypeReference<List<Reservation>> listType = new TypeReference<>() {};
+        TypeReference<List<Reservation>> listType = new TypeReference<>() {
+        };
         //Get current reservations
         try {
             listOfReservation = objectMapper.readValue(response.asString(), listType);
