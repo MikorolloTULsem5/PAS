@@ -38,10 +38,6 @@ public class ReservationsController {
         readAllReservations();
     }
 
-    public void test() {
-        logger.warn(reservation.getCourt() == null ? null : reservation.getCourt().getId());
-    }
-
     public void addReservation() {
         RequestSpecification request = RestAssured.given();
 
@@ -51,26 +47,27 @@ public class ReservationsController {
                         reservation.getCourt().getId(), LocalDateTime.now().toString()));
         statusCode = response.statusCode();
 
-        if (response.statusCode() == 500) {
+        if (statusCode == 409) {
             logger.error("Error occurred: " + response.asString());
-        } else if (response.statusCode() == 201) {
+        } else if (statusCode == 201) {
             logger.info("Court (%s) reserved".formatted(reservation.getCourt().getId()));
         } else {
-            logger.warn("Cannot to reserved a court; Returned HTTP code: " + response.statusCode());
+            logger.warn("Cannot to reserved a court; Returned HTTP code: " + statusCode);
         }
     }
 
     public void endReservation() {
-        RequestSpecification requestReturn = RestAssured.given();
-        Response responseReturn = requestReturn.post(appUrlReservation +
+        RequestSpecification request = RestAssured.given();
+        Response response = request.post(appUrlReservation +
                 "/returnCourt?courtId=%s&date=%s".formatted(reservation.getCourt().getId(), LocalDateTime.now().toString()));
+        statusCode = response.statusCode();
 
-        if (responseReturn.statusCode() == 500) {
-            logger.error("Error occurred: " + responseReturn.asString());
-        } else if (responseReturn.statusCode() == 204) {
+        if (statusCode == 500) {
+            logger.error("Error occurred: " + response.asString());
+        } else if (statusCode == 204) {
             logger.info("Court (%s) returned".formatted(reservation.getCourt().getId()));
         } else {
-            logger.warn("Cannot to return a court; Returned HTTP code: " + responseReturn.statusCode());
+            logger.warn("Cannot to return a court; Returned HTTP code: " + statusCode);
         }
     }
 
