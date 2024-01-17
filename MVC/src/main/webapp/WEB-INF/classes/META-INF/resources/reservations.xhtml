@@ -46,7 +46,8 @@
 
                         <p:column styleClass="col">
                             <f:facet name="header">Action</f:facet>
-                            <h:commandButton value="End" style="visibility: #{reservation.endTime!=null ? 'hidden' : 'visible'}">
+                            <h:commandButton value="End"
+                                             rendered="#{reservation.endTime eq null}">
                                 <f:setPropertyActionListener value="#{reservation.court}" target="#{reservationController.reservation.court}" />
                                 <f:actionListener binding="#{reservationController.endReservation()}" />
                                 <f:setPropertyActionListener value="#{null}" target="#{reservationController.reservation.court}" />
@@ -62,9 +63,9 @@
                 </p:panel>
             </h:form>
 
-            <h:panelGroup rendered="#{reservationController.statusCode eq 204}">
-                <h:outputText value="Court successfully returned"/>
-            </h:panelGroup>
+            <p:messages id="messages" showDetail="true" closable="true">
+                <p:autoUpdate/>
+            </p:messages>
         </ui:define>
     </ui:composition>
 

@@ -9,59 +9,60 @@
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:p="http://primefaces.org/ui">
 
-    <ui:composition template="menu.xhtml">
-        <ui:define name="content">
-            <h:form id="form">
-                <p:panel header="Clients List">
-                    <p:dataTable id="table" var="client" value="#{clientController.listOfClients}">
-                        <p:column style="width: 310px">
-                            <f:facet name="header"># Id</f:facet>
-                            <h:outputText value="#{client.id}" />
-                        </p:column>
+<ui:composition template="menu.xhtml">
+    <ui:define name="content">
+        <h:form id="form">
+            <p:panel header="Clients List">
+                <p:dataTable id="table" var="client" value="#{clientController.listOfClients}">
+                    <p:column style="width: 310px">
+                        <f:facet name="header"># Id</f:facet>
+                        <h:outputText value="#{client.id}"/>
+                    </p:column>
 
-                        <p:column styleClass="col">
-                            <f:facet name="header">Login</f:facet>
-                            <h:outputText value="#{client.login}" />
-                        </p:column>
+                    <p:column styleClass="col">
+                        <f:facet name="header">Login</f:facet>
+                        <h:outputText value="#{client.login}"/>
+                    </p:column>
 
-                        <p:column styleClass="col">
-                            <f:facet name="header">First name</f:facet>
-                            <h:outputText value="#{client.firstName}" />
-                        </p:column>
+                    <p:column styleClass="col">
+                        <f:facet name="header">First name</f:facet>
+                        <h:outputText value="#{client.firstName}"/>
+                    </p:column>
 
-                        <p:column styleClass="col">
-                            <f:facet name="header">Last name</f:facet>
-                            <h:outputText value="#{client.lastName}" />
-                        </p:column>
+                    <p:column styleClass="col">
+                        <f:facet name="header">Last name</f:facet>
+                        <h:outputText value="#{client.lastName}"/>
+                    </p:column>
 
-                        <p:column styleClass="col">
-                            <f:facet name="header">Archive</f:facet>
-                            <h:outputText value="#{client.archive}" />
-                        </p:column>
+                    <p:column styleClass="col">
+                        <f:facet name="header">Archive</f:facet>
+                        <h:outputText value="#{client.archive}"/>
+                    </p:column>
 
-                        <p:column styleClass="col">
-                            <f:facet name="header">Client type</f:facet>
-                            <h:outputText value="#{client.clientType}" />
-                        </p:column>
+                    <p:column styleClass="col">
+                        <f:facet name="header">Client type</f:facet>
+                        <h:outputText value="#{client.clientType}"/>
+                    </p:column>
 
-                        <p:column styleClass="col">
-                            <f:facet name="header">Action</f:facet>
-<!--                            TODO stylowanie guzikow-->
-                            <h:commandButton value="Login as" rendered="#{client.login ne identityController.contextLogin}" >
-                                <f:setPropertyActionListener value="#{client.login}" target="#{identityController.contextLogin}" />
-                                <f:setPropertyActionListener value="#{client}" target="#{identityController.client}" />
-                            </h:commandButton>
-                            <h:commandButton value="Login out"  styleClass="ui-button-error"
-                                             rendered="#{client.login eq identityController.contextLogin}" >
-                                <f:setPropertyActionListener value="Anonymous" target="#{identityController.contextLogin}" />
-                                <f:setPropertyActionListener value="#{null}" target="#{identityController.client}" />
-                            </h:commandButton>
-                        </p:column>
+                    <p:column styleClass="col">
+                        <f:facet name="header">Action</f:facet>
+                        <h:commandButton value="Login as"
+                                         rendered="#{client.login ne identityController.contextLogin}">
+                            <f:setPropertyActionListener value="#{client.login}"
+                                                         target="#{identityController.contextLogin}"/>
+                            <f:setPropertyActionListener value="#{client}" target="#{identityController.client}"/>
+                        </h:commandButton>
+                        <h:commandButton value="Login out"
+                                         rendered="#{client.login eq identityController.contextLogin}">
+                            <f:setPropertyActionListener value="Anonymous" target="#{identityController.contextLogin}"/>
+                            <f:setPropertyActionListener value="#{null}" target="#{identityController.client}"/>
+                        </h:commandButton>
+                    </p:column>
 
-                    </p:dataTable>
-                </p:panel>
-            </h:form>
-        </ui:define>
-    </ui:composition>
+                </p:dataTable>
+            </p:panel>
+        </h:form>
+    </ui:define>
+</ui:composition>
 
 </html>

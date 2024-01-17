@@ -35,9 +35,9 @@
             </p:panel>
         </h:form>
 
-        <h:panelGroup rendered="#{clientController.statusCode eq 201}">
-            <h:outputText value="Client successfully registered" />
-        </h:panelGroup>
+        <p:messages severity="info, warn" showDetail="true" closable="true">
+            <p:autoUpdate />
+        </p:messages>
     </ui:define>
 
 </ui:composition>

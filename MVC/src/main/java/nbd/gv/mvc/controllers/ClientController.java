@@ -57,6 +57,21 @@ public class ClientController {
         statusCode = 0;
         Response response = request.post(appUrlClient + "/addClient");
         statusCode = response.statusCode();
+
+        String message;
+        if (statusCode == 201) {
+            message = "Client successfully registered with login: " + client.getLogin();
+            logger.info(message);
+            MessageView.info(message);
+        } else if (statusCode == 409) {
+            message = "Client not registered; This login already exists!";
+            logger.warn(message);
+            MessageView.warn(message);
+        } else {
+            message = "Cannot to register a client";
+            logger.warn(message + "; Returned HTTP code: " + statusCode);
+            MessageView.warn(message);
+        }
     }
 
     public void readAllClients() {

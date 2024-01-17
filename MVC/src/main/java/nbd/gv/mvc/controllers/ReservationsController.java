@@ -7,7 +7,6 @@ import io.restassured.RestAssured;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
 import jakarta.annotation.PostConstruct;
-import jakarta.enterprise.context.ConversationScoped;
 import jakarta.faces.view.ViewScoped;
 import lombok.Getter;
 
@@ -16,7 +15,6 @@ import nbd.gv.mvc.model.Reservation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
@@ -41,12 +39,14 @@ public class ReservationsController {
     }
 
     public void addReservation() {
-        if (reservation.getClient() == null) {
-            logger.warn("Cannot reserve a court without choosing client");
-            statusCode = 900;
+        String message;
+
+        if (reservation.getClient() == null || reservation.getClient().getId() == null) {
+            message = "Cannot reserve a court without choosing client";
+            logger.warn(message);
+            MessageView.warn(message);
             return;
         }
-
         RequestSpecification request = RestAssured.given();
 
         statusCode = 0;
@@ -56,11 +56,17 @@ public class ReservationsController {
         statusCode = response.statusCode();
 
         if (statusCode == 409) {
-            logger.error("Error occurred: " + response.asString());
+            message = "Error occurred: " + response.asString();
+            logger.error(message);
+            MessageView.error(message);
         } else if (statusCode == 201) {
-            logger.info("Court (%s) reserved".formatted(reservation.getCourt().getId()));
+            message = "Court (%s) reserved".formatted(reservation.getCourt().getId());
+            logger.info(message);
+            MessageView.info(message);
         } else {
-            logger.warn("Cannot to reserved a court; Returned HTTP code: " + statusCode);
+            message = "Cannot to reserved a court";
+            logger.warn(message + "; Returned HTTP code: " + statusCode);
+            MessageView.warn(message);
         }
     }
 
@@ -70,10 +76,15 @@ public class ReservationsController {
                 "/returnCourt?courtId=%s&date=%s".formatted(reservation.getCourt().getId(), LocalDateTime.now().toString()));
         statusCode = response.statusCode();
 
+        String message;
         if (statusCode == 500) {
-            logger.error("Error occurred: " + response.asString());
+            message = "Error occurred: " + response.asString();
+            logger.error(message);
+            MessageView.error(message);
         } else if (statusCode == 204) {
-            logger.info("Court (%s) returned".formatted(reservation.getCourt().getId()));
+            message = "Court (%s) returned".formatted(reservation.getCourt().getId());
+            logger.info(message);
+            MessageView.info(message);
         } else {
             logger.warn("Cannot to return a court; Returned HTTP code: " + statusCode);
         }
