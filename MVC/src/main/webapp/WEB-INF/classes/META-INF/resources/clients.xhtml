@@ -46,11 +46,14 @@
 
                         <p:column>
                             <f:facet name="header">Action</f:facet>
-                            <h:commandButton value="Login as" style="visibility: #{client.login==identityController.contextLogin ? 'hidden' : 'visible'}" >
+<!--                            <h:commandButton value="Login as" style="visibility: #{client.login==identityController.contextLogin ? 'hidden' : 'visible'}" >-->
+                            <h:commandButton value="Login as" type="button" styleClass="ui-button-success"
+                                             rendered="#{client.login ne identityController.contextLogin}" >
                                 <f:setPropertyActionListener value="#{client.login}" target="#{identityController.contextLogin}" />
                                 <f:setPropertyActionListener value="#{client}" target="#{identityController.client}" />
                             </h:commandButton>
-                            <h:commandButton value="Login out" style="visibility: #{client.login!=identityController.contextLogin ? 'hidden' : 'visible'}" >
+                            <h:commandButton value="Login out"  styleClass="ui-button-error"
+                                             rendered="#{client.login eq identityController.contextLogin}" >
                                 <f:setPropertyActionListener value="Anonymous" target="#{identityController.contextLogin}" />
                                 <f:setPropertyActionListener value="#{null}" target="#{identityController.client}" />
                             </h:commandButton>
