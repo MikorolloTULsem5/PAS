@@ -216,7 +216,6 @@ public class ReservationsControllerTests {
         Response responsePostReturning = requestPost.post(appUrlReservation +
                 "/returnCourt?courtId=%s&date=%s".formatted(court1.getId().toString(), "2023-12-05T17:03:22"));
 
-        System.out.println(responsePostReturning.getBody().asString());
         assertEquals(204, responsePostReturning.getStatusCode());
 
         //Check current reservations

@@ -8,8 +8,6 @@ import org.springframework.boot.autoconfigure.mongo.MongoAutoConfiguration;
 public class AppREST {
 
     public static void main(String[] args) {
-        //Gdyby nie zaczytalo z .properties mozna odkomentowac
-//        System.setProperty("server.servlet.context-path", "/api");
         SpringApplication.run(AppREST.class, args);
     }
 }
