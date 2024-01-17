@@ -38,7 +38,7 @@ public class CourtController {
         readAllCourts();
     }
 
-    void readAllCourts() {
+    public void readAllCourts() {
         RequestSpecification request = RestAssured.given();
         Response response = request.get(appUrlCourt);
 

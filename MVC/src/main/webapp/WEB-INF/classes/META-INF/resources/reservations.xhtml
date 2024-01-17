@@ -50,6 +50,8 @@
                                 <f:setPropertyActionListener value="#{reservation.court}" target="#{reservationController.reservation.court}" />
                                 <f:actionListener binding="#{reservationController.endReservation()}" />
                                 <f:setPropertyActionListener value="#{null}" target="#{reservationController.reservation.court}" />
+                                <f:actionListener binding="#{reservationController.readAllReservations()}" />
+                                <f:actionListener binding="#{courtController.readAllCourts()}" />
                             </h:commandButton>
                         </p:column>
 

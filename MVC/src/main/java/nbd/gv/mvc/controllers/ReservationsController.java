@@ -72,6 +72,10 @@ public class ReservationsController {
     }
 
     public void readAllReservations() {
+        if (!listOfReservation.isEmpty()) {
+            listOfReservation = new ArrayList<>();
+        }
+
         RequestSpecification request = RestAssured.given();
         Response response = request.get(appUrlReservation);
 
