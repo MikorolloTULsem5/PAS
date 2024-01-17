@@ -29,22 +29,22 @@
                             <h:outputText value="#{reservation.court.id}" />
                         </p:column>
 
-                        <p:column>
+                        <p:column styleClass="col">
                             <f:facet name="header">Begin time</f:facet>
                             <h:outputText value="#{reservation.beginTime}" />
                         </p:column>
 
-                        <p:column>
+                        <p:column styleClass="col">
                             <f:facet name="header">End time</f:facet>
                             <h:outputText value="#{reservation.endTime}" />
                         </p:column>
 
-                        <p:column>
+                        <p:column styleClass="col">
                             <f:facet name="header">Reservation cost</f:facet>
                             <h:outputText value="#{reservation.reservationCost}" />
                         </p:column>
 
-                        <p:column>
+                        <p:column styleClass="col">
                             <f:facet name="header">Action</f:facet>
                             <h:commandButton value="End" style="visibility: #{reservation.endTime!=null ? 'hidden' : 'visible'}">
                                 <f:setPropertyActionListener value="#{reservation.court}" target="#{reservationController.reservation.court}" />

@@ -19,32 +19,32 @@
                         <h:outputText value="#{court.id}"/>
                     </p:column>
 
-                    <p:column>
+                    <p:column styleClass="col">
                         <f:facet name="header">Area [m2]</f:facet>
                         <h:outputText value="#{court.area}"/>
                     </p:column>
 
-                    <p:column>
+                    <p:column styleClass="col">
                         <f:facet name="header">Base cost [zł]</f:facet>
                         <h:outputText value="#{court.baseCost}"/>
                     </p:column>
 
-                    <p:column>
+                    <p:column styleClass="col">
                         <f:facet name="header">Court number</f:facet>
                         <h:outputText value="#{court.courtNumber}"/>
                     </p:column>
 
-                    <p:column>
+                    <p:column styleClass="col">
                         <f:facet name="header">Archive</f:facet>
                         <h:outputText value="#{court.archive}"/>
                     </p:column>
 
-                    <p:column>
+                    <p:column styleClass="col">
                         <f:facet name="header">Rented</f:facet>
                         <h:outputText value="#{court.rented}"/>
                     </p:column>
 
-                    <p:column>
+                    <p:column styleClass="col">
                         <f:facet name="header">Action</f:facet>
                         <h:commandButton value="Reserve" style="visibility: #{court.rented==true ? 'hidden' : 'visible'}" >
                             <f:setPropertyActionListener value="#{court}" target="#{reservationController.reservation.court}" />
