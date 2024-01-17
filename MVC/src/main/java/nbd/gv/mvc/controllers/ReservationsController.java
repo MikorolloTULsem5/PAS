@@ -7,6 +7,8 @@ import io.restassured.RestAssured;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
 import jakarta.annotation.PostConstruct;
+import jakarta.enterprise.context.ConversationScoped;
+import jakarta.faces.view.ViewScoped;
 import lombok.Getter;
 
 import nbd.gv.mvc.model.Reservation;
@@ -21,7 +23,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-@Scope(value = "session")
+@ViewScoped
 @Component(value = "reservationController")
 public class ReservationsController {
     Logger logger = LoggerFactory.getLogger(ReservationsController.class);
@@ -39,11 +41,17 @@ public class ReservationsController {
     }
 
     public void addReservation() {
+        if (reservation.getClient() == null) {
+            logger.warn("Cannot reserve a court without choosing client");
+            statusCode = 900;
+            return;
+        }
+
         RequestSpecification request = RestAssured.given();
 
         statusCode = 0;
         Response response = request.post(appUrlReservation +
-                "/addReservation?clientId=%s&courtId=%s&date=%s".formatted("80e62401-6517-4392-856c-e22ef5f3d6a2",
+                "/addReservation?clientId=%s&courtId=%s&date=%s".formatted(reservation.getClient().getId(),
                         reservation.getCourt().getId(), LocalDateTime.now().toString()));
         statusCode = response.statusCode();
 

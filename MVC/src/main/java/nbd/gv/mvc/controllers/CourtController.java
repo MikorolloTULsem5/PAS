@@ -10,6 +10,7 @@ import io.restassured.specification.RequestSpecification;
 
 import jakarta.annotation.PostConstruct;
 
+import jakarta.faces.view.ViewScoped;
 import lombok.Getter;
 
 import nbd.gv.mvc.model.Court;
@@ -17,13 +18,12 @@ import nbd.gv.mvc.model.Court;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@Scope(value = "session")
+@ViewScoped
 @Component(value = "courtController")
 public class CourtController {
     Logger logger = LoggerFactory.getLogger(CourtController.class);

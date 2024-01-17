@@ -48,8 +48,10 @@
                         <f:facet name="header">Action</f:facet>
                         <h:commandButton value="Reserve" style="visibility: #{court.rented==true ? 'hidden' : 'visible'}" >
                             <f:setPropertyActionListener value="#{court}" target="#{reservationController.reservation.court}" />
+                            <f:setPropertyActionListener value="#{identityController.client}" target="#{reservationController.reservation.client}" />
                             <f:actionListener binding="${reservationController.addReservation()}" />
                             <f:setPropertyActionListener value="#{null}" target="#{reservationController.reservation.court}" />
+                            <f:setPropertyActionListener value="#{null}" target="#{reservationController.reservation.client}" />
                             <f:actionListener binding="#{courtController.readAllCourts()}" />
                             <f:actionListener binding="#{reservationController.readAllReservations()}" />
                         </h:commandButton>

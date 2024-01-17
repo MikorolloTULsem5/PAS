@@ -1,5 +1,8 @@
 * Problem odswiezania strony
 * Problem wspolbieznych operacji???
 * Problem wspolbieznych operacji - wiadomosc
----
-* Id klienta do rezerwacji (pomysl: "logowanie")
+
+* Message nie mozna rezerwowac jako Anonymous
+
+* Podwojne wpisanie hasla przy rejestracji
+* Wywalic komunikaty 'successfully'

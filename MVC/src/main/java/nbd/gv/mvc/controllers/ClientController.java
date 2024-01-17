@@ -9,6 +9,7 @@ import io.restassured.specification.RequestSpecification;
 
 import jakarta.annotation.PostConstruct;
 
+import jakarta.faces.view.ViewScoped;
 import lombok.Getter;
 
 import lombok.Setter;
@@ -17,13 +18,12 @@ import nbd.gv.mvc.model.Client;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@Scope(value = "session")
+@ViewScoped
 @Component(value = "clientController")
 public class ClientController {
     Logger logger = LoggerFactory.getLogger(ClientController.class);
@@ -34,11 +34,6 @@ public class ClientController {
     private Client client = new Client();
     @Getter
     private int statusCode = 0;
-
-    public final String DEFAULT_CONTEXT_LOGIN = "Anonymous";
-    @Getter
-    @Setter
-    private String contextLogin = DEFAULT_CONTEXT_LOGIN;
 
 
     @PostConstruct
