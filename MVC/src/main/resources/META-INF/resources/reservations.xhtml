@@ -14,17 +14,17 @@
             <h:form id="form">
                 <p:panel header="Reservations List">
                     <p:dataTable id="table" var="reservation" value="#{reservationController.listOfReservation}">
-                        <p:column>
+                        <p:column style="width: 310px">
                             <f:facet name="header"># Id</f:facet>
                             <h:outputText value="#{reservation.id}" />
                         </p:column>
 
-                        <p:column>
+                        <p:column style="width: 310px">
                             <f:facet name="header">Client id</f:facet>
                             <h:outputText value="#{reservation.client.id}" />
                         </p:column>
 
-                        <p:column>
+                        <p:column style="width: 310px">
                             <f:facet name="header">Court id</f:facet>
                             <h:outputText value="#{reservation.court.id}" />
                         </p:column>

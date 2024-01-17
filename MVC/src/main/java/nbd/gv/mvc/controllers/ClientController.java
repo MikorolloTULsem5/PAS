@@ -11,6 +11,7 @@ import jakarta.annotation.PostConstruct;
 
 import lombok.Getter;
 
+import lombok.Setter;
 import nbd.gv.mvc.model.Client;
 
 import org.slf4j.Logger;
@@ -33,6 +34,13 @@ public class ClientController {
     private Client client = new Client();
     @Getter
     private int statusCode = 0;
+
+    public final String DEFAULT_CONTEXT_LOGIN = "Anonymous";
+    @Getter
+    @Setter
+    private String contextLogin = DEFAULT_CONTEXT_LOGIN;
+
+
     @PostConstruct
     private void init() {
         readAllClients();

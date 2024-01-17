@@ -23,16 +23,16 @@
                     <p:toolbarGroup>
                         <p:button href="addClient.xhtml" value="New Client"/>
                         <h:outputText value="&#160;"/>
+                        <p:button href="clients.xhtml" value="List of clients"/>
+                        <h:outputText value="&#160;"/>
                         <p:button href="courts.xhtml"  value="Reserve a court" />
                         <h:outputText value="&#160;"/>
                         <p:button href="reservations.xhtml" value="List of reservations"/>
-                        <h:outputText value="&#160;"/>
-                        <p:button href="clients.xhtml" value="List of clients"/>
                     </p:toolbarGroup>
                     <p:toolbarGroup align="right">
                         <i class="pi pi-user" style="font-size: 2rem" />
                         <h:outputText value="&#160;" />
-                        <h:outputText id="userLogin" value="Anonymous" />
+                        <h:outputText id="userLogin" value="#{clientController.contextLogin}" />
                     </p:toolbarGroup>
                 </p:toolbar>
             </div>

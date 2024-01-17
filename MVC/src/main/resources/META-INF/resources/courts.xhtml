@@ -14,7 +14,7 @@
         <h:form id="form">
             <p:panel header="Court List">
                 <p:dataTable id="table" var="court" value="#{courtController.listOfCourts}">
-                    <p:column>
+                    <p:column style="width: 310px">
                         <f:facet name="header"># Id</f:facet>
                         <h:outputText value="#{court.id}"/>
                     </p:column>
