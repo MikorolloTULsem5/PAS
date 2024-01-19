@@ -5,4 +5,5 @@
 * Podwojne wpisanie hasla przy rejestracji
 * Nazwa pakietu ;3
 
-* Edycja ResAdmina i Admina w Rest
+* Edycja ResAdmina i Admina w Rest i dtos
+* serwisy

@@ -10,11 +10,12 @@ import io.restassured.specification.RequestSpecification;
 import jakarta.annotation.PostConstruct;
 
 import jakarta.faces.view.ViewScoped;
+import jakarta.inject.Inject;
 import lombok.Getter;
 
-import lombok.Setter;
 import nbd.gv.mvc.model.Client;
 
+import nbd.gv.mvc.services.ClientService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -27,36 +28,26 @@ import java.util.List;
 @Component(value = "clientController")
 public class ClientController {
     Logger logger = LoggerFactory.getLogger(ClientController.class);
-    private static final String appUrlClient = "http://localhost:8080/api/clients";
     @Getter
     private List<Client> listOfClients = new ArrayList<>();
     @Getter
     private Client client = new Client();
-    @Getter
-    private int statusCode = 0;
 
+    private final ClientService clientService;
+
+    @Inject
+    public ClientController(ClientService clientService) {
+        this.clientService = clientService;
+    }
 
     @PostConstruct
     private void init() {
-        readAllClients();
+       readAllClients();
     }
 
     public void addClient() {
-        String JSON = """
-                {
-                  "firstName": "%s",
-                  "lastName": "%s",
-                  "login": "%s",
-                  "password": "%s"
-                }
-                """.formatted(client.getFirstName(), client.getLastName(), client.getLogin(), client.getPassword());
-        RequestSpecification request = RestAssured.given();
-        request.contentType("application/json");
-        request.body(JSON);
-
-        statusCode = 0;
-        Response response = request.post(appUrlClient + "/addClient");
-        statusCode = response.statusCode();
+        int statusCode = clientService.addClient(client.getFirstName(), client.getLastName(), client.getLogin(),
+                client.getPassword());
 
         String message;
         if (statusCode == 201) {
@@ -75,18 +66,6 @@ public class ClientController {
     }
 
     public void readAllClients() {
-        RequestSpecification request = RestAssured.given();
-        Response response = request.get(appUrlClient);
-
-        //Alternative way
-//        listOfCourts = new ArrayList<>(response.jsonPath().getList(".", Client.class));
-
-        ObjectMapper objectMapper = new ObjectMapper();
-        TypeReference<List<Client>> listType = new TypeReference<>() {};
-        try {
-            listOfClients = objectMapper.readValue(response.asString(), listType);
-        } catch (Exception jpe) {
-            logger.error(jpe.getMessage());
-        }
+        listOfClients = clientService.readAllClients();
     }
 }

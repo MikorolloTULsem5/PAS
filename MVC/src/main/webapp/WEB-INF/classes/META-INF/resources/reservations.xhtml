@@ -55,10 +55,6 @@
                                 <f:actionListener binding="#{courtController.readAllCourts()}" />
                             </h:commandButton>
                         </p:column>
-
-                        <h:panelGroup rendered="#{clientController.statusCode eq 201}">
-                            <h:outputText value="Client successfully registered" />
-                        </h:panelGroup>
                     </p:dataTable>
                 </p:panel>
             </h:form>
