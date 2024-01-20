@@ -8,10 +8,6 @@ import {RoutesComponents} from "./router/Routes/index";
 
 function App() {
 
-  useEffect(() => {
-     console.log(adminsApi.getAdmins());
-  }, []);
-
   return (
       <Router>
         <RoutesComponents/>
