@@ -105,7 +105,7 @@ public class ClientController {
 
         try {
             ClientDTO finalModifyClient = new ClientDTO(id, modifiedClient.getFirstName(),
-                    modifiedClient.getLastName(), modifiedClient.getLogin(), "password", modifiedClient.isArchive(),
+                    modifiedClient.getLastName(), modifiedClient.getLogin(), modifiedClient.getPassword(), modifiedClient.isArchive(),
                     modifiedClient.getClientType());
             clientService.modifyClient(finalModifyClient);
         } catch (UserLoginException ule) {

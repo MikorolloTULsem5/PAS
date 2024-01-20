@@ -4,7 +4,6 @@ import pas.gV.model.logic.users.Client;
 
 import pas.gV.restapi.data.dto.ClientDTO;
 
-import java.util.Objects;
 import java.util.UUID;
 
 public class ClientMapper {

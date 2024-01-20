@@ -135,8 +135,8 @@ public class UserMongoRepository extends AbstractMongoRepository<User> {
 
         List<User> list = new ArrayList<>();
         for (var userDTO : this.getDatabase().getCollection(COLLECTION_NAME, clazzDTO).find(filter).into(new ArrayList<>())) {
-            if (userDTO instanceof ClientEntity clientDTO) {
-                list.add(ClientMapper.fromMongoUser(clientDTO));
+            if (userDTO instanceof ClientEntity clientEntity) {
+                list.add(ClientMapper.fromMongoUser(clientEntity));
             } else if (userDTO instanceof AdminEntity adminDTO) {
                 list.add(AdminMapper.fromMongoUser(adminDTO));
             } else if (userDTO instanceof ResourceAdminEntity resourceAdminDTO) {

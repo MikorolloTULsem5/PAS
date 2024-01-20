@@ -15,7 +15,9 @@ import pas.gV.model.logic.users.Admin;
 import pas.gV.model.logic.users.Client;
 import pas.gV.model.logic.reservations.Reservation;
 import pas.gV.model.logic.users.ResourceAdmin;
+import pas.gV.restapi.data.dto.AdminDTO;
 import pas.gV.restapi.data.dto.ClientDTO;
+import pas.gV.restapi.data.dto.ResourceAdminDTO;
 import pas.gV.restapi.data.mappers.ClientMapper;
 import pas.gV.restapi.services.CourtService;
 import pas.gV.restapi.services.ReservationService;
@@ -132,8 +134,8 @@ public class NewCleaningClassForTests {
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    static Admin admin1;
-    static Admin admin2;
+    static AdminDTO admin1;
+    static AdminDTO admin2;
 
     static void initAdmins() {
         AdminService adminServiceServiceTest = new AdminService(new UserMongoRepository());
@@ -143,8 +145,8 @@ public class NewCleaningClassForTests {
     }
 
 
-    static ResourceAdmin adminRes1;
-    static ResourceAdmin adminRes2;
+    static ResourceAdminDTO adminRes1;
+    static ResourceAdminDTO adminRes2;
 
     static void initResAdmins() {
         ResourceAdminService resourceAdminServiceTest = new ResourceAdminService(new UserMongoRepository());

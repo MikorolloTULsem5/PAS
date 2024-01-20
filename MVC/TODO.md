@@ -1,9 +1,3 @@
-* Problem odswiezania strony???
-* Problem wspolbieznych operacji???
-
+* Do poprawy odświeżanie stron -> auto wypelnienie formularza
 * Ewentualne czyszczenie formularza po nacisnieciu Register
 * Podwojne wpisanie hasla przy rejestracji
-* Nazwa pakietu ;3
-
-* Edycja ResAdmina i Admina w Rest i dtos
-* serwisy

@@ -11,6 +11,8 @@ import pas.gV.model.exceptions.UserException;
 import pas.gV.model.exceptions.UserLoginException;
 import pas.gV.model.logic.users.Admin;
 import pas.gV.model.logic.users.User;
+import pas.gV.restapi.data.dto.AdminDTO;
+import pas.gV.restapi.data.mappers.AdminMapper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,63 +29,64 @@ public class AdminService extends UserService {
         this.userRepository = userRepository;
     }
 
-    public Admin registerAdmin(String login, String password) {
+    public AdminDTO registerAdmin(String login, String password) {
         try {
-            return (Admin) userRepository.create(new Admin(null, login, password));
+            return AdminMapper.toJsonUser((Admin) userRepository.create(new Admin(null, login, password)));
         } catch (MyMongoException | UnexpectedTypeException exception) {
             throw new UserException("Nie udalo sie zarejestrowac administratora w bazie! - " + exception.getMessage());
         }
     }
 
-    public Admin getAdminById(UUID adminId) {
+    public AdminDTO getAdminById(UUID adminId) {
         User admin = userRepository.readByUUID(adminId, Admin.class);
-        return admin != null ? (Admin) admin : null;
+        return admin != null ? AdminMapper.toJsonUser((Admin) admin) : null;
     }
 
-    public List<Admin> getAllAdmins() {
-        List<Admin> list = new ArrayList<>();
+    public List<AdminDTO> getAllAdmins() {
+        List<AdminDTO> list = new ArrayList<>();
         for (var user : userRepository.readAll(Admin.class)) {
             if (user instanceof Admin admin) {
-                list.add(admin);
+                list.add(AdminMapper.toJsonUser(admin));
             }
         }
         return list;
     }
 
-    public Admin getAdminByLogin(String login) {
+    public AdminDTO getAdminByLogin(String login) {
         var list = userRepository.read(Filters.eq("login", login), Admin.class);
-        return !list.isEmpty() ? (Admin) list.get(0) : null;
+        return !list.isEmpty() ? AdminMapper.toJsonUser((Admin) list.get(0)) : null;
     }
 
-    public List<Admin> getAdminByLoginMatching(String login) {
-        List<Admin> list = new ArrayList<>();
+    public List<AdminDTO> getAdminByLoginMatching(String login) {
+        List<AdminDTO> list = new ArrayList<>();
         for (var user : userRepository.read(Filters.and(Filters.regex("login", ".*%s.*".formatted(login)),
                 Filters.eq("_clazz", "admin")), Admin.class)) {
-            list.add((Admin) user);
+            list.add(AdminMapper.toJsonUser((Admin) user));
         }
         return list;
     }
 
-    public void modifyAdmin(Admin modifiedAdmin) {
+    public void modifyAdmin(AdminDTO modifiedAdmin) {
         var list = userRepository.read(Filters.and(
                 Filters.eq("login", modifiedAdmin.getLogin()),
-                Filters.ne("_id", modifiedAdmin.getId().toString())), Admin.class);
+                Filters.ne("_id", modifiedAdmin.getId())), Admin.class);
         if (!list.isEmpty()) {
             throw new UserLoginException("Nie udalo sie zmodyfikowac podanego administratora - " +
                     "proba zmiany loginu na login wystepujacy juz u innego administratora");
         }
 
-        if (!userRepository.updateByReplace(modifiedAdmin.getId(), modifiedAdmin)) {
+        if (!userRepository.updateByReplace(UUID.fromString(modifiedAdmin.getId()),
+                AdminMapper.fromJsonUser(modifiedAdmin))) {
             throw new UserException("Nie udalo sie zmodyfikowac podanego administratora.");
         }
     }
 
-    public void activateAdmin(UUID adminId) {
-        userRepository.update(adminId, "archive", false);
+    public void activateAdmin(String adminId) {
+        userRepository.update(UUID.fromString(adminId), "archive", false);
     }
 
-    public void deactivateAdmin(UUID adminId) {
-        userRepository.update(adminId, "archive", true);
+    public void deactivateAdmin(String adminId) {
+        userRepository.update(UUID.fromString(adminId), "archive", true);
     }
 
     @Override

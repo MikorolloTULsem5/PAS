@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import pas.gV.model.exceptions.UserException;
 import pas.gV.model.exceptions.UserLoginException;
-import pas.gV.model.logic.users.Admin;
+import pas.gV.restapi.data.dto.AdminDTO;
 import pas.gV.restapi.services.userservice.AdminService;
 
 import java.util.List;
@@ -39,15 +39,15 @@ public class AdminController {
     }
 
     @PostMapping("/addAdmin")
-    public ResponseEntity<String> addAdmin(@RequestBody Admin admin) {
-        Set<ConstraintViolation<Admin>> violations = validator.validate(admin);
+    public ResponseEntity<String> addAdmin(@RequestBody AdminDTO admin) {
+        Set<ConstraintViolation<AdminDTO>> violations = validator.validate(admin);
         List<String> errors = violations.stream().map(ConstraintViolation::getMessage).toList();
         if (!violations.isEmpty()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errors.toString());
         }
 
         try {
-            adminService.registerAdmin(admin.getLogin(), "password");
+            adminService.registerAdmin(admin.getLogin(), admin.getPassword());
         } catch (UserLoginException ule) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(ule.getMessage());
         } catch (UserException ue) {
@@ -58,8 +58,8 @@ public class AdminController {
     }
 
     @GetMapping
-    public List<Admin> getAllAdmins(HttpServletResponse response) {
-        List<Admin> resultList = adminService.getAllAdmins();
+    public List<AdminDTO> getAllAdmins(HttpServletResponse response) {
+        List<AdminDTO> resultList = adminService.getAllAdmins();
         if (resultList.isEmpty()) {
             resultList = null;
             response.setStatus(HttpStatus.NO_CONTENT.value());
@@ -68,17 +68,17 @@ public class AdminController {
     }
 
     @GetMapping("/{id}")
-    public Admin getAdminById(@PathVariable("id") String id, HttpServletResponse response) {
-        Admin admin = adminService.getAdminById(UUID.fromString(id));
-        if (admin == null) {
+    public AdminDTO getAdminById(@PathVariable("id") String id, HttpServletResponse response) {
+        AdminDTO adminDTO = adminService.getAdminById(UUID.fromString(id));
+        if (adminDTO == null) {
             response.setStatus(HttpStatus.NO_CONTENT.value());
         }
-        return admin;
+        return adminDTO;
     }
 
     @GetMapping("/get")
-    public Admin getAdminByLogin(@RequestParam("login") String login, HttpServletResponse response) {
-        Admin admin = adminService.getAdminByLogin(login);
+    public AdminDTO getAdminByLogin(@RequestParam("login") String login, HttpServletResponse response) {
+        AdminDTO admin = adminService.getAdminByLogin(login);
         if (admin == null) {
             response.setStatus(HttpStatus.NO_CONTENT.value());
         }
@@ -86,8 +86,8 @@ public class AdminController {
     }
 
     @GetMapping("/match")
-    public List<Admin> getAdminByLoginMatching(@RequestParam("login") String login, HttpServletResponse response) {
-        List<Admin> resultList = adminService.getAdminByLoginMatching(login);
+    public List<AdminDTO> getAdminByLoginMatching(@RequestParam("login") String login, HttpServletResponse response) {
+        List<AdminDTO> resultList = adminService.getAdminByLoginMatching(login);
         if (resultList.isEmpty()) {
             resultList = null;
             response.setStatus(HttpStatus.NO_CONTENT.value());
@@ -96,16 +96,16 @@ public class AdminController {
     }
 
     @PutMapping("/modifyAdmin/{id}")
-    public ResponseEntity<String> modifyAdmin(@PathVariable("id") String id, @RequestBody Admin modifiedAdmin) {
-        Set<ConstraintViolation<Admin>> violations = validator.validate(modifiedAdmin);
+    public ResponseEntity<String> modifyAdmin(@PathVariable("id") String id, @RequestBody AdminDTO modifiedAdmin) {
+        Set<ConstraintViolation<AdminDTO>> violations = validator.validate(modifiedAdmin);
         List<String> errors = violations.stream().map(ConstraintViolation::getMessage).toList();
         if (!violations.isEmpty()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errors.toString());
         }
 
         try {
-            Admin finalModifyAdmin = new Admin(UUID.fromString(id), modifiedAdmin.getLogin(), "password");
-            finalModifyAdmin.setArchive(modifiedAdmin.isArchive());
+            AdminDTO finalModifyAdmin = new AdminDTO(id, modifiedAdmin.getLogin(), modifiedAdmin.getPassword(),
+                    modifiedAdmin.isArchive());
             adminService.modifyAdmin(finalModifyAdmin);
         } catch (UserLoginException ule) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(ule.getMessage());
@@ -118,13 +118,13 @@ public class AdminController {
 
     @PostMapping("/activate/{id}")
     public void activateAdmin(@PathVariable("id") String id, HttpServletResponse response) {
-        adminService.activateAdmin(UUID.fromString(id));
+        adminService.activateAdmin(id);
         response.setStatus(HttpStatus.NO_CONTENT.value());
     }
 
     @PostMapping("/deactivate/{id}")
     public void archiveAdmin(@PathVariable("id") String id, HttpServletResponse response) {
-        adminService.deactivateAdmin(UUID.fromString(id));
+        adminService.deactivateAdmin(id);
         response.setStatus(HttpStatus.NO_CONTENT.value());
     }
 }
