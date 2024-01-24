@@ -1,12 +1,11 @@
 import {UserType} from "../../types/Users";
-import {Dispatch, SetStateAction, useState} from "react";
-import ModalBasic from "../ModalBasic";
-import {Button} from "react-bootstrap";
-import {clientsApi} from "../../api/clientsApi";
-import {adminsApi} from "../../api/adminsApi";
-import {resAdminsApi} from "../../api/resAdminsApi";
-import modifyClientForm from "../forms/modifyClientForm";
-import ModifyClientForm from "../forms/modifyClientForm";
+import React, {Dispatch, SetStateAction, useRef, useState} from "react";
+import ConfirmModal from "../Modal/ConfirmModal";
+import {Formik, FormikProps, FormikValues} from "formik";
+import * as yup from 'yup';
+import {Button, Col, Form, Row} from "react-bootstrap";
+import {capitalize} from "lodash";
+import {usersApi} from "../../api/userApi";
 
 interface UserProps {
     user: UserType
@@ -15,22 +14,19 @@ interface UserProps {
 }
 
 function User({user, users, setUsers}: UserProps) {
-    const [showModal, setShowModal] = useState(false);
+    const [isModified, setIsModified] = useState(false);
+    const [userCopy, setUserCopy] = useState(user);
+    const formRef = useRef<FormikProps<FormikValues>>(null)
+
+    const schema = yup.object().shape({
+        login: yup.string().required()
+    });
 
     const activate = async () => {
         try {
-            switch (user.userType) {
-                case "Client":
-                    clientsApi.activate(user.id);
-                    break;
-                case "Admin":
-                    adminsApi.activate(user.id);
-                    break;
-                case "Resource admin":
-                    resAdminsApi.activate(user.id);
-                    break;
-            }
-            user.archive = false;
+            usersApi.activate(user);
+            setUserCopy({...userCopy, archive: false})
+            user = userCopy;
         } catch (error) {
             console.log(error)
         }
@@ -38,74 +34,92 @@ function User({user, users, setUsers}: UserProps) {
 
     const deactivate = async () => {
         try {
-            switch (user.userType) {
-                case "Client":
-                    clientsApi.deactivate(user.id);
-                    break;
-                case "Admin":
-                    adminsApi.deactivate(user.id);
-                    break;
-                case "Resource admin":
-                    resAdminsApi.deactivate(user.id);
-                    break;
-            }
-            user.archive = true;
+            usersApi.deactivate(user);
+            setUserCopy({...userCopy, archive: true})
+            user = userCopy;
         } catch (error) {
             console.log(error)
         }
     }
 
+    const handleSubmit = () => {
+        if (formRef.current) {
+            formRef.current.handleSubmit()
+        }
+    }
+
+    const modifyUser = (changes:FormikValues) => {
+        try {
+            usersApi.modify({...user,login:changes.login});
+            setUserCopy({...userCopy, login:changes.login})
+            user = userCopy;
+            setIsModified(false);
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+
+
     return (
         <tr>
-            <td>{user.id}</td>
-            <td>{user.login}</td>
-            <td>{user.userType}</td>
-            {!user.archive && <td>Active</td>}
-            {!user.archive &&
-                <td>
-                    <Button onClick={() => setShowModal(true)} variant="primary">Archive</Button>
-                    <ModalBasic show={showModal} setShow={setShowModal}
-                                title='Archive user'
-                                body={<h2>Are you sure you want to archive user: {user.id} ?</h2>}
-                                footer={
-                                    <div>
-                                        <Button variant='success' onClick={() => {
-                                            deactivate()
-                                            setShowModal(false);
-                                        }}>Yes</Button>
-                                        <Button variant='danger' onClick={() => setShowModal(false)}>No</Button>
-                                    </div>
-                                }/>
-                </td>
-            }
-            {user.archive && <td>Archived</td>}
-            {user.archive &&
-                <td>
-                    <Button onClick={() => setShowModal(true)} variant="primary">Activate</Button>
-                    <ModalBasic show={showModal} setShow={setShowModal}
-                                title='Archive user'
-                                body={<h2>Are you sure you want to activate user: {user.id} ?</h2>}
-                                footer={
-                                    <div>
-                                        <Button variant='success' onClick={() => {
-                                            activate();
-                                            setShowModal(false);
-                                        }}>Yes</Button>
-                                        <Button variant='danger' onClick={() => setShowModal(false)}>No</Button>
-                                    </div>
-                                }/>
-                </td>
-            }
+            <td>{userCopy.id}</td>
+            {!isModified && <td>{userCopy.login}</td>}
+            {isModified && <td>
+                <Formik innerRef={formRef}
+                        validationSchema={schema}
+                        initialValues={{login: user.login}}
+                        onSubmit={modifyUser}>{props => (
+                    <Form noValidate onSubmit={props.handleSubmit}>
+                        <Form.Group controlId="searchFormUsername">
+                            <Form.Control onChange={props.handleChange} onBlur={props.handleBlur}
+                                          value={props.values.login}
+                                          isInvalid={props.touched.login && !!props.errors.login}
+                                          isValid={props.touched.login && !props.errors.login} name="login"
+                                          type="text"/>
+                            <Form.Control.Feedback
+                                type="invalid">{capitalize(props.errors.login?.toString())}</Form.Control.Feedback>
+                        </Form.Group>
+                    </Form>
+                )}</Formik>
+            </td>}
+            <td>{userCopy.userType}</td>
+            {!userCopy.archive && <td>Active</td>}
+            {userCopy.archive && <td>Archived</td>}
             <td>
-                <Button onClick={() => setShowModal(true)} variant="primary">Modify</Button>
-                <ModalBasic show={showModal} setShow={setShowModal}
-                            title='Modify user'
-                            body={<ModifyClientForm/>}
-                            footer={
-                                <div>
+                <Row>
+                    {!isModified &&
+                        <Col><Button variant="primary" onClick={() => setIsModified(true)}>Edit</Button></Col>
+                    }
 
-                                </div>
-                            }/>
+                    {isModified &&
+                        <Col>
+                            <ConfirmModal variant={"success"} title={'Modify user'}
+                                          body={<h2>Are you sure you want to modify user: {user.id} ?</h2>}
+                                          onConfirm={handleSubmit}>Success</ConfirmModal>
+                        </Col>
+                    }
+
+                    {isModified &&
+                        <Col><Button variant="danger" onClick={() => setIsModified(false)}>Cancel</Button></Col>
+                    }
+
+
+                    {!userCopy.archive &&
+                        <Col>
+                            <ConfirmModal variant={"primary"} title={'Archive user'}
+                                          body={<h2>Are you sure you want to archive user: {user.id} ?</h2>}
+                                          onConfirm={deactivate}>Archive</ConfirmModal>
+                        </Col>
+                    }
+                    {userCopy.archive &&
+                        <Col>
+                            <ConfirmModal variant={"primary"} title={'Activate user'}
+                                          body={<h2>Are you sure you want to activate user: {user.id} ?</h2>}
+                                          onConfirm={activate}>Activate</ConfirmModal>
+                        </Col>
+                    }
+                </Row>
             </td>
         </tr>
     )
