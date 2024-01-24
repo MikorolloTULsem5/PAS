@@ -23,7 +23,7 @@ public class UserDTO implements DTO {
     @JsonProperty("archive")
     private boolean archive;
     @JsonProperty(value = "password", access = JsonProperty.Access.WRITE_ONLY)
-    @NotBlank
+//    @NotBlank
     private String password;
     @JsonCreator
     public UserDTO(@JsonProperty("id") String id,

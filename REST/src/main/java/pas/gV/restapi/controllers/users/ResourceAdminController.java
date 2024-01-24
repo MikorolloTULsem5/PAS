@@ -98,8 +98,8 @@ public class ResourceAdminController {
     }
 
     @PutMapping("/modifyResAdmin/{id}")
-    public ResponseEntity<String> modifyResAdmin(@PathVariable("id") String id, @RequestBody ResourceAdmin modifyResourceAdmin) {
-        Set<ConstraintViolation<ResourceAdmin>> violations = validator.validate(modifyResourceAdmin);
+    public ResponseEntity<String> modifyResAdmin(@PathVariable("id") String id, @RequestBody ResourceAdminDTO modifyResourceAdmin) {
+        Set<ConstraintViolation<ResourceAdminDTO>> violations = validator.validate(modifyResourceAdmin);
         List<String> errors = violations.stream().map(ConstraintViolation::getMessage).toList();
         if (!violations.isEmpty()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errors.toString());
