@@ -3,15 +3,28 @@ import {ApiResponseType} from "../types/ApiResponseType";
 import {UserType} from "../types/Users";
 
 export const adminsApi = {
-    getAdmins: (): ApiResponseType<UserType[]> => {
-        return apiWithConfig.get('/admins')
+    getAdmins: async (): Promise<ApiResponseType<UserType[]>> => {
+        let admins = await apiWithConfig.get('/admins');
+        admins.data.forEach((user:UserType) => {
+            user.userType = "Admin"
+        })
+        return admins;
     },
 
     activate: (id:string) => {
-        apiWithConfig.put(`/admins/activate/${id}`);
+        return apiWithConfig.post(`/admins/activate/${id}`);
     },
 
     deactivate: (id:string) => {
-        apiWithConfig.put(`/admins/deactivate/${id}`);
+        return apiWithConfig.post(`/admins/deactivate/${id}`);
+    },
+
+    modify: (user:UserType): ApiResponseType<any> => {
+        let userCopy:any = {...user};
+        delete userCopy['id'];
+        delete userCopy['userType'];
+        userCopy.password='';
+        console.log(userCopy);
+        return apiWithConfig.put(`/admins/modifyAdmin/${user.id}`,userCopy);
     }
 }
