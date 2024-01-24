@@ -6,6 +6,7 @@ import * as yup from 'yup';
 import {Button, Col, Form, Row} from "react-bootstrap";
 import {capitalize} from "lodash";
 import {usersApi} from "../../api/userApi";
+import ModalBasic from "../Modal/ModalBasic";
 
 interface UserProps {
     user: UserType
@@ -16,6 +17,8 @@ interface UserProps {
 function User({user, users, setUsers}: UserProps) {
     const [isModified, setIsModified] = useState(false);
     const [userCopy, setUserCopy] = useState(user);
+    const [showErrorModal,setShowErrorModal] = useState(false);
+    const [errorModalContent,setErrorModalContent] = useState<string>("");
     const formRef = useRef<FormikProps<FormikValues>>(null)
 
     const schema = yup.object().shape({
@@ -49,20 +52,20 @@ function User({user, users, setUsers}: UserProps) {
     }
 
     const modifyUser = (changes:FormikValues) => {
-        try {
-            usersApi.modify({...user,login:changes.login});
-            setUserCopy({...userCopy, login:changes.login})
-            user = userCopy;
-            setIsModified(false);
-        } catch (error) {
-            console.log(error)
-        }
+        usersApi.modify({...user,login:changes.login})?.then(
+            (response) =>{
+                setUserCopy({...userCopy, login:changes.login})
+                user = userCopy;
+                setIsModified(false);
+            }
+        ).catch( (error) => {console.log(error); setErrorModalContent(JSON.stringify(error.response.data)); setShowErrorModal(true)});
     }
 
 
 
     return (
         <tr>
+            <ModalBasic show={showErrorModal} setShow={setShowErrorModal} title={"Modification Error"} body={errorModalContent} footer={""}/>
             <td>{userCopy.id}</td>
             {!isModified && <td>{userCopy.login}</td>}
             {isModified && <td>
@@ -96,7 +99,7 @@ function User({user, users, setUsers}: UserProps) {
                         <Col>
                             <ConfirmModal variant={"success"} title={'Modify user'}
                                           body={<h2>Are you sure you want to modify user: {user.id} ?</h2>}
-                                          onConfirm={handleSubmit}>Success</ConfirmModal>
+                                          onConfirm={handleSubmit}>Save</ConfirmModal>
                         </Col>
                     }
 

@@ -3,6 +3,7 @@ import {useEffect, useState} from "react";
 import {UserType} from "../types/Users";
 import User from "../components/User";
 import {usersApi} from "../api/userApi";
+import AddUserForm from "../components/forms/AddUserForm";
 
 function UsersPage() {
     const [users, setUsers] = useState<UserType[]>([])
@@ -13,6 +14,7 @@ function UsersPage() {
 
     return (
         <div>
+            <AddUserForm/>
             <Table striped hover>
                 <thead>
                 <tr>

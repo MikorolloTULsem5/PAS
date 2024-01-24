@@ -19,8 +19,9 @@ export const resAdminsApi = {
         apiWithConfig.post(`/resAdmins/deactivate/${id}`);
     },
     modify: (user:UserType): ApiResponseType<any> => {
-        let userCopy:any = {user};
+        let userCopy:any = {...user};
         delete userCopy['id'];
+        delete userCopy['userType'];
         userCopy.password='';
         return apiWithConfig.put(`/resAdmins/modifyResAdmin/${user.id}`,userCopy)
     }

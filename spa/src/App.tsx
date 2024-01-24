@@ -1,6 +1,5 @@
-import React, {useEffect} from 'react';
+import React from 'react';
 import './App.css';
-import {adminsApi} from "./api/adminsApi";
 import {BrowserRouter as Router} from "react-router-dom";
 import {RoutesComponents} from "./router/Routes/index";
 

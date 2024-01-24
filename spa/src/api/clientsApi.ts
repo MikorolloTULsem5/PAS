@@ -18,9 +18,10 @@ export const clientsApi = {
         return apiWithConfig.post(`/clients/deactivate/${id}`);
     },
     modify: (user:ClientType) => {
-        let userCopy:any = {user};
+        let userCopy:any = {...user};
         delete userCopy['id'];
+        delete userCopy['userType'];
         userCopy.password='';
-        return apiWithConfig.put(`/client/clientModify/${user.id}`,userCopy)
+        return apiWithConfig.put(`/clients/modifyClient/${user.id}`,userCopy)
     }
 }

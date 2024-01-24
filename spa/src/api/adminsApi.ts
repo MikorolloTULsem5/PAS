@@ -24,7 +24,6 @@ export const adminsApi = {
         delete userCopy['id'];
         delete userCopy['userType'];
         userCopy.password='';
-        console.log(userCopy);
         return apiWithConfig.put(`/admins/modifyAdmin/${user.id}`,userCopy);
     }
 }
