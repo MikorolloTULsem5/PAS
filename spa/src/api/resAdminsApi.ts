@@ -1,6 +1,6 @@
 import {apiWithConfig} from "./api.config";
 import {ApiResponseType} from "../types/ApiResponseType";
-import {UserType} from "../types/Users";
+import {NewUserType, UserType} from "../types/Users";
 
 export const resAdminsApi = {
     getResAdmins: async (): Promise<ApiResponseType<UserType[]>> => {
@@ -24,6 +24,12 @@ export const resAdminsApi = {
         delete userCopy['userType'];
         userCopy.password='';
         return apiWithConfig.put(`/resAdmins/modifyResAdmin/${user.id}`,userCopy)
+    },
+
+    create: (user:NewUserType): ApiResponseType<any>  => {
+        let userCopy:any = {...user};
+        delete userCopy['userType'];
+        return apiWithConfig.post(`/resAdmins/addResAdmin`,userCopy);
     }
 
 }

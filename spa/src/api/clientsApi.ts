@@ -1,6 +1,6 @@
 import {apiWithConfig} from "./api.config";
 import {ApiResponseType} from "../types/ApiResponseType";
-import {ClientType, UserType} from "../types/Users";
+import {ClientType, NewClientType, UserType} from "../types/Users";
 
 export const clientsApi = {
     getClients: async (): Promise<ApiResponseType<ClientType[]>> => {
@@ -23,5 +23,10 @@ export const clientsApi = {
         delete userCopy['userType'];
         userCopy.password='';
         return apiWithConfig.put(`/clients/modifyClient/${user.id}`,userCopy)
+    },
+    create: (user:NewClientType): ApiResponseType<any>  => {
+        let userCopy:any = {...user};
+        delete userCopy['userType'];
+        return apiWithConfig.post(`/clients/addClient`,userCopy);
     }
 }

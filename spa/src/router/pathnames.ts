@@ -1,6 +1,10 @@
 export const Pathnames = {
     public: {
         home: '/',
-        users: '/users'
+        users: '/users',
+        clients: '/clients',
+        courts: '/courts',
+        reservations: '/reservations',
+        'add user': '/addUser'
     },
 }

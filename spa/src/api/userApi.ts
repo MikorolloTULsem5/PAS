@@ -1,7 +1,7 @@
 import {clientsApi} from "./clientsApi";
 import {adminsApi} from "./adminsApi";
 import {resAdminsApi} from "./resAdminsApi";
-import {UserType} from "../types/Users";
+import {NewUserType, UserType} from "../types/Users";
 
 export const usersApi = {
     getUsers: async (): Promise<UserType[]> => {
@@ -52,7 +52,6 @@ export const usersApi = {
     },
 
     modify: (user:UserType) => {
-
         switch (user.userType) {
             case "Client":
                 // @ts-ignore
@@ -61,6 +60,18 @@ export const usersApi = {
                 return adminsApi.modify(user);
             case "Resource admin":
                 return resAdminsApi.modify(user);
+        }
+    },
+
+    create: (user:NewUserType) => {
+        switch (user.userType) {
+            case "Client":
+                // @ts-ignore
+                return clientsApi.create(user);
+            case "Admin":
+                return adminsApi.create(user);
+            case "Resource admin":
+                return resAdminsApi.create(user);
         }
     }
 }

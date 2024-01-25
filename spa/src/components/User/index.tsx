@@ -1,10 +1,10 @@
 import {UserType} from "../../types/Users";
-import React, {Dispatch, SetStateAction, useRef, useState} from "react";
+import React, {Dispatch, SetStateAction, useEffect, useRef, useState} from "react";
 import ConfirmModal from "../Modal/ConfirmModal";
 import {Formik, FormikProps, FormikValues} from "formik";
 import * as yup from 'yup';
 import {Button, Col, Form, Row} from "react-bootstrap";
-import {capitalize} from "lodash";
+import {capitalize, find, indexOf} from "lodash";
 import {usersApi} from "../../api/userApi";
 import ModalBasic from "../Modal/ModalBasic";
 
@@ -29,7 +29,6 @@ function User({user, users, setUsers}: UserProps) {
         try {
             usersApi.activate(user);
             setUserCopy({...userCopy, archive: false})
-            user = userCopy;
         } catch (error) {
             console.log(error)
         }
@@ -39,7 +38,6 @@ function User({user, users, setUsers}: UserProps) {
         try {
             usersApi.deactivate(user);
             setUserCopy({...userCopy, archive: true})
-            user = userCopy;
         } catch (error) {
             console.log(error)
         }
@@ -55,11 +53,16 @@ function User({user, users, setUsers}: UserProps) {
         usersApi.modify({...user,login:changes.login})?.then(
             (response) =>{
                 setUserCopy({...userCopy, login:changes.login})
-                user = userCopy;
                 setIsModified(false);
             }
-        ).catch( (error) => {console.log(error); setErrorModalContent(JSON.stringify(error.response.data)); setShowErrorModal(true)});
+        ).catch( (error) => {setErrorModalContent(JSON.stringify(error.response.data)); setShowErrorModal(true)});
     }
+
+    useEffect(() => {
+        let usersCopy = [...users]
+        usersCopy[indexOf(usersCopy,user)] = userCopy;
+        setUsers(usersCopy);
+    }, [userCopy]);
 
 
 
@@ -71,7 +74,7 @@ function User({user, users, setUsers}: UserProps) {
             {isModified && <td>
                 <Formik innerRef={formRef}
                         validationSchema={schema}
-                        initialValues={{login: user.login}}
+                        initialValues={{login: userCopy.login}}
                         onSubmit={modifyUser}>{props => (
                     <Form noValidate onSubmit={props.handleSubmit}>
                         <Form.Group controlId="searchFormUsername">
