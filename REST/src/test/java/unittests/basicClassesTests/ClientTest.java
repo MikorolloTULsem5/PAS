@@ -68,8 +68,8 @@ public class ClientTest {
         assertNotNull(client2);
 
         assertEquals(0, client.applyDiscount());
-        assertEquals(10, client1.applyDiscount());
-        assertEquals(20, client2.applyDiscount());
+        assertEquals(0.1, client1.applyDiscount());
+        assertEquals(0.2, client2.applyDiscount());
 
         assertEquals(3, client.clientMaxHours());
         assertEquals(6, client1.clientMaxHours());

@@ -13,7 +13,7 @@ import java.util.UUID;
 public class Client extends User {
 
     private enum ClientType {
-        NORMAL(0, 3), ATHLETE(10, 6), COACH(20, 12);
+        NORMAL(0, 3), ATHLETE(0.1, 6), COACH(0.2, 12);
 
         private final double discount;
         @Getter
