@@ -1,7 +1,10 @@
 package pas.gV.restapi.controllers.users;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.databind.util.JSONPObject;
 import jakarta.servlet.http.HttpServletResponse;
 
+import org.bson.json.JsonObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -9,6 +12,7 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.ObjectError;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -26,6 +30,8 @@ import pas.gV.restapi.data.dto.UserDTO.PasswordValidation;
 import pas.gV.restapi.services.userservice.ClientService;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/clients")
@@ -136,6 +142,24 @@ public class ClientController {
     public void archiveClient(@PathVariable("id") String id, HttpServletResponse response) {
         clientService.deactivateClient(id);
         response.setStatus(HttpStatus.NO_CONTENT.value());
+    }
+
+    @PatchMapping("/changePassword/{id}")
+    public ResponseEntity<String> changeClientPassword(@PathVariable("id") String id,
+                                     @Validated(PasswordValidation.class) @RequestBody ClientDTO body,
+                                     Errors errors) {
+        if (errors.hasErrors()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(errors.getAllErrors()
+                            .stream().map(ObjectError::getDefaultMessage)
+                            .toList()
+                            .toString()
+                    );
+        }
+
+        clientService.changeClientPassword(id, body.getPassword());
+
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 }
 

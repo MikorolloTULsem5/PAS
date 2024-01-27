@@ -89,6 +89,10 @@ public class ClientService extends UserService {
         userRepository.update(UUID.fromString(clientId), "archive", true);
     }
 
+    public void changeClientPassword(String id, String newPassword) {
+        userRepository.update(UUID.fromString(id), "password", newPassword);
+    }
+
     @Override
     public int usersSize() {
         return userRepository.readAll(User.class).size();
@@ -107,5 +111,9 @@ public class ClientService extends UserService {
 
     public void deactivateClient(UUID clientId) {
         deactivateClient(clientId.toString());
+    }
+
+    public void changeClientPassword(UUID id, String newPassword) {
+        changeClientPassword(id.toString(), newPassword);
     }
 }
