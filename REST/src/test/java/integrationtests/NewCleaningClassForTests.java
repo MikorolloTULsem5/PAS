@@ -10,16 +10,13 @@ import com.mongodb.client.model.Filters;
 import pas.gV.model.data.repositories.CourtMongoRepository;
 import pas.gV.model.data.repositories.ReservationMongoRepository;
 import pas.gV.model.data.repositories.UserMongoRepository;
-import pas.gV.model.logic.courts.Court;
-import pas.gV.model.logic.users.Admin;
-import pas.gV.model.logic.users.Client;
-import pas.gV.model.logic.reservations.Reservation;
-import pas.gV.model.logic.users.ResourceAdmin;
+
 import pas.gV.restapi.data.dto.AdminDTO;
 import pas.gV.restapi.data.dto.ClientDTO;
 import pas.gV.restapi.data.dto.CourtDTO;
+import pas.gV.restapi.data.dto.ReservationDTO;
 import pas.gV.restapi.data.dto.ResourceAdminDTO;
-import pas.gV.restapi.data.mappers.ClientMapper;
+
 import pas.gV.restapi.services.CourtService;
 import pas.gV.restapi.services.ReservationService;
 import pas.gV.restapi.services.userservice.AdminService;
@@ -79,13 +76,13 @@ public class NewCleaningClassForTests {
     static CourtDTO court4;
     static CourtDTO court5;
 
-    static Reservation reservation1;
-    static Reservation reservation2;
-    static Reservation reservation3;
-    static Reservation reservation4;
-    static Reservation reservation5;
-    static Reservation reservation6;
-    static Reservation reservation7;
+    static ReservationDTO reservation1;
+    static ReservationDTO reservation2;
+    static ReservationDTO reservation3;
+    static ReservationDTO reservation4;
+    static ReservationDTO reservation5;
+    static ReservationDTO reservation6;
+    static ReservationDTO reservation7;
 
     static final LocalDateTime dataStart = LocalDateTime.of(2023, Month.NOVEMBER, 30, 14, 20);
 

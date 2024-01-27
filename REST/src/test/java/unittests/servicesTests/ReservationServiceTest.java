@@ -11,6 +11,7 @@ import pas.gV.model.data.repositories.UserMongoRepository;
 import pas.gV.model.data.repositories.CourtMongoRepository;
 import pas.gV.model.data.repositories.ReservationMongoRepository;
 import pas.gV.model.logic.reservations.Reservation;
+import pas.gV.restapi.data.dto.ReservationDTO;
 import pas.gV.restapi.services.ReservationService;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -83,7 +84,7 @@ public class ReservationServiceTest {
         assertEquals(rm.getAllCurrentReservations().size(), 0);
         assertFalse(testCourt1.isRented());
 
-        Reservation newReservation = rm.makeReservation(testClient1.getId(), testCourt1.getId(), testTimeStart);
+        ReservationDTO newReservation = rm.makeReservation(testClient1.getId(), testCourt1.getId(), testTimeStart);
 
         assertEquals(rm.getAllCurrentReservations().size(), 1);
         assertEquals(newReservation, rm.getReservationById(newReservation.getId()));
@@ -91,7 +92,7 @@ public class ReservationServiceTest {
 
 
         assertFalse(testCourt2.isRented());
-        Reservation newReservation2 = rm.makeReservation(testClient1.getId(), testCourt2.getId());
+        ReservationDTO newReservation2 = rm.makeReservation(testClient1.getId(), testCourt2.getId());
 
         assertEquals(rm.getAllCurrentReservations().size(), 2);
         assertEquals(newReservation2, rm.getReservationById(newReservation2.getId()));
@@ -113,7 +114,7 @@ public class ReservationServiceTest {
     @Test
     void testCreatingReservationManagerWithNullDate() {
         assertEquals(0, rm.getAllCurrentReservations().size());
-        Reservation newReservation = rm.makeReservation(testClient1.getId(), testCourt1.getId());
+        ReservationDTO newReservation = rm.makeReservation(testClient1.getId(), testCourt1.getId());
         var reservations = rm.getAllCurrentReservations();
         assertEquals(1, reservations.size());
         assertEquals(newReservation, reservations.get(0));

@@ -3,14 +3,17 @@ package pas.gV.restapi.services;
 import com.mongodb.client.model.Filters;
 
 import lombok.NoArgsConstructor;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import pas.gV.model.data.repositories.ReservationMongoRepository;
 import pas.gV.model.logic.courts.Court;
 import pas.gV.model.logic.reservations.Reservation;
 import pas.gV.model.logic.users.Client;
 import pas.gV.model.exceptions.MyMongoException;
 import pas.gV.model.exceptions.ReservationException;
-import pas.gV.model.data.repositories.ReservationMongoRepository;
+
 import pas.gV.restapi.data.dto.ReservationDTO;
 import pas.gV.restapi.data.mappers.ReservationMapper;
 
@@ -23,28 +26,29 @@ import java.util.UUID;
 public class ReservationService {
 
     private ReservationMongoRepository reservationRepository;
+
     @Autowired
     public ReservationService(ReservationMongoRepository reservationRepository) {
         this.reservationRepository = reservationRepository;
     }
 
-    public Reservation makeReservation(UUID clientId, UUID courtId, LocalDateTime beginTime) {
+    public ReservationDTO makeReservation(UUID clientId, UUID courtId, LocalDateTime beginTime) {
         try {
             Reservation newReservation = reservationRepository.create(
                     new Reservation(null,
-                                    new Client(clientId, "", "", "", "", ""),
-                                    new Court(courtId, 0, 0,0),
-                                    beginTime));
+                            new Client(clientId, "", "", "", "", ""),
+                            new Court(courtId, 0, 0, 0),
+                            beginTime));
             if (newReservation == null) {
                 throw new ReservationException("Nie udalo sie utworzyc rezerwacji! - brak odpowiedzi");
             }
-            return newReservation;
+            return ReservationMapper.toJsonReservation(newReservation);
         } catch (MyMongoException exception) {
             throw new ReservationException("Nie udalo sie utworzyc rezerwacji - " + exception.getMessage());
         }
     }
 
-    public Reservation makeReservation(UUID clientId, UUID courtId) {
+    public ReservationDTO makeReservation(UUID clientId, UUID courtId) {
         return makeReservation(clientId, courtId, LocalDateTime.now());
     }
 
@@ -60,8 +64,9 @@ public class ReservationService {
         returnCourt(courtId, LocalDateTime.now());
     }
 
-    public Reservation getReservationById(UUID uuid) {
-        return reservationRepository.readByUUID(uuid);
+    public ReservationDTO getReservationById(String uuid) {
+        Reservation reservation = reservationRepository.readByUUID(UUID.fromString(uuid));
+        return reservation != null ? ReservationMapper.toJsonReservation(reservation) : null;
     }
 
     public List<ReservationDTO> getAllCurrentReservations() {
@@ -70,42 +75,56 @@ public class ReservationService {
                 .toList();
     }
 
-    public List<Reservation> getAllArchiveReservations() {
-        return reservationRepository.read(Filters.ne("endtime", null));
+    public List<ReservationDTO> getAllArchiveReservations() {
+        return reservationRepository.read(Filters.ne("endtime", null))
+                .stream().map(ReservationMapper::toJsonReservation)
+                .toList();
     }
 
-    public List<Reservation> getAllClientReservations(UUID clientId) {
-        return reservationRepository.read(Filters.eq("clientid", clientId.toString()));
+    public List<ReservationDTO> getAllClientReservations(UUID clientId) {
+        return reservationRepository.read(Filters.eq("clientid", clientId.toString()))
+                .stream().map(ReservationMapper::toJsonReservation)
+                .toList();
     }
 
-    public List<Reservation> getClientCurrentReservations(UUID clientId) {
+    public List<ReservationDTO> getClientCurrentReservations(UUID clientId) {
         return reservationRepository.read(Filters.and(
-                Filters.eq("clientid", clientId.toString()),
-                Filters.eq("endtime", null)));
+                        Filters.eq("clientid", clientId.toString()),
+                        Filters.eq("endtime", null)))
+                .stream().map(ReservationMapper::toJsonReservation)
+                .toList();
     }
 
-    public List<Reservation> getClientEndedReservations(UUID clientId) {
+    public List<ReservationDTO> getClientEndedReservations(UUID clientId) {
         return reservationRepository.read(Filters.and(
-                Filters.eq("clientid", clientId.toString()),
-                Filters.ne("endtime", null)));
+                        Filters.eq("clientid", clientId.toString()),
+                        Filters.ne("endtime", null)))
+                .stream().map(ReservationMapper::toJsonReservation)
+                .toList();
     }
 
-    public Reservation getCourtCurrentReservation(UUID courtId) {
+    public ReservationDTO getCourtCurrentReservation(UUID courtId) {
         var list = reservationRepository.read(
                 Filters.and(Filters.eq("courtid", courtId.toString()),
-                            Filters.eq("endtime", null)));
-        return !list.isEmpty() ? list.get(0) : null;
+                        Filters.eq("endtime", null)));
+        return !list.isEmpty() ? ReservationMapper.toJsonReservation(list.get(0)) : null;
     }
 
-    public List<Reservation> getCourtEndedReservation(UUID courtId) {
+    public List<ReservationDTO> getCourtEndedReservation(UUID courtId) {
         return reservationRepository.read(Filters.and(
-                Filters.eq("courtid", courtId.toString()),
-                Filters.ne("endtime", null)));
+                        Filters.eq("courtid", courtId.toString()),
+                        Filters.ne("endtime", null)))
+                .stream().map(ReservationMapper::toJsonReservation)
+                .toList();
     }
 
-    public void deleteReservation(UUID reservationId) {
+    public void deleteReservation(UUID uuid) {
+        deleteReservation(uuid.toString());
+    }
+
+    public void deleteReservation(String reservationId) {
         try {
-            reservationRepository.delete(reservationId);
+            reservationRepository.delete(UUID.fromString(reservationId));
         } catch (IllegalStateException e) {
             throw new ReservationException("Nie mozna usunac zakonczonej rezerwacji");
         } catch (Exception exception) {
@@ -115,8 +134,8 @@ public class ReservationService {
 
     public double checkClientReservationBalance(UUID clientId) {
         double sum = 0;
-        List<Reservation> reservationList = getClientEndedReservations(clientId);
-        for (Reservation reservation : reservationList) {
+        List<ReservationDTO> reservationList = getClientEndedReservations(clientId);
+        for (var reservation : reservationList) {
             sum += reservation.getReservationCost();
         }
         return sum;

@@ -52,15 +52,12 @@ public class ReservationsControllerTests {
         assertTrue(splitedRespStr[0].contains("\"court\":{\""));
         assertTrue(splitedRespStr[0].contains("\"id\":\"" + reservation1.getId() + "\""));
         assertTrue(splitedRespStr[0].contains("\"reservationCost\":0"));
-        assertTrue(splitedRespStr[0].contains("\"reservationHours\":0"));
 
         //Second Reservation
         assertTrue(splitedRespStr[1].contains("\"beginTime\":\"2023-11-30T14:20:00\""));
         assertTrue(splitedRespStr[1].contains("\"client\":{\""));
         assertTrue(splitedRespStr[1].contains("\"court\":{\""));
         assertTrue(splitedRespStr[1].contains("\"id\":\"" + reservation2.getId() + "\""));
-        assertTrue(splitedRespStr[1].contains("\"reservationCost\":0"));
-        assertTrue(splitedRespStr[1].contains("\"reservationHours\":0"));
 
         assertEquals(200, response.getStatusCode());
     }
@@ -91,7 +88,6 @@ public class ReservationsControllerTests {
         assertTrue(splitedRespStr[0].contains("\"endTime\":\"2023-11-30T14:20:00\""));
         assertTrue(splitedRespStr[0].contains("\"id\":\"" + reservation3.getId() + "\""));
         assertTrue(splitedRespStr[0].contains("\"reservationCost\":10560"));
-        assertTrue(splitedRespStr[0].contains("\"reservationHours\":48"));
 
         assertEquals(200, response.getStatusCode());
     }

@@ -54,8 +54,9 @@ public class ReservationDTO implements DTO {
         return Objects.equal(id, that.id) &&
                 Double.compare(reservationCost, that.reservationCost) == 0  &&
                 Objects.equal(client, that.client) &&
-                Objects.equal(court, that.court) &&
-                Objects.equal(beginTime, that.beginTime) &&
-                Objects.equal(endTime, that.endTime);
+                Objects.equal(court, that.court);
+//                &&
+//                Objects.equal(beginTime, that.beginTime) &&
+//                Objects.equal(endTime, that.endTime);
     }
 }

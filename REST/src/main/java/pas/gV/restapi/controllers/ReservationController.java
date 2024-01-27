@@ -12,10 +12,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
 import pas.gV.model.exceptions.MultiReservationException;
 import pas.gV.model.exceptions.MyMongoException;
 import pas.gV.model.exceptions.ReservationException;
-import pas.gV.model.logic.reservations.Reservation;
+
 import pas.gV.restapi.data.dto.ReservationDTO;
 import pas.gV.restapi.services.ReservationService;
 
@@ -65,8 +66,8 @@ public class ReservationController {
     }
 
     @GetMapping("/archive")
-    public List<Reservation> getAllArchiveReservations(HttpServletResponse response) {
-        List<Reservation> resultList = reservationService.getAllArchiveReservations();
+    public List<ReservationDTO> getAllArchiveReservations(HttpServletResponse response) {
+        List<ReservationDTO> resultList = reservationService.getAllArchiveReservations();
         if (resultList.isEmpty()) {
             resultList = null;
             response.setStatus(HttpStatus.NO_CONTENT.value());
@@ -92,8 +93,8 @@ public class ReservationController {
     }
 
     @GetMapping("/{id}")
-    public Reservation getReservationById(@PathVariable("id") String id, HttpServletResponse response) {
-        Reservation reservation = reservationService.getReservationById(UUID.fromString(id));
+    public ReservationDTO getReservationById(@PathVariable("id") String id, HttpServletResponse response) {
+        ReservationDTO reservation = reservationService.getReservationById(id);
         if (reservation == null) {
             response.setStatus(HttpStatus.NO_CONTENT.value());
         }
@@ -101,8 +102,8 @@ public class ReservationController {
     }
 
     @GetMapping("/clientReservation")
-    public List<Reservation> getAllClientReservations(@RequestParam("clientId") String clientId, HttpServletResponse response) {
-        List<Reservation> resultList = reservationService.getAllClientReservations(UUID.fromString(clientId));
+    public List<ReservationDTO> getAllClientReservations(@RequestParam("clientId") String clientId, HttpServletResponse response) {
+        List<ReservationDTO> resultList = reservationService.getAllClientReservations(UUID.fromString(clientId));
         if (resultList.isEmpty()) {
             resultList = null;
             response.setStatus(HttpStatus.NO_CONTENT.value());
@@ -111,8 +112,8 @@ public class ReservationController {
     }
 
     @GetMapping("/clientReservation/current")
-    public List<Reservation> getClientCurrentReservations(@RequestParam("clientId") String clientId, HttpServletResponse response) {
-        List<Reservation> resultList = reservationService.getClientCurrentReservations(UUID.fromString(clientId));
+    public List<ReservationDTO> getClientCurrentReservations(@RequestParam("clientId") String clientId, HttpServletResponse response) {
+        List<ReservationDTO> resultList = reservationService.getClientCurrentReservations(UUID.fromString(clientId));
         if (resultList.isEmpty()) {
             resultList = null;
             response.setStatus(HttpStatus.NO_CONTENT.value());
@@ -121,8 +122,8 @@ public class ReservationController {
     }
 
     @GetMapping("/clientReservation/ended")
-    public List<Reservation> getClientEndedReservations(@RequestParam("clientId") String clientId, HttpServletResponse response) {
-        List<Reservation> resultList = reservationService.getClientEndedReservations(UUID.fromString(clientId));
+    public List<ReservationDTO> getClientEndedReservations(@RequestParam("clientId") String clientId, HttpServletResponse response) {
+        List<ReservationDTO> resultList = reservationService.getClientEndedReservations(UUID.fromString(clientId));
         if (resultList.isEmpty()) {
             resultList = null;
             response.setStatus(HttpStatus.NO_CONTENT.value());
@@ -131,8 +132,8 @@ public class ReservationController {
     }
 
     @GetMapping("/courtReservation/current")
-    public Reservation getCourtCurrentReservation(@RequestParam("courtId") String courtId, HttpServletResponse response) {
-        Reservation reservation = reservationService.getCourtCurrentReservation(UUID.fromString(courtId));
+    public ReservationDTO getCourtCurrentReservation(@RequestParam("courtId") String courtId, HttpServletResponse response) {
+        ReservationDTO reservation = reservationService.getCourtCurrentReservation(UUID.fromString(courtId));
         if (reservation == null) {
             response.setStatus(HttpStatus.NO_CONTENT.value());
         }
@@ -140,8 +141,8 @@ public class ReservationController {
     }
 
     @GetMapping("/courtReservation/ended")
-    public List<Reservation> getCourtEndedReservation(@RequestParam("courtId") String courtId, HttpServletResponse response) {
-        List<Reservation> resultList = reservationService.getCourtEndedReservation(UUID.fromString(courtId));
+    public List<ReservationDTO> getCourtEndedReservation(@RequestParam("courtId") String courtId, HttpServletResponse response) {
+        List<ReservationDTO> resultList = reservationService.getCourtEndedReservation(UUID.fromString(courtId));
         if (resultList.isEmpty()) {
             resultList = null;
             response.setStatus(HttpStatus.NO_CONTENT.value());
