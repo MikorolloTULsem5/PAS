@@ -100,7 +100,6 @@ public class CourtControllerTests {
 
         Response responsePost = requestPost.post(appUrlCourt + "/addCourt");
 
-        System.out.println(responsePost.asString());
         assertEquals(201, responsePost.getStatusCode());
 
         responseString = requestGet.get(new URI(appUrlCourt)).asString();

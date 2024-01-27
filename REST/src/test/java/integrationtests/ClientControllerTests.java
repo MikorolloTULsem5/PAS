@@ -202,7 +202,6 @@ public class ClientControllerTests {
         Response responseById = request.get(new URI(appUrlClient + "/" + clientId));
         String responseByIdString = responseById.asString();
 
-        System.out.println(responseByIdString);
         assertTrue(responseByIdString.contains("\"login\":\"michas13\",\"clientTypeName\":\"coach\",\"firstName\":\"Michal\",\"lastName\":\"Pi\""));
 
         assertEquals(200, responseById.getStatusCode());
@@ -296,7 +295,6 @@ public class ClientControllerTests {
 
         Response responsePut = requestPut.put(appUrlClient + "/modifyClient/" + clientId);
 
-        System.out.println(responsePut.asString());
         assertEquals(204, responsePut.getStatusCode());
 
         responseString = requestGet.get(new URI(appUrlClient)).asString();
