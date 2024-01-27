@@ -4,6 +4,7 @@ import com.mongodb.client.model.Filters;
 import pas.gV.model.exceptions.CourtNumberException;
 import pas.gV.model.logic.courts.Court;
 import pas.gV.model.data.datahandling.entities.CourtEntity;
+import pas.gV.restapi.data.dto.CourtDTO;
 import pas.gV.restapi.services.CourtService;
 import pas.gV.model.exceptions.CourtException;
 import pas.gV.model.data.repositories.CourtMongoRepository;
@@ -57,10 +58,10 @@ public class CourtServiceTest {
         assertNotNull(cm);
         assertEquals(0, cm.getAllCourts().size());
 
-        Court newCourt = cm.registerCourt(200, 200, 5);
+        CourtDTO newCourt = cm.registerCourt(200, 200, 5);
         assertNotNull(newCourt);
         assertEquals(1, cm.getAllCourts().size());
-        assertEquals(newCourt, cm.getCourtById(newCourt.getId()));
+        assertEquals(newCourt, cm.getCourtById(UUID.fromString(newCourt.getId())));
         assertThrows(CourtNumberException.class, () -> cm.registerCourt(300, 300, 5));
         assertEquals(1, cm.getAllCourts().size());
 
@@ -72,11 +73,11 @@ public class CourtServiceTest {
 
     @Test
     void testGettingCourt() {
-        Court testCourt1 = cm.registerCourt(10, 50, 1);
+        CourtDTO testCourt1 = cm.registerCourt(10, 50, 1);
         assertNotNull(testCourt1);
         assertEquals(1, cm.getAllCourts().size());
 
-        Court testCourt2 = cm.registerCourt(14, 67, 2);
+        CourtDTO testCourt2 = cm.registerCourt(14, 67, 2);
         assertNotNull(testCourt2);
         assertEquals(2, cm.getAllCourts().size());
 
@@ -87,21 +88,21 @@ public class CourtServiceTest {
 
     @Test
     void testDeactivateCourt() {
-        Court testCourt1 = cm.registerCourt(10, 50, 1);
+        CourtDTO testCourt1 = cm.registerCourt(10, 50, 1);
         assertNotNull(testCourt1);
         assertEquals(1, cm.getAllCourts().size());
-        Court testCourt2 = cm.registerCourt(14, 67, 2);
+        CourtDTO testCourt2 = cm.registerCourt(14, 67, 2);
         assertNotNull(testCourt2);
         assertEquals(2, cm.getAllCourts().size());
 
         assertEquals(2, cm.getAllCourts().size());
-        assertEquals(testCourt1, cm.getCourtById(testCourt1.getId()));
+        assertEquals(testCourt1, cm.getCourtById(UUID.fromString(testCourt1.getId())));
         assertFalse(testCourt1.isArchive());
 
-        cm.deactivateCourt(testCourt1.getId());
+        cm.deactivateCourt(UUID.fromString(testCourt1.getId()));
 
         assertEquals(2, cm.getAllCourts().size());
-        Court dbCourt = cm.getCourtById(testCourt1.getId());
+        CourtDTO dbCourt = cm.getCourtById(UUID.fromString(testCourt1.getId()));
         assertNotNull(dbCourt);
         assertTrue(dbCourt.isArchive());
     }
@@ -140,17 +141,17 @@ public class CourtServiceTest {
 
     @Test
     public void testFindByCourtNumber() {
-        Court testCourt1 = cm.registerCourt(10, 50, 1);
+        CourtDTO testCourt1 = cm.registerCourt(10, 50, 1);
         assertNotNull(testCourt1);
         assertEquals(1, cm.getAllCourts().size());
-        Court testCourt2 = cm.registerCourt(14, 67, 2);
+        CourtDTO testCourt2 = cm.registerCourt(14, 67, 2);
         assertNotNull(testCourt2);
         assertEquals(2, cm.getAllCourts().size());
 
-        Court newCourt = cm.getCourtByCourtNumber(1);
+        CourtDTO newCourt = cm.getCourtByCourtNumber(1);
         assertNotNull(newCourt);
         assertEquals(testCourt1, newCourt);
-        Court newCourt2 = cm.getCourtByCourtNumber(4);
+        CourtDTO newCourt2 = cm.getCourtByCourtNumber(4);
         assertNull(newCourt2);
     }
 }

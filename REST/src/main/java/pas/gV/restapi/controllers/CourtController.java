@@ -21,7 +21,8 @@ import org.springframework.web.bind.annotation.RestController;
 import pas.gV.model.exceptions.CourtException;
 import pas.gV.model.exceptions.CourtNumberException;
 import pas.gV.model.exceptions.MyMongoException;
-import pas.gV.model.logic.courts.Court;
+
+import pas.gV.restapi.data.dto.CourtDTO;
 import pas.gV.restapi.services.CourtService;
 
 import java.util.List;
@@ -41,8 +42,8 @@ public class CourtController {
     }
 
     @PostMapping( "/addCourt")
-    public ResponseEntity<String> addCourt(@RequestBody Court court) {
-        Set<ConstraintViolation<Court>> violations = validator.validate(court);
+    public ResponseEntity<String> addCourt(@RequestBody CourtDTO court) {
+        Set<ConstraintViolation<CourtDTO>> violations = validator.validate(court);
         List<String> errors = violations.stream().map(ConstraintViolation::getMessage).toList();
         if (!violations.isEmpty()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errors.toString());
@@ -60,8 +61,8 @@ public class CourtController {
     }
 
     @GetMapping
-    public List<Court> getAllCourts(HttpServletResponse response) {
-        List<Court> resultList = courtService.getAllCourts();
+    public List<CourtDTO> getAllCourts(HttpServletResponse response) {
+        List<CourtDTO> resultList = courtService.getAllCourts();
         if (resultList.isEmpty()) {
             resultList = null;
             response.setStatus(HttpStatus.NO_CONTENT.value());
@@ -70,8 +71,8 @@ public class CourtController {
     }
 
     @GetMapping( "/{id}")
-    public Court getCourtById(@PathVariable("id") String id, HttpServletResponse response) {
-        Court court = courtService.getCourtById(UUID.fromString(id));
+    public CourtDTO getCourtById(@PathVariable("id") String id, HttpServletResponse response) {
+        CourtDTO court = courtService.getCourtById(UUID.fromString(id));
         if (court == null) {
             response.setStatus(HttpStatus.NO_CONTENT.value());
         }
@@ -79,8 +80,8 @@ public class CourtController {
     }
 
     @GetMapping( "/get")
-    public Court getCourtByCourtNumber(@RequestParam("number") String number, HttpServletResponse response) {
-        Court court = courtService.getCourtByCourtNumber(Integer.parseInt(number));
+    public CourtDTO getCourtByCourtNumber(@RequestParam("number") String number, HttpServletResponse response) {
+        CourtDTO court = courtService.getCourtByCourtNumber(Integer.parseInt(number));
         if (court == null) {
             response.setStatus(HttpStatus.NO_CONTENT.value());
         }
@@ -88,18 +89,16 @@ public class CourtController {
     }
 
     @PutMapping( "/modifyCourt/{id}")
-    public ResponseEntity<String> modifyCourt(@PathVariable("id") String id, @RequestBody Court modifiedCourt) {
-        Set<ConstraintViolation<Court>> violations = validator.validate(modifiedCourt);
+    public ResponseEntity<String> modifyCourt(@PathVariable("id") String id, @RequestBody CourtDTO modifiedCourt) {
+        Set<ConstraintViolation<CourtDTO>> violations = validator.validate(modifiedCourt);
         List<String> errors = violations.stream().map(ConstraintViolation::getMessage).toList();
         if (!violations.isEmpty()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errors.toString());
         }
 
         try {
-            Court finalModifyCourt = new Court(UUID.fromString(id), modifiedCourt.getArea(), modifiedCourt.getBaseCost(),
-                    modifiedCourt.getCourtNumber());
-            finalModifyCourt.setArchive(modifiedCourt.isArchive());
-            finalModifyCourt.setRented(modifiedCourt.isRented());
+            CourtDTO finalModifyCourt = new CourtDTO(id, modifiedCourt.getArea(), modifiedCourt.getBaseCost(),
+                    modifiedCourt.getCourtNumber(), modifiedCourt.isArchive(), modifiedCourt.isRented());
             courtService.modifyCourt(finalModifyCourt);
         } catch (CourtNumberException cne) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(cne.getMessage());

@@ -13,7 +13,9 @@ public class AdminMapper {
     }
 
     public static Admin fromJsonUser(AdminDTO adminDTO) {
-        Admin newAdmin = new Admin(UUID.fromString(adminDTO.getId()), adminDTO.getLogin(), adminDTO.getPassword());
+        Admin newAdmin = new Admin(adminDTO.getId() != null ? UUID.fromString(adminDTO.getId()) : null,
+                adminDTO.getLogin(),
+                adminDTO.getPassword());
         newAdmin.setArchive(adminDTO.isArchive());
         return newAdmin;
     }

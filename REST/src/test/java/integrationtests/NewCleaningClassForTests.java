@@ -17,6 +17,7 @@ import pas.gV.model.logic.reservations.Reservation;
 import pas.gV.model.logic.users.ResourceAdmin;
 import pas.gV.restapi.data.dto.AdminDTO;
 import pas.gV.restapi.data.dto.ClientDTO;
+import pas.gV.restapi.data.dto.CourtDTO;
 import pas.gV.restapi.data.dto.ResourceAdminDTO;
 import pas.gV.restapi.data.mappers.ClientMapper;
 import pas.gV.restapi.services.CourtService;
@@ -72,11 +73,11 @@ public class NewCleaningClassForTests {
     static ClientDTO client3;
     static ClientDTO client4;
 
-    static Court court1;
-    static Court court2;
-    static Court court3;
-    static Court court4;
-    static Court court5;
+    static CourtDTO court1;
+    static CourtDTO court2;
+    static CourtDTO court3;
+    static CourtDTO court4;
+    static CourtDTO court5;
 
     static Reservation reservation1;
     static Reservation reservation2;
@@ -118,18 +119,18 @@ public class NewCleaningClassForTests {
         cleanAll();
         initClients();
         initCourts();
-        reservation1 = reservationServiceTest.makeReservation(UUID.fromString(client1.getId()), court1.getId(), dataStart);
-        reservation2 = reservationServiceTest.makeReservation(UUID.fromString(client2.getId()), court2.getId(), dataStart);
-        reservation3 = reservationServiceTest.makeReservation(UUID.fromString(client3.getId()), court3.getId(), LocalDateTime.of(2023, Month.NOVEMBER, 28, 14, 20));
-        reservationServiceTest.returnCourt(court3.getId(), dataStart);
+        reservation1 = reservationServiceTest.makeReservation(UUID.fromString(client1.getId()), UUID.fromString(court1.getId()), dataStart);
+        reservation2 = reservationServiceTest.makeReservation(UUID.fromString(client2.getId()), UUID.fromString(court2.getId()), dataStart);
+        reservation3 = reservationServiceTest.makeReservation(UUID.fromString(client3.getId()), UUID.fromString(court3.getId()), LocalDateTime.of(2023, Month.NOVEMBER, 28, 14, 20));
+        reservationServiceTest.returnCourt(UUID.fromString(court3.getId()), dataStart);
 
         //Extra for getters
-        reservation4 = reservationServiceTest.makeReservation(UUID.fromString(client2.getId()), court3.getId(), LocalDateTime.of(2023, Month.NOVEMBER, 28, 15, 0));
-        reservationServiceTest.returnCourt(court3.getId(), LocalDateTime.of(2023, Month.DECEMBER, 2, 12, 20));
-        reservation5 = reservationServiceTest.makeReservation(UUID.fromString(client3.getId()), court4.getId(), dataStart);
-        reservationServiceTest.returnCourt(court4.getId(), LocalDateTime.of(2023, Month.DECEMBER, 1, 14, 20));
-        reservation6 = reservationServiceTest.makeReservation(UUID.fromString(client1.getId()), court3.getId(), LocalDateTime.of(2023, Month.DECEMBER, 15, 10, 0));
-        reservation7 = reservationServiceTest.makeReservation(UUID.fromString(client3.getId()), court5.getId(), LocalDateTime.of(2023, Month.DECEMBER, 16, 10, 0));
+        reservation4 = reservationServiceTest.makeReservation(UUID.fromString(client2.getId()), UUID.fromString(court3.getId()), LocalDateTime.of(2023, Month.NOVEMBER, 28, 15, 0));
+        reservationServiceTest.returnCourt(UUID.fromString(court3.getId()), LocalDateTime.of(2023, Month.DECEMBER, 2, 12, 20));
+        reservation5 = reservationServiceTest.makeReservation(UUID.fromString(client3.getId()), UUID.fromString(court4.getId()), dataStart);
+        reservationServiceTest.returnCourt(UUID.fromString(court4.getId()), LocalDateTime.of(2023, Month.DECEMBER, 1, 14, 20));
+        reservation6 = reservationServiceTest.makeReservation(UUID.fromString(client1.getId()), UUID.fromString(court3.getId()), LocalDateTime.of(2023, Month.DECEMBER, 15, 10, 0));
+        reservation7 = reservationServiceTest.makeReservation(UUID.fromString(client3.getId()), UUID.fromString(court5.getId()), LocalDateTime.of(2023, Month.DECEMBER, 16, 10, 0));
     }
 
     /*----------------------------------------------------------------------------------------------------------------*/

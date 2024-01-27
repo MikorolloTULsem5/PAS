@@ -183,6 +183,7 @@ public class CourtControllerTests {
 
         assertEquals(1, splitedRespStr.length);
 
+        System.out.println(splitedRespStr[0]);
         assertTrue(splitedRespStr[0].contains("\"archive\":false"));
         assertTrue(splitedRespStr[0].contains("\"area\":300"));
         assertTrue(splitedRespStr[0].contains("\"baseCost\":200"));
