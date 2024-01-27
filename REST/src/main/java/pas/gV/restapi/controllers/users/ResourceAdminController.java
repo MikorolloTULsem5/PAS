@@ -1,14 +1,14 @@
 package pas.gV.restapi.controllers.users;
 
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.validation.ConstraintViolation;
-import jakarta.validation.Validation;
-import jakarta.validation.Validator;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import org.springframework.validation.Errors;
+import org.springframework.validation.ObjectError;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,19 +20,17 @@ import org.springframework.web.bind.annotation.RestController;
 
 import pas.gV.model.exceptions.UserException;
 import pas.gV.model.exceptions.UserLoginException;
-import pas.gV.model.logic.users.ResourceAdmin;
 
 import pas.gV.restapi.data.dto.ResourceAdminDTO;
+import pas.gV.restapi.data.dto.UserDTO;
 import pas.gV.restapi.services.userservice.ResourceAdminService;
 
 import java.util.List;
-import java.util.Set;
 import java.util.UUID;
 
 @RestController
 @RequestMapping("/resAdmins")
 public class ResourceAdminController {
-    private final Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
     private final ResourceAdminService resourceAdminService;
 
     @Autowired
@@ -41,11 +39,15 @@ public class ResourceAdminController {
     }
 
     @PostMapping("/addResAdmin")
-    public ResponseEntity<String> addResAdmin(@RequestBody ResourceAdminDTO resourceAdmin) {
-        Set<ConstraintViolation<ResourceAdminDTO>> violations = validator.validate(resourceAdmin);
-        List<String> errors = violations.stream().map(ConstraintViolation::getMessage).toList();
-        if (!violations.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errors.toString());
+    public ResponseEntity<String> addResAdmin(@Validated({UserDTO.BasicValidation.class, UserDTO.PasswordValidation.class}) @RequestBody ResourceAdminDTO resourceAdmin,
+                                              Errors errors) {
+        if (errors.hasErrors()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(errors.getAllErrors()
+                            .stream().map(ObjectError::getDefaultMessage)
+                            .toList()
+                            .toString()
+                    );
         }
 
         try {
@@ -98,11 +100,16 @@ public class ResourceAdminController {
     }
 
     @PutMapping("/modifyResAdmin/{id}")
-    public ResponseEntity<String> modifyResAdmin(@PathVariable("id") String id, @RequestBody ResourceAdminDTO modifyResourceAdmin) {
-        Set<ConstraintViolation<ResourceAdminDTO>> violations = validator.validate(modifyResourceAdmin);
-        List<String> errors = violations.stream().map(ConstraintViolation::getMessage).toList();
-        if (!violations.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errors.toString());
+    public ResponseEntity<String> modifyResAdmin(@PathVariable("id") String id,
+                                                 @Validated(UserDTO.BasicValidation.class) @RequestBody ResourceAdminDTO modifyResourceAdmin,
+                                                 Errors errors) {
+        if (errors.hasErrors()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(errors.getAllErrors()
+                            .stream().map(ObjectError::getDefaultMessage)
+                            .toList()
+                            .toString()
+                    );
         }
 
         try {

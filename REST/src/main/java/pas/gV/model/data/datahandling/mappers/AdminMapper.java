@@ -5,13 +5,15 @@ import pas.gV.model.data.datahandling.entities.AdminEntity;
 import pas.gV.model.logic.users.Admin;
 
 import java.nio.charset.StandardCharsets;
+import java.util.Objects;
 import java.util.UUID;
 
 public class AdminMapper {
 
     public static AdminEntity toMongoUser(Admin admin) {
         return new AdminEntity(admin.getId().toString(), admin.getLogin(),
-                Hashing.sha256().hashString(admin.getPassword(), StandardCharsets.UTF_8).toString(),
+                Hashing.sha256().hashString(Objects.requireNonNullElse(admin.getPassword(), ""),
+                        StandardCharsets.UTF_8).toString(),
                 admin.isArchive());
     }
 

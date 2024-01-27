@@ -80,7 +80,7 @@ public class AdminControllerTests {
         String JSON = """
                 {
                   "login": "johnBravo",
-                  "password": "test"
+                  "password": "testTO1"
                 }
                 """;
         RequestSpecification requestPost = RestAssured.given();
@@ -106,7 +106,7 @@ public class AdminControllerTests {
         String json = """
                 {
                   "login": " ",
-                  "password": "test"
+                  "password": "testTO1"
                 }
                 """;
         RequestSpecification requestPost = RestAssured.given();
@@ -132,7 +132,7 @@ public class AdminControllerTests {
         String json = """
                 {
                   "login": "adminek1@1234",
-                  "password": "test"
+                  "password": "testTO1"
                 }
                 """;
         RequestSpecification requestPost = RestAssured.given();
@@ -227,8 +227,7 @@ public class AdminControllerTests {
         String JSON = """
                 {
                   "archive": true,
-                  "login": "loginekAdm",
-                  "password": "test"
+                  "login": "loginekAdm"
                 }
                 """;
         RequestSpecification requestPut = RestAssured.given();
@@ -268,8 +267,7 @@ public class AdminControllerTests {
         String JSON = """
                 {
                   "archive": true,
-                  "login": " ",
-                  "password": "test"
+                  "login": " "
                 }
                 """;
         RequestSpecification requestPut = RestAssured.given();
@@ -309,8 +307,7 @@ public class AdminControllerTests {
         String JSON = """
                 {
                   "archive": true,
-                  "login": "adminek2@9876",
-                  "password": "test"
+                  "login": "adminek2@9876"
                 }
                 """;
         RequestSpecification requestPut = RestAssured.given();

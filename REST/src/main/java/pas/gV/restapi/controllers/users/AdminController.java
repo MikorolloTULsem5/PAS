@@ -8,6 +8,9 @@ import jakarta.validation.Validator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.Errors;
+import org.springframework.validation.ObjectError;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,6 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 import pas.gV.model.exceptions.UserException;
 import pas.gV.model.exceptions.UserLoginException;
 import pas.gV.restapi.data.dto.AdminDTO;
+import pas.gV.restapi.data.dto.UserDTO;
 import pas.gV.restapi.services.userservice.AdminService;
 
 import java.util.List;
@@ -39,11 +43,15 @@ public class AdminController {
     }
 
     @PostMapping("/addAdmin")
-    public ResponseEntity<String> addAdmin(@RequestBody AdminDTO admin) {
-        Set<ConstraintViolation<AdminDTO>> violations = validator.validate(admin);
-        List<String> errors = violations.stream().map(ConstraintViolation::getMessage).toList();
-        if (!violations.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errors.toString());
+    public ResponseEntity<String> addAdmin(@Validated({UserDTO.BasicValidation.class, UserDTO.PasswordValidation.class}) @RequestBody AdminDTO admin,
+                                           Errors errors) {
+        if (errors.hasErrors()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(errors.getAllErrors()
+                            .stream().map(ObjectError::getDefaultMessage)
+                            .toList()
+                            .toString()
+                    );
         }
 
         try {
@@ -96,15 +104,20 @@ public class AdminController {
     }
 
     @PutMapping("/modifyAdmin/{id}")
-    public ResponseEntity<String> modifyAdmin(@PathVariable("id") String id, @RequestBody AdminDTO modifiedAdmin) {
-        Set<ConstraintViolation<AdminDTO>> violations = validator.validate(modifiedAdmin);
-        List<String> errors = violations.stream().map(ConstraintViolation::getMessage).toList();
-        if (!violations.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errors.toString());
+    public ResponseEntity<String> modifyAdmin(@PathVariable("id") String id,
+                                              @Validated(UserDTO.BasicValidation.class) @RequestBody AdminDTO modifiedAdmin,
+                                              Errors errors) {
+        if (errors.hasErrors()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(errors.getAllErrors()
+                            .stream().map(ObjectError::getDefaultMessage)
+                            .toList()
+                            .toString()
+                    );
         }
 
         try {
-            AdminDTO finalModifyAdmin = new AdminDTO(id, modifiedAdmin.getLogin(), modifiedAdmin.getPassword(),
+            AdminDTO finalModifyAdmin = new AdminDTO(id, modifiedAdmin.getLogin(), null,
                     modifiedAdmin.isArchive());
             adminService.modifyAdmin(finalModifyAdmin);
         } catch (UserLoginException ule) {

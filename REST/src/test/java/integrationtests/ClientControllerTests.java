@@ -264,7 +264,6 @@ public class ClientControllerTests {
                   "firstName": "John",
                   "lastName": "Smith",
                   "login": "loginek",
-                  "password": "loginek",
                   "clientTypeName": "coach"
                 }
                 """;
@@ -326,7 +325,6 @@ public class ClientControllerTests {
                   "firstName": "   ",
                   "lastName": "Smith",
                   "login": "loginek",
-                  "password": "loginek",
                   "clientTypeName": "coach"
                 }
                 """;
@@ -387,7 +385,6 @@ public class ClientControllerTests {
                   "firstName": "John",
                   "lastName": "Smith",
                   "login": "michas13",
-                  "password": "michas13",
                   "clientTypeName": "coach"
                 }
                 """;

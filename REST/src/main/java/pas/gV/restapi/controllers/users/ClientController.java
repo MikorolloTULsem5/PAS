@@ -43,7 +43,7 @@ public class ClientController {
         if (errors.hasErrors()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body(errors.getAllErrors()
-                            .stream().map(ObjectError::toString)
+                            .stream().map(ObjectError::getDefaultMessage)
                             .toList()
                             .toString()
                     );
@@ -106,7 +106,7 @@ public class ClientController {
         if (errors.hasErrors()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body(errors.getAllErrors()
-                            .stream().map(ObjectError::toString)
+                            .stream().map(ObjectError::getDefaultMessage)
                             .toList()
                             .toString()
                     );
@@ -114,7 +114,7 @@ public class ClientController {
 
         try {
             ClientDTO finalModifyClient = new ClientDTO(id, modifiedClient.getFirstName(),
-                    modifiedClient.getLastName(), modifiedClient.getLogin(), "", modifiedClient.isArchive(),
+                    modifiedClient.getLastName(), modifiedClient.getLogin(), null, modifiedClient.isArchive(),
                     modifiedClient.getClientType());
             clientService.modifyClient(finalModifyClient);
         } catch (UserLoginException ule) {
