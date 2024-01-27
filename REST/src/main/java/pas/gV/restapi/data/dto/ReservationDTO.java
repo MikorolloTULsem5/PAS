@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.google.common.base.Objects;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.experimental.FieldDefaults;
 
@@ -19,10 +20,10 @@ public class ReservationDTO implements DTO {
     @JsonProperty("id")
     private String id;
     @JsonProperty("client")
-//    @NotNull
+    @NotNull
     private ClientDTO client;
     @JsonProperty("court")
-//    @NotNull
+    @NotNull
     private CourtDTO court;
     @JsonProperty("beginTime")
     private LocalDateTime beginTime;
@@ -55,8 +56,5 @@ public class ReservationDTO implements DTO {
                 Double.compare(reservationCost, that.reservationCost) == 0  &&
                 Objects.equal(client, that.client) &&
                 Objects.equal(court, that.court);
-//                &&
-//                Objects.equal(beginTime, that.beginTime) &&
-//                Objects.equal(endTime, that.endTime);
     }
 }

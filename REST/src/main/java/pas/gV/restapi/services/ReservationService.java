@@ -32,12 +32,12 @@ public class ReservationService {
         this.reservationRepository = reservationRepository;
     }
 
-    public ReservationDTO makeReservation(UUID clientId, UUID courtId, LocalDateTime beginTime) {
+    public ReservationDTO makeReservation(String clientId, String courtId, LocalDateTime beginTime) {
         try {
             Reservation newReservation = reservationRepository.create(
                     new Reservation(null,
-                            new Client(clientId, "", "", "", "", ""),
-                            new Court(courtId, 0, 0, 0),
+                            new Client(UUID.fromString(clientId), "", "", "", "", ""),
+                            new Court(UUID.fromString(courtId), 0, 0, 0),
                             beginTime));
             if (newReservation == null) {
                 throw new ReservationException("Nie udalo sie utworzyc rezerwacji! - brak odpowiedzi");
@@ -48,19 +48,19 @@ public class ReservationService {
         }
     }
 
-    public ReservationDTO makeReservation(UUID clientId, UUID courtId) {
+    public ReservationDTO makeReservation(String clientId, String courtId) {
         return makeReservation(clientId, courtId, LocalDateTime.now());
     }
 
-    public void returnCourt(UUID courtId, LocalDateTime endTime) {
+    public void returnCourt(String courtId, LocalDateTime endTime) {
         try {
-            reservationRepository.update(courtId, endTime);
+            reservationRepository.update(UUID.fromString(courtId), endTime);
         } catch (MyMongoException exception) {
             throw new ReservationException("Blad transakcji. - " + exception.getMessage());
         }
     }
 
-    public void returnCourt(UUID courtId) {
+    public void returnCourt(String courtId) {
         returnCourt(courtId, LocalDateTime.now());
     }
 
@@ -81,45 +81,41 @@ public class ReservationService {
                 .toList();
     }
 
-    public List<ReservationDTO> getAllClientReservations(UUID clientId) {
-        return reservationRepository.read(Filters.eq("clientid", clientId.toString()))
+    public List<ReservationDTO> getAllClientReservations(String clientId) {
+        return reservationRepository.read(Filters.eq("clientid", clientId))
                 .stream().map(ReservationMapper::toJsonReservation)
                 .toList();
     }
 
-    public List<ReservationDTO> getClientCurrentReservations(UUID clientId) {
+    public List<ReservationDTO> getClientCurrentReservations(String clientId) {
         return reservationRepository.read(Filters.and(
-                        Filters.eq("clientid", clientId.toString()),
+                        Filters.eq("clientid", clientId),
                         Filters.eq("endtime", null)))
                 .stream().map(ReservationMapper::toJsonReservation)
                 .toList();
     }
 
-    public List<ReservationDTO> getClientEndedReservations(UUID clientId) {
+    public List<ReservationDTO> getClientEndedReservations(String clientId) {
         return reservationRepository.read(Filters.and(
-                        Filters.eq("clientid", clientId.toString()),
+                        Filters.eq("clientid", clientId),
                         Filters.ne("endtime", null)))
                 .stream().map(ReservationMapper::toJsonReservation)
                 .toList();
     }
 
-    public ReservationDTO getCourtCurrentReservation(UUID courtId) {
+    public ReservationDTO getCourtCurrentReservation(String courtId) {
         var list = reservationRepository.read(
-                Filters.and(Filters.eq("courtid", courtId.toString()),
+                Filters.and(Filters.eq("courtid", courtId),
                         Filters.eq("endtime", null)));
         return !list.isEmpty() ? ReservationMapper.toJsonReservation(list.get(0)) : null;
     }
 
-    public List<ReservationDTO> getCourtEndedReservation(UUID courtId) {
+    public List<ReservationDTO> getCourtEndedReservation(String courtId) {
         return reservationRepository.read(Filters.and(
-                        Filters.eq("courtid", courtId.toString()),
+                        Filters.eq("courtid", courtId),
                         Filters.ne("endtime", null)))
                 .stream().map(ReservationMapper::toJsonReservation)
                 .toList();
-    }
-
-    public void deleteReservation(UUID uuid) {
-        deleteReservation(uuid.toString());
     }
 
     public void deleteReservation(String reservationId) {
@@ -132,12 +128,62 @@ public class ReservationService {
         }
     }
 
-    public double checkClientReservationBalance(UUID clientId) {
+    public double checkClientReservationBalance(String clientId) {
         double sum = 0;
         List<ReservationDTO> reservationList = getClientEndedReservations(clientId);
         for (var reservation : reservationList) {
             sum += reservation.getReservationCost();
         }
         return sum;
+    }
+
+    /*----------------------------------------------HANDLE UUID----------------------------------------------*/
+
+    public ReservationDTO makeReservation(UUID clientId, UUID courtId, LocalDateTime beginTime) {
+        return makeReservation(clientId.toString(), courtId.toString(), beginTime);
+    }
+
+    public ReservationDTO makeReservation(UUID clientId, UUID courtId) {
+        return makeReservation(clientId.toString(), courtId.toString(), LocalDateTime.now());
+    }
+
+    public void returnCourt(UUID courtId, LocalDateTime endTime) {
+        returnCourt(courtId.toString(), endTime);
+    }
+
+    public void returnCourt(UUID courtId) {
+        returnCourt(courtId.toString(), LocalDateTime.now());
+    }
+
+    public ReservationDTO getReservationById(UUID uuid) {
+        return getReservationById(uuid.toString());
+    }
+
+    public List<ReservationDTO> getAllClientReservations(UUID clientId) {
+        return getAllClientReservations(clientId.toString());
+    }
+
+    public List<ReservationDTO> getClientCurrentReservations(UUID clientId) {
+        return getClientCurrentReservations(clientId.toString());
+    }
+
+    public List<ReservationDTO> getClientEndedReservations(UUID clientId) {
+        return getClientEndedReservations(clientId.toString());
+    }
+
+    public ReservationDTO getCourtCurrentReservation(UUID courtId) {
+        return getCourtCurrentReservation(courtId.toString());
+    }
+
+    public List<ReservationDTO> getCourtEndedReservation(UUID courtId) {
+        return getCourtEndedReservation(courtId.toString());
+    }
+
+    public void deleteReservation(UUID uuid) {
+        deleteReservation(uuid.toString());
+    }
+
+    public double checkClientReservationBalance(UUID clientId) {
+        return checkClientReservationBalance(clientId.toString());
     }
 }

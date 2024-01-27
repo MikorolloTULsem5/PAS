@@ -37,6 +37,10 @@ public class ClientService extends UserService {
         }
     }
 
+    public ClientDTO getClientById(UUID clientID) {
+        return getClientById(clientID.toString());
+    }
+
     public ClientDTO getClientById(String clientID) {
         User client = userRepository.readByUUID(UUID.fromString(clientID), Client.class);
         return client != null ? ClientMapper.toJsonUser((Client) client) : null;
@@ -81,8 +85,16 @@ public class ClientService extends UserService {
         }
     }
 
+    public void activateClient(UUID clientId) {
+        activateClient(clientId.toString());
+    }
+
     public void activateClient(String clientId) {
         userRepository.update(UUID.fromString(clientId), "archive", false);
+    }
+
+    public void deactivateClient(UUID clientId) {
+        deactivateClient(clientId.toString());
     }
 
     public void deactivateClient(String clientId) {
