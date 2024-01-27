@@ -16,6 +16,7 @@ import pas.gV.model.exceptions.MultiReservationException;
 import pas.gV.model.exceptions.MyMongoException;
 import pas.gV.model.exceptions.ReservationException;
 import pas.gV.model.logic.reservations.Reservation;
+import pas.gV.restapi.data.dto.ReservationDTO;
 import pas.gV.restapi.services.ReservationService;
 
 import java.time.LocalDateTime;
@@ -54,8 +55,8 @@ public class ReservationController {
     }
 
     @GetMapping
-    public List<Reservation> getAllCurrentReservations(HttpServletResponse response) {
-        List<Reservation> resultList = reservationService.getAllCurrentReservations();
+    public List<ReservationDTO> getAllCurrentReservations(HttpServletResponse response) {
+        List<ReservationDTO> resultList = reservationService.getAllCurrentReservations();
         if (resultList.isEmpty()) {
             resultList = null;
             response.setStatus(HttpStatus.NO_CONTENT.value());

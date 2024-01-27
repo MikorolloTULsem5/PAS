@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
+import com.google.common.base.Objects;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.PositiveOrZero;
 
@@ -11,8 +12,6 @@ import lombok.Getter;
 import lombok.experimental.FieldDefaults;
 
 import pas.gV.model.data.datahandling.entities.Entity;
-
-import java.util.Objects;
 
 @Getter
 @FieldDefaults(makeFinal = true)
@@ -56,12 +55,12 @@ public class CourtDTO implements Entity {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        CourtDTO that = (CourtDTO) o;
-        return Double.compare(area, that.area) == 0 &&
-                baseCost == that.baseCost &&
-                courtNumber == that.courtNumber &&
-                archive == that.archive &&
-                rented == that.rented &&
-                Objects.equals(id, that.id);
+        CourtDTO courtDTO = (CourtDTO) o;
+        return Objects.equal(id, courtDTO.id) &&
+                Double.compare(area, courtDTO.area) == 0 &&
+                baseCost == courtDTO.baseCost &&
+                courtNumber == courtDTO.courtNumber &&
+                archive == courtDTO.archive &&
+                rented == courtDTO.rented;
     }
 }

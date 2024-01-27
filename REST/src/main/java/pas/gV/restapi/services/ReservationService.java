@@ -11,6 +11,8 @@ import pas.gV.model.logic.users.Client;
 import pas.gV.model.exceptions.MyMongoException;
 import pas.gV.model.exceptions.ReservationException;
 import pas.gV.model.data.repositories.ReservationMongoRepository;
+import pas.gV.restapi.data.dto.ReservationDTO;
+import pas.gV.restapi.data.mappers.ReservationMapper;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -62,8 +64,10 @@ public class ReservationService {
         return reservationRepository.readByUUID(uuid);
     }
 
-    public List<Reservation> getAllCurrentReservations() {
-        return reservationRepository.read(Filters.eq("endtime", null));
+    public List<ReservationDTO> getAllCurrentReservations() {
+        return reservationRepository.read(Filters.eq("endtime", null))
+                .stream().map(ReservationMapper::toJsonReservation)
+                .toList();
     }
 
     public List<Reservation> getAllArchiveReservations() {
