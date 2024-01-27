@@ -1,6 +1,9 @@
 function HomePage(){
     return (
-        <h1>Jaką kiełbasą jesteś?</h1>
+        <div>
+            <h1>Jaką kiełbasą jesteś?</h1>
+            <img src={"test.JPG"}/>
+        </div>
     )
 }
 

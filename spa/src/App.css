@@ -1,3 +1,7 @@
+img {
+  max-width: 1000px;
+}
+
 .App {
   text-align: center;
 }
