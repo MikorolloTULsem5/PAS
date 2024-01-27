@@ -18,16 +18,19 @@ import java.util.Objects;
 @FieldDefaults(makeFinal = true)
 @JsonPropertyOrder({"archive", "area", "baseCost", "courtNumber", "id", "rented"})
 public class CourtDTO implements Entity {
+
+    public interface BasicCourtValidation {}
+
     @JsonProperty("id")
     private String id;
     @JsonProperty("area")
-    @PositiveOrZero
+    @PositiveOrZero(groups = BasicCourtValidation.class)
     private double area;
     @JsonProperty("baseCost")
-    @PositiveOrZero
+    @PositiveOrZero(groups = BasicCourtValidation.class)
     private int baseCost;
     @JsonProperty("courtNumber")
-    @Min(value = 1)
+    @Min(value = 1, groups = BasicCourtValidation.class)
     private int courtNumber;
     @JsonProperty("archive")
     private boolean archive;

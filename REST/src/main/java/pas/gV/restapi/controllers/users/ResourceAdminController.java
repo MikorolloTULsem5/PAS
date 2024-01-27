@@ -39,7 +39,7 @@ public class ResourceAdminController {
     }
 
     @PostMapping("/addResAdmin")
-    public ResponseEntity<String> addResAdmin(@Validated({UserDTO.BasicValidation.class, UserDTO.PasswordValidation.class}) @RequestBody ResourceAdminDTO resourceAdmin,
+    public ResponseEntity<String> addResAdmin(@Validated({UserDTO.BasicUserValidation.class, UserDTO.PasswordValidation.class}) @RequestBody ResourceAdminDTO resourceAdmin,
                                               Errors errors) {
         if (errors.hasErrors()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
@@ -101,7 +101,7 @@ public class ResourceAdminController {
 
     @PutMapping("/modifyResAdmin/{id}")
     public ResponseEntity<String> modifyResAdmin(@PathVariable("id") String id,
-                                                 @Validated(UserDTO.BasicValidation.class) @RequestBody ResourceAdminDTO modifyResourceAdmin,
+                                                 @Validated(UserDTO.BasicUserValidation.class) @RequestBody ResourceAdminDTO modifyResourceAdmin,
                                                  Errors errors) {
         if (errors.hasErrors()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)

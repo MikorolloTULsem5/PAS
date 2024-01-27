@@ -1,9 +1,6 @@
 package pas.gV.restapi.controllers.users;
 
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.validation.ConstraintViolation;
-import jakarta.validation.Validation;
-import jakarta.validation.Validator;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -27,14 +24,12 @@ import pas.gV.restapi.data.dto.UserDTO;
 import pas.gV.restapi.services.userservice.AdminService;
 
 import java.util.List;
-import java.util.Set;
 import java.util.UUID;
 
 @RestController
 @RequestMapping("/admins")
 public class AdminController {
 
-    private final Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
     private final AdminService adminService;
 
     @Autowired
@@ -43,7 +38,7 @@ public class AdminController {
     }
 
     @PostMapping("/addAdmin")
-    public ResponseEntity<String> addAdmin(@Validated({UserDTO.BasicValidation.class, UserDTO.PasswordValidation.class}) @RequestBody AdminDTO admin,
+    public ResponseEntity<String> addAdmin(@Validated({UserDTO.BasicUserValidation.class, UserDTO.PasswordValidation.class}) @RequestBody AdminDTO admin,
                                            Errors errors) {
         if (errors.hasErrors()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
@@ -105,7 +100,7 @@ public class AdminController {
 
     @PutMapping("/modifyAdmin/{id}")
     public ResponseEntity<String> modifyAdmin(@PathVariable("id") String id,
-                                              @Validated(UserDTO.BasicValidation.class) @RequestBody AdminDTO modifiedAdmin,
+                                              @Validated(UserDTO.BasicUserValidation.class) @RequestBody AdminDTO modifiedAdmin,
                                               Errors errors) {
         if (errors.hasErrors()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)

@@ -18,13 +18,13 @@ import java.util.Objects;
 @JsonPropertyOrder({"archive", "id", "login"})
 public class UserDTO implements DTO {
 
-    public interface BasicValidation {}
+    public interface BasicUserValidation {}
     public interface PasswordValidation {}
 
     @JsonProperty("id")
     private String id;
     @JsonProperty("login")
-    @NotBlank(groups = {BasicValidation.class})
+    @NotBlank(groups = {BasicUserValidation.class})
     private String login;
     @JsonProperty("archive")
     private boolean archive;

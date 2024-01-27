@@ -1,13 +1,13 @@
 package pas.gV.restapi.controllers;
 
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.validation.ConstraintViolation;
-import jakarta.validation.Validation;
-import jakarta.validation.Validator;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.Errors;
+import org.springframework.validation.ObjectError;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -23,17 +23,16 @@ import pas.gV.model.exceptions.CourtNumberException;
 import pas.gV.model.exceptions.MyMongoException;
 
 import pas.gV.restapi.data.dto.CourtDTO;
+import pas.gV.restapi.data.dto.CourtDTO.BasicCourtValidation;
+
 import pas.gV.restapi.services.CourtService;
 
 import java.util.List;
-import java.util.Set;
 import java.util.UUID;
 
 @RestController
 @RequestMapping("/courts")
 public class CourtController {
-
-    private final Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
     private final CourtService courtService;
 
     @Autowired
@@ -41,12 +40,16 @@ public class CourtController {
         this.courtService = courtService;
     }
 
-    @PostMapping( "/addCourt")
-    public ResponseEntity<String> addCourt(@RequestBody CourtDTO court) {
-        Set<ConstraintViolation<CourtDTO>> violations = validator.validate(court);
-        List<String> errors = violations.stream().map(ConstraintViolation::getMessage).toList();
-        if (!violations.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errors.toString());
+    @PostMapping("/addCourt")
+    public ResponseEntity<String> addCourt(@Validated({BasicCourtValidation.class}) @RequestBody CourtDTO court,
+                                           Errors errors) {
+        if (errors.hasErrors()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(errors.getAllErrors()
+                            .stream().map(ObjectError::getDefaultMessage)
+                            .toList()
+                            .toString()
+                    );
         }
 
         try {
@@ -70,7 +73,7 @@ public class CourtController {
         return resultList;
     }
 
-    @GetMapping( "/{id}")
+    @GetMapping("/{id}")
     public CourtDTO getCourtById(@PathVariable("id") String id, HttpServletResponse response) {
         CourtDTO court = courtService.getCourtById(UUID.fromString(id));
         if (court == null) {
@@ -79,7 +82,7 @@ public class CourtController {
         return court;
     }
 
-    @GetMapping( "/get")
+    @GetMapping("/get")
     public CourtDTO getCourtByCourtNumber(@RequestParam("number") String number, HttpServletResponse response) {
         CourtDTO court = courtService.getCourtByCourtNumber(Integer.parseInt(number));
         if (court == null) {
@@ -88,12 +91,17 @@ public class CourtController {
         return court;
     }
 
-    @PutMapping( "/modifyCourt/{id}")
-    public ResponseEntity<String> modifyCourt(@PathVariable("id") String id, @RequestBody CourtDTO modifiedCourt) {
-        Set<ConstraintViolation<CourtDTO>> violations = validator.validate(modifiedCourt);
-        List<String> errors = violations.stream().map(ConstraintViolation::getMessage).toList();
-        if (!violations.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errors.toString());
+    @PutMapping("/modifyCourt/{id}")
+    public ResponseEntity<String> modifyCourt(@PathVariable("id") String id,
+                                              @Validated({BasicCourtValidation.class}) @RequestBody CourtDTO modifiedCourt,
+                                              Errors errors) {
+        if (errors.hasErrors()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(errors.getAllErrors()
+                            .stream().map(ObjectError::getDefaultMessage)
+                            .toList()
+                            .toString()
+                    );
         }
 
         try {
@@ -109,19 +117,19 @@ public class CourtController {
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
-    @PostMapping( "/activate/{id}")
+    @PostMapping("/activate/{id}")
     public void activateCourt(@PathVariable("id") String id, HttpServletResponse response) {
         courtService.activateCourt(UUID.fromString(id));
         response.setStatus(HttpStatus.NO_CONTENT.value());
     }
 
-    @PostMapping( "/deactivate/{id}")
+    @PostMapping("/deactivate/{id}")
     public void archiveCourt(@PathVariable("id") String id, HttpServletResponse response) {
         courtService.deactivateCourt(UUID.fromString(id));
         response.setStatus(HttpStatus.NO_CONTENT.value());
     }
 
-    @DeleteMapping( "/delete/{id}")
+    @DeleteMapping("/delete/{id}")
     public ResponseEntity<String> deleteCourt(@PathVariable("id") String id) {
         try {
             courtService.deleteCourt(UUID.fromString(id));

@@ -21,7 +21,7 @@ import pas.gV.model.exceptions.UserException;
 import pas.gV.model.exceptions.UserLoginException;
 
 import pas.gV.restapi.data.dto.ClientDTO;
-import pas.gV.restapi.data.dto.UserDTO.BasicValidation;
+import pas.gV.restapi.data.dto.UserDTO.BasicUserValidation;
 import pas.gV.restapi.data.dto.UserDTO.PasswordValidation;
 import pas.gV.restapi.services.userservice.ClientService;
 
@@ -38,7 +38,7 @@ public class ClientController {
     }
 
     @PostMapping("/addClient")
-    public ResponseEntity<String> addClient(@Validated({BasicValidation.class, PasswordValidation.class}) @RequestBody ClientDTO client,
+    public ResponseEntity<String> addClient(@Validated({BasicUserValidation.class, PasswordValidation.class}) @RequestBody ClientDTO client,
                                             Errors errors) {
         if (errors.hasErrors()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
@@ -101,7 +101,7 @@ public class ClientController {
 
     @PutMapping("/modifyClient/{id}")
     public ResponseEntity<String> modifyClient(@PathVariable("id") String id,
-                                               @Validated(BasicValidation.class) @RequestBody ClientDTO modifiedClient,
+                                               @Validated(BasicUserValidation.class) @RequestBody ClientDTO modifiedClient,
                                                Errors errors) {
         if (errors.hasErrors()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
