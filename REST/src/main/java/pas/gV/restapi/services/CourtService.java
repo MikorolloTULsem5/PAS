@@ -3,15 +3,18 @@ package pas.gV.restapi.services;
 import com.mongodb.client.model.Filters;
 
 import lombok.NoArgsConstructor;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import pas.gV.restapi.data.mappers.CourtMapper;
+import pas.gV.restapi.data.dto.CourtDTO;
+
 import pas.gV.model.exceptions.CourtNumberException;
 import pas.gV.model.logic.courts.Court;
 import pas.gV.model.exceptions.CourtException;
 import pas.gV.model.exceptions.MyMongoException;
 import pas.gV.model.data.repositories.CourtMongoRepository;
-import pas.gV.restapi.data.dto.CourtDTO;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,10 +38,6 @@ public class CourtService {
         } catch (MyMongoException exception) {
             throw new CourtException("Nie udalo sie dodac boiska.");
         }
-    }
-
-    public CourtDTO getCourtById(UUID courtId) {
-        return getCourtById(courtId.toString());
     }
 
     public CourtDTO getCourtById(String courtId) {
@@ -72,24 +71,12 @@ public class CourtService {
         }
     }
 
-    public void activateCourt(UUID courtId) {
-        activateCourt(courtId.toString());
-    }
-
     public void activateCourt(String courtId) {
         courtRepository.update(UUID.fromString(courtId), "archive", false);
     }
 
-    public void deactivateCourt(UUID courtId) {
-        deactivateCourt(courtId.toString());
-    }
-
     public void deactivateCourt(String courtId) {
         courtRepository.update(UUID.fromString(courtId), "archive", true);
-    }
-
-    public void deleteCourt(UUID courtId) {
-        deleteCourt(courtId.toString());
     }
 
     public void deleteCourt(String courtId) {
@@ -100,5 +87,24 @@ public class CourtService {
         } catch (MyMongoException exception) {
             throw new MyMongoException("Nie udalo sie usunac podanego boiska. - " + exception.getMessage());
         }
+    }
+
+
+    /*----------------------------------------------HANDLE UUID----------------------------------------------*/
+
+    public CourtDTO getCourtById(UUID courtId) {
+        return getCourtById(courtId.toString());
+    }
+
+    public void activateCourt(UUID courtId) {
+        activateCourt(courtId.toString());
+    }
+
+    public void deactivateCourt(UUID courtId) {
+        deactivateCourt(courtId.toString());
+    }
+
+    public void deleteCourt(UUID courtId) {
+        deleteCourt(courtId.toString());
     }
 }

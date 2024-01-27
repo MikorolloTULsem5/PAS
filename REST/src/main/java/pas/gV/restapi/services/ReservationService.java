@@ -137,6 +137,7 @@ public class ReservationService {
         return sum;
     }
 
+
     /*----------------------------------------------HANDLE UUID----------------------------------------------*/
 
     public ReservationDTO makeReservation(UUID clientId, UUID courtId, LocalDateTime beginTime) {

@@ -42,10 +42,6 @@ public class ResourceAdminService extends UserService {
         }
     }
 
-    public ResourceAdminDTO getResourceAdminById(UUID resourceAdminId) {
-        return getResourceAdminById(resourceAdminId.toString());
-    }
-
     public ResourceAdminDTO getResourceAdminById(String resourceAdminId) {
         User resourceAdmin = userRepository.readByUUID(UUID.fromString(resourceAdminId), ResourceAdmin.class);
         return resourceAdmin != null ? ResourceAdminMapper.toJsonUser((ResourceAdmin) resourceAdmin) : null;
@@ -90,16 +86,8 @@ public class ResourceAdminService extends UserService {
         }
     }
 
-    public void activateResourceAdmin(UUID resourceAdminId) {
-        activateResourceAdmin(resourceAdminId.toString());
-    }
-
     public void activateResourceAdmin(String resourceAdminId) {
         userRepository.update(UUID.fromString(resourceAdminId), "archive", false);
-    }
-
-    public void deactivateResourceAdmin(UUID resourceAdminId) {
-        deactivateResourceAdmin(resourceAdminId.toString());
     }
 
     public void deactivateResourceAdmin(String resourceAdminId) {
@@ -111,4 +99,18 @@ public class ResourceAdminService extends UserService {
         return userRepository.readAll(User.class).size();
     }
 
+
+    /*----------------------------------------------HANDLE UUID----------------------------------------------*/
+
+    public ResourceAdminDTO getResourceAdminById(UUID resourceAdminId) {
+        return getResourceAdminById(resourceAdminId.toString());
+    }
+
+    public void activateResourceAdmin(UUID resourceAdminId) {
+        activateResourceAdmin(resourceAdminId.toString());
+    }
+
+    public void deactivateResourceAdmin(UUID resourceAdminId) {
+        deactivateResourceAdmin(resourceAdminId.toString());
+    }
 }

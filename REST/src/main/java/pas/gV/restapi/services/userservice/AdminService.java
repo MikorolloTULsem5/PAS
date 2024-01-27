@@ -37,10 +37,6 @@ public class AdminService extends UserService {
         }
     }
 
-    public AdminDTO getAdminById(UUID adminId) {
-        return getAdminById(adminId.toString());
-    }
-
     public AdminDTO getAdminById(String adminId) {
         User admin = userRepository.readByUUID(UUID.fromString(adminId), Admin.class);
         return admin != null ? AdminMapper.toJsonUser((Admin) admin) : null;
@@ -85,16 +81,8 @@ public class AdminService extends UserService {
         }
     }
 
-    public void activateAdmin(UUID adminId) {
-        activateAdmin(adminId.toString());
-    }
-
     public void activateAdmin(String adminId) {
         userRepository.update(UUID.fromString(adminId), "archive", false);
-    }
-
-    public void deactivateAdmin(UUID adminId) {
-        deactivateAdmin(adminId.toString());
     }
 
     public void deactivateAdmin(String adminId) {
@@ -106,4 +94,18 @@ public class AdminService extends UserService {
         return userRepository.readAll(User.class).size();
     }
 
+
+    /*----------------------------------------------HANDLE UUID----------------------------------------------*/
+
+    public AdminDTO getAdminById(UUID adminId) {
+        return getAdminById(adminId.toString());
+    }
+
+    public void activateAdmin(UUID adminId) {
+        activateAdmin(adminId.toString());
+    }
+
+    public void deactivateAdmin(UUID adminId) {
+        deactivateAdmin(adminId.toString());
+    }
 }
