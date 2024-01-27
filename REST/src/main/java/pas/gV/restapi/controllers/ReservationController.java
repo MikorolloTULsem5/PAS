@@ -35,7 +35,7 @@ public class ReservationController {
 
     @PostMapping("/addReservation")
     public ResponseEntity<String> addReservation(@RequestParam("clientId") String clientId, @RequestParam("courtId") String courtId,
-                                                 @RequestParam("date") String date) {
+                                                 @RequestParam(value = "date", required = false) String date) {
         try {
             if (date == null) {
                 reservationService.makeReservation(UUID.fromString(clientId), UUID.fromString(courtId));
@@ -74,7 +74,7 @@ public class ReservationController {
     }
 
     @PostMapping("/returnCourt")
-    public ResponseEntity<String> returnCourt(@RequestParam("courtId") String courtId, @RequestParam("date") String date) {
+    public ResponseEntity<String> returnCourt(@RequestParam("courtId") String courtId, @RequestParam(value = "date", required = false) String date) {
         try {
             if (date == null) {
                 reservationService.returnCourt(UUID.fromString(courtId));

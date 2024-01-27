@@ -90,7 +90,7 @@ public class ReservationsControllerTests {
         assertTrue(splitedRespStr[0].contains("\"court\":{\""));
         assertTrue(splitedRespStr[0].contains("\"endTime\":\"2023-11-30T14:20:00\""));
         assertTrue(splitedRespStr[0].contains("\"id\":\"" + reservation3.getId() + "\""));
-        assertTrue(splitedRespStr[0].contains("\"reservationCost\":13180"));
+        assertTrue(splitedRespStr[0].contains("\"reservationCost\":10560"));
         assertTrue(splitedRespStr[0].contains("\"reservationHours\":48"));
 
         assertEquals(200, response.getStatusCode());
@@ -576,7 +576,7 @@ public class ReservationsControllerTests {
         Response response = request.get(new URI(appUrlReservation + "/clientBalance?clientId=" + client3.getId()));
         double balance = Double.parseDouble(response.asString());
 
-        assertEquals(19160.0, balance);
+        assertEquals(15360.0, balance);
     }
 
     @Test

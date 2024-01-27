@@ -59,13 +59,12 @@ public class Reservation {
             court.setRented(false);
 
             if (getReservationHours() <= client.clientMaxHours()) {
-                reservationCost = getReservationHours() * court.getBaseCost() -
-                        client.applyDiscount();
+                reservationCost = getReservationHours() * court.getBaseCost();
             } else {
                 reservationCost = court.getBaseCost() *
-                        (client.clientMaxHours() + (getReservationHours() - client.clientMaxHours()) * 1.5) -
-                        client.applyDiscount();
+                        (client.clientMaxHours() + (getReservationHours() - client.clientMaxHours()) * 1.5);
             }
+            reservationCost *= (1.0 - client.applyDiscount());
         } else {
             throw new ReservationException("Ta rezerwacja juz sie zakonczyla i nie mozna zmienic jej daty!");
         }

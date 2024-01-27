@@ -128,6 +128,7 @@ public class ClientControllerTests {
 
         Response responsePost = requestPost.post(appUrlClient + "/addClient");
 
+        System.out.println("DUPA: " + responsePost.asString());
         assertEquals(400, responsePost.getStatusCode());
 
         responseString = requestGet.get(new URI(appUrlClient)).asString();
