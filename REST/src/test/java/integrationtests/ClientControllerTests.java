@@ -80,7 +80,7 @@ public class ClientControllerTests {
                   "firstName": "John",
                   "lastName": "Bravo",
                   "login": "johnBravo",
-                  "password": "johnBravo",
+                  "password": "johnBravo1",
                   "clientTypeName": "normal"
                 }
                 """;
@@ -112,7 +112,7 @@ public class ClientControllerTests {
                   "firstName": "John",
                   "lastName": "  ",
                   "login": "johnBravo",
-                  "password": "johnBravo",
+                  "password": "johnBravo1",
                   "clientTypeName": "normal"
                 }
                 """;
@@ -128,7 +128,6 @@ public class ClientControllerTests {
 
         Response responsePost = requestPost.post(appUrlClient + "/addClient");
 
-        System.out.println("DUPA: " + responsePost.asString());
         assertEquals(400, responsePost.getStatusCode());
 
         responseString = requestGet.get(new URI(appUrlClient)).asString();
@@ -144,7 +143,7 @@ public class ClientControllerTests {
                   "firstName": "John",
                   "lastName": "Bravo",
                   "login": "michas13",
-                  "password": "michas13",
+                  "password": "michaS13",
                   "clientTypeName": "normal"
                 }
                 """;

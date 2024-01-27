@@ -21,7 +21,7 @@ export const clientsApi = {
         let userCopy:any = {...user};
         delete userCopy['id'];
         delete userCopy['userType'];
-        userCopy.password='';
+        //userCopy.password='';
         return apiWithConfig.put(`/clients/modifyClient/${user.id}`,userCopy)
     },
     create: (user:NewClientType): ApiResponseType<any>  => {

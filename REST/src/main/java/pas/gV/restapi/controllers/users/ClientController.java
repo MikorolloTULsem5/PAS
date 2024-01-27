@@ -1,13 +1,13 @@
 package pas.gV.restapi.controllers.users;
 
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.validation.ConstraintViolation;
-import jakarta.validation.Validation;
-import jakarta.validation.Validator;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.Errors;
+import org.springframework.validation.ObjectError;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,15 +21,15 @@ import pas.gV.model.exceptions.UserException;
 import pas.gV.model.exceptions.UserLoginException;
 
 import pas.gV.restapi.data.dto.ClientDTO;
+import pas.gV.restapi.data.dto.UserDTO.BasicValidation;
+import pas.gV.restapi.data.dto.UserDTO.PasswordValidation;
 import pas.gV.restapi.services.userservice.ClientService;
 
 import java.util.List;
-import java.util.Set;
 
 @RestController
 @RequestMapping("/clients")
 public class ClientController {
-    private final Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
     private final ClientService clientService;
 
     @Autowired
@@ -38,11 +38,15 @@ public class ClientController {
     }
 
     @PostMapping("/addClient")
-    public ResponseEntity<String> addClient(@RequestBody ClientDTO client) {
-        Set<ConstraintViolation<ClientDTO>> violations = validator.validate(client);
-        List<String> errors = violations.stream().map(ConstraintViolation::getMessage).toList();
-        if (!violations.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errors.toString());
+    public ResponseEntity<String> addClient(@Validated({BasicValidation.class, PasswordValidation.class}) @RequestBody ClientDTO client,
+                                            Errors errors) {
+        if (errors.hasErrors()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(errors.getAllErrors()
+                            .stream().map(ObjectError::toString)
+                            .toList()
+                            .toString()
+                    );
         }
 
         try {
@@ -96,16 +100,21 @@ public class ClientController {
     }
 
     @PutMapping("/modifyClient/{id}")
-    public ResponseEntity<String> modifyClient(@PathVariable("id") String id, @RequestBody ClientDTO modifiedClient) {
-        Set<ConstraintViolation<ClientDTO>> violations = validator.validate(modifiedClient);
-        List<String> errors = violations.stream().map(ConstraintViolation::getMessage).toList();
-        if (!violations.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errors.toString());
+    public ResponseEntity<String> modifyClient(@PathVariable("id") String id,
+                                               @Validated(BasicValidation.class) @RequestBody ClientDTO modifiedClient,
+                                               Errors errors) {
+        if (errors.hasErrors()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(errors.getAllErrors()
+                            .stream().map(ObjectError::toString)
+                            .toList()
+                            .toString()
+                    );
         }
 
         try {
             ClientDTO finalModifyClient = new ClientDTO(id, modifiedClient.getFirstName(),
-                    modifiedClient.getLastName(), modifiedClient.getLogin(), modifiedClient.getPassword(), modifiedClient.isArchive(),
+                    modifiedClient.getLastName(), modifiedClient.getLogin(), "", modifiedClient.isArchive(),
                     modifiedClient.getClientType());
             clientService.modifyClient(finalModifyClient);
         } catch (UserLoginException ule) {

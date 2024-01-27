@@ -3,27 +3,34 @@ package pas.gV.restapi.data.dto;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+
 import jakarta.validation.constraints.NotBlank;
+
+import jakarta.validation.constraints.Pattern;
 import lombok.Getter;
 import lombok.experimental.FieldDefaults;
 
 import java.util.Objects;
 
-///TODO dodac DTOsy dla pozostalych klas
 
 @Getter
 @FieldDefaults(makeFinal = true)
 @JsonPropertyOrder({"archive", "id", "login"})
 public class UserDTO implements DTO {
+
+    public interface BasicValidation {}
+    public interface PasswordValidation {}
+
     @JsonProperty("id")
     private String id;
     @JsonProperty("login")
-    @NotBlank
+    @NotBlank(groups = {BasicValidation.class})
     private String login;
     @JsonProperty("archive")
     private boolean archive;
     @JsonProperty(value = "password", access = JsonProperty.Access.WRITE_ONLY)
-//    @NotBlank
+    @NotBlank(groups = {PasswordValidation.class})
+    @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).{5,}$", groups = {PasswordValidation.class})
     private String password;
     @JsonCreator
     public UserDTO(@JsonProperty("id") String id,

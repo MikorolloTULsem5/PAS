@@ -16,10 +16,10 @@ import java.util.Objects;
 @JsonPropertyOrder({"archive", "id", "login", "clientTypeName", "firstName", "lastName"})
 public class ClientDTO extends UserDTO {
     @JsonProperty("firstName")
-    @NotBlank
+    @NotBlank(groups = {BasicValidation.class})
     private String firstName;
     @JsonProperty("lastName")
-    @NotBlank
+    @NotBlank(groups = {BasicValidation.class})
     private String lastName;
     @JsonProperty("clientTypeName")
     private String clientType;

@@ -16,7 +16,7 @@ public abstract class User {
     @Setter
     @NotBlank
     private String login;
-//    @NotBlank
+    @NotBlank
     private String password;
 
     @Setter

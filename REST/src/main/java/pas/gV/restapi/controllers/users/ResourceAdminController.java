@@ -107,7 +107,7 @@ public class ResourceAdminController {
 
         try {
             ResourceAdminDTO finalModifyResourceAdmin = new ResourceAdminDTO(id, modifyResourceAdmin.getLogin(),
-                    modifyResourceAdmin.getPassword(), modifyResourceAdmin.isArchive());
+                    "", modifyResourceAdmin.isArchive());
             resourceAdminService.modifyResourceAdmin(finalModifyResourceAdmin);
         } catch (UserLoginException ule) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(ule.getMessage());

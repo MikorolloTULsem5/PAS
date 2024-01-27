@@ -22,7 +22,7 @@ export const resAdminsApi = {
         let userCopy:any = {...user};
         delete userCopy['id'];
         delete userCopy['userType'];
-        userCopy.password='';
+        //userCopy.password='';
         return apiWithConfig.put(`/resAdmins/modifyResAdmin/${user.id}`,userCopy)
     },
 
