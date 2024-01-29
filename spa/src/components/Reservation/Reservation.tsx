@@ -1,9 +1,9 @@
 import React, {useState} from "react";
 import {ReservationType} from "../../types/ReservationsTypes";
-import {usersApi} from "../userApi";
-import client from "../../components/Client/Client";
-import {reservationsApi} from "../reservationsApi";
-import ConfirmModal from "../../components/Modal/ConfirmModal";
+import {usersApi} from "../../api/userApi";
+import client from "../Client/Client";
+import {reservationsApi} from "../../api/reservationsApi";
+import ConfirmModal from "../Modal/ConfirmModal";
 
 interface ReservationProps {
     reservation: ReservationType

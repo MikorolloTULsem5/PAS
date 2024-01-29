@@ -8,8 +8,8 @@ import {clientsApi} from "../api/clientsApi";
 import Client from "../components/Client/Client";
 import {filter, includes, indexOf} from "lodash";
 import {ReservationType} from "../types/ReservationsTypes";
-import reservation from "../api/Reservation/Reservation";
-import Reservation from "../api/Reservation/Reservation";
+import reservation from "../components/Reservation/Reservation";
+import Reservation from "../components/Reservation/Reservation";
 import {reservationsApi} from "../api/reservationsApi";
 
 function ReservationsPage() {

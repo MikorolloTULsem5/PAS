@@ -1,8 +1,15 @@
+export enum AccountTypeEnum{
+    ADMIN = "Admin",
+    CLIENT = "Client",
+    RESADMIN = "Resource admin"
+}
+
 export interface UserType {
     archive:boolean,
     id:string,
     login:string
-    userType: "Client" | "Admin" | "Resource admin" | null
+    token?: string
+    userType: AccountTypeEnum | null
 }
 
 export interface ClientType extends UserType{
@@ -14,7 +21,7 @@ export interface ClientType extends UserType{
 export interface NewUserType {
     login:string,
     password:string
-    userType: "Client" | "Admin" | "Resource admin" | null
+    userType: AccountTypeEnum | null
 }
 
 export interface NewClientType extends NewUserType{

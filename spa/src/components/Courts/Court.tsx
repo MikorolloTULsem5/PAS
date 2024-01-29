@@ -1,13 +1,13 @@
 import React, {useRef, useState} from "react";
 import {CourtType} from "../../types/ReservationsTypes";
-import ModalBasic from "../../components/Modal/ModalBasic";
+import ModalBasic from "../Modal/ModalBasic";
 import {Button, Form} from "react-bootstrap";
 import {capitalize} from "lodash";
 import {Formik, FormikProps, FormikValues} from "formik";
 import * as yup from "yup";
-import ConfirmModal from "../../components/Modal/ConfirmModal";
-import {reservationsApi} from "../reservationsApi";
-import {courtsApi} from "../courtsApi";
+import ConfirmModal from "../Modal/ConfirmModal";
+import {reservationsApi} from "../../api/reservationsApi";
+import {courtsApi} from "../../api/courtsApi";
 
 interface CourtProps {
     court: CourtType

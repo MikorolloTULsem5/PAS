@@ -8,7 +8,7 @@ import {clientsApi} from "../api/clientsApi";
 import Client from "../components/Client/Client";
 import {courtsApi} from "../api/courtsApi";
 import {CourtType} from "../types/ReservationsTypes";
-import Court from "../api/Courts/Court";
+import Court from "../components/Courts/Court";
 
 function CourtsPage() {
     const [courts, setCourts] = useState<CourtType[]>([])
