@@ -1,12 +1,12 @@
 import {apiWithConfig} from "./api.config";
 import {ApiResponseType} from "../types/ApiResponseType";
-import {ClientType, NewClientType, UserType} from "../types/Users";
+import {AccountTypeEnum, ClientType, NewClientType, UserType} from "../types/Users";
 
 export const clientsApi = {
     getClients: async (): Promise<ApiResponseType<ClientType[]>> => {
         let clients = await apiWithConfig.get('/clients');
         clients.data.forEach((user: UserType) => {
-            user.userType = "Client"
+            user.userType = AccountTypeEnum.CLIENT
         })
         return clients;
     },

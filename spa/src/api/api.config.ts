@@ -11,8 +11,20 @@ export const apiWithConfig = axios.create({
     headers: DEFAULT_HEADERS,
 })
 
+apiWithConfig.interceptors.response.use(
+    (response) => response,
+    (error) => {
+        const status = error.response?.status
+        if (status === 401 || status === 403 || status === 404) {
+            localStorage.removeItem('token')
+        }
+        return Promise.reject(error)
+    },
+)
+
 apiWithConfig.interceptors.request.use((config) => {
-    const token = window.localStorage.getItem('token')
-    if (token && config.headers) config.headers.Authorization = JSON.parse(token)
+    let token = window.localStorage.getItem('token');
+    token = (token && token !== "null") ? token : null;
+    if (token && config.headers) {console.log(token); config.headers.Authorization = `Bearer ${token}`};
     return config
 })

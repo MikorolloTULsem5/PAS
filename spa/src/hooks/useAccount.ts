@@ -1,43 +1,47 @@
-
 import {AccountTypeEnum} from "../types/Users";
 import {useAccountState} from "../context/AccountContext";
 import {useNavigate} from "react-router-dom";
+import {api} from "../api/api";
+import {Pathnames} from "../router/pathnames";
+import {adminsApi} from "../api/adminsApi";
 
 export const useAccount = () => {
     const navigate = useNavigate()
-    const { account, setAccount, isLoggingIn, setIsLoggingIn, isFetching, setIsFetching } =
+    const { account, setAccount, token, setToken } =
         useAccountState()
     const isAuthenticated = !!account?.login
-    const isAdmin:AccountTypeEnum | null = account ? account.userType : null;
+    const accountType:AccountTypeEnum | null = !!account ? AccountTypeEnum.ADMIN : null;
     const logOut = async () => {
         try {
-            setIsFetching(true)
             await api.logOut()
         } catch {
             alert('Logout failure!')
         } finally {
             localStorage.removeItem('token')
             setAccount(null)
+            setToken(null)
             navigate(Pathnames.public.login)
-            setIsFetching(false)
         }
     }
     const logIn = async (login: string, password: string) => {
         try {
-            setIsLoggingIn(true)
-            const { data } = await api.logIn(login, password)
-            setAccount(data)
-        } catch {
+            const token = (await api.logIn(login, password)).data.accessToken;
+            setToken(token);
+            localStorage.setItem('token',token);
+            console.log(localStorage);
+            //TODO zrobić to uniwersalne
+            const {data} = await adminsApi.getAdminByLogin(login);
+            setAccount(data);
+            navigate(Pathnames.public.home)
+        } catch(e) {
             alert('Logging in error!')
-            logOut()
+            if(isAuthenticated)logOut();
         } finally {
-            setIsLoggingIn(false)
         }
     }
     const getCurrentAccount = async () => {
         try {
-            setIsFetching(true)
-            if (localStorage.getItem(TOKEN)) {
+            if (localStorage.getItem("token")) {
                 const { data } = await api.getCurrentAccount()
                 setAccount(data)
             }
@@ -45,16 +49,14 @@ export const useAccount = () => {
             alert('Unable to get current account!')
             logOut()
         } finally {
-            setIsFetching(false)
         }
     }
     return {
         account,
-        isLoggingIn,
-        isFetching,
+        token,
         isAuthenticated,
-        isAdmin,
-        Documentation13logIn,
+        accountType,
+        logIn,
         getCurrentAccount,
         logOut,
     }

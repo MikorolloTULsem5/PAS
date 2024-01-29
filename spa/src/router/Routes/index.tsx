@@ -1,10 +1,14 @@
 import {Route, Routes} from "react-router-dom";
-import {AdminRoutes, PublicRoutes} from "../routes";
+import {AdminRoutes, ClientRoutes, PublicRoutes} from "../routes";
 import PublicLayout from "../../components/layouts/PublicLayout";
 import {useAccount} from "../../hooks/useAccount";
 import {AccountTypeEnum} from "../../types/Users";
+import {useEffect} from "react";
+import AdminLayout from "../../components/layouts/AdminLayout";
+import ClientLayout from "../../components/layouts/ClientLayout";
 export const RoutesComponents = () => {
     const { isAuthenticated, accountType } = useAccount();
+
     return (
         <Routes>
             {!isAuthenticated && PublicRoutes.map(({path, Component}) => (
@@ -16,19 +20,20 @@ export const RoutesComponents = () => {
 
             {isAuthenticated && accountType===AccountTypeEnum.ADMIN && AdminRoutes.map(({path, Component}) => (
                 <Route key={path} path={path} element={
-                    <PublicLayout>
+                    <AdminLayout>
                         <Component/>
-                    </PublicLayout>}/>
+                    </AdminLayout>}/>
             ))}
 
-            {isAuthenticated && accountType===AccountTypeEnum.CLIENT && AdminRoutes.map(({path, Component}) => (
+            //TODO Zamienić logike
+            {isAuthenticated && false && ClientRoutes.map(({path, Component}) => (
                 <Route key={path} path={path} element={
-                    <PublicLayout>
+                    <ClientLayout>
                         <Component/>
-                    </PublicLayout>}/>
+                    </ClientLayout>}/>
             ))}
 
-            {isAuthenticated && accountType===AccountTypeEnum.RESADMIN && AdminRoutes.map(({path, Component}) => (
+            {isAuthenticated && false && AdminRoutes.map(({path, Component}) => (
                 <Route key={path} path={path} element={
                     <PublicLayout>
                         <Component/>

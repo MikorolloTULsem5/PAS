@@ -4,24 +4,25 @@ import {createContext, ReactNode, useContext, useEffect, useState} from "react";
 interface AccountState {
     account: UserType | null
     setAccount: (item: UserType | null) => void
-    isLoggingIn: boolean
-    setIsLoggingIn: (value: boolean) => void
-    isFetching: boolean
-    setIsFetching: (value: boolean) => void
+    token: string | null;
+    setToken: (item: string | null) => void
 }
 const AccountStateContext = createContext<AccountState | null>(null)
 export const AccountStateContextProvider = ({ children }: { children: ReactNode }) => {
-    const [account, setAccount] = useState<UserType | null>(null)
-    const [isLoggingIn, setIsLoggingIn] = useState(false)
-    const [isFetching, setIsFetching] = useState(true)
+    const [account, setAccount] = useState<UserType | null>(null);
+    const [token, setToken] = useState<string | null>(null);
     useEffect(() => {
-        if (account?.token) {
-            localStorage.setItem('token', JSON.stringify(account.token))
+        if(token){
+            localStorage.setItem('token',token)
         }
-    }, [account])
+    }, [token]);
+
+    useEffect(() => {
+        console.log(account)
+    }, [account]);
     return (
         <AccountStateContext.Provider
-                value={{ account, setAccount, isLoggingIn, setIsLoggingIn, isFetching, setIsFetching }}>
+                value={{ account, setAccount, token, setToken }}>
             {children}
         </AccountStateContext.Provider>
     )

@@ -1,12 +1,12 @@
 import {apiWithConfig} from "./api.config";
 import {ApiResponseType} from "../types/ApiResponseType";
-import {NewUserType, UserType} from "../types/Users";
+import {AccountTypeEnum, NewUserType, UserType} from "../types/Users";
 
 export const resAdminsApi = {
     getResAdmins: async (): Promise<ApiResponseType<UserType[]>> => {
         let resAdmins = await apiWithConfig.get('/resAdmins');
         resAdmins.data.forEach((user: UserType) => {
-            user.userType = "Resource admin"
+            user.userType = AccountTypeEnum.RESADMIN;
         })
         return resAdmins;
     },

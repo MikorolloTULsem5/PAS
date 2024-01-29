@@ -1,14 +1,20 @@
 import {apiWithConfig} from "./api.config";
 import {ApiResponseType} from "../types/ApiResponseType";
-import {NewUserType, UserType} from "../types/Users";
+import {AccountTypeEnum, NewUserType, UserType} from "../types/Users";
 
 export const adminsApi = {
     getAdmins: async (): Promise<ApiResponseType<UserType[]>> => {
         let admins = await apiWithConfig.get('/admins');
         admins.data.forEach((user:UserType) => {
-            user.userType = "Admin"
+            user.userType = AccountTypeEnum.ADMIN
         })
         return admins;
+    },
+
+    getAdminByLogin: async (login:string): Promise<ApiResponseType<UserType>> => {
+        let admin = await apiWithConfig.get(`/admins/get?login=${login}`);
+        admin.data.userType = AccountTypeEnum.ADMIN
+        return admin;
     },
 
     activate: (id:string) => {

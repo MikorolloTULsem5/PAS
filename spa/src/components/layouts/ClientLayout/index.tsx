@@ -7,7 +7,7 @@ interface LayoutProps {
     children: ReactNode
 }
 
-function UserLayout({children}:LayoutProps){
+function ClientLayout({children}:LayoutProps){
     return (
         <div>
             <NavbarBasic pathnames={Pathnames.public}/>
@@ -16,4 +16,4 @@ function UserLayout({children}:LayoutProps){
     )
 }
 
-export default UserLayout;
+export default ClientLayout;
