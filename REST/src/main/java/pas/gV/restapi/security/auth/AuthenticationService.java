@@ -30,22 +30,16 @@ public class AuthenticationService {
   private final AuthenticationManager authenticationManager;
 
   public AuthenticationResponse register(RegisterRequest request) {
-//    var user = User.builder()
-//        .firstname(request.getFirstname())
-//        .lastname(request.getLastname())
-//        .email(request.getEmail())
-//        .password(passwordEncoder.encode(request.getPassword()))
-//        .role(request.getRole())
-//        .build();
-    var user = new Client(null,
+    Client clientReg = new Client(null,
             request.getFirstName(),
             request.getLastName(),
             request.getLogin(),
             passwordEncoder.encode(request.getPassword()),
             "normal");
-    clientService.registerClient(user.getFirstName(), user.getLastName(), user.getLogin(),
-            user.getPassword(), user.getClientTypeName());
-    var jwtToken = jwtService.generateToken(user);
+    clientService.registerClient(clientReg.getFirstName(), clientReg.getLastName(), clientReg.getLogin(),
+            clientReg.getPassword(), clientReg.getClientTypeName());
+
+    String jwtToken = jwtService.generateToken(clientReg);
     return AuthenticationResponse.builder()
         .accessToken(jwtToken)
         .build();
@@ -59,11 +53,13 @@ public class AuthenticationService {
             request.getPassword()
         )
     );
-    var user = getUser(request.getLogin());
+
+    User user = getUser(request.getLogin());
     if (user == null) {
       throw new UsernameNotFoundException("User not found");
     }
-    var jwtToken = jwtService.generateToken(user);
+
+    String jwtToken = jwtService.generateToken(user);
     return AuthenticationResponse.builder()
         .accessToken(jwtToken)
         .build();
