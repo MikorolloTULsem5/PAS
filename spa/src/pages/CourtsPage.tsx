@@ -12,7 +12,7 @@ function CourtsPage() {
     const {accountType, account, getCurrentAccount} = useAccount()
 
     useEffect(() => {
-        courtsApi.getCourts().then((response) => setCourts(response.data))
+        courtsApi.getCourts().then((response) => setCourts(response.data)).catch(console.log)
     }, []);
 
     useEffect(() => {

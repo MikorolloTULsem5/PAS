@@ -3,6 +3,10 @@ import {ApiResponseType} from "../types/ApiResponseType";
 import {NewReservationType, ReservationType} from "../types/ReservationsTypes";
 
 export const reservationsApi = {
+    getClientReservations: (): ApiResponseType<ReservationType[]> => {
+        return apiWithConfig.get(`/reservations/clientReservation/me`);
+    },
+
     getReservationsByClientId: (clientId: string): ApiResponseType<ReservationType[]> => {
         return apiWithConfig.get(`/reservations/clientReservation?clientId=${clientId}`);
     },
@@ -29,8 +33,16 @@ export const reservationsApi = {
         return apiWithConfig.post(`/reservations/returnCourt?courtId=${courtId}`)
     },
 
+    returnCourtClient: (courtId: string): ApiResponseType<any> => {
+        return apiWithConfig.post(`/reservations/returnCourt/me?courtId=${courtId}`)
+    },
+
     create: (newReservation: NewReservationType): ApiResponseType<any> => {
         return apiWithConfig.post(`/reservations/addReservation?clientId=${newReservation.clientId}&courtId=${newReservation.courtId}`)
+    },
+
+    createByClient: (courtId:string): ApiResponseType<any> => {
+        return apiWithConfig.post(`/reservations/addReservation/me?courtId=${courtId}`)
     }
 
 }

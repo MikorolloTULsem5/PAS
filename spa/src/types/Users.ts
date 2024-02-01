@@ -8,7 +8,7 @@ export interface UserType {
     archive:boolean,
     id:string,
     login:string
-    token?: string
+    token?: string,
     userType: AccountTypeEnum | null
 }
 

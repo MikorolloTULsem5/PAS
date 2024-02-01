@@ -10,7 +10,7 @@ function UsersPage() {
     const [filterId, setFilterId] = useState("")
 
     useEffect(() => {
-        usersApi.getUsers().then((getUsers) => setUsers(getUsers));
+        usersApi.getUsers().then((getUsers) => setUsers(getUsers)).catch(console.log);
     }, []);
 
     return (

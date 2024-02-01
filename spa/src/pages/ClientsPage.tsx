@@ -12,7 +12,7 @@ function ClientsPage() {
     useEffect(() => {
         clientsApi.getClients().then(async (response) => {
             setClients((await response).data)
-        })
+        }).catch(console.log)
     }, []);
 
     return (

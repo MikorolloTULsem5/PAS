@@ -42,7 +42,7 @@ function Court({court, accountType, clientId=null}: CourtProps) {
 
     const rentCourtClient = () => {
         if(clientId !== null && clientId !== undefined){
-            reservationsApi.create({courtId:court.id, clientId}).then(() =>{
+            reservationsApi.createByClient(court.id).then(() =>{
                 courtsApi.getCourtById(court.id).then((response)=>setCourtCopy(response.data)).catch(console.log);
             }).catch((error)=>{setErrorModalContent(JSON.stringify(error.response.data)); setShowErrorModal(true)})
         }

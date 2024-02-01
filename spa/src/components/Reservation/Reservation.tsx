@@ -2,9 +2,11 @@ import React, {useState} from "react";
 import {ReservationType} from "../../types/ReservationsTypes";
 import {reservationsApi} from "../../api/reservationsApi";
 import ConfirmModal from "../Modal/ConfirmModal";
+import {AccountTypeEnum} from "../../types/Users";
 
 interface ReservationProps {
-    reservation: ReservationType
+    reservation: ReservationType,
+    //accountType: AccountTypeEnum | null
 }
 
 function Reservation({reservation}: ReservationProps) {
