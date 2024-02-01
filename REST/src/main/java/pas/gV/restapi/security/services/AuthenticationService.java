@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import pas.gV.model.logic.users.Client;
 
+import pas.gV.restapi.data.mappers.ClientMapper;
 import pas.gV.restapi.security.dto.AuthenticationRequest;
 import pas.gV.restapi.security.dto.TokenResponse;
 import pas.gV.restapi.security.dto.ClientRegisterDTORequest;
@@ -26,20 +27,18 @@ import java.util.Map;
 public class AuthenticationService {
     private ClientService clientService;
     private UserDetailsService userDetailsService;
-    private PasswordEncoder passwordEncoder;
     private JwtService jwtService;
     private AuthenticationManager authenticationManager;
 
     public TokenResponse register(ClientRegisterDTORequest requestDto) {
-        Client clientReg = new Client(null,
-                requestDto.getFirstName(),
-                requestDto.getLastName(),
-                requestDto.getLogin(),
-                passwordEncoder.encode(requestDto.getPassword()),
-                "normal");
-        clientService.registerClient(clientReg.getFirstName(), clientReg.getLastName(), clientReg.getLogin(),
-                clientReg.getPassword(), clientReg.getClientTypeName());
-
+        Client clientReg = ClientMapper.fromJsonUser(
+                clientService.registerClient(
+                        requestDto.getFirstName(),
+                        requestDto.getLastName(),
+                        requestDto.getLogin(),
+                        requestDto.getPassword(),
+                        "normal")
+        );
         String jwtToken = jwtService.generateToken(Map.of("authorities", clientReg.getAuthorities()), clientReg);
         return new TokenResponse(jwtToken);
     }
