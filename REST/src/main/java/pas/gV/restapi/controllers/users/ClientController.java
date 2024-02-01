@@ -37,6 +37,7 @@ import pas.gV.restapi.security.services.JwsService;
 import pas.gV.restapi.services.userservice.ClientService;
 
 import java.util.List;
+
 @RestController
 @RequestMapping("/clients")
 public class ClientController {
@@ -133,11 +134,8 @@ public class ClientController {
             ClientDTO finalModifyClient = new ClientDTO(modifiedClient.getId(), modifiedClient.getFirstName(),
                     modifiedClient.getLastName(), modifiedClient.getLogin(), null, modifiedClient.isArchive(),
                     modifiedClient.getClientType());
-            if (jwsService.verifyClientSignature(ifMatch, finalModifyClient)) {
-                clientService.modifyClient(finalModifyClient);
-            } else {
-                throw new UserException("Proba zmiany niedozwolonego pola!");
-            }
+
+            clientService.modifyClient(finalModifyClient);
 
         } catch (UserLoginException ule) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(ule.getMessage());
@@ -162,8 +160,8 @@ public class ClientController {
 
     @PatchMapping("/changePassword/{id}")
     public ResponseEntity<String> changeClientPassword(@PathVariable("id") String id,
-                                     @Validated(PasswordValidation.class) @RequestBody ChangePasswordDTORequest body,
-                                     Errors errors) {
+                                                       @Validated(PasswordValidation.class) @RequestBody ChangePasswordDTORequest body,
+                                                       Errors errors) {
         if (errors.hasErrors()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body(errors.getAllErrors()

@@ -109,9 +109,8 @@ public class ResourceAdminController {
         return resultList;
     }
 
-    @PutMapping("/modifyResAdmin/{id}")
-    public ResponseEntity<String> modifyResAdmin(@PathVariable("id") String id,
-                                                 @Validated(UserDTO.BasicUserValidation.class) @RequestBody ResourceAdminDTO modifyResourceAdmin,
+    @PutMapping("/modifyResAdmin")
+    public ResponseEntity<String> modifyResAdmin(@Validated(UserDTO.BasicUserValidation.class) @RequestBody ResourceAdminDTO modifyResourceAdmin,
                                                  Errors errors) {
         if (errors.hasErrors()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
@@ -123,8 +122,8 @@ public class ResourceAdminController {
         }
 
         try {
-            ResourceAdminDTO finalModifyResourceAdmin = new ResourceAdminDTO(id, modifyResourceAdmin.getLogin(),
-                    "", modifyResourceAdmin.isArchive());
+            ResourceAdminDTO finalModifyResourceAdmin = new ResourceAdminDTO(modifyResourceAdmin.getId(), modifyResourceAdmin.getLogin(),
+                    null, modifyResourceAdmin.isArchive());
             resourceAdminService.modifyResourceAdmin(finalModifyResourceAdmin);
         } catch (UserLoginException ule) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(ule.getMessage());

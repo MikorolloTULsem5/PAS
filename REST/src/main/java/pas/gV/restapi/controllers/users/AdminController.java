@@ -108,9 +108,8 @@ public class AdminController {
     }
 
     ///TODO modify i podpisy dla adminow
-    @PutMapping("/modifyAdmin/{id}")
-    public ResponseEntity<String> modifyAdmin(@PathVariable("id") String id,
-                                              @Validated(UserDTO.BasicUserValidation.class) @RequestBody AdminDTO modifiedAdmin,
+    @PutMapping("/modifyAdmin")
+    public ResponseEntity<String> modifyAdmin(@Validated(UserDTO.BasicUserValidation.class) @RequestBody AdminDTO modifiedAdmin,
                                               Errors errors) {
         if (errors.hasErrors()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
@@ -122,7 +121,7 @@ public class AdminController {
         }
 
         try {
-            AdminDTO finalModifyAdmin = new AdminDTO(id, modifiedAdmin.getLogin(), null,
+            AdminDTO finalModifyAdmin = new AdminDTO(modifiedAdmin.getId(), modifiedAdmin.getLogin(), null,
                     modifiedAdmin.isArchive());
             adminService.modifyAdmin(finalModifyAdmin);
         } catch (UserLoginException ule) {
