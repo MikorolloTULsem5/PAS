@@ -36,7 +36,6 @@ public class SecurityConfig {
     ///TODO https
     ///TODO weryfikacja czy ja to ja
 
-    ///TODO modifyClient
     ///TODO samodzielna alokacja zasobu
 
     @Bean

@@ -5,6 +5,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,8 +18,11 @@ import pas.gV.model.exceptions.MultiReservationException;
 import pas.gV.model.exceptions.MyMongoException;
 import pas.gV.model.exceptions.ReservationException;
 
+import pas.gV.model.logic.users.Client;
 import pas.gV.restapi.data.dto.ReservationDTO;
+import pas.gV.restapi.security.services.JwsService;
 import pas.gV.restapi.services.ReservationService;
+import pas.gV.restapi.services.userservice.ClientService;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -29,10 +33,14 @@ import java.util.UUID;
 public class ReservationController {
 
     private final ReservationService reservationService;
+    private final ClientService clientService;
+    private final JwsService jwsService;
 
     @Autowired
-    public ReservationController(ReservationService reservationService) {
+    public ReservationController(ReservationService reservationService, ClientService clientService, JwsService jwsService) {
         this.reservationService = reservationService;
+        this.clientService = clientService;
+        this.jwsService = jwsService;
     }
 
     @PostMapping("/addReservation")
@@ -166,5 +174,14 @@ public class ReservationController {
         }
 
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
+
+    /*---------------------------------------FOR CLIENT-------------------------------------------------------------*/
+    @PostMapping("/addReservation/me")
+    public ResponseEntity<String> addReservation(@RequestParam("courtId") String courtId,
+                                                 @RequestParam(value = "date", required = false) String date) {
+        String clientId = clientService.getClientByLogin(
+                SecurityContextHolder.getContext().getAuthentication().getName()).getId();
+        return addReservation(clientId, courtId, date);
     }
 }

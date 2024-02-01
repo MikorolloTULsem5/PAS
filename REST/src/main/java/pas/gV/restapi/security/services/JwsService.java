@@ -5,8 +5,10 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+
 import pas.gV.restapi.data.dto.ClientDTO;
 
 import java.security.Key;
@@ -45,12 +47,9 @@ public class JwsService {
         return signature.equals(currentSignature);
     }
 
-    ///TODO verify admins
-
     public String extractLogin(String signature) {
         return extractAllClaims(signature).get("login", String.class);
     }
-
 
     private Claims extractAllClaims(String signature) {
         return Jwts
