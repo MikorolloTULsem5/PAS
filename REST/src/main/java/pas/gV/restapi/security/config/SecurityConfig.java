@@ -56,10 +56,7 @@ public class SecurityConfig {
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(STATELESS))
                 .authenticationProvider(authenticationProvider)
-//                .cors(cors -> corsConfigurationSource())
-
-//                .cors().disable()
-                .cors(AbstractHttpConfigurer::disable)
+                .cors(cors -> corsConfigurationSource())
 
 //                .cors(httpSecurityCorsConfigurer ->
 //                        httpSecurityCorsConfigurer.configurationSource(request -> {
