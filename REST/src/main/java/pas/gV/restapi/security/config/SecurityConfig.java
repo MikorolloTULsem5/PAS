@@ -58,8 +58,8 @@ public class SecurityConfig {
                 .authenticationProvider(authenticationProvider)
 //                .cors(cors -> corsConfigurationSource())
 
-                .cors().disable()
-//                .cors(AbstractHttpConfigurer::disable)
+//                .cors().disable()
+                .cors(AbstractHttpConfigurer::disable)
 
 //                .cors(httpSecurityCorsConfigurer ->
 //                        httpSecurityCorsConfigurer.configurationSource(request -> {
