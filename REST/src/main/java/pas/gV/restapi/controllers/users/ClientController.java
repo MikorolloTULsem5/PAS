@@ -116,11 +116,6 @@ public class ClientController {
     public ResponseEntity<String> modifyClient(HttpServletRequest httpServletRequest,
                                                @Validated(BasicUserValidation.class) @RequestBody ClientDTO modifiedClient,
                                                Errors errors) {
-        String ifMatch = httpServletRequest.getHeader(HttpHeaders.IF_MATCH);
-        if (ifMatch == null || ifMatch.isBlank()) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Brak naglowka IF-MATCH");
-        }
-
         if (errors.hasErrors()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body(errors.getAllErrors()
