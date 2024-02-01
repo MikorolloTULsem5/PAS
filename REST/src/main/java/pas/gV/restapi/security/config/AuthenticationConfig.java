@@ -1,9 +1,5 @@
 package pas.gV.restapi.security.config;
 
-import com.mongodb.client.model.Filters;
-
-import jakarta.validation.UnexpectedTypeException;
-
 import lombok.RequiredArgsConstructor;
 
 import lombok.experimental.FieldDefaults;
@@ -31,7 +27,7 @@ import pas.gV.restapi.services.userservice.ResourceAdminService;
 @Configuration
 @RequiredArgsConstructor
 @FieldDefaults(makeFinal = true)
-public class ApplicationConfig {
+public class AuthenticationConfig {
 
     private ClientService clientService;
     private AdminService adminService;
