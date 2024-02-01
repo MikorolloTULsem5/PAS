@@ -9,6 +9,10 @@ import java.util.UUID;
 public class ClientMapper {
 
     public static ClientDTO toJsonUser(Client client) {
+        if (client == null) {
+            return null;
+        }
+
         return new ClientDTO(client.getId().toString(),
                 client.getFirstName(),
                 client.getLastName(),
@@ -19,6 +23,10 @@ public class ClientMapper {
     }
 
     public static Client fromJsonUser(ClientDTO clientDTO) {
+        if (clientDTO == null) {
+            return null;
+        }
+
         Client clientModel = new Client(clientDTO.getId() != null ? UUID.fromString(clientDTO.getId()) : null,
                 clientDTO.getFirstName(),
                 clientDTO.getLastName(),

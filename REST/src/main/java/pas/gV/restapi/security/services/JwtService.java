@@ -1,4 +1,4 @@
-package pas.gV.restapi.security.config;
+package pas.gV.restapi.security.services;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;

@@ -1,16 +1,13 @@
-package pas.gV.restapi.security.auth;
+package pas.gV.restapi.security.dto;
 
 import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Data
-@Builder
+@Getter
 @AllArgsConstructor
 @NoArgsConstructor
 public class AuthenticationRequest {
-
-  private String login;
-  String password;
+    private String login;
+    private String password;
 }

@@ -1,4 +1,4 @@
-package pas.gV.restapi.security.config;
+package pas.gV.restapi.security.filters;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -7,6 +7,7 @@ import jakarta.servlet.http.HttpServletResponse;
 
 import lombok.RequiredArgsConstructor;
 
+import lombok.experimental.FieldDefaults;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -16,22 +17,21 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
+import pas.gV.restapi.security.services.JwtService;
 
 import java.io.IOException;
 
 @Component
 @RequiredArgsConstructor
+@FieldDefaults(makeFinal = true)
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
-    private final JwtService jwtService;
-    private final UserDetailsService userDetailsService;
+    private JwtService jwtService;
+    private UserDetailsService userDetailsService;
 
     @Override
-    protected void doFilterInternal(
-            @NonNull HttpServletRequest request,
-            @NonNull HttpServletResponse response,
-            @NonNull FilterChain filterChain
-    ) throws ServletException, IOException {
+    protected void doFilterInternal(@NonNull HttpServletRequest request, @NonNull HttpServletResponse response,
+                                    @NonNull FilterChain filterChain) throws ServletException, IOException {
         if (request.getServletPath().contains("/api/auth")) {
             filterChain.doFilter(request, response);
             return;

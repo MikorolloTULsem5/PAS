@@ -1,6 +1,7 @@
 package pas.gV.restapi.security.config;
 
 import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -10,8 +11,8 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.security.web.authentication.logout.LogoutHandler;
 import org.springframework.web.cors.CorsConfiguration;
+import pas.gV.restapi.security.filters.JwtAuthenticationFilter;
 
 import java.util.List;
 
@@ -21,11 +22,12 @@ import static org.springframework.security.config.http.SessionCreationPolicy.STA
 @EnableWebSecurity
 @RequiredArgsConstructor
 @EnableMethodSecurity
-public class SecurityConfiguration {
+@FieldDefaults(makeFinal = true)
+public class SecurityConfig {
 
 
-    private final JwtAuthenticationFilter jwtAuthFilter;
-    private final AuthenticationProvider authenticationProvider;
+    private JwtAuthenticationFilter jwtAuthFilter;
+    private AuthenticationProvider authenticationProvider;
 //    private final LogoutHandler logoutHandler;
 
     @Bean
@@ -51,7 +53,7 @@ public class SecurityConfiguration {
                         )
                 )
 //                .logout(logout ->
-//                        logout.logoutUrl("/api/v1/auth/logout")
+//                        logout.logoutUrl("/api/v1/dto/logout")
 //                                .addLogoutHandler(logoutHandler)
 //                                .logoutSuccessHandler((request, response, authentication) -> SecurityContextHolder.clearContext())
 //                )
