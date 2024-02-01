@@ -9,8 +9,10 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.authentication.logout.LogoutHandler;
 import org.springframework.web.cors.CorsConfiguration;
 import pas.gV.restapi.security.filters.JwtAuthenticationFilter;
 
@@ -28,7 +30,7 @@ public class SecurityConfig {
 
     private JwtAuthenticationFilter jwtAuthFilter;
     private AuthenticationProvider authenticationProvider;
-//    private final LogoutHandler logoutHandler;
+    private LogoutHandler logoutHandler;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -53,11 +55,10 @@ public class SecurityConfig {
                         )
                 )
 //                .logout(logout ->
-//                        logout.logoutUrl("/api/v1/dto/logout")
+//                        logout.logoutUrl("/api/auth/logout")
 //                                .addLogoutHandler(logoutHandler)
 //                                .logoutSuccessHandler((request, response, authentication) -> SecurityContextHolder.clearContext())
 //                )
-        ///TODO corsy
         ;
 
         return http.build();
