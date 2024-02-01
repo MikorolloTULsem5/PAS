@@ -15,6 +15,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import org.springframework.web.bind.annotation.CrossOrigin;
 import pas.gV.model.logic.users.User;
 import pas.gV.restapi.data.mappers.AdminMapper;
 import pas.gV.restapi.data.mappers.ClientMapper;

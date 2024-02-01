@@ -3,7 +3,7 @@ export const API_URL = "https://localhost:8080/api" //process.env.REACT_APP_API_
 export const TIMEOUT_IN_MS = 30000
 export const DEFAULT_HEADERS = {
     Accept: 'application/json',
-    'Content-type': 'application/json',
+    'Content-type': 'application/json'
 }
 export const apiWithConfig = axios.create({
     baseURL: API_URL,
