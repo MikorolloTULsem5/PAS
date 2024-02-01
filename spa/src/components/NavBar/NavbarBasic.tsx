@@ -11,7 +11,11 @@ interface NavBarProps {
 }
 
 function NavbarBasic({pathnames}:NavBarProps) {
-    const {isAuthenticated, logOut} = useAccount();
+    const {isAuthenticated, account, getCurrentAccount, logOut} = useAccount();
+
+    useEffect(() => {
+        getCurrentAccount()
+    }, []);
 
     const keys = Object.keys(pathnames);
     return (
@@ -22,8 +26,18 @@ function NavbarBasic({pathnames}:NavBarProps) {
                 <Navbar.Collapse id="basic-navbar-nav">
                     <Nav className="me-auto">
                         {keys.map((key)=>(<Nav.Link key={key} as={Link} to={pathnames[key as keyof typeof pathnames]}>{capitalize(key)}</Nav.Link>))}
-                        {isAuthenticated && <Nav.Link className="ml-auto" onClick={logOut} as={Link} to='/'>Log out</Nav.Link>}
+                        {isAuthenticated && <Nav.Link onClick={logOut} as={Link} to='/'>Log out</Nav.Link>}
                     </Nav>
+                </Navbar.Collapse>
+                <Navbar.Collapse className="justify-content-end">
+                    {isAuthenticated &&
+                        <Navbar.Text>
+                        Logged in as: <a>{account?.login}</a> - {account?.userType}
+                    </Navbar.Text>}
+                    {!isAuthenticated &&
+                        <Navbar.Text>
+                            Logged in as: <a>Anonymus</a>
+                        </Navbar.Text>}
                 </Navbar.Collapse>
             </Container>
         </Navbar>
