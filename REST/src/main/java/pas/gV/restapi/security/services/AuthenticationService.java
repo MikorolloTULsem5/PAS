@@ -10,7 +10,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import org.springframework.stereotype.Service;
 
-import pas.gV.model.exceptions.UserException;
 import pas.gV.model.logic.users.Client;
 
 import pas.gV.restapi.security.dto.AuthenticationRequest;
@@ -58,6 +57,4 @@ public class AuthenticationService {
         String jwtToken = jwtService.generateToken(Map.of("authorities", userDetails.getAuthorities()), userDetails);
         return new TokenResponse(jwtToken);
     }
-
-    //TODO kasowanie tokenu
 }

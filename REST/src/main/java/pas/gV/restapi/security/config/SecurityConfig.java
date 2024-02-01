@@ -34,8 +34,8 @@ public class SecurityConfig {
 
     ///TODO hasROLE
     ///TODO https
+    ///TODO weryfikacja czy ja to ja
 
-    ///TODO changePassword
     ///TODO modifyClient
     ///TODO samodzielna alokacja zasobu
 

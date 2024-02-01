@@ -3,8 +3,11 @@ package pas.gV.restapi.controllers.users;
 import jakarta.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.Errors;
 import org.springframework.validation.ObjectError;
 import org.springframework.validation.annotation.Validated;
@@ -14,6 +17,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -25,6 +29,7 @@ import pas.gV.restapi.data.dto.ClientDTO;
 import pas.gV.restapi.data.dto.UserDTO.BasicUserValidation;
 import pas.gV.restapi.data.dto.UserDTO.PasswordValidation;
 import pas.gV.restapi.security.dto.ChangePasswordDTORequest;
+import pas.gV.restapi.security.services.JwsService;
 import pas.gV.restapi.services.userservice.ClientService;
 
 import java.util.List;
@@ -32,10 +37,12 @@ import java.util.List;
 @RequestMapping("/clients")
 public class ClientController {
     private final ClientService clientService;
+    private final JwsService jwsService;
 
     @Autowired
-    public ClientController(ClientService clientService) {
+    public ClientController(ClientService clientService, JwsService jwsService) {
         this.clientService = clientService;
+        this.jwsService = jwsService;
     }
 
     @PostMapping("/addClient")
@@ -90,6 +97,18 @@ public class ClientController {
         return client;
     }
 
+    @GetMapping("/get/me")
+    public ClientDTO getClientByLogin(HttpServletResponse response) {
+        ClientDTO client = clientService.getClientByLogin(SecurityContextHolder.getContext().getAuthentication().getName());
+        if (client == null) {
+            response.setStatus(HttpStatus.NO_CONTENT.value());
+            return null;
+        }
+        String etag = jwsService.generateSignatureForClient(client);
+        response.setHeader(HttpHeaders.ETAG, etag);
+        return client;
+    }
+
     @GetMapping("/match")
     public List<ClientDTO> getClientByLoginMatching(@RequestParam("login") String login, HttpServletResponse response) {
         List<ClientDTO> resultList = clientService.getClientByLoginMatching(login);
@@ -100,8 +119,35 @@ public class ClientController {
         return resultList;
     }
 
-    @PutMapping("/modifyClient/{id}")
-    public ResponseEntity<String> modifyClient(@PathVariable("id") String id,
+//    @PutMapping("/modifyClient/{id}")
+//    public ResponseEntity<String> modifyClient(@PathVariable("id") String id,
+//                                               @Validated(BasicUserValidation.class) @RequestBody ClientDTO modifiedClient,
+//                                               Errors errors) {
+//        if (errors.hasErrors()) {
+//            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+//                    .body(errors.getAllErrors()
+//                            .stream().map(ObjectError::getDefaultMessage)
+//                            .toList()
+//                            .toString()
+//                    );
+//        }
+//
+//        try {
+//            ClientDTO finalModifyClient = new ClientDTO(id, modifiedClient.getFirstName(),
+//                    modifiedClient.getLastName(), modifiedClient.getLogin(), null, modifiedClient.isArchive(),
+//                    modifiedClient.getClientType());
+//            clientService.modifyClient(finalModifyClient);
+//        } catch (UserLoginException ule) {
+//            return ResponseEntity.status(HttpStatus.CONFLICT).body(ule.getMessage());
+//        } catch (UserException ue) {
+//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ue.getMessage());
+//        }
+//
+//        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+//    }
+
+    @PutMapping("/modifyClient")
+    public ResponseEntity<String> modifyClient(@RequestHeader(value = HttpHeaders.IF_MATCH) String ifMatch,
                                                @Validated(BasicUserValidation.class) @RequestBody ClientDTO modifiedClient,
                                                Errors errors) {
         if (errors.hasErrors()) {
@@ -114,10 +160,15 @@ public class ClientController {
         }
 
         try {
-            ClientDTO finalModifyClient = new ClientDTO(id, modifiedClient.getFirstName(),
+            ClientDTO finalModifyClient = new ClientDTO(modifiedClient.getId(), modifiedClient.getFirstName(),
                     modifiedClient.getLastName(), modifiedClient.getLogin(), null, modifiedClient.isArchive(),
                     modifiedClient.getClientType());
-            clientService.modifyClient(finalModifyClient);
+            if (jwsService.verifyClientSignature(ifMatch, finalModifyClient)) {
+                clientService.modifyClient(finalModifyClient);
+            } else {
+                throw new UserException("Proba zmiany niedozwolonego pola!");
+            }
+
         } catch (UserLoginException ule) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(ule.getMessage());
         } catch (UserException ue) {
@@ -126,6 +177,7 @@ public class ClientController {
 
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
+
 
     @PostMapping("/activate/{id}")
     public void activateClient(@PathVariable("id") String id, HttpServletResponse response) {
