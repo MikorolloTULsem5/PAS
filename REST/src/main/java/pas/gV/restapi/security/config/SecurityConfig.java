@@ -30,7 +30,7 @@ public class SecurityConfig {
 
     private JwtAuthenticationFilter jwtAuthFilter;
     private AuthenticationProvider authenticationProvider;
-    private LogoutHandler logoutHandler;
+//    private LogoutHandler logoutHandler;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
