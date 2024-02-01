@@ -1,5 +1,5 @@
 import axios from 'axios'
-export const API_URL = "http://localhost:8080/api" //process.env.REACT_APP_API_URL
+export const API_URL = "https://localhost:8080/api" //process.env.REACT_APP_API_URL
 export const TIMEOUT_IN_MS = 30000
 export const DEFAULT_HEADERS = {
     Accept: 'application/json',
