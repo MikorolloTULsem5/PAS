@@ -36,8 +36,6 @@ public class SecurityConfig {
     ///TODO https
     ///TODO weryfikacja czy ja to ja
 
-    ///TODO samodzielna alokacja zasobu
-
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http

@@ -18,7 +18,6 @@ import pas.gV.model.exceptions.MultiReservationException;
 import pas.gV.model.exceptions.MyMongoException;
 import pas.gV.model.exceptions.ReservationException;
 
-import pas.gV.model.logic.users.Client;
 import pas.gV.restapi.data.dto.ReservationDTO;
 import pas.gV.restapi.security.services.JwsService;
 import pas.gV.restapi.services.ReservationService;
@@ -183,5 +182,10 @@ public class ReservationController {
         String clientId = clientService.getClientByLogin(
                 SecurityContextHolder.getContext().getAuthentication().getName()).getId();
         return addReservation(clientId, courtId, date);
+    }
+
+    @GetMapping("/clientReservation/current/me")
+    public List<ReservationDTO> getClientCurrentReservations(HttpServletResponse response) {
+        return getClientCurrentReservations("", response);
     }
 }
