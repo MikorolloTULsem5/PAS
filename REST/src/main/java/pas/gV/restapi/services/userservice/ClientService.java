@@ -29,6 +29,7 @@ public class ClientService extends UserService {
 
     private UserMongoRepository userRepository;
     private PasswordEncoder passwordEncoder;
+
     @Autowired
     public ClientService(UserMongoRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
@@ -38,7 +39,9 @@ public class ClientService extends UserService {
     public ClientDTO registerClient(String firstName, String lastName, String login, String password, String clientType) {
         try {
             return ClientMapper.toJsonUser(
-                    (Client) userRepository.create(new Client(null, firstName, lastName, login, password, clientType)));
+                    (Client) userRepository.create(
+                            new Client(null, firstName, lastName, login, passwordEncoder.encode(password), clientType))
+            );
         } catch (MyMongoException | UnexpectedTypeException exception) {
             throw new UserException("Nie udalo sie zarejestrowac klienta w bazie! - " + exception.getMessage());
         }

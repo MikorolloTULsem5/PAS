@@ -38,7 +38,9 @@ public class AdminService extends UserService {
 
     public AdminDTO registerAdmin(String login, String password) {
         try {
-            return AdminMapper.toJsonUser((Admin) userRepository.create(new Admin(null, login, password)));
+            return AdminMapper.toJsonUser((Admin) userRepository.create(
+                    new Admin(null, login, passwordEncoder.encode(password)))
+            );
         } catch (MyMongoException | UnexpectedTypeException exception) {
             throw new UserException("Nie udalo sie zarejestrowac administratora w bazie! - " + exception.getMessage());
         }
