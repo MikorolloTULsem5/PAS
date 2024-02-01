@@ -30,23 +30,28 @@ public class SecurityConfig {
 
     private JwtAuthenticationFilter jwtAuthFilter;
     private AuthenticationProvider authenticationProvider;
-//    private LogoutHandler logoutHandler;
-
-    ///TODO hasROLE
-    ///TODO https
-
-    ///TODO weryfikacja czy ja to ja
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
                 .csrf(AbstractHttpConfigurer::disable)
-                .authorizeHttpRequests(req ->
-                        req.requestMatchers("/auth/**")
-                                .permitAll()
-                                .anyRequest()
-                                .authenticated()
+                .authorizeHttpRequests(req -> {
+                            req
+                                    .requestMatchers("/auth/**").permitAll()
+                                    .requestMatchers(
+                                            "/clients/get/me",
+                                            "/clients/changePassword/me",
+                                            "/clients/modifyClient/me",
+                                            "/courts",
+                                            "/reservations/addReservation/me",
+                                            "/reservations/clientReservation/me",
+                                            "/reservations/returnCourt/me").hasAuthority("ROLE_CLIENT")
+                                    .requestMatchers("/clients/**", "/admins/**", "/resAdmins/**").hasAuthority("ROLE_ADMIN")
+                                    .requestMatchers("/courts/**", "/reservations/**").hasAuthority("ROLE_RESOURCE_ADMIN")
+                                    .anyRequest().denyAll();
+//                                    .anyRequest().authenticated();
+                        }
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(STATELESS))
                 .authenticationProvider(authenticationProvider)
@@ -59,11 +64,7 @@ public class SecurityConfig {
 
                         )
                 )
-//                .logout(logout ->
-//                        logout.logoutUrl("/api/auth/logout")
-//                                .addLogoutHandler(logoutHandler)
-//                                .logoutSuccessHandler((request, response, authentication) -> SecurityContextHolder.clearContext())
-//                )
+
         ;
 
         return http.build();
