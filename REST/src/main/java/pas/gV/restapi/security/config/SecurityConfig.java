@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpHeaders;
 
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -45,7 +46,8 @@ public class SecurityConfig {
                 .authorizeHttpRequests(req -> {
                             req
                                     .requestMatchers("/auth/**").permitAll()
-//                                    .requestMatchers("/clients/get/me", "/clients/changePassword/me").hasAuthority("ROLE_CLIENT")
+//                                    .requestMatchers("/clients/get/me").hasAuthority("ROLE_CLIENT")
+//                                    .requestMatchers(HttpMethod.PATCH, "/clients/changePassword/me").hasAuthority("ROLE_CLIENT")
 //                                    .requestMatchers("/clients/**", "/admins/**", "/resAdmins/**").hasAuthority("ROLE_ADMIN")
 //                                    .requestMatchers("/courts/**", "/reservations/**").hasAuthority("ROLE_RESOURCE_ADMIN")
 //                                    .anyRequest().denyAll();
