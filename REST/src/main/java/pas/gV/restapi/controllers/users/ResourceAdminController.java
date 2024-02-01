@@ -3,9 +3,11 @@ package pas.gV.restapi.controllers.users;
 import jakarta.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.Errors;
 import org.springframework.validation.ObjectError;
@@ -23,10 +25,12 @@ import org.springframework.web.bind.annotation.RestController;
 import pas.gV.model.exceptions.UserException;
 import pas.gV.model.exceptions.UserLoginException;
 
+import pas.gV.restapi.data.dto.AdminDTO;
 import pas.gV.restapi.data.dto.ResourceAdminDTO;
 import pas.gV.restapi.data.dto.UserDTO;
 import pas.gV.restapi.data.dto.UserDTO.PasswordValidation;
 import pas.gV.restapi.security.dto.ChangePasswordDTORequest;
+import pas.gV.restapi.security.services.JwsService;
 import pas.gV.restapi.services.userservice.ResourceAdminService;
 
 import java.util.List;
@@ -36,10 +40,12 @@ import java.util.UUID;
 @RequestMapping("/resAdmins")
 public class ResourceAdminController {
     private final ResourceAdminService resourceAdminService;
+    private final JwsService jwsService;
 
     @Autowired
-    public ResourceAdminController(ResourceAdminService resourceAdminService, PasswordEncoder passwordEncoder) {
+    public ResourceAdminController(ResourceAdminService resourceAdminService, JwsService jwsService) {
         this.resourceAdminService = resourceAdminService;
+        this.jwsService = jwsService;
     }
 
     @PostMapping("/addResAdmin")
@@ -161,5 +167,18 @@ public class ResourceAdminController {
         }
 
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
+
+    /* me */
+    @GetMapping("/get/me")
+    public ResourceAdminDTO getClientByLogin(HttpServletResponse response) {
+        ResourceAdminDTO resAdmin = resourceAdminService.getResourceAdminById(SecurityContextHolder.getContext().getAuthentication().getName());
+        if (resAdmin == null) {
+            response.setStatus(HttpStatus.NO_CONTENT.value());
+            return null;
+        }
+        String etag = "";
+        response.setHeader(HttpHeaders.ETAG, etag);
+        return resAdmin;
     }
 }

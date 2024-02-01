@@ -3,8 +3,10 @@ package pas.gV.restapi.controllers.users;
 import jakarta.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.Errors;
 import org.springframework.validation.ObjectError;
 import org.springframework.validation.annotation.Validated;
@@ -21,9 +23,11 @@ import org.springframework.web.bind.annotation.RestController;
 import pas.gV.model.exceptions.UserException;
 import pas.gV.model.exceptions.UserLoginException;
 import pas.gV.restapi.data.dto.AdminDTO;
+import pas.gV.restapi.data.dto.ClientDTO;
 import pas.gV.restapi.data.dto.UserDTO;
 import pas.gV.restapi.data.dto.UserDTO.PasswordValidation;
 import pas.gV.restapi.security.dto.ChangePasswordDTORequest;
+import pas.gV.restapi.security.services.JwsService;
 import pas.gV.restapi.services.userservice.AdminService;
 
 import java.util.List;
@@ -34,10 +38,12 @@ import java.util.UUID;
 public class AdminController {
 
     private final AdminService adminService;
+    private final JwsService jwsService;
 
     @Autowired
-    public AdminController(AdminService adminService) {
+    public AdminController(AdminService adminService, JwsService jwsService) {
         this.adminService = adminService;
+        this.jwsService = jwsService;
     }
 
     @PostMapping("/addAdmin")
@@ -101,6 +107,7 @@ public class AdminController {
         return resultList;
     }
 
+    ///TODO modify i podpisy dla adminow
     @PutMapping("/modifyAdmin/{id}")
     public ResponseEntity<String> modifyAdmin(@PathVariable("id") String id,
                                               @Validated(UserDTO.BasicUserValidation.class) @RequestBody AdminDTO modifiedAdmin,
@@ -159,5 +166,18 @@ public class AdminController {
         }
 
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
+
+    /* me */
+    @GetMapping("/get/me")
+    public AdminDTO getClientByLogin(HttpServletResponse response) {
+        AdminDTO admin = adminService.getAdminByLogin(SecurityContextHolder.getContext().getAuthentication().getName());
+        if (admin == null) {
+            response.setStatus(HttpStatus.NO_CONTENT.value());
+            return null;
+        }
+        String etag = "";
+        response.setHeader(HttpHeaders.ETAG, etag);
+        return admin;
     }
 }

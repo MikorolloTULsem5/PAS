@@ -34,6 +34,7 @@ public class SecurityConfig {
 
     ///TODO hasROLE
     ///TODO https
+
     ///TODO weryfikacja czy ja to ja
 
     @Bean
