@@ -11,6 +11,12 @@ export const resAdminsApi = {
         return resAdmins;
     },
 
+    getMe: async (): Promise<ApiResponseType<UserType>> => {
+        let resAdmin = await apiWithConfig.get(`/resAdmins/get/me`);
+        resAdmin.data.userType = AccountTypeEnum.RESADMIN
+        return resAdmin;
+    },
+
     activate: (id:string) => {
         apiWithConfig.post(`/resAdmins/activate/${id}`);
     },
@@ -20,10 +26,9 @@ export const resAdminsApi = {
     },
     modify: (user:UserType): ApiResponseType<any> => {
         let userCopy:any = {...user};
-        delete userCopy['id'];
         delete userCopy['userType'];
         //userCopy.password='';
-        return apiWithConfig.put(`/resAdmins/modifyResAdmin/${user.id}`,userCopy)
+        return apiWithConfig.put(`/resAdmins/modifyResAdmin`,userCopy)
     },
 
     create: (user:NewUserType): ApiResponseType<any>  => {

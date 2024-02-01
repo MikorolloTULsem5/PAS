@@ -1,9 +1,8 @@
-import {Table} from "react-bootstrap";
+import {Form, Table} from "react-bootstrap";
 import {ChangeEvent, useEffect, useState} from "react";
 import {UserType} from "../types/Users";
 import User from "../components/User";
 import {usersApi} from "../api/userApi";
-import {Col, Form, Row} from "react-bootstrap";
 import {filter, includes} from "lodash";
 
 function UsersPage() {

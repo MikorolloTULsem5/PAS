@@ -1,18 +1,13 @@
-import React, {FormEvent, FormEventHandler, useRef, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Button, Form} from "react-bootstrap";
 import * as formik from 'formik';
 import * as yup from 'yup';
-import {string} from "yup";
-import ConfirmModal from "../Modal/ConfirmModal";
-import {FormikHelpers, FormikProps, FormikValues} from "formik";
-import {NewClientType, NewUserType} from "../../types/Users";
-import {capitalize, isEmpty, valuesIn} from "lodash";
-import {usersApi} from "../../api/userApi";
+import {capitalize} from "lodash";
 import ModalBasic from "../Modal/ModalBasic";
 import {useAccount} from "../../hooks/useAccount";
+import {FormikHelpers} from "formik";
 
 function LoginForm() {
-    const { isAuthenticated, logIn, getCurrentAccount } = useAccount();
     const [showErrorModal,setShowErrorModal] = useState(false);
     const [errorModalContent,setErrorModalContent] = useState<string>("");
     const {Formik} = formik;
@@ -20,6 +15,24 @@ function LoginForm() {
         login: yup.string().required(),
         password: yup.string().required()
     });
+
+    const { isAuthenticated, logIn, getCurrentAccount } = useAccount();
+    useEffect(() => {
+        getCurrentAccount();
+    }, []);
+
+    interface formResult{
+        login:string,
+        password:string
+    }
+
+    const handleSubmit = (values:formResult, formikHelpers : FormikHelpers<formResult>) =>{
+        logIn(values.login, values.password).catch((error) =>{
+            setErrorModalContent(JSON.stringify(error.response.data));
+            setShowErrorModal(true)
+        });
+        formikHelpers.setSubmitting(false);
+    }
 
     return (
         <div>
@@ -30,10 +43,7 @@ function LoginForm() {
                     login: '',
                     password: '',
                 }}
-                onSubmit={(values, formikHelpers)=>{
-                    logIn(values.login, values.password);
-                    formikHelpers.setSubmitting(false);
-                }}
+                onSubmit={handleSubmit}
             >{props => (
                 <Form onSubmit={props.handleSubmit} noValidate className="m-3 p-3">
                     <Form.Group controlId="addUserFormLogin" >

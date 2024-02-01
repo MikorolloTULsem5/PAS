@@ -15,7 +15,8 @@ export interface UserType {
 export interface ClientType extends UserType{
     clientTypeName: "normal" | "coach" | "athlete",
     firstName: string,
-    lastName: string
+    lastName: string,
+    eTag?: string
 }
 
 export interface NewUserType {

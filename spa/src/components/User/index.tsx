@@ -4,9 +4,10 @@ import ConfirmModal from "../Modal/ConfirmModal";
 import {Formik, FormikProps, FormikValues} from "formik";
 import * as yup from 'yup';
 import {Button, Col, Form, Row} from "react-bootstrap";
-import {capitalize, find, indexOf} from "lodash";
+import {capitalize, indexOf} from "lodash";
 import {usersApi} from "../../api/userApi";
 import ModalBasic from "../Modal/ModalBasic";
+import {useAccount} from "../../hooks/useAccount";
 
 interface UserProps {
     user: UserType
@@ -19,7 +20,7 @@ function User({user, users, setUsers}: UserProps) {
     const [userCopy, setUserCopy] = useState(user);
     const [showErrorModal,setShowErrorModal] = useState(false);
     const [errorModalContent,setErrorModalContent] = useState<string>("");
-    const formRef = useRef<FormikProps<FormikValues>>(null)
+    const formRef = useRef<FormikProps<FormikValues>>(null);
 
     const schema = yup.object().shape({
         login: yup.string().required()

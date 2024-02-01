@@ -20,7 +20,7 @@ function AddUserForm() {
     const {Formik} = formik;
     const schemaUser = yup.object().shape({
         login: yup.string().required(),
-        password: yup.string().required()
+        password: yup.string().required().matches(new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{5,}$"))
     });
     const schemaClient = yup.object().shape({
         firstName: yup.string().required(),

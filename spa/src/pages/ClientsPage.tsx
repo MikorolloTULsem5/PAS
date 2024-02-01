@@ -1,12 +1,9 @@
 import {Form, Table} from "react-bootstrap";
 import {ChangeEvent, useEffect, useState} from "react";
-import {ClientType, UserType} from "../types/Users";
-import User from "../components/User";
-import {usersApi} from "../api/userApi";
-import AddUserForm from "../components/forms/AddUserForm";
+import {ClientType} from "../types/Users";
 import {clientsApi} from "../api/clientsApi";
 import Client from "../components/Client/Client";
-import {filter, includes, indexOf} from "lodash";
+import {filter, includes} from "lodash";
 
 function ClientsPage() {
     const [clients, setClients] = useState<ClientType[]>([]);

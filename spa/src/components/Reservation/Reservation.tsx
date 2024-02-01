@@ -1,7 +1,5 @@
 import React, {useState} from "react";
 import {ReservationType} from "../../types/ReservationsTypes";
-import {usersApi} from "../../api/userApi";
-import client from "../Client/Client";
 import {reservationsApi} from "../../api/reservationsApi";
 import ConfirmModal from "../Modal/ConfirmModal";
 

@@ -25,6 +25,6 @@ apiWithConfig.interceptors.response.use(
 apiWithConfig.interceptors.request.use((config) => {
     let token = window.localStorage.getItem('token');
     token = (token && token !== "null") ? token : null;
-    if (token && config.headers) {console.log(token); config.headers.Authorization = `Bearer ${token}`};
+    if (token && config.headers) {config.headers.Authorization = `Bearer ${token}`};
     return config
 })

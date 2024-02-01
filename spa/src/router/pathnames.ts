@@ -2,13 +2,12 @@ export const Pathnames = {
     public: {
         home: '/',
         login: '/login',
+        register: '/register'
     },
     admin: {
         home: '/',
         users: '/users',
         clients: '/clients',
-        courts: '/courts',
-        reservations: '/reservations',
         'add user': '/addUser'
     },
     resAdmin: {
@@ -17,14 +16,10 @@ export const Pathnames = {
         clients: '/clients',
         courts: '/courts',
         reservations: '/reservations',
-        'add user': '/addUser'
     },
     client: {
         home: '/',
-        users: '/users',
-        clients: '/clients',
         courts: '/courts',
         reservations: '/reservations',
-        'add user': '/addUser'
     },
 }

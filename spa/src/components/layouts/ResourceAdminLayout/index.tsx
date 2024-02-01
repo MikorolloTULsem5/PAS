@@ -7,13 +7,13 @@ interface LayoutProps {
     children: ReactNode
 }
 
-function ClientLayout({children}:LayoutProps){
+function ResourceAdminLayout({children}:LayoutProps){
     return (
         <div>
-            <NavbarBasic pathnames={Pathnames.client}/>
+            <NavbarBasic pathnames={Pathnames.resAdmin}/>
             <Container>{children}</Container>
         </div>
     )
 }
 
-export default ClientLayout;
+export default ResourceAdminLayout;

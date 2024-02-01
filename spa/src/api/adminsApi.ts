@@ -17,6 +17,12 @@ export const adminsApi = {
         return admin;
     },
 
+    getMe: async (): Promise<ApiResponseType<UserType>> => {
+        let admin = await apiWithConfig.get(`/admins/get/me`);
+        admin.data.userType = AccountTypeEnum.ADMIN
+        return admin;
+    },
+
     activate: (id:string) => {
         return apiWithConfig.post(`/admins/activate/${id}`);
     },
@@ -27,10 +33,9 @@ export const adminsApi = {
 
     modify: (user:UserType): ApiResponseType<any> => {
         let userCopy:any = {...user};
-        delete userCopy['id'];
         delete userCopy['userType'];
         //userCopy.password='';
-        return apiWithConfig.put(`/admins/modifyAdmin/${user.id}`,userCopy);
+        return apiWithConfig.put(`/admins/modifyAdmin`,userCopy);
     },
 
     create: (user:NewUserType): ApiResponseType<any>  => {

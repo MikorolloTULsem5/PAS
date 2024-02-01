@@ -1,15 +1,13 @@
-import {ClientType, UserType} from "../../types/Users";
+import {ClientType} from "../../types/Users";
 import React, {Dispatch, SetStateAction, useEffect, useRef, useState} from "react";
 import ConfirmModal from "../Modal/ConfirmModal";
 import {Formik, FormikProps, FormikValues} from "formik";
 import * as yup from 'yup';
 import {Button, Col, Form, Row, Table} from "react-bootstrap";
 import {capitalize, indexOf, isEmpty} from "lodash";
-import {usersApi} from "../../api/userApi";
 import ModalBasic from "../Modal/ModalBasic";
 import {clientsApi} from "../../api/clientsApi";
 import {ReservationType} from "../../types/ReservationsTypes";
-import {apiWithConfig} from "../../api/api.config";
 import {reservationsApi} from "../../api/reservationsApi";
 
 interface ClientProps {

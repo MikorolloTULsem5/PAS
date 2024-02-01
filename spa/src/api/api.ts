@@ -1,16 +1,15 @@
 import {ApiResponseType} from "../types/ApiResponseType";
-import {UserType} from "../types/Users";
 import {apiWithConfig} from "./api.config";
-import {TokenPayload} from "../types/TokenPayload";
+import {AccessToken} from "../types/TokenPayload";
 
 export const api = {
-    logIn: (login: string, password: string): ApiResponseType<TokenPayload> => {
+    logIn: (login: string, password: string): ApiResponseType<AccessToken> => {
         return apiWithConfig.post('/auth/authenticate', { login, password })
     },
-    logOut: (): ApiResponseType<UserType> => {
-        return apiWithConfig.post('/accounts/log_out')
+    logOut: (): ApiResponseType<any> => {
+        return apiWithConfig.post('/auth/logout')
     },
-    getCurrentAccount: (): ApiResponseType<UserType> => {
-        return apiWithConfig.post('/accounts/existing_account')
-    },
+    register: (login:string, password:string, firstName:string, lastName:string) => {
+        return apiWithConfig.post('/auth/register',{login,password, firstName, lastName})
+    }
 }

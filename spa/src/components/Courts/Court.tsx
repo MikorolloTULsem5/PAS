@@ -8,17 +8,21 @@ import * as yup from "yup";
 import ConfirmModal from "../Modal/ConfirmModal";
 import {reservationsApi} from "../../api/reservationsApi";
 import {courtsApi} from "../../api/courtsApi";
+import {AccountTypeEnum} from "../../types/Users";
 
 interface CourtProps {
-    court: CourtType
+    court: CourtType,
+    accountType: AccountTypeEnum | null,
+    clientId?: string | null
 }
 
-function Court({court}: CourtProps) {
+function Court({court, accountType, clientId=null}: CourtProps) {
     const [courtCopy,setCourtCopy] = useState(court);
     const [showReservationModal,setShowReservationModal] = useState(false);
     const formRef = useRef<FormikProps<FormikValues>>(null);
     const [showErrorModal,setShowErrorModal] = useState(false);
     const [errorModalContent,setErrorModalContent] = useState<string>("");
+
 
     const schema = yup.object().shape({
         clientId: yup.string().required()
@@ -30,10 +34,18 @@ function Court({court}: CourtProps) {
         }
     }
 
-    const rentCourt = (form:FormikValues) => {
+    const rentCourtResAdmin = (form:FormikValues) => {
         reservationsApi.create({courtId:court.id, clientId:form.clientId}).then(() =>{
             courtsApi.getCourtById(court.id).then((response)=>setCourtCopy(response.data)).catch(console.log);
         }).catch((error)=>{setErrorModalContent(JSON.stringify(error.response.data)); setShowErrorModal(true)})
+    }
+
+    const rentCourtClient = () => {
+        if(clientId !== null && clientId !== undefined){
+            reservationsApi.create({courtId:court.id, clientId}).then(() =>{
+                courtsApi.getCourtById(court.id).then((response)=>setCourtCopy(response.data)).catch(console.log);
+            }).catch((error)=>{setErrorModalContent(JSON.stringify(error.response.data)); setShowErrorModal(true)})
+        }
     }
 
     return (
@@ -47,8 +59,8 @@ function Court({court}: CourtProps) {
             {!courtCopy.rented && <td>No</td>}
             {!court.archive && <td>Active</td>}
             {court.archive && <td>Archived</td>}
-            {court.archive || courtCopy.rented && <td/>}
-            {!court.archive && !courtCopy.rented && <td>
+            {(court.archive || courtCopy.rented) && <td/>}
+            {!court.archive && !courtCopy.rented && accountType === AccountTypeEnum.RESADMIN && <td>
                 <Button variant="primary" onClick={()=>setShowReservationModal(true)}>Reserve</Button>
                 <ModalBasic show={showReservationModal}
                             setShow={setShowReservationModal}
@@ -56,7 +68,7 @@ function Court({court}: CourtProps) {
                     <Formik innerRef={formRef}
                             validationSchema={schema}
                             initialValues={{clientId: ''}}
-                            onSubmit={rentCourt}>{props => (
+                            onSubmit={rentCourtResAdmin}>{props => (
                     <Form noValidate onSubmit={props.handleSubmit}>
                         <Form.Group controlId="reserveFormClientId">
                             <Form.Label>Client id:</Form.Label>
@@ -71,6 +83,13 @@ function Court({court}: CourtProps) {
                     </Form>
                 )}</Formik>}
                             footer={<ConfirmModal variant={"primary"} onConfirm={handleSubmit} title="Reserve a court" body={<h2>Do you want to reserve a court: {court.id}</h2>}>Reserve</ConfirmModal>}/>
+            </td>}
+            {!court.archive && !courtCopy.rented && accountType === AccountTypeEnum.CLIENT && <td>
+                <ConfirmModal variant={"primary"}
+                              onConfirm={rentCourtClient}
+                              title="Reserve a court"
+                              body={<h2>Do you want to reserve a court: {court.id}</h2>}
+                >Reserve</ConfirmModal>
             </td>}
         </tr>
     )

@@ -1,7 +1,6 @@
 import {apiWithConfig} from "./api.config";
 import {ApiResponseType} from "../types/ApiResponseType";
-import {ClientType, NewClientType, UserType} from "../types/Users";
-import {CourtType, ReservationType} from "../types/ReservationsTypes";
+import {CourtType} from "../types/ReservationsTypes";
 
 export const courtsApi = {
     getCourts: ():ApiResponseType<CourtType[]> => {

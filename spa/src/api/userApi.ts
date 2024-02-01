@@ -2,6 +2,7 @@ import {clientsApi} from "./clientsApi";
 import {adminsApi} from "./adminsApi";
 import {resAdminsApi} from "./resAdminsApi";
 import {NewUserType, UserType} from "../types/Users";
+import {RolesEnum} from "../types/TokenPayload";
 
 export const usersApi = {
     getUsers: async (): Promise<UserType[]> => {
@@ -72,6 +73,17 @@ export const usersApi = {
                 return adminsApi.create(user);
             case "Resource admin":
                 return resAdminsApi.create(user);
+        }
+    },
+
+    getMe: (role:RolesEnum) => {
+        switch (role) {
+            case RolesEnum.CLIENT:
+                return clientsApi.getMe();
+            case RolesEnum.ADMIN:
+                return adminsApi.getMe();
+            case RolesEnum.RESADMIN:
+                return resAdminsApi.getMe();
         }
     }
 }

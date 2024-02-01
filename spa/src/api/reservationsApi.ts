@@ -1,22 +1,21 @@
 import {apiWithConfig} from "./api.config";
 import {ApiResponseType} from "../types/ApiResponseType";
-import {ClientType, NewClientType, UserType} from "../types/Users";
 import {NewReservationType, ReservationType} from "../types/ReservationsTypes";
 
 export const reservationsApi = {
-    getReservationsByClientId: (clientId:string):ApiResponseType<ReservationType[]> => {
+    getReservationsByClientId: (clientId: string): ApiResponseType<ReservationType[]> => {
         return apiWithConfig.get(`/reservations/clientReservation?clientId=${clientId}`);
     },
 
-    getReservationsById: (reservationId:string):ApiResponseType<ReservationType> => {
+    getReservationsById: (reservationId: string): ApiResponseType<ReservationType> => {
         return apiWithConfig.get(`/reservations/${reservationId}`);
     },
 
-    getCurrentReservations: ():ApiResponseType<ReservationType[]> => {
+    getCurrentReservations: (): ApiResponseType<ReservationType[]> => {
         return apiWithConfig.get(`/reservations`);
     },
 
-    getArchivedReservations: ():ApiResponseType<ReservationType[]> => {
+    getArchivedReservations: (): ApiResponseType<ReservationType[]> => {
         return apiWithConfig.get(`/reservations/archive`);
     },
 
@@ -26,7 +25,7 @@ export const reservationsApi = {
         return current.concat(archived);
     },
 
-    returnCourt: (courtId:string): ApiResponseType<any> => {
+    returnCourt: (courtId: string): ApiResponseType<any> => {
         return apiWithConfig.post(`/reservations/returnCourt?courtId=${courtId}`)
     },
 

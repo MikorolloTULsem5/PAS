@@ -4,13 +4,16 @@ import {useNavigate} from "react-router-dom";
 import {api} from "../api/api";
 import {Pathnames} from "../router/pathnames";
 import {adminsApi} from "../api/adminsApi";
+import {usersApi} from "../api/userApi";
+import {jwtDecode} from "jwt-decode";
+import {TokenPayload} from "../types/TokenPayload";
 
 export const useAccount = () => {
     const navigate = useNavigate()
-    const { account, setAccount, token, setToken } =
+    const { account, setAccount} =
         useAccountState()
     const isAuthenticated = !!account?.login
-    const accountType:AccountTypeEnum | null = !!account ? AccountTypeEnum.ADMIN : null;
+    const accountType:AccountTypeEnum | null = !!account?.userType ? account.userType : null;
     const logOut = async () => {
         try {
             await api.logOut()
@@ -19,21 +22,18 @@ export const useAccount = () => {
         } finally {
             localStorage.removeItem('token')
             setAccount(null)
-            setToken(null)
-            navigate(Pathnames.public.login)
         }
     }
     const logIn = async (login: string, password: string) => {
         try {
             const token = (await api.logIn(login, password)).data.accessToken;
-            setToken(token);
             localStorage.setItem('token',token);
             console.log(localStorage);
-            //TODO zrobić to uniwersalne
-            const {data} = await adminsApi.getAdminByLogin(login);
+            const {data} = await usersApi.getMe(jwtDecode<TokenPayload>(token).authorities[0].authority);
             setAccount(data);
             navigate(Pathnames.public.home)
         } catch(e) {
+            console.log(e);
             alert('Logging in error!')
             if(isAuthenticated)logOut();
         } finally {
@@ -41,19 +41,22 @@ export const useAccount = () => {
     }
     const getCurrentAccount = async () => {
         try {
-            if (localStorage.getItem("token")) {
-                const { data } = await api.getCurrentAccount()
+            const tokenRaw = localStorage.getItem("token");
+            if (tokenRaw && tokenRaw !=='null') {
+                const token = jwtDecode<TokenPayload>(tokenRaw);
+                const { data } = await usersApi.getMe(token.authorities[0].authority);
                 setAccount(data)
-            }
+            } else throw new Error("Token is null");
         } catch {
-            alert('Unable to get current account!')
-            logOut()
+            if(account!==null){
+                alert('Unable to get current account!');
+                logOut();
+            }
         } finally {
         }
     }
     return {
         account,
-        token,
         isAuthenticated,
         accountType,
         logIn,

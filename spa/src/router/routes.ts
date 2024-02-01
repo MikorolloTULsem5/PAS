@@ -7,6 +7,7 @@ import ClientsPage from "../pages/ClientsPage";
 import CourtsPage from "../pages/CourtsPage";
 import ReservationsPage from "../pages/ReservationsPage";
 import LoginPage from "../pages/LoginPage";
+import RegisterPage from "../pages/RegisterPage";
 
 export const PublicRoutes: RouteType[] = [
     {
@@ -16,6 +17,10 @@ export const PublicRoutes: RouteType[] = [
     {
         path: Pathnames.public.login,
         Component: LoginPage
+    },
+    {
+        path: Pathnames.public.register,
+        Component: RegisterPage
     }
 ]
 
@@ -33,14 +38,6 @@ export const AdminRoutes: RouteType[] = [
         Component: ClientsPage
     },
     {
-        path: Pathnames.admin.courts,
-        Component: CourtsPage
-    },
-    {
-        path: Pathnames.admin.reservations,
-        Component: ReservationsPage
-    },
-    {
         path: Pathnames.admin["add user"],
         Component: AddUserPage
     }
@@ -52,14 +49,6 @@ export const ClientRoutes: RouteType[] = [
         Component: HomePage
     },
     {
-        path: Pathnames.client.users,
-        Component: UsersPage
-    },
-    {
-        path: Pathnames.client.clients,
-        Component: ClientsPage
-    },
-    {
         path: Pathnames.client.courts,
         Component: CourtsPage
     },
@@ -67,10 +56,6 @@ export const ClientRoutes: RouteType[] = [
         path: Pathnames.client.reservations,
         Component: ReservationsPage
     },
-    {
-        path: Pathnames.client["add user"],
-        Component: AddUserPage
-    }
 ]
 
 export const ResAdminRoutes: RouteType[] = [
@@ -94,8 +79,4 @@ export const ResAdminRoutes: RouteType[] = [
         path: Pathnames.resAdmin.reservations,
         Component: ReservationsPage
     },
-    {
-        path: Pathnames.resAdmin["add user"],
-        Component: AddUserPage
-    }
 ]

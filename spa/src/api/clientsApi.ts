@@ -10,6 +10,15 @@ export const clientsApi = {
         })
         return clients;
     },
+
+    getMe: async (): Promise<ApiResponseType<ClientType>> => {
+        let client = await apiWithConfig.get(`/clients/get/me`);
+        client.data.userType = AccountTypeEnum.CLIENT;
+        client.data.eTag = client.headers['etag'];
+        console.log("eTag "+client.data.eTag)
+        return client;
+    },
+
     activate: (id:string) => {
         return apiWithConfig.post(`/clients/activate/${id}`);
     },
@@ -19,10 +28,9 @@ export const clientsApi = {
     },
     modify: (user:ClientType) => {
         let userCopy:any = {...user};
-        delete userCopy['id'];
         delete userCopy['userType'];
         //userCopy.password='';
-        return apiWithConfig.put(`/clients/modifyClient/${user.id}`,userCopy)
+        return apiWithConfig.put(`/clients/modifyClient`,userCopy)
     },
     create: (user:NewClientType): ApiResponseType<any>  => {
         let userCopy:any = {...user};
