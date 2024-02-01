@@ -10,6 +10,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import org.springframework.stereotype.Service;
 
+import pas.gV.model.exceptions.UserException;
 import pas.gV.model.logic.users.Client;
 
 import pas.gV.restapi.security.dto.AuthenticationRequest;
@@ -17,6 +18,8 @@ import pas.gV.restapi.security.dto.TokenResponse;
 import pas.gV.restapi.security.dto.ClientRegisterDTORequest;
 
 import pas.gV.restapi.services.userservice.ClientService;
+
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -38,7 +41,7 @@ public class AuthenticationService {
         clientService.registerClient(clientReg.getFirstName(), clientReg.getLastName(), clientReg.getLogin(),
                 clientReg.getPassword(), clientReg.getClientTypeName());
 
-        String jwtToken = jwtService.generateToken(clientReg);
+        String jwtToken = jwtService.generateToken(Map.of("authorities", clientReg.getAuthorities()), clientReg);
         return new TokenResponse(jwtToken);
     }
 
@@ -50,7 +53,9 @@ public class AuthenticationService {
                 )
         );
 
-        String jwtToken = jwtService.generateToken(userDetailsService.loadUserByUsername(request.getLogin()));
+        var userDetails = userDetailsService.loadUserByUsername(request.getLogin());
+
+        String jwtToken = jwtService.generateToken(userDetails);
         return new TokenResponse(jwtToken);
     }
 
