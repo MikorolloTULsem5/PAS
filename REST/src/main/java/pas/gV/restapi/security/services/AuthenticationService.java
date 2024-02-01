@@ -13,8 +13,8 @@ import org.springframework.stereotype.Service;
 import pas.gV.model.logic.users.Client;
 
 import pas.gV.restapi.security.dto.AuthenticationRequest;
-import pas.gV.restapi.security.dto.AuthenticationResponse;
-import pas.gV.restapi.security.dto.RegisterRequest;
+import pas.gV.restapi.security.dto.TokenResponse;
+import pas.gV.restapi.security.dto.ClientRegisterDTORequest;
 
 import pas.gV.restapi.services.userservice.ClientService;
 
@@ -28,21 +28,21 @@ public class AuthenticationService {
     private JwtService jwtService;
     private AuthenticationManager authenticationManager;
 
-    public AuthenticationResponse register(RegisterRequest request) {
+    public TokenResponse register(ClientRegisterDTORequest requestDto) {
         Client clientReg = new Client(null,
-                request.getFirstName(),
-                request.getLastName(),
-                request.getLogin(),
-                passwordEncoder.encode(request.getPassword()),
+                requestDto.getFirstName(),
+                requestDto.getLastName(),
+                requestDto.getLogin(),
+                passwordEncoder.encode(requestDto.getPassword()),
                 "normal");
         clientService.registerClient(clientReg.getFirstName(), clientReg.getLastName(), clientReg.getLogin(),
                 clientReg.getPassword(), clientReg.getClientTypeName());
 
         String jwtToken = jwtService.generateToken(clientReg);
-        return new AuthenticationResponse(jwtToken);
+        return new TokenResponse(jwtToken);
     }
 
-    public AuthenticationResponse authenticate(AuthenticationRequest request) {
+    public TokenResponse authenticate(AuthenticationRequest request) {
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         request.getLogin(),
@@ -51,7 +51,7 @@ public class AuthenticationService {
         );
 
         String jwtToken = jwtService.generateToken(userDetailsService.loadUserByUsername(request.getLogin()));
-        return new AuthenticationResponse(jwtToken);
+        return new TokenResponse(jwtToken);
     }
 
     //TODO kasowanie tokenu

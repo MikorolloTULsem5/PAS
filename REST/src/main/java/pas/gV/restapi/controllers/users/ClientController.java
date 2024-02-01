@@ -1,10 +1,7 @@
 package pas.gV.restapi.controllers.users;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.databind.util.JSONPObject;
 import jakarta.servlet.http.HttpServletResponse;
 
-import org.bson.json.JsonObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,9 +27,6 @@ import pas.gV.restapi.data.dto.UserDTO.PasswordValidation;
 import pas.gV.restapi.services.userservice.ClientService;
 
 import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-
 @RestController
 @RequestMapping("/clients")
 public class ClientController {
