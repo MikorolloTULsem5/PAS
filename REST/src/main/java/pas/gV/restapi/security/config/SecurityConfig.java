@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -14,6 +15,8 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.logout.LogoutHandler;
 import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import pas.gV.restapi.security.filters.JwtAuthenticationFilter;
 
 import java.util.List;
@@ -27,45 +30,53 @@ import static org.springframework.security.config.http.SessionCreationPolicy.STA
 @FieldDefaults(makeFinal = true)
 public class SecurityConfig {
 
-
     private JwtAuthenticationFilter jwtAuthFilter;
     private AuthenticationProvider authenticationProvider;
-//    private LogoutHandler logoutHandler;
 
     ///TODO hasROLE
-    ///TODO https
-
-    ///TODO weryfikacja czy ja to ja
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
                 .csrf(AbstractHttpConfigurer::disable)
-                .authorizeHttpRequests(req ->
-                        req.requestMatchers("/auth/**")
-                                .permitAll()
-                                .anyRequest()
-                                .authenticated()
+                .authorizeHttpRequests(req -> {
+                            req.requestMatchers("/auth/**")
+                                    .permitAll()
+                                    .anyRequest()
+                                    .authenticated();
+                        }
+
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(STATELESS))
                 .authenticationProvider(authenticationProvider)
-                .cors(httpSecurityCorsConfigurer ->
-                        httpSecurityCorsConfigurer.configurationSource(request -> {
-                                    CorsConfiguration configuration = new CorsConfiguration().applyPermitDefaultValues();
-                                    configuration.setAllowedMethods(List.of("GET", "HEAD", "POST", "PUT", "DELETE", "PATCH"));
-                                    return configuration;
-                                }
-
-                        )
-                )
-//                .logout(logout ->
-//                        logout.logoutUrl("/api/auth/logout")
-//                                .addLogoutHandler(logoutHandler)
-//                                .logoutSuccessHandler((request, response, authentication) -> SecurityContextHolder.clearContext())
+                .cors(cors -> corsConfigurationSource())
+//                .cors(httpSecurityCorsConfigurer ->
+//                        httpSecurityCorsConfigurer.configurationSource(request -> {
+//                                    CorsConfiguration configuration = new CorsConfiguration().applyPermitDefaultValues();
+//                                    configuration.setAllowedMethods(List.of("GET", "HEAD", "POST", "PUT", "DELETE", "PATCH"));
+//                                    return configuration;
+//                                }
+//
+//                        )
 //                )
         ;
 
         return http.build();
+    }
+
+    private static CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration corsConfiguration = new CorsConfiguration();
+        corsConfiguration.setAllowCredentials(true);
+        corsConfiguration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE"));
+        corsConfiguration.setAllowedHeaders(List.of(
+                HttpHeaders.AUTHORIZATION,
+                HttpHeaders.CONTENT_TYPE,
+                HttpHeaders.ACCEPT));
+        corsConfiguration.setAllowedOriginPatterns(List.of("https://localhost:3000"));
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", corsConfiguration);
+        return source;
     }
 }
