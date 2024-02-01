@@ -55,7 +55,7 @@ public class AuthenticationService {
 
         var userDetails = userDetailsService.loadUserByUsername(request.getLogin());
 
-        String jwtToken = jwtService.generateToken(userDetails);
+        String jwtToken = jwtService.generateToken(Map.of("authorities", userDetails.getAuthorities()), userDetails);
         return new TokenResponse(jwtToken);
     }
 

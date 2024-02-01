@@ -32,6 +32,13 @@ public class SecurityConfig {
     private AuthenticationProvider authenticationProvider;
 //    private LogoutHandler logoutHandler;
 
+    ///TODO hasROLE
+    ///TODO https
+
+    ///TODO changePassword
+    ///TODO modifyClient
+    ///TODO samodzielna alokacja zasobu
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
