@@ -45,12 +45,11 @@ public class SecurityConfig {
                 .authorizeHttpRequests(req -> {
                             req
                                     .requestMatchers("/auth/**").permitAll()
-//                                    .requestMatchers("/clients/get/me").hasAuthority("ROLE_CLIENT")
-//                                    .requestMatchers("/clients/changePassword/me").hasAuthority("ROLE_CLIENT")
+//                                    .requestMatchers("/clients/get/me", "/clients/changePassword/me").hasAuthority("ROLE_CLIENT")
 //                                    .requestMatchers("/clients/**", "/admins/**", "/resAdmins/**").hasAuthority("ROLE_ADMIN")
 //                                    .requestMatchers("/courts/**", "/reservations/**").hasAuthority("ROLE_RESOURCE_ADMIN")
-                                    .anyRequest()
-                                    .authenticated();
+//                                    .anyRequest().denyAll();
+                                    .anyRequest().authenticated();
                         }
 
                 )
