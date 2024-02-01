@@ -93,7 +93,7 @@ public class NewCleaningClassForTests {
     }
 
     static void initClients() {
-        ClientService clientServiceTest = new ClientService(new UserMongoRepository());
+        ClientService clientServiceTest = new ClientService(new UserMongoRepository(), null);
         cleanUsers();
         client1 = clientServiceTest.registerClient("Adam", "Smith", "loginek", "password", "normal");
         client2 = clientServiceTest.registerClient("Eva", "Braun", "loginek13", "password", "athlete");

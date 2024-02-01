@@ -24,6 +24,7 @@ import pas.gV.model.exceptions.UserLoginException;
 import pas.gV.restapi.data.dto.ClientDTO;
 import pas.gV.restapi.data.dto.UserDTO.BasicUserValidation;
 import pas.gV.restapi.data.dto.UserDTO.PasswordValidation;
+import pas.gV.restapi.security.dto.ChangePasswordDTORequest;
 import pas.gV.restapi.services.userservice.ClientService;
 
 import java.util.List;
@@ -140,7 +141,7 @@ public class ClientController {
 
     @PatchMapping("/changePassword/{id}")
     public ResponseEntity<String> changeClientPassword(@PathVariable("id") String id,
-                                     @Validated(PasswordValidation.class) @RequestBody ClientDTO body,
+                                     @Validated(PasswordValidation.class) @RequestBody ChangePasswordDTORequest body,
                                      Errors errors) {
         if (errors.hasErrors()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
@@ -151,7 +152,11 @@ public class ClientController {
                     );
         }
 
-        clientService.changeClientPassword(id, body.getPassword());
+        try {
+            clientService.changeClientPassword(id, body);
+        } catch (IllegalStateException ise) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ise.getMessage());
+        }
 
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
