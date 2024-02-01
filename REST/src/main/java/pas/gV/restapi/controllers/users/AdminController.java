@@ -9,6 +9,7 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.ObjectError;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -21,6 +22,8 @@ import pas.gV.model.exceptions.UserException;
 import pas.gV.model.exceptions.UserLoginException;
 import pas.gV.restapi.data.dto.AdminDTO;
 import pas.gV.restapi.data.dto.UserDTO;
+import pas.gV.restapi.data.dto.UserDTO.PasswordValidation;
+import pas.gV.restapi.security.dto.ChangePasswordDTORequest;
 import pas.gV.restapi.services.userservice.AdminService;
 
 import java.util.List;
@@ -134,5 +137,27 @@ public class AdminController {
     public void archiveAdmin(@PathVariable("id") String id, HttpServletResponse response) {
         adminService.deactivateAdmin(id);
         response.setStatus(HttpStatus.NO_CONTENT.value());
+    }
+
+    @PatchMapping("/changePassword/{id}")
+    public ResponseEntity<String> changeAdminPassword(@PathVariable("id") String id,
+                                                      @Validated(PasswordValidation.class) @RequestBody ChangePasswordDTORequest body,
+                                                      Errors errors) {
+        if (errors.hasErrors()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(errors.getAllErrors()
+                            .stream().map(ObjectError::getDefaultMessage)
+                            .toList()
+                            .toString()
+                    );
+        }
+
+        try {
+            adminService.changeAdminPassword(id, body);
+        } catch (IllegalStateException ise) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ise.getMessage());
+        }
+
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 }

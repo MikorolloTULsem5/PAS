@@ -7,17 +7,22 @@ import jakarta.validation.UnexpectedTypeException;
 import lombok.NoArgsConstructor;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import pas.gV.model.data.repositories.UserMongoRepository;
 import pas.gV.model.exceptions.MyMongoException;
 import pas.gV.model.exceptions.UserException;
 import pas.gV.model.exceptions.UserLoginException;
+import pas.gV.model.logic.users.Admin;
+import pas.gV.model.logic.users.Client;
 import pas.gV.model.logic.users.ResourceAdmin;
 import pas.gV.model.logic.users.User;
 
 import pas.gV.restapi.data.dto.ResourceAdminDTO;
 import pas.gV.restapi.data.mappers.ResourceAdminMapper;
+import pas.gV.restapi.security.dto.ChangePasswordDTORequest;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,9 +33,11 @@ import java.util.UUID;
 public class ResourceAdminService extends UserService {
 
     private UserMongoRepository userRepository;
+    private PasswordEncoder passwordEncoder;
     @Autowired
-    public ResourceAdminService(UserMongoRepository userRepository) {
+    public ResourceAdminService(UserMongoRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     public ResourceAdminDTO registerResourceAdmin(String login, String password) {
@@ -59,7 +66,10 @@ public class ResourceAdminService extends UserService {
 
     public ResourceAdminDTO getResourceAdminByLogin(String login) {
         var list = userRepository.read(Filters.eq("login", login), ResourceAdmin.class);
-        return !list.isEmpty() ? ResourceAdminMapper.toJsonUser((ResourceAdmin) list.get(0)) : null;
+        if (list.isEmpty() || (list.get(0) instanceof Admin || list.get(0) instanceof Client)) {
+            return null;
+        }
+        return ResourceAdminMapper.toJsonUser((ResourceAdmin) list.get(0));
     }
 
     public List<ResourceAdminDTO> getResourceAdminByLoginMatching(String login) {
@@ -94,6 +104,20 @@ public class ResourceAdminService extends UserService {
         userRepository.update(UUID.fromString(resourceAdminId), "archive", true);
     }
 
+    public void changeResourceAdminPassword(String id, ChangePasswordDTORequest changePasswordDTO) {
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        if (!passwordEncoder.matches(changePasswordDTO.getActualPassword(), user.getPassword())) {
+            throw new IllegalStateException("Niepoprawne aktualne haslo!");
+        }
+        if (!changePasswordDTO.getNewPassword().equals(changePasswordDTO.getConfirmationPassword())) {
+            throw new IllegalStateException("Podane hasla roznia sie!");
+        }
+
+        userRepository.update(UUID.fromString(id), "password",
+                passwordEncoder.encode(changePasswordDTO.getNewPassword()));
+    }
+
     @Override
     public int usersSize() {
         return userRepository.readAll(User.class).size();
@@ -112,5 +136,9 @@ public class ResourceAdminService extends UserService {
 
     public void deactivateResourceAdmin(UUID resourceAdminId) {
         deactivateResourceAdmin(resourceAdminId.toString());
+    }
+
+    public void changeResourceAdminPassword(UUID id, ChangePasswordDTORequest changePasswordDTO) {
+        changeResourceAdminPassword(id.toString(), changePasswordDTO);
     }
 }

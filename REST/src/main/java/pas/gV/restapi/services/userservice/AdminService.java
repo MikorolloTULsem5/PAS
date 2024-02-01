@@ -4,15 +4,20 @@ import com.mongodb.client.model.Filters;
 import jakarta.validation.UnexpectedTypeException;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import pas.gV.model.data.repositories.UserMongoRepository;
 import pas.gV.model.exceptions.MyMongoException;
 import pas.gV.model.exceptions.UserException;
 import pas.gV.model.exceptions.UserLoginException;
 import pas.gV.model.logic.users.Admin;
+import pas.gV.model.logic.users.Client;
+import pas.gV.model.logic.users.ResourceAdmin;
 import pas.gV.model.logic.users.User;
 import pas.gV.restapi.data.dto.AdminDTO;
 import pas.gV.restapi.data.mappers.AdminMapper;
+import pas.gV.restapi.security.dto.ChangePasswordDTORequest;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,10 +28,12 @@ import java.util.UUID;
 public class AdminService extends UserService {
 
     private UserMongoRepository userRepository;
+    private PasswordEncoder passwordEncoder;
 
     @Autowired
-    public AdminService(UserMongoRepository userRepository) {
+    public AdminService(UserMongoRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     public AdminDTO registerAdmin(String login, String password) {
@@ -54,7 +61,10 @@ public class AdminService extends UserService {
 
     public AdminDTO getAdminByLogin(String login) {
         var list = userRepository.read(Filters.eq("login", login), Admin.class);
-        return !list.isEmpty() ? AdminMapper.toJsonUser((Admin) list.get(0)) : null;
+        if (list.isEmpty() || (list.get(0) instanceof ResourceAdmin || list.get(0) instanceof Client)) {
+            return null;
+        }
+        return AdminMapper.toJsonUser((Admin) list.get(0));
     }
 
     public List<AdminDTO> getAdminByLoginMatching(String login) {
@@ -89,6 +99,20 @@ public class AdminService extends UserService {
         userRepository.update(UUID.fromString(adminId), "archive", true);
     }
 
+    public void changeAdminPassword(String id, ChangePasswordDTORequest changePasswordDTO) {
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        if (!passwordEncoder.matches(changePasswordDTO.getActualPassword(), user.getPassword())) {
+            throw new IllegalStateException("Niepoprawne aktualne haslo!");
+        }
+        if (!changePasswordDTO.getNewPassword().equals(changePasswordDTO.getConfirmationPassword())) {
+            throw new IllegalStateException("Podane hasla roznia sie!");
+        }
+
+        userRepository.update(UUID.fromString(id), "password",
+                passwordEncoder.encode(changePasswordDTO.getNewPassword()));
+    }
+
     @Override
     public int usersSize() {
         return userRepository.readAll(User.class).size();
@@ -107,5 +131,9 @@ public class AdminService extends UserService {
 
     public void deactivateAdmin(UUID adminId) {
         deactivateAdmin(adminId.toString());
+    }
+
+    public void changeAdminPassword(UUID id, ChangePasswordDTORequest changePasswordDTO) {
+        changeAdminPassword(id.toString(), changePasswordDTO);
     }
 }

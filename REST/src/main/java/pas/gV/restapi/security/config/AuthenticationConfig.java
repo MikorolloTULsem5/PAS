@@ -45,7 +45,7 @@ public class AuthenticationConfig {
                     user = AdminMapper.fromJsonUser(adminService.getAdminByLogin(login));
                 }
                 if (user == null) {
-                    user = ResourceAdminMapper.fromJsonUser(resourceAdminService.getResourceAdminById(login));
+                    user = ResourceAdminMapper.fromJsonUser(resourceAdminService.getResourceAdminByLogin(login));
                 }
                 if (user == null) {
                     throw new UsernameNotFoundException("Brak uzytkownika o loginie \"%s\"!".formatted(login));

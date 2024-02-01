@@ -60,6 +60,7 @@ public class AuthenticationController {
         try {
             token = service.authenticate(request);
         } catch (Exception e) {
+            e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
 

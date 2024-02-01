@@ -8,10 +8,12 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import pas.gV.model.exceptions.UserLoginException;
+import pas.gV.model.logic.users.Admin;
 import pas.gV.model.logic.users.Client;
 import pas.gV.model.exceptions.UserException;
 import pas.gV.model.exceptions.MyMongoException;
 import pas.gV.model.data.repositories.UserMongoRepository;
+import pas.gV.model.logic.users.ResourceAdmin;
 import pas.gV.model.logic.users.User;
 import pas.gV.restapi.data.dto.ClientDTO;
 import pas.gV.restapi.data.mappers.ClientMapper;
@@ -59,7 +61,10 @@ public class ClientService extends UserService {
 
     public ClientDTO getClientByLogin(String login) {
         var list = userRepository.read(Filters.eq("login", login), Client.class);
-        return !list.isEmpty() ? ClientMapper.toJsonUser((Client) list.get(0)) : null;
+        if (list.isEmpty() || (list.get(0) instanceof ResourceAdmin || list.get(0) instanceof Admin)) {
+            return null;
+        }
+        return ClientMapper.toJsonUser((Client) list.get(0));
     }
 
     public List<ClientDTO> getClientByLoginMatching(String login) {

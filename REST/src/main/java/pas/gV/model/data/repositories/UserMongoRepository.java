@@ -158,7 +158,6 @@ public class UserMongoRepository extends AbstractMongoRepository<User> {
 
     @Override
     public boolean updateByReplace(UUID uuid, User user) {
-        ///TODO co z hashowaniem hasla
         if (user.getPassword() == null || user.getPassword().isBlank()) {
             var list = getCollection().find(Filters.eq("_id", uuid.toString())).into(new ArrayList<>());
             user.setPassword(list.isEmpty() ? "bezHasla123" : list.get(0).getPassword());

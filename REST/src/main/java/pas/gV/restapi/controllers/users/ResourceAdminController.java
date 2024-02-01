@@ -6,10 +6,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.Errors;
 import org.springframework.validation.ObjectError;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -23,6 +25,8 @@ import pas.gV.model.exceptions.UserLoginException;
 
 import pas.gV.restapi.data.dto.ResourceAdminDTO;
 import pas.gV.restapi.data.dto.UserDTO;
+import pas.gV.restapi.data.dto.UserDTO.PasswordValidation;
+import pas.gV.restapi.security.dto.ChangePasswordDTORequest;
 import pas.gV.restapi.services.userservice.ResourceAdminService;
 
 import java.util.List;
@@ -34,7 +38,7 @@ public class ResourceAdminController {
     private final ResourceAdminService resourceAdminService;
 
     @Autowired
-    public ResourceAdminController(ResourceAdminService resourceAdminService) {
+    public ResourceAdminController(ResourceAdminService resourceAdminService, PasswordEncoder passwordEncoder) {
         this.resourceAdminService = resourceAdminService;
     }
 
@@ -135,5 +139,27 @@ public class ResourceAdminController {
     public void archiveResAdmin(@PathVariable("id") String id, HttpServletResponse response) {
         resourceAdminService.deactivateResourceAdmin(id);
         response.setStatus(HttpStatus.NO_CONTENT.value());
+    }
+
+    @PatchMapping("/changePassword/{id}")
+    public ResponseEntity<String> changeResAdminPassword(@PathVariable("id") String id,
+                                                         @Validated(PasswordValidation.class) @RequestBody ChangePasswordDTORequest body,
+                                                         Errors errors) {
+        if (errors.hasErrors()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(errors.getAllErrors()
+                            .stream().map(ObjectError::getDefaultMessage)
+                            .toList()
+                            .toString()
+                    );
+        }
+
+        try {
+            resourceAdminService.changeResourceAdminPassword(id, body);
+        } catch (IllegalStateException ise) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ise.getMessage());
+        }
+
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 }

@@ -136,7 +136,7 @@ public class NewCleaningClassForTests {
     static AdminDTO admin2;
 
     static void initAdmins() {
-        AdminService adminServiceServiceTest = new AdminService(new UserMongoRepository());
+        AdminService adminServiceServiceTest = new AdminService(new UserMongoRepository(), null);
         cleanUsers();
         admin1 = adminServiceServiceTest.registerAdmin("adminek1@1234", "adminek1@1234");
         admin2 = adminServiceServiceTest.registerAdmin("adminek2@9876", "adminek2@9876");
@@ -147,7 +147,7 @@ public class NewCleaningClassForTests {
     static ResourceAdminDTO adminRes2;
 
     static void initResAdmins() {
-        ResourceAdminService resourceAdminServiceTest = new ResourceAdminService(new UserMongoRepository());
+        ResourceAdminService resourceAdminServiceTest = new ResourceAdminService(new UserMongoRepository(), null);
         cleanUsers();
         adminRes1 = resourceAdminServiceTest.registerResourceAdmin("adminekRes1@1234", "adminekRes1@1234");
         adminRes2 = resourceAdminServiceTest.registerResourceAdmin("adminekRes2@9876", "adminekRes2@9876");
