@@ -184,8 +184,10 @@ public class ReservationController {
         return addReservation(clientId, courtId, date);
     }
 
-    @GetMapping("/clientReservation/current/me")
-    public List<ReservationDTO> getClientCurrentReservations(HttpServletResponse response) {
-        return getClientCurrentReservations("", response);
+    @GetMapping("/clientReservation/me")
+    public List<ReservationDTO> getAllClientReservations(HttpServletResponse response) {
+        String clientId = clientService.getClientByLogin(
+                SecurityContextHolder.getContext().getAuthentication().getName()).getId();
+        return getAllClientReservations(clientId, response);
     }
 }
