@@ -1,4 +1,4 @@
-import {ClientType} from "../../types/Users";
+import {AccountTypeEnum, ClientType} from "../../types/Users";
 import React, {Dispatch, SetStateAction, useEffect, useRef, useState} from "react";
 import ConfirmModal from "../Modal/ConfirmModal";
 import {Formik, FormikProps, FormikValues} from "formik";
@@ -11,12 +11,13 @@ import {ReservationType} from "../../types/ReservationsTypes";
 import {reservationsApi} from "../../api/reservationsApi";
 
 interface ClientProps {
-    client: ClientType
-    clients: ClientType[]
-    setClients: Dispatch<SetStateAction<ClientType[]>>
+    client: ClientType,
+    clients: ClientType[],
+    setClients: Dispatch<SetStateAction<ClientType[]>>,
+    accountType: AccountTypeEnum | null
 }
 
-function Client({client, clients, setClients}: ClientProps) {
+function Client({client, clients, setClients,accountType}: ClientProps) {
     const [isModified, setIsModified] = useState(false);
     const [clientCopy, setClientCopy] = useState(client);
     const [showErrorModal,setShowErrorModal] = useState(false);
@@ -199,7 +200,7 @@ function Client({client, clients, setClients}: ClientProps) {
                                       }>Reservations</ConfirmModal>
                     </Col>
 
-                    {!isModified &&
+                    {!isModified && accountType===AccountTypeEnum.ADMIN &&
                         <Col><Button variant="primary" onClick={() => setIsModified(true)}>Edit</Button></Col>
                     }
 

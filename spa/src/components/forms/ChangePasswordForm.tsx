@@ -85,9 +85,9 @@ function RegisterForm() {
                             type="invalid">{capitalize(props.errors.newPasswordConfirm?.toString())}</Form.Control.Feedback>
                     </Form.Group>
                     <Button variant="success" type="submit" className="mt-3">Change Password</Button>
-                    {changedPassword && <a>Changed password!</a>}
                 </Form>
             )}</Formik>
+            {changedPassword && <a>Changed password!</a>}
         </div>
     );
 }

@@ -28,7 +28,6 @@ export const useAccount = () => {
         try {
             const token = (await api.logIn(login, password)).data.accessToken;
             localStorage.setItem('token',token);
-            console.log(localStorage);
             const {data} = await usersApi.getMe(jwtDecode<TokenPayload>(token).authorities[0].authority);
             setAccount(data);
             navigate(Pathnames.public.home)

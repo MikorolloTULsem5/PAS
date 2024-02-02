@@ -36,7 +36,8 @@ function ReservationsPage() {
             </thead>
             <tbody>
             {reservations.length!==0 && reservations.map((reservation) => (
-                    <Reservation key={reservation.id} reservation={reservation} trigger={trigger} setTrigger={setTrigger}></Reservation>
+                    <Reservation key={reservation.id} reservation={reservation} trigger={trigger} setTrigger={setTrigger}
+                    accountType={account?.userType}></Reservation>
                 )
             )}
             </tbody>

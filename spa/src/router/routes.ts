@@ -79,10 +79,6 @@ export const ResAdminRoutes: RouteType[] = [
         Component: HomePage
     },
     {
-        path: Pathnames.resAdmin.users,
-        Component: UsersPage
-    },
-    {
         path: Pathnames.resAdmin.clients,
         Component: ClientsPage
     },

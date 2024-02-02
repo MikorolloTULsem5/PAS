@@ -37,7 +37,6 @@ export const clientsApi = {
             {actualPassword: oldPassword, newPassword: newPassword, confirmationPassword: newPasswordConfirm})
     },
     changeDetails: (user:ClientType) => {
-        console.log("ads");
         let userCopy:any = {...user};
         delete userCopy['userType'];
         delete userCopy['eTag'];

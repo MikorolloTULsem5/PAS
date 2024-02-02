@@ -24,6 +24,7 @@ import pas.gV.model.exceptions.UserException;
 import pas.gV.model.exceptions.UserLoginException;
 import pas.gV.restapi.data.dto.AdminDTO;
 import pas.gV.restapi.data.dto.ClientDTO;
+import pas.gV.restapi.data.dto.ResourceAdminDTO;
 import pas.gV.restapi.data.dto.UserDTO;
 import pas.gV.restapi.data.dto.UserDTO.PasswordValidation;
 import pas.gV.restapi.security.dto.ChangePasswordDTORequest;
@@ -178,5 +179,27 @@ public class AdminController {
         String etag = "";
         response.setHeader(HttpHeaders.ETAG, etag);
         return admin;
+    }
+
+    @PatchMapping("/changePassword/me")
+    public ResponseEntity<String> changeResAdminPassword(@Validated(PasswordValidation.class) @RequestBody ChangePasswordDTORequest body,
+                                                         Errors errors) {
+        AdminDTO adminDTO = adminService.getAdminByLogin(SecurityContextHolder.getContext().getAuthentication().getName());
+        if (errors.hasErrors()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(errors.getAllErrors()
+                            .stream().map(ObjectError::getDefaultMessage)
+                            .toList()
+                            .toString()
+                    );
+        }
+
+        try {
+            adminService.changeAdminPassword(adminDTO.getId(), body);
+        } catch (IllegalStateException ise) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ise.getMessage());
+        }
+
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 }

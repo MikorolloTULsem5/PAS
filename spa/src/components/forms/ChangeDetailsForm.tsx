@@ -12,6 +12,7 @@ function ChangeDetailsForm() {
     const { account, getCurrentAccount } = useAccount();
     const [showErrorModal,setShowErrorModal] = useState(false);
     const [errorModalContent,setErrorModalContent] = useState<string>("");
+    const [changedDetails, setChangedDetails] = useState(false);
     // @ts-ignore
     const [details, setDetails] = useState<{firstName:string, lastName: string}>({firstName:account.firstName,lastName:account.lastName})
     const {Formik} = formik;
@@ -21,11 +22,9 @@ function ChangeDetailsForm() {
     });
 
     useEffect(() => {
-        getCurrentAccount();
         // @ts-ignore
         setDetails({firstName:account?.firstName, lastName:account?.lastName})
-        console.log(account);
-    }, []);
+    }, [account]);
 
     interface formResult{
         firstName:string,
@@ -33,8 +32,11 @@ function ChangeDetailsForm() {
     }
 
     const handleSubmit = (values:formResult, formikHelpers : FormikHelpers<formResult>) =>{
+        setChangedDetails(false);
         // @ts-ignore
-        clientsApi.changeDetails({...account, firstName: values.firstName, lastName:values.lastName}).catch((error) =>{
+        clientsApi.changeDetails({...account, firstName: values.firstName, lastName:values.lastName})
+            .then(()=>{setChangedDetails(true)})
+            .catch((error) =>{
             setErrorModalContent(JSON.stringify(error.response.data));
             setShowErrorModal(true)
         });
@@ -76,6 +78,7 @@ function ChangeDetailsForm() {
                     <Button variant="success" type="submit" className="mt-3">Change</Button>
                 </Form>
             )}</Formik>
+            {changedDetails && <a>Changed details!</a>}
         </div>
     );
 }

@@ -14,7 +14,6 @@ export const Pathnames = {
     },
     resAdmin: {
         home: '/',
-        users: '/users',
         clients: '/clients',
         courts: '/courts',
         reservations: '/reservations',

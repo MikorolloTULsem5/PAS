@@ -4,10 +4,12 @@ import {ClientType} from "../types/Users";
 import {clientsApi} from "../api/clientsApi";
 import Client from "../components/Client/Client";
 import {filter, includes} from "lodash";
+import {useAccount} from "../hooks/useAccount";
 
 function ClientsPage() {
     const [clients, setClients] = useState<ClientType[]>([]);
     const [filterId, setFilterId] = useState("");
+    const {accountType, getCurrentAccount } = useAccount();
 
     useEffect(() => {
         clientsApi.getClients().then(async (response) => {
@@ -45,10 +47,10 @@ function ClientsPage() {
                 </thead>
                 <tbody>
                 {filterId!=="" && filter(clients,(client:ClientType)=>{return includes(client.id, filterId)}).map((client)=> (
-                    <Client key={client.id} client={client} clients={clients} setClients={setClients}/>
+                    <Client key={client.id} client={client} clients={clients} setClients={setClients} accountType={accountType}/>
                 ))}
                 {filterId==="" && clients.map((client)=> (
-                    <Client key={client.id} client={client} clients={clients} setClients={setClients}/>
+                    <Client key={client.id} client={client} clients={clients} setClients={setClients} accountType={accountType}/>
                 ))}
                 </tbody>
             </Table>

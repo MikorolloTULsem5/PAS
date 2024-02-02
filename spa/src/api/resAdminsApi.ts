@@ -31,7 +31,7 @@ export const resAdminsApi = {
         return apiWithConfig.put(`/resAdmins/modifyResAdmin`,userCopy)
     },
     changePassword: (oldPassword:string, newPassword: string, newPasswordConfirm: string) => {
-        return apiWithConfig.patch(`/resAdmin/changePassword/me`,
+        return apiWithConfig.patch(`/resAdmins/changePassword/me`,
             {actualPassword: oldPassword, newPassword: newPassword, confirmationPassword: newPasswordConfirm})
     },
 

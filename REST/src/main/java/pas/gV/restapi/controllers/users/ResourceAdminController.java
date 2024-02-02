@@ -26,6 +26,7 @@ import pas.gV.model.exceptions.UserException;
 import pas.gV.model.exceptions.UserLoginException;
 
 import pas.gV.restapi.data.dto.AdminDTO;
+import pas.gV.restapi.data.dto.ClientDTO;
 import pas.gV.restapi.data.dto.ResourceAdminDTO;
 import pas.gV.restapi.data.dto.UserDTO;
 import pas.gV.restapi.data.dto.UserDTO.PasswordValidation;
@@ -170,8 +171,8 @@ public class ResourceAdminController {
 
     /* me */
     @GetMapping("/get/me")
-    public ResourceAdminDTO getClientByLogin(HttpServletResponse response) {
-        ResourceAdminDTO resAdmin = resourceAdminService.getResourceAdminById(SecurityContextHolder.getContext().getAuthentication().getName());
+    public ResourceAdminDTO getResAdminByLogin(HttpServletResponse response) {
+        ResourceAdminDTO resAdmin = resourceAdminService.getResourceAdminByLogin(SecurityContextHolder.getContext().getAuthentication().getName());
         if (resAdmin == null) {
             response.setStatus(HttpStatus.NO_CONTENT.value());
             return null;
@@ -179,5 +180,27 @@ public class ResourceAdminController {
         String etag = "";
         response.setHeader(HttpHeaders.ETAG, etag);
         return resAdmin;
+    }
+
+    @PatchMapping("/changePassword/me")
+    public ResponseEntity<String> changeResAdminPassword(@Validated(PasswordValidation.class) @RequestBody ChangePasswordDTORequest body,
+                                                       Errors errors) {
+        ResourceAdminDTO resourceAdminDTO = resourceAdminService.getResourceAdminByLogin(SecurityContextHolder.getContext().getAuthentication().getName());
+        if (errors.hasErrors()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(errors.getAllErrors()
+                            .stream().map(ObjectError::getDefaultMessage)
+                            .toList()
+                            .toString()
+                    );
+        }
+
+        try {
+            resourceAdminService.changeResourceAdminPassword(resourceAdminDTO.getId(), body);
+        } catch (Exception ise ) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ise.getMessage());
+        }
+
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 }

@@ -43,19 +43,17 @@ public class SecurityConfig {
                                             "/clients/get/me",
                                             "/clients/changePassword/me",
                                             "/clients/modifyClient/me",
-                                            "/courts",
-                                            "/courts/get",
                                             "/reservations/addReservation/me",
                                             "/reservations/clientReservation/me",
                                             "/reservations/returnCourt/me").hasAuthority("ROLE_CLIENT")
-//                                    .requestMatchers(
-//                                            "/admins/get/me",
-//                                            "/admins/changePassword/me",
-//                                            "/admins/modifyAdmin/me").hasAuthority("ROLE_ADMIN")
+                                    .requestMatchers(
+                                            "/courts",
+                                            "/courts/get").hasAnyAuthority("ROLE_CLIENT", "ROLE_RESOURCE_ADMIN")
                                     .requestMatchers(
                                             "/resAdmins/get/me",
                                             "/resAdmins/changePassword/me",
                                             "/resAdmins/modifyResAdmin/me").hasAuthority("ROLE_RESOURCE_ADMIN")
+                                    .requestMatchers("/clients").hasAnyAuthority("ROLE_ADMIN", "ROLE_RESOURCE_ADMIN")
                                     .requestMatchers("/clients/**", "/admins/**", "/resAdmins/**").hasAuthority("ROLE_ADMIN")
                                     .requestMatchers("/courts/**", "/reservations/**").hasAuthority("ROLE_RESOURCE_ADMIN")
                                     .anyRequest().denyAll();

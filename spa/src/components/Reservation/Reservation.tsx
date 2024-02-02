@@ -2,14 +2,16 @@ import React, {Dispatch, SetStateAction, useEffect, useState} from "react";
 import {ReservationType} from "../../types/ReservationsTypes";
 import {reservationsApi} from "../../api/reservationsApi";
 import ConfirmModal from "../Modal/ConfirmModal";
+import {AccountTypeEnum} from "../../types/Users";
 
 interface ReservationProps {
     reservation: ReservationType,
     trigger:boolean,
-    setTrigger:Dispatch<SetStateAction<boolean>>
+    setTrigger:Dispatch<SetStateAction<boolean>>,
+    accountType: AccountTypeEnum | null | undefined
 }
 
-function Reservation({reservation, trigger, setTrigger}: ReservationProps) {
+function Reservation({reservation, trigger, setTrigger,accountType}: ReservationProps) {
 
     const [reservationCopy,setReservationCopy] = useState(reservation);
 
@@ -18,9 +20,15 @@ function Reservation({reservation, trigger, setTrigger}: ReservationProps) {
     }, [reservation]);
 
     const returnCourt = async () => {
-        reservationsApi.returnCourtClient(reservation.court.id).then((response)=>{
-            setTrigger(!trigger);
-        }).catch(console.log);
+        if(accountType === AccountTypeEnum.CLIENT){
+            reservationsApi.returnCourtClient(reservation.court.id).then((response)=>{
+                setTrigger(!trigger);
+            }).catch(console.log);
+        } else {
+            reservationsApi.returnCourt(reservation.court.id).then((response)=>{
+                setTrigger(!trigger);
+            }).catch(console.log);
+        }
     }
 
     return (
