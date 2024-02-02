@@ -55,7 +55,7 @@ public class SecurityConfig {
                                     .requestMatchers(
                                             "/resAdmins/get/me",
                                             "/resAdmins/changePassword/me",
-                                            "/resAdmins/modifyClient/me").hasAuthority("ROLE_RESOURCE_ADMIN")
+                                            "/resAdmins/modifyResAdmin/me").hasAuthority("ROLE_RESOURCE_ADMIN")
                                     .requestMatchers("/clients/**", "/admins/**", "/resAdmins/**").hasAuthority("ROLE_ADMIN")
                                     .requestMatchers("/courts/**", "/reservations/**").hasAuthority("ROLE_RESOURCE_ADMIN")
                                     .anyRequest().denyAll();
