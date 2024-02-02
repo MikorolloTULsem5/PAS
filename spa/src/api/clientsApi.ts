@@ -15,7 +15,6 @@ export const clientsApi = {
         let client = await apiWithConfig.get(`/clients/get/me`);
         client.data.userType = AccountTypeEnum.CLIENT;
         client.data.eTag = client.headers['etag'];
-        console.log("eTag "+client.data.eTag)
         return client;
     },
 

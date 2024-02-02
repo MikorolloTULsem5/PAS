@@ -59,7 +59,6 @@ function Client({client, clients, setClients}: ClientProps) {
             lastName: lastNameFormRef.current.values.lastName,
             clientTypeName: clientTypeNameFormRef.current.values.clientTypeName}
         clientsApi.modify(clientPacket).then(()=>{
-            console.log(client.login);
             setClientCopy(clientPacket);
             setIsModified(false);
         }).catch( (error) => {setErrorModalContent(JSON.stringify(error.response.data)); setShowErrorModal(true)});

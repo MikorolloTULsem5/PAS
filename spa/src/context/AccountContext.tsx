@@ -10,7 +10,6 @@ export const AccountStateContextProvider = ({ children }: { children: ReactNode 
     const [account, setAccount] = useState<UserType | null>(null);
 
     useEffect(() => {
-        console.log(account)
     }, [account]);
     return (
         <AccountStateContext.Provider

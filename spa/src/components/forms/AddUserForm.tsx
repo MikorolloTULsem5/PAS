@@ -108,7 +108,6 @@ function AddUserForm() {
                     lastName:''
                 }}
                 onSubmit={(values) => {
-                    console.log(string);
                 }}
             >{props => (
                 <Form noValidate onSubmit={props.handleSubmit} className="m-3 p-3">

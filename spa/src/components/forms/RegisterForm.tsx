@@ -31,7 +31,6 @@ function RegisterForm() {
         lastName: string
     }
     const handleSubmit = (values:formResult, formikHelpers : FormikHelpers<formResult>) =>{
-        console.log(values.password)
         api.register(values.login, values.password, values.firstName, values.lastName).
         then(()=>{navigate(Pathnames.public.login)})
             .catch((error) =>{

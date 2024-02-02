@@ -9,11 +9,12 @@ import client from "../components/Client/Client";
 
 function CourtsPage() {
     const [courts, setCourts] = useState<CourtType[]>([])
+    const [trigger, setTrigger] = useState(false);
     const {accountType, account, getCurrentAccount} = useAccount()
 
     useEffect(() => {
         courtsApi.getCourts().then((response) => setCourts(response.data))
-    }, []);
+    }, [trigger]);
 
     useEffect(() => {
         getCurrentAccount();
@@ -35,7 +36,9 @@ function CourtsPage() {
                 </thead>
                 <tbody>
                 {courts.map((court)=> (
-                    <Court key={court.id} court={court} accountType={accountType}  clientId={(accountType===AccountTypeEnum.CLIENT ? account?.id : undefined)} />
+                    <Court key={court.id} court={court} accountType={accountType}
+                           clientId={(accountType===AccountTypeEnum.CLIENT ? account?.id : undefined)}
+                           trigger={trigger} setTrigger={setTrigger} />
                 ))}
                 </tbody>
             </Table>

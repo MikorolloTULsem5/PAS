@@ -1,4 +1,4 @@
-import React, {useRef, useState} from "react";
+import React, {Dispatch, SetStateAction, useEffect, useRef, useState} from "react";
 import {CourtType} from "../../types/ReservationsTypes";
 import ModalBasic from "../Modal/ModalBasic";
 import {Button, Form} from "react-bootstrap";
@@ -13,15 +13,21 @@ import {AccountTypeEnum} from "../../types/Users";
 interface CourtProps {
     court: CourtType,
     accountType: AccountTypeEnum | null,
-    clientId?: string | null
+    clientId?: string | null,
+    trigger:boolean,
+    setTrigger:Dispatch<SetStateAction<boolean>>
 }
 
-function Court({court, accountType, clientId=null}: CourtProps) {
+function Court({court, accountType, trigger, setTrigger ,clientId=null}: CourtProps) {
     const [courtCopy,setCourtCopy] = useState(court);
     const [showReservationModal,setShowReservationModal] = useState(false);
     const formRef = useRef<FormikProps<FormikValues>>(null);
     const [showErrorModal,setShowErrorModal] = useState(false);
     const [errorModalContent,setErrorModalContent] = useState<string>("");
+
+    useEffect(() => {
+        setCourtCopy(court)
+    }, [court]);
 
 
     const schema = yup.object().shape({
@@ -42,9 +48,8 @@ function Court({court, accountType, clientId=null}: CourtProps) {
 
     const rentCourtClient = () => {
         if(clientId !== null && clientId !== undefined){
-            reservationsApi.create({courtId:court.id, clientId}).then(() =>{
-                courtsApi.getCourtById(court.id).then((response)=>setCourtCopy(response.data)).catch(console.log);
-            }).catch((error)=>{setErrorModalContent(JSON.stringify(error.response.data)); setShowErrorModal(true)})
+            reservationsApi.createClientReservation(court.id).then(() =>{setTrigger(!trigger)}).
+            catch((error)=>{setErrorModalContent(JSON.stringify(error.response.data)); setShowErrorModal(true)})
         }
     }
 

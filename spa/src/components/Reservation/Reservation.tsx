@@ -1,20 +1,25 @@
-import React, {useState} from "react";
+import React, {Dispatch, SetStateAction, useEffect, useState} from "react";
 import {ReservationType} from "../../types/ReservationsTypes";
 import {reservationsApi} from "../../api/reservationsApi";
 import ConfirmModal from "../Modal/ConfirmModal";
 
 interface ReservationProps {
-    reservation: ReservationType
+    reservation: ReservationType,
+    trigger:boolean,
+    setTrigger:Dispatch<SetStateAction<boolean>>
 }
 
-function Reservation({reservation}: ReservationProps) {
+function Reservation({reservation, trigger, setTrigger}: ReservationProps) {
 
     const [reservationCopy,setReservationCopy] = useState(reservation);
 
+    useEffect(() => {
+        setReservationCopy(reservation)
+    }, [reservation]);
+
     const returnCourt = async () => {
-        reservationsApi.returnCourt(reservation.court.id).then((response)=>{
-            reservationsApi.getReservationsById(reservationCopy.id).then( (response) => setReservationCopy(response.data))
-                .catch(console.log);
+        reservationsApi.returnCourtClient(reservation.court.id).then((response)=>{
+            setTrigger(!trigger);
         }).catch(console.log);
     }
 
