@@ -38,6 +38,11 @@ export const adminsApi = {
         return apiWithConfig.put(`/admins/modifyAdmin`,userCopy);
     },
 
+    changePassword: (oldPassword:string, newPassword: string, newPasswordConfirm: string) => {
+        return apiWithConfig.patch(`/admins/changePassword/me`,
+            {actualPassword: oldPassword, newPassword: newPassword, confirmationPassword: newPasswordConfirm})
+    },
+
     create: (user:NewUserType): ApiResponseType<any>  => {
         let userCopy:any = {...user};
         delete userCopy['userType'];

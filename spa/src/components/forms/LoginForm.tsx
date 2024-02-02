@@ -66,7 +66,7 @@ function LoginForm() {
                         <Form.Control.Feedback
                             type="invalid">{capitalize(props.errors.password?.toString())}</Form.Control.Feedback>
                     </Form.Group>
-                    <Button variant="success" type="submit" className="mt-3">Zaloguj</Button>
+                    <Button variant="success" type="submit" className="mt-3">Log in</Button>
                 </Form>
             )}</Formik>
         </div>

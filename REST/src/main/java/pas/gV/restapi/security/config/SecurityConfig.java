@@ -68,6 +68,7 @@ public class SecurityConfig {
                         httpSecurityCorsConfigurer.configurationSource(request -> {
                                     CorsConfiguration configuration = new CorsConfiguration().applyPermitDefaultValues();
                                     configuration.setAllowedMethods(List.of("GET", "HEAD", "POST", "PUT", "DELETE", "PATCH"));
+                                    configuration.addExposedHeader("ETag");
                                     return configuration;
                                 }
 

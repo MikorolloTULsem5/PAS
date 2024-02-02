@@ -30,6 +30,10 @@ export const resAdminsApi = {
         //userCopy.password='';
         return apiWithConfig.put(`/resAdmins/modifyResAdmin`,userCopy)
     },
+    changePassword: (oldPassword:string, newPassword: string, newPasswordConfirm: string) => {
+        return apiWithConfig.patch(`/resAdmin/changePassword/me`,
+            {actualPassword: oldPassword, newPassword: newPassword, confirmationPassword: newPasswordConfirm})
+    },
 
     create: (user:NewUserType): ApiResponseType<any>  => {
         let userCopy:any = {...user};

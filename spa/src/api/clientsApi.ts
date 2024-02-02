@@ -28,8 +28,20 @@ export const clientsApi = {
     modify: (user:ClientType) => {
         let userCopy:any = {...user};
         delete userCopy['userType'];
+        delete userCopy['eTag'];
         //userCopy.password='';
         return apiWithConfig.put(`/clients/modifyClient`,userCopy)
+    },
+    changePassword: (oldPassword:string, newPassword: string, newPasswordConfirm: string) => {
+        return apiWithConfig.patch(`/clients/changePassword/me`,
+            {actualPassword: oldPassword, newPassword: newPassword, confirmationPassword: newPasswordConfirm})
+    },
+    changeDetails: (user:ClientType) => {
+        console.log("ads");
+        let userCopy:any = {...user};
+        delete userCopy['userType'];
+        delete userCopy['eTag'];
+        return apiWithConfig.put(`/clients/modifyClient/me`,userCopy, {headers:{"If-Match":user.eTag}})
     },
     create: (user:NewClientType): ApiResponseType<any>  => {
         let userCopy:any = {...user};

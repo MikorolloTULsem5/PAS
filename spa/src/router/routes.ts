@@ -8,6 +8,9 @@ import CourtsPage from "../pages/CourtsPage";
 import ReservationsPage from "../pages/ReservationsPage";
 import LoginPage from "../pages/LoginPage";
 import RegisterPage from "../pages/RegisterPage";
+import ChangePasswordFormForm from "../components/forms/ChangePasswordForm";
+import ChangePasswordPage from "../pages/ChangePasswordPage";
+import ChangeDetailsPage from "../pages/ChangeDetailsPage";
 
 export const PublicRoutes: RouteType[] = [
     {
@@ -40,6 +43,10 @@ export const AdminRoutes: RouteType[] = [
     {
         path: Pathnames.admin["add user"],
         Component: AddUserPage
+    },
+    {
+        path: Pathnames.admin["change password"],
+        Component: ChangePasswordPage
     }
 ]
 
@@ -55,6 +62,14 @@ export const ClientRoutes: RouteType[] = [
     {
         path: Pathnames.client.reservations,
         Component: ReservationsPage
+    },
+    {
+        path: Pathnames.client["change password"],
+        Component: ChangePasswordPage
+    },
+    {
+        path: Pathnames.client["change details"],
+        Component: ChangeDetailsPage
     },
 ]
 
@@ -79,4 +94,8 @@ export const ResAdminRoutes: RouteType[] = [
         path: Pathnames.resAdmin.reservations,
         Component: ReservationsPage
     },
+    {
+        path: Pathnames.client["change password"],
+        Component: ChangePasswordPage
+    }
 ]

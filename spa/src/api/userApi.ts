@@ -1,7 +1,7 @@
 import {clientsApi} from "./clientsApi";
 import {adminsApi} from "./adminsApi";
 import {resAdminsApi} from "./resAdminsApi";
-import {NewUserType, UserType} from "../types/Users";
+import {AccountTypeEnum, NewUserType, UserType} from "../types/Users";
 import {RolesEnum} from "../types/TokenPayload";
 
 export const usersApi = {
@@ -85,5 +85,16 @@ export const usersApi = {
             case RolesEnum.RESADMIN:
                 return resAdminsApi.getMe();
         }
-    }
+    },
+
+    changePassword: (accountType: AccountTypeEnum, oldPassword:string, newPassword: string, newPasswordConfirm: string) => {
+        switch (accountType) {
+            case AccountTypeEnum.CLIENT:
+                return clientsApi.changePassword(oldPassword, newPassword, newPasswordConfirm);
+            case AccountTypeEnum.ADMIN:
+                return adminsApi.changePassword(oldPassword, newPassword, newPasswordConfirm);
+            case AccountTypeEnum.RESADMIN:
+                return resAdminsApi.changePassword(oldPassword, newPassword, newPasswordConfirm);
+        }
+    },
 }
